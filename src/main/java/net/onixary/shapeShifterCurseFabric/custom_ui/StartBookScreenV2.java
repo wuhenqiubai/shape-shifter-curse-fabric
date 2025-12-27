@@ -14,8 +14,6 @@ import net.minecraft.util.Identifier;
 import net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric;
 import net.onixary.shapeShifterCurseFabric.networking.ModPackets;
 
-import java.util.OptionalInt;
-
 import static net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric.MOD_ID;
 
 public class StartBookScreenV2 extends Screen {
@@ -53,7 +51,7 @@ public class StartBookScreenV2 extends Screen {
         int ButtonPosY = BookBottomY + ButtonPosYFix;
         this.addDrawableChild(ButtonWidget.builder(
                 Text.translatable("screen.shape-shifter-curse.book_of_shape_shifter.start_button_text"),
-                button -> {
+                (ButtonWidget button) -> {
                     PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
                     buf.writeUuid(currentPlayer.getUuid());
                     // 发送到服务端

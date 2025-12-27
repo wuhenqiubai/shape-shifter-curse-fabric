@@ -127,7 +127,7 @@ public class BookOfShapeShifterScreenV2_P1 extends Screen {
         int FixedPosY = BookPosY + InBookPosY * BookScale;
         int FixedSizeX = SizeX * BookScale;
         int FixedSizeY = SizeY * BookScale;
-        return ButtonWidget.builder(Text.of("+"), button -> {
+        return ButtonWidget.builder(Text.of("+"), (ButtonWidget btn) -> {
             MinecraftClient.getInstance().setScreen(new DetailScreen(this, DetailText));
         }).size(FixedSizeX, FixedSizeY).position(FixedPosX, FixedPosY).build();
     }
