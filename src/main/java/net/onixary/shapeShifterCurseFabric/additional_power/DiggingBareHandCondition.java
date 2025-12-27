@@ -1,7 +1,6 @@
 package net.onixary.shapeShifterCurseFabric.additional_power;
 
 import io.github.apace100.apoli.mixin.ClientPlayerInteractionManagerAccessor;
-import io.github.apace100.apoli.mixin.ServerPlayerInteractionManagerAccessor;
 import io.github.apace100.apoli.power.factory.condition.ConditionFactory;
 import io.github.apace100.calio.data.SerializableData;
 import net.minecraft.client.MinecraftClient;
@@ -11,6 +10,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ToolItem;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric;
+import net.onixary.shapeShifterCurseFabric.mixin.ServerPlayerInteractionManagerAccessor;
 
 public class DiggingBareHandCondition {
 
