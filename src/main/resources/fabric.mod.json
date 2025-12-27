@@ -71,7 +71,7 @@
     "satin": ">=1.14.0"
   },
   "breaks": {
-    "origins": ">0.0.0",
+    "origins": "<1.10.2",
     "optifabric": "*",
     "identity": "<1.14.2-beta"
   },
