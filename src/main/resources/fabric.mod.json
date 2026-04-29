@@ -116,12 +116,12 @@
   },
 
   "depends": {
-    "java": ">=17",
-    "fabricloader": ">=0.12.3",
+    "java": ">=21",
+    "fabricloader": ">=0.19.2",
     "fabric": ">=0.83.0",
-    "minecraft": "1.20.1",
-    "pehkui": ">=3.7.8",
-    "satin": ">=1.14.0"
+    "minecraft": "1.21.1",
+    "pehkui": ">=3.8.3",
+    "satin": ">=2.0.0"
   },
   "breaks": {
     "origins": ">0.0.0",
@@ -135,6 +135,6 @@
   "recommends": {
     "rich_translatable_text": ">=1.0.2",
     "firstperson": "*",
-    "trinkets": ">=3.7.2"
+    "trinkets": ">=3.10.0"
   }
 }

@@ -1,5 +1,5 @@
 plugins {
-    id 'fabric-loom' version '1.9-SNAPSHOT'
+    id 'fabric-loom' version '1.14-SNAPSHOT'
     id 'maven-publish'
     //id("com.gradleup.shadow") version "8.3.6"
 }
@@ -99,12 +99,7 @@ repositories {
             includeGroup "net.adriantodt.fabricmc"
         }
     }
-    maven {
-        url = "https://maven.jamieswhiteshirt.com/libs-release"
-        content {
-            includeGroup "com.jamieswhiteshirt"
-        }
-    }
+
     maven {
         url = "https://masa.dy.fi/maven"
     }
@@ -156,8 +151,8 @@ dependencies {
     //compileOnly "mod.azure.azurelib:azurelib-common-1.20.1:2.0.41"
 
     //Fabric or Quilt
-    modImplementation "mod.azure.azurelib:azurelib-fabric-1.20.1:${azurelib_version}"
-    include "mod.azure.azurelib:azurelib-fabric-1.20.1:${azurelib_version}"
+    modImplementation "mod.azure.azurelib:azurelib-fabric-1.21.1:${azurelib_version}"
+    include "mod.azure.azurelib:azurelib-fabric-1.21.1:${azurelib_version}"
     //modCompileOnly "maven.modrinth:azurelib:2.1.17"
 
 
@@ -175,7 +170,7 @@ dependencies {
     modImplementation "org.ladysnake:satin:${satin_version}"
 
     // Reach Entity Attributes by jamieswhiteshirt
-    modImplementation "com.jamieswhiteshirt:reach-entity-attributes:${project.reach_version}"
+
 
     // player ability lib
     //modImplementation "io.github.ladysnake:PlayerAbilityLib:${pal_version}"
@@ -210,7 +205,7 @@ dependencies {
     modApi("me.shedaniel.cloth:cloth-config-fabric:${project.clothconfig_version}") {
         exclude(group: "net.fabricmc.fabric-api")
     }
-    include modApi("com.jamieswhiteshirt:reach-entity-attributes:${project.reach_version}")
+
     //  Modmenu
     modImplementation "com.terraformersmc:modmenu:${project.mod_menu_version}"
     // Player Anim
@@ -232,13 +227,12 @@ dependencies {
     modCompileOnly "maven.modrinth:origins-classes:EnGfmh9y"
     modCompileOnly "maven.modrinth:bendy-lib:DFxVCaiC"
     modCompileOnly "maven.modrinth:better-combat:MxaoPSMy"
-    modCompileOnly "maven.modrinth:playeranimator:cfkAgcOh"
     modCompileOnly "maven.modrinth:first-person-model:mquWPSix"
     modRuntimeOnly "maven.modrinth:first-person-model:mquWPSix"
 
     // AppleSkin
-    modCompileOnly "squeek.appleskin:appleskin-fabric:mc1.20-2.5.1"
-    modLocalRuntime "squeek.appleskin:appleskin-fabric:mc1.20-2.5.1"
+    modCompileOnly "squeek.appleskin:appleskin-fabric:mc1.21-3.0.6"
+    modLocalRuntime "squeek.appleskin:appleskin-fabric:mc1.21-3.0.6"
 
     modCompileOnly "maven.modrinth:vivecraft:9Sa2NEEb"
     annotationProcessor(files("libs/mixinextras-fabric-0.2.0-beta.8.jar"))
@@ -260,7 +254,7 @@ processResources {
     }
 }
 
-def targetJavaVersion = 17
+def targetJavaVersion = 21
 tasks.withType(JavaCompile).configureEach {
     // ensure that the encoding is set to UTF-8, no matter what the system default is
     // this fixes some edge cases with special characters not displaying correctly
