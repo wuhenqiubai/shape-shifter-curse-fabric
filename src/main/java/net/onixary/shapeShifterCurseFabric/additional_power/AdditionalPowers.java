@@ -1,18 +1,18 @@
 package net.onixary.shapeShifterCurseFabric.additional_power;
 
-import io.github.apace100.apoli.power.PowerType;
-import io.github.apace100.apoli.power.PowerTypeReference;
-import io.github.apace100.apoli.power.ValueModifyingPower;
-import io.github.apace100.apoli.power.factory.PowerFactory;
+import io.github.apace100.apoli.data.TypedDataObjectFactory;
+import io.github.apace100.apoli.power.PowerConfiguration;
+import io.github.apace100.apoli.power.PowerReference;
+import io.github.apace100.apoli.power.type.PowerType;
 import io.github.apace100.apoli.registry.ApoliRegistries;
 import net.minecraft.registry.Registry;
 import net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric;
 
 public class AdditionalPowers {
-    public static final PowerType<?> SCARE_SKELETON = new PowerTypeReference<>(ShapeShifterCurseFabric.identifier("scare_skeleton"));  // 这种应该会比较节省计算资源
-    public static final PowerType<?> CAN_LOOT_SPIDER_FLUID_COCOON = new PowerTypeReference<>(ShapeShifterCurseFabric.identifier("can_loot_spider_fluid_cocoon"));
-    public static final PowerType<?> SPIDER_FRIENDLY = new PowerTypeReference<>(ShapeShifterCurseFabric.identifier("spider_friendly"));
-    public static final PowerType<?> HOSTILE_IRON_GOLEM = new PowerTypeReference<>(ShapeShifterCurseFabric.identifier("hostile_iron_golem"));
+    public static final PowerReference SCARE_SKELETON = PowerReference.of(ShapeShifterCurseFabric.identifier("scare_skeleton"));
+    public static final PowerReference CAN_LOOT_SPIDER_FLUID_COCOON = PowerReference.of(ShapeShifterCurseFabric.identifier("can_loot_spider_fluid_cocoon"));
+    public static final PowerReference SPIDER_FRIENDLY = PowerReference.of(ShapeShifterCurseFabric.identifier("spider_friendly"));
+    public static final PowerReference HOSTILE_IRON_GOLEM = PowerReference.of(ShapeShifterCurseFabric.identifier("hostile_iron_golem"));
 
     public static void register() {
         register(AddSustainedInstinctPower.getFactory());
@@ -82,7 +82,7 @@ public class AdditionalPowers {
         register(RenderTrinketsSlotPower.createFactory());
     }
 
-    public static PowerFactory<?> register(PowerFactory<?> powerFactory) {
-        return Registry.register(ApoliRegistries.POWER_FACTORY, powerFactory.getSerializerId(), powerFactory);
+    private static <T extends PowerType> PowerConfiguration<T> register(PowerConfiguration<T> config) {
+        return Registry.register(ApoliRegistries.POWER_TYPE, config.id(), config);
     }
 }
