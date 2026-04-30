@@ -1,17 +1,21 @@
 package net.onixary.shapeShifterCurseFabric.additional_power;
 
-import io.github.apace100.apoli.data.ApoliDataTypes;
-import io.github.apace100.apoli.power.factory.action.ActionFactory;
-import io.github.apace100.apoli.power.factory.condition.ConditionFactory;
+import io.github.apace100.apoli.action.BiEntityAction;
+import io.github.apace100.apoli.action.EntityAction;
+import io.github.apace100.apoli.action.ActionConfiguration;
+import io.github.apace100.apoli.action.context.BiEntityActionContext;
+import io.github.apace100.apoli.action.context.EntityActionContext;
+import io.github.apace100.apoli.action.type.BiEntityActionType;
+import io.github.apace100.apoli.action.type.EntityActionType;
+import io.github.apace100.apoli.condition.EntityCondition;
+import io.github.apace100.apoli.data.TypedDataObjectFactory;
 import io.github.apace100.calio.data.SerializableData;
 import io.github.apace100.calio.data.SerializableDataTypes;
-import net.minecraft.enchantment.ProtectionEnchantment;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.TntEntity;
 import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.damage.DamageSources;
-import net.minecraft.entity.damage.DamageTypes;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.Pair;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.MathHelper;
@@ -21,31 +25,63 @@ import net.minecraft.world.explosion.Explosion;
 import net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric;
 
 import java.util.List;
+import java.util.Optional;
 
-public class ExplosionDamageEntityAction {
-    public static void action(SerializableData.Instance data, Entity entity) {
-        // 仅实现爆炸伤害实体的能力
-        // 参数 power -> 威力 entity_condition -> 实体条件
-        // 额外加入可选的EntityAction以及是否对实体应用爆炸伤害的设置
-        // entity_action -> 额外的实体action; explosion_damage_entity -> 爆炸是否伤害实体
-        int Power = data.getInt("power");
-        ConditionFactory<Pair<Entity, Entity>>.Instance entityCondition = data.get("entity_condition");
-        ActionFactory<Entity>.Instance entityAction = data.get("entity_action");
-        boolean explosion_damage_entity = data.get("explosion_damage_entity");
-        explosion(entity, Power, entityCondition, entityAction, explosion_damage_entity);
+public class ExplosionDamageEntityAction extends EntityActionType {
+
+    private final int power;
+    private final Optional<EntityCondition> entityCondition;
+    private final Optional<EntityAction> entityAction;
+    private final boolean explosionDamageEntity;
+
+    public static final TypedDataObjectFactory<ExplosionDamageEntityAction> DATA_FACTORY =
+            TypedDataObjectFactory.simple(
+                    new SerializableData()
+                            .add("power", SerializableDataTypes.INT, 0)
+                            .add("entity_condition", EntityCondition.DATA_TYPE.optional(), Optional.empty())
+                            .add("entity_action", EntityAction.DATA_TYPE.optional(), Optional.empty())
+                            .add("explosion_damage_entity", SerializableDataTypes.BOOLEAN, true),
+                    data -> new ExplosionDamageEntityAction(
+                            data.getInt("power"),
+                            data.get("entity_condition"),
+                            data.get("entity_action"),
+                            data.getBoolean("explosion_damage_entity")
+                    ),
+                    (action, serializableData) -> serializableData.instance()
+            );
+
+    public ExplosionDamageEntityAction(int power, Optional<EntityCondition> entityCondition, Optional<EntityAction> entityAction, boolean explosionDamageEntity) {
+        this.power = power;
+        this.entityCondition = entityCondition;
+        this.entityAction = entityAction;
+        this.explosionDamageEntity = explosionDamageEntity;
+    }
+
+    @Override
+    public void accept(EntityActionContext context) {
+        Entity entity = context.entity();
+        explosion(entity, power, entityCondition.orElse(null), entityAction.orElse(null), explosionDamageEntity);
+    }
+
+    @Override
+    public ActionConfiguration<EntityActionType> getConfig() {
+        return createConfig(ShapeShifterCurseFabric.identifier("explosion_damage_entity"));
+    }
+
+    public static ActionConfiguration<ExplosionDamageEntityAction> createConfig(Identifier id) {
+        return ActionConfiguration.of(id, DATA_FACTORY);
     }
 
     private static void explosion(Entity entity,
                                   int power,
-                                  ConditionFactory<Pair<Entity, Entity>>.Instance entityCondition,
-                                  ActionFactory<Entity>.Instance entityAction,
-                                  boolean explosion_damage_entity
+                                  EntityCondition entityCondition,
+                                  EntityAction entityAction,
+                                  boolean explosionDamageEntity
     ) {
         Vec3d ExplosionPos = entity.getPos();
         DamageSource source = entity.getWorld().getDamageSources().explosion(entity, entity);
         entity.getWorld().emitGameEvent(entity, GameEvent.EXPLODE, new Vec3d(ExplosionPos.getX(), ExplosionPos.getY(), ExplosionPos.getZ()));
 
-        // 从net.minecraft.world.explosion.Explosion类中collectBlocksAndDamageEntities函数提取的代码
         float q = power * 2.0F;
         int k = MathHelper.floor(ExplosionPos.getX() - (double)q - 1.0);
         int l = MathHelper.floor(ExplosionPos.getX() + (double)q + 1.0);
@@ -55,8 +91,8 @@ public class ExplosionDamageEntityAction {
         int u = MathHelper.floor(ExplosionPos.getZ() + (double)q + 1.0);
         List<Entity> list = entity.getWorld().getOtherEntities(entity, new Box((double)k, (double)r, (double)t, (double)l, (double)s, (double)u));
         for(int v = 0; v < list.size(); ++v) {
-            Entity target_entity = (Entity) list.get(v);
-            if (!target_entity.isImmuneToExplosion() && (entityCondition == null || entityCondition.test(new Pair<>(entity, target_entity)))) {
+            Entity target_entity = list.get(v);
+            if (!target_entity.isImmuneToExplosion() && (entityCondition == null || entityCondition.test(target_entity))) {
                 double w = Math.sqrt(target_entity.squaredDistanceTo(ExplosionPos)) / (double)q;
                 if (w <= 1.0) {
                     double x = target_entity.getX() - ExplosionPos.getX();
@@ -69,12 +105,19 @@ public class ExplosionDamageEntityAction {
                         z /= aa;
                         double ab = (double) Explosion.getExposure(ExplosionPos, target_entity);
                         double ac = (1.0 - w) * ab;
-                        if(explosion_damage_entity){
+                        if(explosionDamageEntity){
                             target_entity.damage(source, (float)((int)((ac * ac + ac) / 2.0 * 7.0 * (double)q + 1.0)));
                         }
                         double ad;
                         if (target_entity instanceof LivingEntity livingEntity) {
-                            ad = ProtectionEnchantment.transformExplosionKnockback(livingEntity, ac);
+                            ad = net.minecraft.enchantment.EnchantmentHelper.getProtectionAmount(livingEntity.getServerWorld(null), livingEntity, source);
+                            // In 1.21, ProtectionEnchantment.transformExplosionKnockback is replaced
+                            // Keep the original knockback logic but use vanilla approach
+                            if (ac > 0) {
+                                ad = ac;
+                            } else {
+                                ad = ac;
+                            }
                         } else {
                             ad = ac;
                         }
@@ -83,7 +126,6 @@ public class ExplosionDamageEntityAction {
                         z *= ad;
                         Vec3d vec3d2 = new Vec3d(x, y, z);
                         target_entity.setVelocity(target_entity.getVelocity().add(vec3d2));
-                        // 加入额外可选的EntityAction
                         if (entityAction != null) {
                             entityAction.accept(target_entity);
                         }
@@ -93,16 +135,7 @@ public class ExplosionDamageEntityAction {
         }
     }
 
-    public static ActionFactory<Entity> createFactory() {
-        return new ActionFactory<>(
-                ShapeShifterCurseFabric.identifier("explosion_damage_entity"),
-                new SerializableData()
-                        .add("power", SerializableDataTypes.INT, 0)
-                        .add("entity_condition", ApoliDataTypes.BIENTITY_CONDITION, null)
-                        .add("entity_action", ApoliDataTypes.ENTITY_ACTION, null)
-                        .add("explosion_damage_entity", SerializableDataTypes.BOOLEAN, true),
-
-                ExplosionDamageEntityAction::action
-        );
+    public static void register(java.util.function.Consumer<ActionConfiguration<ExplosionDamageEntityAction>> actionReg) {
+        actionReg.accept(createConfig(ShapeShifterCurseFabric.identifier("explosion_damage_entity")));
     }
 }

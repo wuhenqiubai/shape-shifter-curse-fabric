@@ -1,72 +1,104 @@
 package net.onixary.shapeShifterCurseFabric.additional_power;
 
-import io.github.apace100.apoli.data.ApoliDataTypes;
-import io.github.apace100.apoli.power.factory.action.ActionFactory;
+import io.github.apace100.apoli.action.ActionConfiguration;
+import io.github.apace100.apoli.action.EntityAction;
+import io.github.apace100.apoli.action.context.EntityActionContext;
+import io.github.apace100.apoli.action.type.EntityActionType;
+import io.github.apace100.apoli.data.TypedDataObjectFactory;
 import io.github.apace100.calio.data.SerializableData;
 import io.github.apace100.calio.data.SerializableDataTypes;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.item.ArrowItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.util.Pair;
+import net.minecraft.util.Identifier;
 import net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric;
+import org.jetbrains.annotations.NotNull;
 
+import java.util.Optional;
 import java.util.function.Consumer;
 
-public class FireArrowAction {
-    public static void spawnFireArrow(LivingEntity owner, float Damage, float Speed, float Spread, int FireTime, boolean NoGravity, boolean Critical, boolean hasOwner, Consumer<Entity> projectileAction) {
-        ArrowItem arrowItem = (ArrowItem)(Items.ARROW);
-        ItemStack itemStack = new ItemStack(arrowItem);
-        PersistentProjectileEntity persistentProjectileEntity = arrowItem.createArrow(owner.getWorld(), itemStack, hasOwner ? owner : null);
-        if (FireTime > 0) {
-            persistentProjectileEntity.setOnFireFor(FireTime);
-        }
-        if (NoGravity) {
-            persistentProjectileEntity.setNoGravity(true);  // 危险设计 容易制作卡服机 见烈焰弹卡服务器方法
-        }
-        persistentProjectileEntity.setVelocity(owner, owner.getPitch(), owner.getYaw(), 0.0F, Speed, Spread);
-        persistentProjectileEntity.setDamage(Damage);
-        if (Critical) {
-            persistentProjectileEntity.setCritical(true);
-        }
-        persistentProjectileEntity.pickupType = PersistentProjectileEntity.PickupPermission.CREATIVE_ONLY;
-        boolean success = owner.getWorld().spawnEntity(persistentProjectileEntity);
-        if (success) {
-            if (projectileAction != null) {
-                projectileAction.accept(persistentProjectileEntity);
-            }
+public class FireArrowAction extends EntityActionType {
+
+    public static final TypedDataObjectFactory<FireArrowAction> DATA_FACTORY = TypedDataObjectFactory.simple(
+            new SerializableData()
+                    .add("damage", SerializableDataTypes.FLOAT, 2.0f)
+                    .add("speed", SerializableDataTypes.FLOAT, 3.0f)
+                    .add("spread", SerializableDataTypes.FLOAT, 0.0f)
+                    .add("fire_time", SerializableDataTypes.INT, 0)
+                    .add("no_gravity", SerializableDataTypes.BOOLEAN, false)
+                    .add("critical", SerializableDataTypes.BOOLEAN, false)
+                    .add("has_owner", SerializableDataTypes.BOOLEAN, true)
+                    .add("projectile_action", EntityAction.DATA_TYPE.optional(), Optional.empty())
+                    .add("count", SerializableDataTypes.INT, 1),
+            data -> new FireArrowAction(
+                    data.getFloat("damage"),
+                    data.getFloat("speed"),
+                    data.getFloat("spread"),
+                    data.getInt("fire_time"),
+                    data.getBoolean("no_gravity"),
+                    data.getBoolean("critical"),
+                    data.getBoolean("has_owner"),
+                    data.get("projectile_action"),
+                    data.getInt("count")
+            ),
+            (action, serializableData) -> serializableData.instance()
+    );
+
+    private final float damage, speed, spread;
+    private final int fireTime, count;
+    private final boolean noGravity, critical, hasOwner;
+    private final Optional<EntityAction> projectileAction;
+
+    public FireArrowAction(float damage, float speed, float spread, int fireTime,
+                           boolean noGravity, boolean critical, boolean hasOwner,
+                           Optional<EntityAction> projectileAction, int count) {
+        this.damage = damage;
+        this.speed = speed;
+        this.spread = spread;
+        this.fireTime = fireTime;
+        this.noGravity = noGravity;
+        this.critical = critical;
+        this.hasOwner = hasOwner;
+        this.projectileAction = projectileAction;
+        this.count = count;
+    }
+
+    @Override
+    public void accept(EntityActionContext context) {
+        if (!(context.entity() instanceof LivingEntity livingEntity)) return;
+        for (int i = 0; i < count; i++) {
+            spawnFireArrow(livingEntity);
         }
     }
 
-    public static void registerAction(Consumer<ActionFactory<Entity>> ActionRegister, Consumer<ActionFactory<Pair<Entity, Entity>>> BIActionRegister) {
-        ActionRegister.accept(new ActionFactory<Entity>(
-                ShapeShifterCurseFabric.identifier("fire_arrow"),
-                new SerializableData()
-                        .add("damage", SerializableDataTypes.FLOAT, 2.0f)
-                        .add("speed", SerializableDataTypes.FLOAT, 3.0f)
-                        .add("spread", SerializableDataTypes.FLOAT, 0.0f)
-                        .add("fire_time", SerializableDataTypes.INT, 0)
-                        .add("no_gravity", SerializableDataTypes.BOOLEAN, false)
-                        .add("critical", SerializableDataTypes.BOOLEAN, false)
-                        .add("has_owner", SerializableDataTypes.BOOLEAN, true)
-                        .add("projectile_action", ApoliDataTypes.ENTITY_ACTION, null)
-                        .add("count", SerializableDataTypes.INT, 1),
-                (data, e) -> {
-                    if (e instanceof LivingEntity livingEntity) {
-                    float damage = data.get("damage");
-                    float speed = data.get("speed");
-                    float spread = data.get("spread");
-                    int fireTime = data.get("fire_time");
-                    boolean noGravity = data.get("no_gravity");
-                    boolean critical = data.get("critical");
-                    boolean hasOwner = data.get("has_owner");
-                    Consumer<Entity> projectileAction = data.get("projectile_action");
-                    int count = data.get("count");
-                    for (int i = 0; i < count; i++) {
-                        spawnFireArrow(livingEntity, damage, speed, spread, fireTime, noGravity, critical, hasOwner, projectileAction);
-                    }
-                }}));
+    private void spawnFireArrow(LivingEntity owner) {
+        ArrowItem arrowItem = (ArrowItem) Items.ARROW;
+        ItemStack itemStack = new ItemStack(arrowItem);
+        PersistentProjectileEntity arrow = arrowItem.createArrow(owner.getWorld(), itemStack, hasOwner ? owner : null);
+        if (fireTime > 0) arrow.setOnFireFor(fireTime);
+        if (noGravity) arrow.setNoGravity(true);
+        arrow.setVelocity(owner, owner.getPitch(), owner.getYaw(), 0.0F, speed, spread);
+        arrow.setDamage(damage);
+        if (critical) arrow.setCritical(true);
+        arrow.pickupType = PersistentProjectileEntity.PickupPermission.CREATIVE_ONLY;
+        if (owner.getWorld().spawnEntity(arrow)) {
+            projectileAction.ifPresent(a -> a.accept(arrow));
+        }
+    }
+
+    @Override
+    public @NotNull ActionConfiguration<?> getConfig() {
+        return AdditionalEntityActions.FIRE_ARROW;
+    }
+
+    public static ActionConfiguration<FireArrowAction> createConfig(Identifier id) {
+        return ActionConfiguration.of(id, DATA_FACTORY);
+    }
+
+    public static void registerAction(Consumer<ActionConfiguration<FireArrowAction>> actionReg,
+                                       Consumer<?> biActionReg) {
+        actionReg.accept(createConfig(ShapeShifterCurseFabric.identifier("fire_arrow")));
     }
 }

@@ -3,311 +3,321 @@ package net.onixary.shapeShifterCurseFabric.additional_power;
 import dev.emi.trinkets.api.TrinketComponent;
 import dev.emi.trinkets.api.TrinketInventory;
 import dev.emi.trinkets.api.TrinketsApi;
-import io.github.apace100.apoli.data.ApoliDataTypes;
-import io.github.apace100.apoli.power.factory.action.ActionFactory;
-import io.github.apace100.apoli.power.factory.condition.ConditionFactory;
+import io.github.apace100.apoli.action.ActionConfiguration;
+import io.github.apace100.apoli.action.context.EntityActionContext;
+import io.github.apace100.apoli.action.type.EntityActionType;
+import io.github.apace100.apoli.condition.ConditionConfiguration;
+import io.github.apace100.apoli.condition.EntityCondition;
+import io.github.apace100.apoli.condition.ItemCondition;
+import io.github.apace100.apoli.condition.context.EntityConditionContext;
+import io.github.apace100.apoli.condition.type.EntityConditionType;
+import io.github.apace100.apoli.data.TypedDataObjectFactory;
 import io.github.apace100.calio.data.SerializableData;
 import io.github.apace100.calio.data.SerializableDataTypes;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.Pair;
 import net.minecraft.world.World;
 import net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric;
 import net.onixary.shapeShifterCurseFabric.items.accessory.AccessoryUtils;
 import net.onixary.shapeShifterCurseFabric.items.accessory.CurioUtils;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Consumer;
-import java.util.function.Predicate;
 
 import static net.onixary.shapeShifterCurseFabric.items.accessory.AccessoryUtils.calcAutoMod;
 
 public class TrinketsConditionAction {
-    public static boolean isEquipped(Entity entity, String AccessoryMod, Identifier trinketID) {
-        if (trinketID == null) {
-            return false;
-        }
+
+    private static boolean isEquipped(LivingEntity entity, String accessoryMod, Identifier trinketID) {
+        if (trinketID == null) return false;
         Optional<Item> trinketItem = Registries.ITEM.getOrEmpty(trinketID);
-        if (trinketItem.isEmpty()) {
-            return false;
-        }
-        switch (calcAutoMod(AccessoryMod)) {
-            case "trinkets":
-                if (!AccessoryUtils.LOADED_Trinkets) {
-                    return false;
-                }
-                if (entity instanceof LivingEntity livingEntity) {
-                    Optional<TrinketComponent> component = TrinketsApi.getTrinketComponent(livingEntity);
-                    if (!component.isEmpty()) {
-                        boolean IsEquipped = component.get().isEquipped(trinketItem.get());
-                        return IsEquipped;
-                    }
-                }
-                return false;
-            case "curios":
-                if (!AccessoryUtils.LOADED_Curios) {
-                    return false;
-                }
-                if (entity instanceof LivingEntity livingEntity) {
-                    return CurioUtils.isEquipped(livingEntity, trinketItem.get());
-                }
-                return false;
-            case "all":
-                boolean FoundEquipped = false;
-                if (!FoundEquipped && AccessoryUtils.LOADED_Trinkets) {
-                    if (entity instanceof LivingEntity livingEntity) {
-                        Optional<TrinketComponent> component = TrinketsApi.getTrinketComponent(livingEntity);
-                        if (!component.isEmpty()) {
-                            boolean IsEquipped = component.get().isEquipped(trinketItem.get());
-                            FoundEquipped = IsEquipped;
-                        }
-                    }
-                }
-                if (!FoundEquipped && AccessoryUtils.LOADED_Curios) {
-                    if (entity instanceof LivingEntity livingEntity) {
-                        return CurioUtils.isEquipped(livingEntity, trinketItem.get());
-                    }
-                }
-                return FoundEquipped;
-            case "none":
-                return false;
-            default:
-                ShapeShifterCurseFabric.LOGGER.error("[check_accessory_slot] accessory_mod is not valid");
-        }
-        return false;
-    }
-
-    public static boolean CheckEquipped(Entity entity, String AccessoryMod, String GroupString, String SlotString, int Slot, Predicate<ItemStack> conditon, boolean rDefault) {
-        if (entity instanceof LivingEntity livingEntity) {
-            switch (calcAutoMod(AccessoryMod)) {
-                case "trinkets":
-                    if (!AccessoryUtils.LOADED_Trinkets) {
-                        return rDefault;
-                    }
-                    Optional<TrinketComponent> component = TrinketsApi.getTrinketComponent(livingEntity);
-                    if (component.isEmpty()) {
-                        return rDefault;
-                    }
-                    Map<String, TrinketInventory> groupInv = component.get().getInventory().get(GroupString);
-                    if (groupInv == null) {
-                        return rDefault;
-                    }
-                    TrinketInventory inv = groupInv.get(SlotString);
-                    if (inv == null) {
-                        return rDefault;
-                    }
-                    ItemStack stack = inv.getStack(Slot);
-                    if (conditon == null) {
-                        return rDefault;
-                    }
-                    return conditon.test(stack);
-                case "curios":
-                    if (!AccessoryUtils.LOADED_Curios) {
-                        return rDefault;
-                    }
-                    List<ItemStack> itemStackList = CurioUtils.getEntitySlot(livingEntity, SlotString);
-                    if (itemStackList == null) {
-                        return rDefault;
-                    }
-                    if (Slot >= itemStackList.size()) {
-                        return rDefault;
-                    }
-                    ItemStack itemStack = itemStackList.get(Slot);
-                    if (conditon == null) {
-                        return rDefault;
-                    }
-                    return conditon.test(itemStack);
-                case "none":
-                    return rDefault;
-                default:
-                    ShapeShifterCurseFabric.LOGGER.error("[check_accessory_slot] accessory_mod is not valid");
+        if (trinketItem.isEmpty()) return false;
+        return switch (calcAutoMod(accessoryMod)) {
+            case "trinkets" -> {
+                if (!AccessoryUtils.LOADED_Trinkets) yield false;
+                yield TrinketsApi.getTrinketComponent(entity)
+                        .map(c -> c.isEquipped(trinketItem.get())).orElse(false);
             }
-        }
-        return rDefault;
-    }
-
-    public static void InvokeEquipped(Entity entity, String AccessoryMod, String GroupString, String SlotString, int Slot, Consumer<Pair<World, ItemStack>> action) {
-        if (entity instanceof LivingEntity livingEntity) {
-            switch (calcAutoMod(AccessoryMod)) {
-                case "trinkets":
-                    if (!AccessoryUtils.LOADED_Trinkets) {
-                        return;
-                    }
-                    Optional<TrinketComponent> component = TrinketsApi.getTrinketComponent(livingEntity);
-                    if (component.isEmpty()) {
-                        return;
-                    }
-                    Map<String, TrinketInventory> groupInv = component.get().getInventory().get(GroupString);
-                    if (groupInv == null) {
-                        return;
-                    }
-                    TrinketInventory inv = groupInv.get(SlotString);
-                    if (inv == null) {
-                        return;
-                    }
-                    ItemStack stack = inv.getStack(Slot);
-                    if (action == null) {
-                        return;
-                    }
-                    action.accept(new Pair<>(entity.getWorld(), stack));
-                case "curios":
-                    if (!AccessoryUtils.LOADED_Curios) {
-                        return;
-                    }
-                    List<ItemStack> itemStackList = CurioUtils.getEntitySlot(livingEntity, SlotString);
-                    if (itemStackList == null) {
-                        return;
-                    }
-                    if (Slot >= itemStackList.size()) {
-                        return;
-                    }
-                    ItemStack itemStack = itemStackList.get(Slot);
-                    if (action == null) {
-                        return;
-                    }
-                    action.accept(new Pair<>(entity.getWorld(), itemStack));
-                    return;
-                case "none":
-                    return;
-                default:
-                    ShapeShifterCurseFabric.LOGGER.error("[invoke_accessory] accessory_mod is not valid");
+            case "curios" -> AccessoryUtils.LOADED_Curios && CurioUtils.isEquipped(entity, trinketItem.get());
+            case "all" -> {
+                boolean found = false;
+                if (AccessoryUtils.LOADED_Trinkets)
+                    found = TrinketsApi.getTrinketComponent(entity).map(c -> c.isEquipped(trinketItem.get())).orElse(false);
+                if (!found && AccessoryUtils.LOADED_Curios)
+                    found = CurioUtils.isEquipped(entity, trinketItem.get());
+                yield found;
             }
-        }
-        return;
+            default -> false;
+        };
     }
 
-    // 原先有个单独处理drop的函数 但由于trinkets安装状态不确定 java会读取函数描述符 所以trinket的class不能出现在返回值和参数值 所以移除掉了
+    private static boolean checkEquipped(LivingEntity livingEntity, String accessoryMod,
+                                          String group, String slot, int slotIndex,
+                                          Optional<ItemCondition> condition, boolean rDefault) {
+        return switch (calcAutoMod(accessoryMod)) {
+            case "trinkets" -> {
+                if (!AccessoryUtils.LOADED_Trinkets) yield rDefault;
+                Optional<TrinketComponent> comp = TrinketsApi.getTrinketComponent(livingEntity);
+                if (comp.isEmpty()) yield rDefault;
+                Map<String, TrinketInventory> groupInv = comp.get().getInventory().get(group);
+                if (groupInv == null) yield rDefault;
+                TrinketInventory inv = groupInv.get(slot);
+                if (inv == null) yield rDefault;
+                yield condition.map(c -> c.test(inv.getStack(slotIndex))).orElse(rDefault);
+            }
+            case "curios" -> {
+                if (!AccessoryUtils.LOADED_Curios) yield rDefault;
+                List<ItemStack> stacks = CurioUtils.getEntitySlot(livingEntity, slot);
+                if (stacks == null || slotIndex >= stacks.size()) yield rDefault;
+                yield condition.map(c -> c.test(stacks.get(slotIndex))).orElse(rDefault);
+            }
+            default -> rDefault;
+        };
+    }
 
-    public static void DropEquipped(Entity entity, String AccessoryMod, String GroupString, String SlotString, int Slot, boolean remove) {
-        if (entity instanceof LivingEntity livingEntity) {
-            switch (calcAutoMod(AccessoryMod)) {
-                case "trinkets":
-                    if (!AccessoryUtils.LOADED_Trinkets) {
-                        return;
-                    }
-                    Optional<TrinketComponent> component = TrinketsApi.getTrinketComponent(livingEntity);
-                    if (component.isEmpty()) {
-                        return;
-                    }
-                    Map<String, TrinketInventory> groupInv = component.get().getInventory().get(GroupString);
-                    if (groupInv == null) {
-                        return;
-                    }
-                    TrinketInventory inv = groupInv.get(SlotString);
-                    if (inv == null) {
-                        return;
-                    }
-                    if (Slot >= 0) {
-                        if (!remove) {
-                            if (!inv.getStack(Slot).isEmpty()) {
-                                entity.getWorld().spawnEntity(new ItemEntity(entity.getWorld(), entity.getX(), entity.getY(), entity.getZ(), inv.getStack(Slot)));
-                                inv.setStack(Slot, ItemStack.EMPTY);
-                            }
-                        } else {
-                            inv.setStack(Slot, ItemStack.EMPTY);
-                        }
-                    } else {
-                        for (int i = 0; i < inv.size(); i++) {
-                            if (!remove) {
-                                if (!inv.getStack(i).isEmpty()) {
-                                    entity.getWorld().spawnEntity(new ItemEntity(entity.getWorld(), entity.getX(), entity.getY(), entity.getZ(), inv.getStack(i)));
-                                    inv.setStack(i, ItemStack.EMPTY);
-                                }
-                            } else {
-                                inv.setStack(i, ItemStack.EMPTY);
-                            }
-                        }
-                    }
-                case "curios":
-                    if (!AccessoryUtils.LOADED_Curios) {
-                        return;
-                    }
-                    List<ItemStack> itemStackList = CurioUtils.getEntitySlot(livingEntity, SlotString);
-                    if (itemStackList == null) {
-                        return;
-                    }
-                    if (Slot >= itemStackList.size()) {
-                        return;
-                    }
-                    if (Slot >= 0) {
-                        if (!remove) {
-                            if (!itemStackList.get(Slot).isEmpty()) {
-                                entity.getWorld().spawnEntity(new ItemEntity(entity.getWorld(), entity.getX(), entity.getY(), entity.getZ(), itemStackList.get(Slot)));
-                                CurioUtils.setEntitySlot(livingEntity, SlotString, Slot, ItemStack.EMPTY);
-                            }
-                        } else {
-                            CurioUtils.setEntitySlot(livingEntity, SlotString, Slot, ItemStack.EMPTY);
-                        }
-                    } else {
-                        for (int i = 0; i < itemStackList.size(); i++) {
-                            if (!remove) {
-                                if (!itemStackList.get(i).isEmpty()) {
-                                    entity.getWorld().spawnEntity(new ItemEntity(entity.getWorld(), entity.getX(), entity.getY(), entity.getZ(), itemStackList.get(i)));
-                                    CurioUtils.setEntitySlot(livingEntity, SlotString, i, ItemStack.EMPTY);
-                                }
-                            } else {
-                                CurioUtils.setEntitySlot(livingEntity, SlotString, i, ItemStack.EMPTY);
-                            }
-                        }
-                    }
-                    return;
-                case "none":
-                    return;
-                default:
-                    ShapeShifterCurseFabric.LOGGER.error("[drop_accessory] accessory_mod is not valid");
+    private static void invokeEquipped(LivingEntity entity, String accessoryMod, String group, String slot, int slotIndex,
+                                        Optional<Consumer<ItemStack>> action) {
+        if (action.isEmpty()) return;
+        switch (calcAutoMod(accessoryMod)) {
+            case "trinkets" -> {
+                if (!AccessoryUtils.LOADED_Trinkets) return;
+                TrinketsApi.getTrinketComponent(entity).ifPresent(comp -> {
+                    Map<String, TrinketInventory> groupInv = comp.getInventory().get(group);
+                    if (groupInv == null) return;
+                    TrinketInventory inv = groupInv.get(slot);
+                    if (inv == null) return;
+                    action.get().accept(inv.getStack(slotIndex));
+                });
+            }
+            case "curios" -> {
+                if (!AccessoryUtils.LOADED_Curios) return;
+                List<ItemStack> stacks = CurioUtils.getEntitySlot(entity, slot);
+                if (stacks != null && slotIndex < stacks.size())
+                    action.get().accept(stacks.get(slotIndex));
             }
         }
     }
 
-    public static void registerCondition(Consumer<ConditionFactory<Entity>> registerFunc) {
-        registerFunc.accept(new ConditionFactory<Entity>(
-                ShapeShifterCurseFabric.identifier("equip_accessory"),  // 为了之后写双端不用改 还是使用equip_accessories吧
-                new SerializableData()
-                        .add("accessory_mod", SerializableDataTypes.STRING, "auto")
-                        .add("accessory", SerializableDataTypes.IDENTIFIER, null),
-                (data, e) -> isEquipped(e, data.get("accessory_mod"), data.get("accessory"))
-        ));
-
-        registerFunc.accept(new ConditionFactory<Entity>(
-                ShapeShifterCurseFabric.identifier("check_accessory"),
-                new SerializableData()
-                        .add("accessory_mod", SerializableDataTypes.STRING, "auto")
-                        .add("group", SerializableDataTypes.STRING, "")
-                        .add("slot", SerializableDataTypes.STRING, "")
-                        .add("slot_index", SerializableDataTypes.INT, 0)
-                        .add("condition", ApoliDataTypes.ITEM_CONDITION, null),
-                (data, e) -> CheckEquipped(e, data.get("accessory_mod"), data.get("group"), data.get("slot"), data.get("slot_index"), data.get("condition"), false)
-        ));
+    private static void dropEquipped(LivingEntity entity, String accessoryMod, String group, String slot,
+                                      int slotIndex, boolean remove) {
+        switch (calcAutoMod(accessoryMod)) {
+            case "trinkets" -> {
+                if (!AccessoryUtils.LOADED_Trinkets) return;
+                Optional<TrinketComponent> comp = TrinketsApi.getTrinketComponent(entity);
+                if (comp.isEmpty()) return;
+                Map<String, TrinketInventory> groupInv = comp.get().getInventory().get(group);
+                if (groupInv == null) return;
+                TrinketInventory inv = groupInv.get(slot);
+                if (inv == null) return;
+                World world = entity.getWorld();
+                if (slotIndex >= 0) {
+                    dropOrRemove(world, entity, inv, slotIndex, remove);
+                } else {
+                    for (int i = 0; i < inv.size(); i++)
+                        dropOrRemove(world, entity, inv, i, remove);
+                }
+            }
+            case "curios" -> {
+                if (!AccessoryUtils.LOADED_Curios) return;
+                List<ItemStack> stacks = CurioUtils.getEntitySlot(entity, slot);
+                if (stacks == null) return;
+                World world = entity.getWorld();
+                if (slotIndex >= 0 && slotIndex < stacks.size()) {
+                    dropOrRemoveSL(world, entity, stacks, slotIndex, remove);
+                } else if (slotIndex < 0) {
+                    for (int i = 0; i < stacks.size(); i++)
+                        dropOrRemoveSL(world, entity, stacks, i, remove);
+                }
+            }
+        }
     }
 
-    public static void registerAction(Consumer<ActionFactory<Entity>> ActionRegister, Consumer<ActionFactory<Pair<Entity, Entity>>> BIActionRegister) {
-        ActionRegister.accept(new ActionFactory<Entity>(
-                ShapeShifterCurseFabric.identifier("drop_accessory"),
-                new SerializableData()
-                        .add("accessory_mod", SerializableDataTypes.STRING, "auto")
-                        .add("group", SerializableDataTypes.STRING, "")
-                        .add("slot", SerializableDataTypes.STRING, "")
-                        .add("slot_index", SerializableDataTypes.INT, -1)
-                        .add("remove", SerializableDataTypes.BOOLEAN, false),
-                (data, e) -> DropEquipped(e, data.get("accessory_mod"), data.get("group"), data.get("slot"), data.get("slot_index"), data.get("remove"))
-        ));
+    private static void dropOrRemove(World world, LivingEntity entity, TrinketInventory inv, int idx, boolean remove) {
+        if (remove) {
+            inv.setStack(idx, ItemStack.EMPTY);
+        } else if (!inv.getStack(idx).isEmpty()) {
+            world.spawnEntity(new ItemEntity(world, entity.getX(), entity.getY(), entity.getZ(), inv.getStack(idx)));
+            inv.setStack(idx, ItemStack.EMPTY);
+        }
+    }
 
-        ActionRegister.accept(new ActionFactory<Entity>(
-                ShapeShifterCurseFabric.identifier("invoke_accessory"),
-                new SerializableData()
-                        .add("accessory_mod", SerializableDataTypes.STRING, "auto")
-                        .add("group", SerializableDataTypes.STRING, "")
-                        .add("slot", SerializableDataTypes.STRING, "")
-                        .add("slot_index", SerializableDataTypes.INT, 0)
-                        .add("action", ApoliDataTypes.ITEM_ACTION, null),
-                (data, e) -> InvokeEquipped(e, data.get("accessory_mod"), data.get("group"), data.get("slot"), data.get("slot_index"), data.get("action"))
-        ));
+    private static void dropOrRemoveSL(World world, LivingEntity entity, List<ItemStack> stacks, int idx, boolean remove) {
+        if (remove) {
+            stacks.set(idx, ItemStack.EMPTY);
+        } else if (!stacks.get(idx).isEmpty()) {
+            world.spawnEntity(new ItemEntity(world, entity.getX(), entity.getY(), entity.getZ(), stacks.get(idx)));
+            stacks.set(idx, ItemStack.EMPTY);
+        }
+    }
+
+    public static class EquipAccessoryCondition extends EntityConditionType {
+        public static final TypedDataObjectFactory<EquipAccessoryCondition> DATA_FACTORY =
+                TypedDataObjectFactory.simple(
+                        new SerializableData()
+                                .add("accessory_mod", SerializableDataTypes.STRING, "auto")
+                                .add("accessory", SerializableDataTypes.IDENTIFIER, null),
+                        data -> new EquipAccessoryCondition(data.getString("accessory_mod"), data.getId("accessory")),
+                        (c, sd) -> sd.instance()
+                );
+
+        private final String accessoryMod;
+        private final Identifier accessory;
+
+        public EquipAccessoryCondition(String accessoryMod, Identifier accessory) {
+            this.accessoryMod = accessoryMod;
+            this.accessory = accessory;
+        }
+
+        @Override
+        public boolean test(EntityConditionContext ctx) {
+            return ctx.entity() instanceof LivingEntity le && isEquipped(le, accessoryMod, accessory);
+        }
+
+        @Override
+        public @NotNull ConditionConfiguration<?> getConfig() {
+            return AdditionalEntityConditions.EQUIP_ACCESSORY;
+        }
+    }
+
+    public static class CheckAccessoryCondition extends EntityConditionType {
+        public static final TypedDataObjectFactory<CheckAccessoryCondition> DATA_FACTORY =
+                TypedDataObjectFactory.simple(
+                        new SerializableData()
+                                .add("accessory_mod", SerializableDataTypes.STRING, "auto")
+                                .add("group", SerializableDataTypes.STRING, "")
+                                .add("slot", SerializableDataTypes.STRING, "")
+                                .add("slot_index", SerializableDataTypes.INT, 0)
+                                .add("condition", ItemCondition.DATA_TYPE.optional(), Optional.empty()),
+                        data -> new CheckAccessoryCondition(
+                                data.getString("accessory_mod"), data.getString("group"),
+                                data.getString("slot"), data.getInt("slot_index"), data.get("condition")),
+                        (c, sd) -> sd.instance()
+                );
+
+        private final String accessoryMod, group, slot;
+        private final int slotIndex;
+        private final Optional<ItemCondition> condition;
+
+        public CheckAccessoryCondition(String accessoryMod, String group, String slot,
+                                        int slotIndex, Optional<ItemCondition> condition) {
+            this.accessoryMod = accessoryMod;
+            this.group = group;
+            this.slot = slot;
+            this.slotIndex = slotIndex;
+            this.condition = condition;
+        }
+
+        @Override
+        public boolean test(EntityConditionContext ctx) {
+            return ctx.entity() instanceof LivingEntity le
+                    && checkEquipped(le, accessoryMod, group, slot, slotIndex, condition, false);
+        }
+
+        @Override
+        public @NotNull ConditionConfiguration<?> getConfig() {
+            return AdditionalEntityConditions.CHECK_ACCESSORY;
+        }
+    }
+
+    public static class DropAccessoryAction extends EntityActionType {
+        public static final TypedDataObjectFactory<DropAccessoryAction> DATA_FACTORY =
+                TypedDataObjectFactory.simple(
+                        new SerializableData()
+                                .add("accessory_mod", SerializableDataTypes.STRING, "auto")
+                                .add("group", SerializableDataTypes.STRING, "")
+                                .add("slot", SerializableDataTypes.STRING, "")
+                                .add("slot_index", SerializableDataTypes.INT, -1)
+                                .add("remove", SerializableDataTypes.BOOLEAN, false),
+                        data -> new DropAccessoryAction(
+                                data.getString("accessory_mod"), data.getString("group"),
+                                data.getString("slot"), data.getInt("slot_index"), data.getBoolean("remove")),
+                        (a, sd) -> sd.instance()
+                );
+
+        private final String accessoryMod, group, slot;
+        private final int slotIndex;
+        private final boolean remove;
+
+        public DropAccessoryAction(String accessoryMod, String group, String slot, int slotIndex, boolean remove) {
+            this.accessoryMod = accessoryMod;
+            this.group = group;
+            this.slot = slot;
+            this.slotIndex = slotIndex;
+            this.remove = remove;
+        }
+
+        @Override
+        public void accept(EntityActionContext ctx) {
+            if (ctx.entity() instanceof LivingEntity le)
+                dropEquipped(le, accessoryMod, group, slot, slotIndex, remove);
+        }
+
+        @Override
+        public @NotNull ActionConfiguration<?> getConfig() {
+            return AdditionalEntityActions.DROP_ACCESSORY;
+        }
+    }
+
+    public static class InvokeAccessoryAction extends EntityActionType {
+        public static final TypedDataObjectFactory<InvokeAccessoryAction> DATA_FACTORY =
+                TypedDataObjectFactory.simple(
+                        new SerializableData()
+                                .add("accessory_mod", SerializableDataTypes.STRING, "auto")
+                                .add("group", SerializableDataTypes.STRING, "")
+                                .add("slot", SerializableDataTypes.STRING, "")
+                                .add("slot_index", SerializableDataTypes.INT, 0)
+                                .add("item_action", ItemCondition.DATA_TYPE.optional(), Optional.empty()),
+                        data -> new InvokeAccessoryAction(
+                                data.getString("accessory_mod"), data.getString("group"),
+                                data.getString("slot"), data.getInt("slot_index"), data.get("item_action")),
+                        (a, sd) -> sd.instance()
+                );
+
+        private final String accessoryMod, group, slot;
+        private final int slotIndex;
+        private final Optional<ItemCondition> itemAction;
+
+        public InvokeAccessoryAction(String accessoryMod, String group, String slot,
+                                      int slotIndex, Optional<ItemCondition> itemAction) {
+            this.accessoryMod = accessoryMod;
+            this.group = group;
+            this.slot = slot;
+            this.slotIndex = slotIndex;
+            this.itemAction = itemAction;
+        }
+
+        @Override
+        public void accept(EntityActionContext ctx) {
+            if (!(ctx.entity() instanceof LivingEntity le) || itemAction.isEmpty()) return;
+            Consumer<ItemStack> action = itemAction.get()::test;
+            invokeEquipped(le, accessoryMod, group, slot, slotIndex, Optional.of(action));
+        }
+
+        @Override
+        public @NotNull ActionConfiguration<?> getConfig() {
+            return AdditionalEntityActions.INVOKE_ACCESSORY;
+        }
+    }
+
+    public static void registerCondition(Consumer<ConditionConfiguration<EquipAccessoryCondition>> reg) {
+        reg.accept(ConditionConfiguration.of(
+                ShapeShifterCurseFabric.identifier("equip_accessory"), EquipAccessoryCondition.DATA_FACTORY));
+        reg.accept(ConditionConfiguration.of(
+                ShapeShifterCurseFabric.identifier("check_accessory"), CheckAccessoryCondition.DATA_FACTORY));
+    }
+
+    public static void registerAction(Consumer<ActionConfiguration<DropAccessoryAction>> actionReg,
+                                       Consumer<?> biActionReg) {
+        actionReg.accept(ActionConfiguration.of(
+                ShapeShifterCurseFabric.identifier("drop_accessory"), DropAccessoryAction.DATA_FACTORY));
+        actionReg.accept(ActionConfiguration.of(
+                ShapeShifterCurseFabric.identifier("invoke_accessory"), InvokeAccessoryAction.DATA_FACTORY));
     }
 }

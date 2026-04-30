@@ -1,12 +1,16 @@
 package net.onixary.shapeShifterCurseFabric.additional_power;
 
 import io.github.apace100.apoli.component.PowerHolderComponent;
-import io.github.apace100.apoli.data.ApoliDataTypes;
 import io.github.apace100.apoli.power.Power;
-import io.github.apace100.apoli.power.PowerType;
-import io.github.apace100.apoli.power.factory.PowerFactory;
-import io.github.apace100.apoli.power.factory.action.ActionFactory;
-import io.github.apace100.apoli.power.factory.condition.ConditionFactory;
+import io.github.apace100.apoli.power.type.PowerType;
+import io.github.apace100.apoli.action.type.EntityActionType;
+import io.github.apace100.apoli.condition.type.EntityConditionType;
+import io.github.apace100.apoli.action.ActionConfiguration;
+import io.github.apace100.apoli.action.context.EntityActionContext;
+import io.github.apace100.apoli.condition.ConditionConfiguration;
+import io.github.apace100.apoli.condition.ItemCondition;
+import io.github.apace100.apoli.condition.context.EntityConditionContext;
+import io.github.apace100.apoli.data.TypedDataObjectFactory;
 import io.github.apace100.calio.data.SerializableData;
 import io.github.apace100.calio.data.SerializableDataTypes;
 import me.shedaniel.cloth.clothconfig.shadowed.blue.endless.jankson.annotation.Nullable;
@@ -18,11 +22,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.Pair;
 import net.minecraft.world.World;
 import net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric;
 import net.onixary.shapeShifterCurseFabric.render.tech.ItemStorePowerRender;
+import org.jetbrains.annotations.NotNull;
 
+import java.util.Optional;
 import java.util.function.Consumer;
 
 public class ItemStorePower extends Power implements ItemStorePowerRender.itemStorePowerRenderInterface {
@@ -100,12 +105,12 @@ public class ItemStorePower extends Power implements ItemStorePowerRender.itemSt
         this.entity.equipStack(slot, stored);
     }
 
-    public void InvokeItemAction(ActionFactory<Pair<World, ItemStack>>.Instance action) {
+    public void InvokeItemAction(Consumer<ItemStack> action) {
         if (this.entity.getWorld().isClient) {
             return;
         }
         if (action != null) {
-            action.accept(new Pair<>(this.entity.getWorld(), this.storedItem));
+            action.accept(this.storedItem);
         }
         PowerHolderComponent.syncPower(this.entity, this.getType());
     }
@@ -158,84 +163,179 @@ public class ItemStorePower extends Power implements ItemStorePowerRender.itemSt
         return null;
     }
 
-    public static void registerCondition(Consumer<ConditionFactory<Entity>> registerFunc) {
-        registerFunc.accept(new ConditionFactory<>(
-                ShapeShifterCurseFabric.identifier("check_stored_item"),
-                new SerializableData()
-                        .add("id", SerializableDataTypes.IDENTIFIER, null)
-                        .add("item_condition", ApoliDataTypes.ITEM_CONDITION, null)
-                        .add("default", SerializableDataTypes.BOOLEAN, false),
-                (data, entity) -> {
-                    ItemStorePower itemStorePower = findPower(entity, data.get("id"));
-                    if (itemStorePower == null) return data.getBoolean("default");
-                    ConditionFactory<ItemStack>.Instance condition = data.get("item_condition");
-                    if (condition == null) return data.getBoolean("default");
-                    return condition.test(itemStorePower.storedItem);
-                }
-        ));
+    public static void registerCondition(Consumer<ConditionConfiguration<CheckStoredItemCondition>> registerFunc) {
+        registerFunc.accept(ConditionConfiguration.of(
+                ShapeShifterCurseFabric.identifier("check_stored_item"), CheckStoredItemCondition.DATA_FACTORY));
     }
 
-    public static void registerAction(Consumer<ActionFactory<Entity>> ActionRegister, Consumer<ActionFactory<Pair<Entity, Entity>>> BIActionRegister) {
-        ActionRegister.accept(new ActionFactory<>(
-                ShapeShifterCurseFabric.identifier("gain_store_power_item"),
-                new SerializableData()
-                        .add("id", SerializableDataTypes.IDENTIFIER, null)
-                        .add("item", SerializableDataTypes.ITEM_STACK, null)
-                        .add("if_no_power_drop", SerializableDataTypes.BOOLEAN, true),
-                (data, entity) -> {
-                    ItemStorePower itemStorePower = findPower(entity, data.get("id"));
-                    if (itemStorePower != null) {
-                        itemStorePower.GainItem(data.get("item"));
-                    }
-                    else if (data.getBoolean("if_no_power_drop")) {
-                        entity.dropStack(data.get("item"));
-                    }
-                }
-        ));
+    public static class CheckStoredItemCondition extends EntityConditionType {
+        public static final TypedDataObjectFactory<CheckStoredItemCondition> DATA_FACTORY =
+                TypedDataObjectFactory.simple(
+                        new SerializableData()
+                                .add("id", SerializableDataTypes.IDENTIFIER, null)
+                                .add("item_condition", ItemCondition.DATA_TYPE.optional(), Optional.empty())
+                                .add("default", SerializableDataTypes.BOOLEAN, false),
+                        data -> new CheckStoredItemCondition(data.getId("id"), data.get("item_condition"), data.getBoolean("default")),
+                        (c, sd) -> sd.instance()
+                );
 
-        ActionRegister.accept(new ActionFactory<>(
-                ShapeShifterCurseFabric.identifier("drop_store_power_item"),
-                new SerializableData()
-                        .add("id", SerializableDataTypes.IDENTIFIER, null)
-                        .add("remove_item", SerializableDataTypes.BOOLEAN, false),
-                (data, entity) -> {
-                    ItemStorePower itemStorePower = findPower(entity, data.get("id"));
-                    boolean removeItem = data.getBoolean("remove_item");
-                    if (itemStorePower != null) {
-                        if (removeItem) {
-                            itemStorePower.storedItem = ItemStack.EMPTY;
-                        } else {
-                            itemStorePower.DropItem();
-                        }
-                    }
-                }
-        ));
+        private final Identifier powerId;
+        private final Optional<ItemCondition> itemCondition;
+        private final boolean defaultVal;
 
-        ActionRegister.accept(new ActionFactory<>(
-                ShapeShifterCurseFabric.identifier("swap_store_power_item"),
-                new SerializableData()
-                        .add("id", SerializableDataTypes.IDENTIFIER, null)
-                        .add("slot", SerializableDataTypes.EQUIPMENT_SLOT, EquipmentSlot.MAINHAND),
-                (data, entity) -> {
-                    ItemStorePower itemStorePower = findPower(entity, data.get("id"));
-                    if (itemStorePower != null) {
-                        itemStorePower.SwapItem(data.get("slot"));
-                    }
-                }
-        ));
+        public CheckStoredItemCondition(Identifier powerId, Optional<ItemCondition> itemCondition, boolean defaultVal) {
+            this.powerId = powerId;
+            this.itemCondition = itemCondition;
+            this.defaultVal = defaultVal;
+        }
 
-        ActionRegister.accept(new ActionFactory<>(
-                ShapeShifterCurseFabric.identifier("invoke_store_power_item"),
-                new SerializableData()
-                        .add("id", SerializableDataTypes.IDENTIFIER, null)
-                        .add("action", ApoliDataTypes.ITEM_ACTION, null),
-                (data, entity) -> {
-                    ItemStorePower itemStorePower = findPower(entity, data.get("id"));
-                    if (itemStorePower != null) {
-                        itemStorePower.InvokeItemAction(data.get("action"));
-                    }
-                }
-        ));
+        @Override
+        public boolean test(EntityConditionContext ctx) {
+            ItemStorePower power = findPower(ctx.entity(), powerId);
+            if (power == null) return defaultVal;
+            return itemCondition.map(c -> c.test(power.storedItem)).orElse(defaultVal);
+        }
+
+        @Override
+        public @NotNull ConditionConfiguration<?> getConfig() {
+            return ConditionConfiguration.of(ShapeShifterCurseFabric.identifier("check_stored_item"), DATA_FACTORY);
+        }
+    }
+
+    public static void registerAction(Consumer<ActionConfiguration<EntityActionType>> actionReg, Consumer<?> biActionReg) {
+        actionReg.accept(ActionConfiguration.of(
+                ShapeShifterCurseFabric.identifier("gain_store_power_item"), GainStoreItemAction.DATA_FACTORY));
+        actionReg.accept(ActionConfiguration.of(
+                ShapeShifterCurseFabric.identifier("drop_store_power_item"), DropStoreItemAction.DATA_FACTORY));
+        actionReg.accept(ActionConfiguration.of(
+                ShapeShifterCurseFabric.identifier("swap_store_power_item"), SwapStoreItemAction.DATA_FACTORY));
+        actionReg.accept(ActionConfiguration.of(
+                ShapeShifterCurseFabric.identifier("invoke_store_power_item"), InvokeStoreItemAction.DATA_FACTORY));
+    }
+
+    public static class GainStoreItemAction extends EntityActionType {
+        public static final TypedDataObjectFactory<GainStoreItemAction> DATA_FACTORY =
+                TypedDataObjectFactory.simple(
+                        new SerializableData()
+                                .add("id", SerializableDataTypes.IDENTIFIER, null)
+                                .add("item", SerializableDataTypes.ITEM_STACK, null)
+                                .add("if_no_power_drop", SerializableDataTypes.BOOLEAN, true),
+                        data -> new GainStoreItemAction(data.getId("id"), data.get("item"), data.getBoolean("if_no_power_drop")),
+                        (a, sd) -> sd.instance()
+                );
+        private final Identifier powerId;
+        private final ItemStack item;
+        private final boolean ifNoPowerDrop;
+
+        public GainStoreItemAction(Identifier powerId, ItemStack item, boolean ifNoPowerDrop) {
+            this.powerId = powerId; this.item = item; this.ifNoPowerDrop = ifNoPowerDrop;
+        }
+
+        @Override
+        public void accept(EntityActionContext ctx) {
+            ItemStorePower power = findPower(ctx.entity(), powerId);
+            if (power != null) {
+                power.GainItem(item);
+            } else if (ifNoPowerDrop) {
+                ctx.entity().dropStack(item);
+            }
+        }
+
+        @Override
+        public @NotNull ActionConfiguration<?> getConfig() {
+            return ActionConfiguration.of(ShapeShifterCurseFabric.identifier("gain_store_power_item"), DATA_FACTORY);
+        }
+    }
+
+    public static class DropStoreItemAction extends EntityActionType {
+        public static final TypedDataObjectFactory<DropStoreItemAction> DATA_FACTORY =
+                TypedDataObjectFactory.simple(
+                        new SerializableData()
+                                .add("id", SerializableDataTypes.IDENTIFIER, null)
+                                .add("remove_item", SerializableDataTypes.BOOLEAN, false),
+                        data -> new DropStoreItemAction(data.getId("id"), data.getBoolean("remove_item")),
+                        (a, sd) -> sd.instance()
+                );
+        private final Identifier powerId;
+        private final boolean removeItem;
+
+        public DropStoreItemAction(Identifier powerId, boolean removeItem) {
+            this.powerId = powerId; this.removeItem = removeItem;
+        }
+
+        @Override
+        public void accept(EntityActionContext ctx) {
+            ItemStorePower power = findPower(ctx.entity(), powerId);
+            if (power == null) return;
+            if (removeItem) {
+                power.storedItem = ItemStack.EMPTY;
+            } else {
+                power.DropItem();
+            }
+        }
+
+        @Override
+        public @NotNull ActionConfiguration<?> getConfig() {
+            return ActionConfiguration.of(ShapeShifterCurseFabric.identifier("drop_store_power_item"), DATA_FACTORY);
+        }
+    }
+
+    public static class SwapStoreItemAction extends EntityActionType {
+        public static final TypedDataObjectFactory<SwapStoreItemAction> DATA_FACTORY =
+                TypedDataObjectFactory.simple(
+                        new SerializableData()
+                                .add("id", SerializableDataTypes.IDENTIFIER, null)
+                                .add("slot", SerializableDataTypes.EQUIPMENT_SLOT, EquipmentSlot.MAINHAND),
+                        data -> new SwapStoreItemAction(data.getId("id"), data.get("slot")),
+                        (a, sd) -> sd.instance()
+                );
+        private final Identifier powerId;
+        private final EquipmentSlot slot;
+
+        public SwapStoreItemAction(Identifier powerId, EquipmentSlot slot) {
+            this.powerId = powerId; this.slot = slot;
+        }
+
+        @Override
+        public void accept(EntityActionContext ctx) {
+            ItemStorePower power = findPower(ctx.entity(), powerId);
+            if (power != null) power.SwapItem(slot);
+        }
+
+        @Override
+        public @NotNull ActionConfiguration<?> getConfig() {
+            return ActionConfiguration.of(ShapeShifterCurseFabric.identifier("swap_store_power_item"), DATA_FACTORY);
+        }
+    }
+
+    public static class InvokeStoreItemAction extends EntityActionType {
+        public static final TypedDataObjectFactory<InvokeStoreItemAction> DATA_FACTORY =
+                TypedDataObjectFactory.simple(
+                        new SerializableData()
+                                .add("id", SerializableDataTypes.IDENTIFIER, null)
+                                .add("action", ItemCondition.DATA_TYPE.optional(), Optional.empty()),
+                        data -> new InvokeStoreItemAction(data.getId("id"), data.get("action")),
+                        (a, sd) -> sd.instance()
+                );
+        private final Identifier powerId;
+        private final Optional<ItemCondition> itemAction;
+
+        public InvokeStoreItemAction(Identifier powerId, Optional<ItemCondition> itemAction) {
+            this.powerId = powerId; this.itemAction = itemAction;
+        }
+
+        @Override
+        public void accept(EntityActionContext ctx) {
+            ItemStorePower power = findPower(ctx.entity(), powerId);
+            if (power != null && itemAction.isPresent()) {
+                power.InvokeItemAction(stack -> itemAction.get().test(stack));
+            }
+        }
+
+        @Override
+        public @NotNull ActionConfiguration<?> getConfig() {
+            return ActionConfiguration.of(ShapeShifterCurseFabric.identifier("invoke_store_power_item"), DATA_FACTORY);
+        }
     }
 
     @Override
