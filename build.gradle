@@ -195,10 +195,10 @@ dependencies {
     //modImplementation "com.github.eggohito:BreathingLib:${project.breathing_lib_version}"
     //include "com.github.eggohito:BreathingLib:${project.breathing_lib_version}"
 
-    modApi("dev.onyxstudios.cardinal-components-api:cardinal-components-base:${cca_version}") {
+    modApi("org.ladysnake.cardinal-components-api:cardinal-components-base:${cca_version}") {
         exclude(group: "net.fabricmc.fabric-api")
     }
-    modApi("dev.onyxstudios.cardinal-components-api:cardinal-components-entity:${cca_version}") {
+    modApi("org.ladysnake.cardinal-components-api:cardinal-components-entity:${cca_version}") {
         exclude(group: "net.fabricmc.fabric-api")
     }
 
