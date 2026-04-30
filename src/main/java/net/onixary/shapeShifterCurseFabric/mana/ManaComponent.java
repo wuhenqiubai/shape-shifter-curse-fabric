@@ -1,9 +1,11 @@
 package net.onixary.shapeShifterCurseFabric.mana;
 
-import dev.onyxstudios.cca.api.v3.component.sync.AutoSyncedComponent;
-import dev.onyxstudios.cca.api.v3.component.sync.PlayerSyncPredicate;
-import dev.onyxstudios.cca.api.v3.entity.PlayerComponent;
+import org.ladysnake.cca.api.v3.component.CopyableComponent;
+import org.ladysnake.cca.api.v3.component.sync.AutoSyncedComponent;
+import org.ladysnake.cca.api.v3.component.sync.PlayerSyncPredicate;
+import org.ladysnake.cca.api.v3.entity.RespawnableComponent;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
@@ -24,7 +26,7 @@ import java.util.Objects;
 
 // 试试这个实验性接口 省的我缓存ModifierList了
 // 所有的公开Field尽量使用Class里的Method修改 直接修改Field可能会导致一些奇怪的同步Bug
-public class ManaComponent implements AutoSyncedComponent, PlayerComponent<ManaComponent> {
+public class ManaComponent implements AutoSyncedComponent, RespawnableComponent<ManaComponent> {
 
     // 更新等级介绍 此更新指的是根据其他变量重新赋值 会清空之前的修改:
 
@@ -361,12 +363,12 @@ public class ManaComponent implements AutoSyncedComponent, PlayerComponent<ManaC
     }
 
     @Override
-    public void copyForRespawn(ManaComponent original, boolean lossless, boolean keepInventory, boolean sameCharacter) {
-        this.copyFrom(original);
+    public void copyForRespawn(ManaComponent original, RegistryWrapper.WrapperLookup registryLookup, boolean lossless, boolean keepInventory, boolean sameCharacter) {
+        this.copyFrom(original, registryLookup);
     }
 
     @Override
-    public void copyFrom(ManaComponent other) {
+    public void copyFrom(ManaComponent other, RegistryWrapper.WrapperLookup registryLookup) {
         this.Mana = other.Mana;
         this.ManaTypeID = other.ManaTypeID;
         this.ManaTypeSourceMap = other.ManaTypeSourceMap;
