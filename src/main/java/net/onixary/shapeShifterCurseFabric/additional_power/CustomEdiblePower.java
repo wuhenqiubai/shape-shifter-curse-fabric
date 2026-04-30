@@ -1,8 +1,7 @@
 package net.onixary.shapeShifterCurseFabric.additional_power;
 
 import io.github.apace100.apoli.power.Power;
-import io.github.apace100.apoli.power.PowerType;
-import io.github.apace100.apoli.power.factory.PowerFactory;
+import io.github.apace100.apoli.power.type.PowerType;
 import io.github.apace100.calio.data.SerializableData;
 import io.github.apace100.calio.data.SerializableDataTypes;
 import net.fabricmc.api.EnvType;
@@ -10,7 +9,7 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.FoodComponent;
+import net.minecraft.component.type.FoodComponent;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
 import net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric;
@@ -24,7 +23,7 @@ public class CustomEdiblePower extends Power {
     private final List<Identifier> ItemIdList;
 
 
-    public CustomEdiblePower(PowerType<?> type, LivingEntity entity, SerializableData.Instance data) {
+    public CustomEdiblePower(PowerType type, LivingEntity entity, SerializableData.Instance data) {
         super(type, entity);
         this.ItemIdList = data.get("item_id_list");
         FoodComponent.Builder foodComponentBuilder = new FoodComponent.Builder()

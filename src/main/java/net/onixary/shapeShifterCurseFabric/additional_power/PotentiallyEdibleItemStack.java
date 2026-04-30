@@ -1,6 +1,6 @@
 package net.onixary.shapeShifterCurseFabric.additional_power;
 
-import net.minecraft.item.FoodComponent;
+import net.minecraft.component.type.FoodComponent;
 
 import java.util.Optional;
 
