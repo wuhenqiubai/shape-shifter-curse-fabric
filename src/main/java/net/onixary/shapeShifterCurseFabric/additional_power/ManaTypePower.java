@@ -1,60 +1,69 @@
 package net.onixary.shapeShifterCurseFabric.additional_power;
 
 import blue.endless.jankson.annotation.Nullable;
-import io.github.apace100.apoli.power.Power;
-import io.github.apace100.apoli.power.type.PowerType;
+import io.github.apace100.apoli.condition.EntityCondition;
+import io.github.apace100.apoli.data.TypedDataObjectFactory;
+import io.github.apace100.apoli.power.PowerConfiguration;
 import io.github.apace100.apoli.power.type.PowerType;
 import io.github.apace100.calio.data.SerializableData;
 import io.github.apace100.calio.data.SerializableDataTypes;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric;
 import net.onixary.shapeShifterCurseFabric.mana.ManaUtils;
+import org.jetbrains.annotations.NotNull;
 
-public class ManaTypePower extends Power {
+import java.util.Optional;
+
+public class ManaTypePower extends PowerType {
     private @Nullable Identifier manaType = null;
     private @Nullable Identifier manaSource = null;
 
-    public ManaTypePower(PowerType<?> type, LivingEntity entity, @Nullable Identifier manaType, @Nullable Identifier manaSource) {
-        super(type, entity);
+    public static final TypedDataObjectFactory<ManaTypePower> DATA_FACTORY =
+            PowerType.createConditionedDataFactory(
+                    new SerializableData()
+                            .add("mana_type", SerializableDataTypes.IDENTIFIER, null)
+                            .add("mana_source", SerializableDataTypes.IDENTIFIER, null),
+                    (data, condition) -> new ManaTypePower(condition, data.get("mana_type"), data.get("mana_source")),
+                    (power, sd) -> sd.instance()
+            );
+
+    public ManaTypePower(Optional<EntityCondition> condition, @Nullable Identifier manaType, @Nullable Identifier manaSource) {
+        super(condition);
         this.manaType = manaType;
         if (manaSource == null) {
-            this.manaSource = type.getIdentifier();
+            this.manaSource = getConfig().id();
         } else {
             this.manaSource = manaSource;
         }
     }
 
-
     @Override
     public void onAdded() {
-        // 写个保底 治标不治本
-        if (this.entity instanceof ServerPlayerEntity playerEntity && manaType != null) {
+        LivingEntity entity = getHolder();
+        if (entity instanceof ServerPlayerEntity playerEntity && manaType != null) {
             if (!ManaUtils.isManaTypeExists(playerEntity, manaType, manaSource)) {
                 ManaUtils.gainManaTypeID(playerEntity, manaType, manaSource);
             }
         }
     }
 
-    // 在能力获取
     @Override
     public void onGained() {
-        if (this.entity instanceof ServerPlayerEntity playerEntity && manaType != null) {
+        LivingEntity entity = getHolder();
+        if (entity instanceof ServerPlayerEntity playerEntity && manaType != null) {
             if (!ManaUtils.isManaTypeExists(playerEntity, manaType, manaSource)) {
                 ManaUtils.gainManaTypeID(playerEntity, manaType, manaSource);
             }
-            // 获得 Power 时补满魔力
             ManaUtils.gainPlayerMana(playerEntity, Double.MAX_VALUE / 8);
         }
     }
 
-    // 在能力移除
     @Override
     public void onLost() {
-        // 不知道为什么有时Apoli会在玩家死亡时调用onLost 而且在我(XuHaoNan)电脑上复现概率极低 没法测具体原因 先写个治标不治本的解决方案
-        if (this.entity instanceof ServerPlayerEntity playerEntity && manaType != null) {
+        LivingEntity entity = getHolder();
+        if (entity instanceof ServerPlayerEntity playerEntity && manaType != null) {
             if (ManaUtils.isManaTypeExists(playerEntity, manaType, manaSource)) {
                 ManaUtils.loseManaTypeID(playerEntity, manaType, manaSource);
             }
@@ -63,23 +72,21 @@ public class ManaTypePower extends Power {
 
     @Override
     public void onRespawn() {
-        // 写个保底 治标不治本
-        if (this.entity instanceof ServerPlayerEntity playerEntity && manaType != null) {
+        LivingEntity entity = getHolder();
+        if (entity instanceof ServerPlayerEntity playerEntity && manaType != null) {
             if (!ManaUtils.isManaTypeExists(playerEntity, manaType, manaSource)) {
                 ManaUtils.gainManaTypeID(playerEntity, manaType, manaSource);
             }
-            // 调整：复活时也会补满魔力值
             ManaUtils.gainPlayerMana(playerEntity, Double.MAX_VALUE / 8);
         }
     }
 
-    public static PowerFactory<?> createFactory() {
-        return new PowerFactory<>(
-                ShapeShifterCurseFabric.identifier("mana_type_power"),
-                new SerializableData()
-                        .add("mana_type", SerializableDataTypes.IDENTIFIER, null)
-                        .add("mana_source", SerializableDataTypes.IDENTIFIER, null),
-                (data) -> (type, entity) -> new ManaTypePower(type, entity, data.get("mana_type"), data.get("mana_source"))
-        );
+    @Override
+    public @NotNull PowerConfiguration<?> getConfig() {
+        return createFactory(ShapeShifterCurseFabric.identifier("mana_type_power"));
+    }
+
+    public static PowerConfiguration<ManaTypePower> createFactory(net.minecraft.util.Identifier id) {
+        return PowerConfiguration.of(id, DATA_FACTORY);
     }
 }

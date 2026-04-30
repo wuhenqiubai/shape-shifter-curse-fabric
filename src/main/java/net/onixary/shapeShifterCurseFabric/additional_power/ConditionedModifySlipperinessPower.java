@@ -1,57 +1,64 @@
 package net.onixary.shapeShifterCurseFabric.additional_power;
 
-import io.github.apace100.apoli.data.ApoliDataTypes;
+import io.github.apace100.apoli.condition.EntityCondition;
+import io.github.apace100.apoli.data.TypedDataObjectFactory;
+import io.github.apace100.apoli.power.PowerConfiguration;
 import io.github.apace100.apoli.power.type.PowerType;
-import io.github.apace100.apoli.power.type.ValueModifyingPowerType;
-import io.github.apace100.apoli.power.type.PowerType;
-import io.github.apace100.apoli.condition.type.EntityConditionType;
 import io.github.apace100.calio.data.SerializableData;
 import io.github.apace100.calio.data.SerializableDataTypes;
 import net.minecraft.block.pattern.CachedBlockPosition;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldView;
 import net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric;
+import org.jetbrains.annotations.NotNull;
 
+import java.util.Optional;
 import java.util.function.Predicate;
 
-public class ConditionedModifySlipperinessPower extends ValueModifyingPower {
+public class ConditionedModifySlipperinessPower extends PowerType {
+
     private final Predicate<CachedBlockPosition> predicate;
-    private final ConditionFactory<LivingEntity>.Instance condition;
+    private final EntityCondition condition;
     private final float slipperinessModifier;
 
-    public ConditionedModifySlipperinessPower(PowerType<?> type, LivingEntity entity, Predicate<CachedBlockPosition> predicate, ConditionFactory<LivingEntity>.Instance condition, float slipperinessModifier) {
-        super(type, entity);
+    public static final TypedDataObjectFactory<ConditionedModifySlipperinessPower> DATA_FACTORY =
+            PowerType.createConditionedDataFactory(
+                    new SerializableData()
+                            .add("block_condition", SerializableDataTypes.BLOCK_CONDITION, null)
+                            .add("entity_condition", EntityCondition.DATA_TYPE.optional(), Optional.empty())
+                            .add("modifier", SerializableDataTypes.FLOAT),
+                    (data, cond) -> new ConditionedModifySlipperinessPower(
+                            data.get("block_condition"),
+                            data.get("entity_condition"),
+                            data.getFloat("modifier"),
+                            cond),
+                    (power, sd) -> sd.instance()
+            );
+
+    public ConditionedModifySlipperinessPower(Predicate<CachedBlockPosition> predicate,
+                                              Optional<EntityCondition> condition, float slipperinessModifier,
+                                              Optional<EntityCondition> powerCondition) {
+        super(powerCondition);
         this.predicate = predicate;
-        this.condition = condition;
+        this.condition = condition.orElse(null);
         this.slipperinessModifier = slipperinessModifier;
     }
 
     public boolean doesApply(WorldView world, BlockPos pos) {
         CachedBlockPosition cbp = new CachedBlockPosition(world, pos, true);
-
-        return predicate.test(cbp) && (condition == null || condition.test(entity));
+        return predicate.test(cbp) && (condition == null || condition.test(getHolder()));
     }
 
     public float getSlipperinessModifier() {
         return slipperinessModifier;
     }
 
-    public static PowerFactory<?> createFactory() {
-        return new PowerFactory<>(
-                ShapeShifterCurseFabric.identifier("conditioned_modify_slipperiness"),
-                new SerializableData()
-                        .add("block_condition", ApoliDataTypes.BLOCK_CONDITION, null)
-                        .add("entity_condition", ApoliDataTypes.ENTITY_CONDITION, null)
-                        .add("modifier", SerializableDataTypes.FLOAT),
-                data ->
-                        (type, player) -> new ConditionedModifySlipperinessPower(
-                                type,
-                                player,
-                                data.get("block_condition"),
-                                data.get("entity_condition"),
-                                data.getFloat("modifier"))
-        ).allowCondition();
+    @Override
+    public @NotNull PowerConfiguration<?> getConfig() {
+        return createFactory(ShapeShifterCurseFabric.identifier("conditioned_modify_slipperiness"));
     }
 
+    public static PowerConfiguration<ConditionedModifySlipperinessPower> createFactory(net.minecraft.util.Identifier id) {
+        return PowerConfiguration.of(id, DATA_FACTORY);
+    }
 }

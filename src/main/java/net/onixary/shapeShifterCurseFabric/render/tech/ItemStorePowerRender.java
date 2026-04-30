@@ -13,13 +13,14 @@ import net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric;
 import net.onixary.shapeShifterCurseFabric.additional_power.ItemStorePower;
 import net.onixary.shapeShifterCurseFabric.util.UIPositionUtils;
 
+import net.minecraft.util.Identifier;
+
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import static net.minecraft.client.gui.widget.ClickableWidget.WIDGETS_TEXTURE;
-
 public class ItemStorePowerRender {
+    private static final Identifier WIDGETS_TEXTURE = Identifier.of("minecraft", "textures/gui/sprites/container/slot");
     public static interface itemStorePowerRenderInterface {
         public int getSlot();
         public ItemStack getStack();

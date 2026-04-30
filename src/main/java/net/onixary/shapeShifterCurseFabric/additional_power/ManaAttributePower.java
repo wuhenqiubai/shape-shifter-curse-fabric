@@ -1,36 +1,59 @@
 package net.onixary.shapeShifterCurseFabric.additional_power;
 
-import io.github.apace100.apoli.power.Power;
-import io.github.apace100.apoli.power.type.PowerType;
+import io.github.apace100.apoli.condition.EntityCondition;
+import io.github.apace100.apoli.data.TypedDataObjectFactory;
+import io.github.apace100.apoli.power.PowerConfiguration;
 import io.github.apace100.apoli.power.type.PowerType;
 import io.github.apace100.calio.data.SerializableData;
 import io.github.apace100.calio.data.SerializableDataTypes;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
 import net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric;
 import net.onixary.shapeShifterCurseFabric.mana.ManaUtils;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class ManaAttributePower extends Power {
+import java.util.Optional;
+
+public class ManaAttributePower extends PowerType {
+
     private final @Nullable Identifier modifierID;
     private final @Nullable ManaUtils.Modifier maxManaModifier;
     private final @Nullable ManaUtils.Modifier regenManaModifier;
     private final boolean playerSide;
 
-    public ManaAttributePower(PowerType<?> type, LivingEntity entity, @Nullable Identifier modifierID, @Nullable ManaUtils.Modifier maxManaModifier, @Nullable ManaUtils.Modifier manaRegenModifier, boolean playerSide)  {
-        super(type, entity);
+    public static final TypedDataObjectFactory<ManaAttributePower> DATA_FACTORY =
+            PowerType.createConditionedDataFactory(
+                    new SerializableData()
+                            .add("modifierID", SerializableDataTypes.IDENTIFIER, null)
+                            .add("max_mana_modifier", ManaUtils.SDT_ManaModifier, null)
+                            .add("regen_mana_modifier", ManaUtils.SDT_ManaModifier, null)
+                            .add("player_side", SerializableDataTypes.BOOLEAN, false),
+                    (data, cond) -> new ManaAttributePower(
+                            data.get("modifierID"),
+                            data.get("max_mana_modifier"),
+                            data.get("regen_mana_modifier"),
+                            data.get("player_side"),
+                            cond),
+                    (power, sd) -> sd.instance()
+            );
+
+    public ManaAttributePower(@Nullable Identifier modifierID, @Nullable ManaUtils.Modifier maxManaModifier,
+                              @Nullable ManaUtils.Modifier regenManaModifier, boolean playerSide,
+                              Optional<EntityCondition> powerCondition) {
+        super(powerCondition);
         this.modifierID = modifierID;
         this.maxManaModifier = maxManaModifier;
-        this.regenManaModifier = manaRegenModifier;
+        this.regenManaModifier = regenManaModifier;
         this.playerSide = playerSide;
     }
+
     @Override
-    public void onAdded() {
+    public void onGained() {
         if (modifierID == null) {
             return;
         }
-        if (this.entity instanceof ServerPlayerEntity playerEntity) {
+        if (getHolder() instanceof ServerPlayerEntity playerEntity) {
             if (maxManaModifier != null) {
                 ManaUtils.addMaxManaModifier(playerEntity, modifierID, maxManaModifier, playerSide);
             }
@@ -45,7 +68,7 @@ public class ManaAttributePower extends Power {
         if (modifierID == null) {
             return;
         }
-        if (this.entity instanceof ServerPlayerEntity playerEntity) {
+        if (getHolder() instanceof ServerPlayerEntity playerEntity) {
             if (maxManaModifier != null) {
                 ManaUtils.removeMaxManaModifier(playerEntity, modifierID, playerSide);
             }
@@ -55,22 +78,17 @@ public class ManaAttributePower extends Power {
         }
     }
 
-
     @Override
     public void onRespawn() {
-        // 同样与 ManaTypePower 一样写个保底
-        this.onAdded();
+        this.onGained();
     }
 
-    public static PowerFactory<?> createFactory() {
-        return new PowerFactory<>(
-                ShapeShifterCurseFabric.identifier("mana_attribute"),
-                new SerializableData()
-                        .add("modifierID", SerializableDataTypes.IDENTIFIER, null)
-                        .add("max_mana_modifier", ManaUtils.SDT_ManaModifier, null)
-                        .add("regen_mana_modifier", ManaUtils.SDT_ManaModifier, null)
-                        .add("player_side", SerializableDataTypes.BOOLEAN, false),
-                (data) -> (type, entity) -> new ManaAttributePower(type, entity, data.get("modifierID"), data.get("max_mana_modifier"), data.get("regen_mana_modifier"), data.get("player_side"))
-        );
+    @Override
+    public @NotNull PowerConfiguration<?> getConfig() {
+        return createFactory(ShapeShifterCurseFabric.identifier("mana_attribute"));
+    }
+
+    public static PowerConfiguration<ManaAttributePower> createFactory(net.minecraft.util.Identifier id) {
+        return PowerConfiguration.of(id, DATA_FACTORY);
     }
 }

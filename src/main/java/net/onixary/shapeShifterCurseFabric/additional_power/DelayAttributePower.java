@@ -1,8 +1,9 @@
 package net.onixary.shapeShifterCurseFabric.additional_power;
 
+import io.github.apace100.apoli.condition.EntityCondition;
 import io.github.apace100.apoli.data.ApoliDataTypes;
-import io.github.apace100.apoli.power.Power;
-import io.github.apace100.apoli.power.type.PowerType;
+import io.github.apace100.apoli.data.TypedDataObjectFactory;
+import io.github.apace100.apoli.power.PowerConfiguration;
 import io.github.apace100.apoli.power.type.PowerType;
 import io.github.apace100.apoli.util.AttributedEntityAttributeModifier;
 import io.github.apace100.calio.data.SerializableData;
@@ -12,37 +13,52 @@ import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.attribute.EntityAttributeInstance;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
-public class DelayAttributePower extends Power {
+public class DelayAttributePower extends PowerType {
     private final int TargetDelay;
     private int NowDelay;
-    private final List<AttributedEntityAttributeModifier> modifiers = new LinkedList<>();;
+    private final List<AttributedEntityAttributeModifier> modifiers = new LinkedList<>();
     private final boolean updateHealth;
     private final int tickRate;
     private boolean IsModActive = false;
 
-    public DelayAttributePower(PowerType<?> type, LivingEntity entity, SerializableData.Instance data)  {
-        // 延迟生效的Attribute
-        super(type, entity);
+    public static final TypedDataObjectFactory<DelayAttributePower> DATA_FACTORY =
+            PowerType.createConditionedDataFactory(
+                    new SerializableData()
+                            .add("tick_rate", SerializableDataTypes.INT, 1)
+                            .add("updateHealth", SerializableDataTypes.BOOLEAN, true)
+                            .add("modifier", ApoliDataTypes.ATTRIBUTED_ATTRIBUTE_MODIFIER, null)
+                            .add("modifiers", ApoliDataTypes.ATTRIBUTED_ATTRIBUTE_MODIFIERS, null)
+                            .add("delay", SerializableDataTypes.INT, 0),
+                    (data, condition) -> new DelayAttributePower(condition, data),
+                    (power, sd) -> sd.instance()
+            );
+
+    public DelayAttributePower(Optional<EntityCondition> condition, SerializableData.Instance data) {
+        super(condition);
         this.tickRate = data.getInt("tick_rate");
         this.updateHealth = data.getBoolean("updateHealth");
         this.TargetDelay = data.getInt("delay");
-        this.NowDelay = this.TargetDelay;  // 确保玩家进入游戏时的属性会立即生效
+        this.NowDelay = this.TargetDelay;
         if (data.isPresent("modifier")) {
-            this.addModifier((AttributedEntityAttributeModifier)data.get("modifier"));
+            this.addModifier((AttributedEntityAttributeModifier) data.get("modifier"));
         }
         if (data.isPresent("modifiers")) {
-            List<AttributedEntityAttributeModifier> modifierList = (List)data.get("modifiers");
+            List<AttributedEntityAttributeModifier> modifierList = (List) data.get("modifiers");
             modifierList.forEach(this::addModifier);
         }
-        this.setTicking(true);
+        this.setTicking();
     }
 
-    public void tick() {
-        if (this.entity.age % this.tickRate == 0) {
+    @Override
+    public void serverTick() {
+        LivingEntity entity = getHolder();
+        if (entity.age % this.tickRate == 0) {
             if (this.isActive()) {
                 if (!this.IsModActive) {
                     if (this.NowDelay >= this.TargetDelay) {
@@ -52,8 +68,7 @@ public class DelayAttributePower extends Power {
                     }
                     this.NowDelay++;
                     return;
-                }
-                else {
+                } else {
                     this.addMods();
                 }
             } else {
@@ -65,8 +80,7 @@ public class DelayAttributePower extends Power {
                     }
                     this.NowDelay++;
                     return;
-                }
-                else {
+                } else {
                     this.removeMods();
                 }
             }
@@ -74,45 +88,46 @@ public class DelayAttributePower extends Power {
         }
     }
 
+    @Override
     public void onRemoved() {
         this.removeMods();
     }
 
     public void addMods() {
+        LivingEntity entity = getHolder();
         this.IsModActive = true;
-        float previousMaxHealth = this.entity.getMaxHealth();
-        float previousHealthPercent = this.entity.getHealth() / previousMaxHealth;
+        float previousMaxHealth = entity.getMaxHealth();
+        float previousHealthPercent = entity.getHealth() / previousMaxHealth;
         this.modifiers.forEach((mod) -> {
-            if (this.entity.getAttributes().hasAttribute(mod.getAttribute())) {
-                EntityAttributeInstance instance = this.entity.getAttributeInstance(mod.getAttribute());
+            if (entity.getAttributes().hasAttribute(mod.getAttribute())) {
+                EntityAttributeInstance instance = entity.getAttributeInstance(mod.getAttribute());
                 if (instance != null && !instance.hasModifier(mod.getModifier())) {
                     instance.addTemporaryModifier(mod.getModifier());
                 }
             }
-
         });
-        float afterMaxHealth = this.entity.getMaxHealth();
+        float afterMaxHealth = entity.getMaxHealth();
         if (this.updateHealth && afterMaxHealth != previousMaxHealth) {
-            this.entity.setHealth(afterMaxHealth * previousHealthPercent);
+            entity.setHealth(afterMaxHealth * previousHealthPercent);
         }
     }
 
     public void removeMods() {
+        LivingEntity entity = getHolder();
         this.IsModActive = false;
-        float previousMaxHealth = this.entity.getMaxHealth();
-        float previousHealthPercent = this.entity.getHealth() / previousMaxHealth;
+        float previousMaxHealth = entity.getMaxHealth();
+        float previousHealthPercent = entity.getHealth() / previousMaxHealth;
         this.modifiers.forEach((mod) -> {
-            if (this.entity.getAttributes().hasAttribute(mod.getAttribute())) {
-                EntityAttributeInstance instance = this.entity.getAttributeInstance(mod.getAttribute());
+            if (entity.getAttributes().hasAttribute(mod.getAttribute())) {
+                EntityAttributeInstance instance = entity.getAttributeInstance(mod.getAttribute());
                 if (instance != null && instance.hasModifier(mod.getModifier())) {
                     instance.removeModifier(mod.getModifier());
                 }
             }
-
         });
-        float afterMaxHealth = this.entity.getMaxHealth();
+        float afterMaxHealth = entity.getMaxHealth();
         if (this.updateHealth && afterMaxHealth != previousMaxHealth) {
-            this.entity.setHealth(afterMaxHealth * previousHealthPercent);
+            entity.setHealth(afterMaxHealth * previousHealthPercent);
         }
     }
 
@@ -127,20 +142,12 @@ public class DelayAttributePower extends Power {
         return this;
     }
 
-    public static PowerFactory<?> createFactory() {
-        return new PowerFactory<>(
-                ShapeShifterCurseFabric.identifier("delay_attribute"),
-                new SerializableData()
-                    .add("tick_rate", SerializableDataTypes.INT, 1)
-                    .add("updateHealth", SerializableDataTypes.BOOLEAN, true)
-                    .add("modifier", ApoliDataTypes.ATTRIBUTED_ATTRIBUTE_MODIFIER, null)
-                    .add("modifiers", ApoliDataTypes.ATTRIBUTED_ATTRIBUTE_MODIFIERS, null)
-                    .add("delay", SerializableDataTypes.INT, 0),
-                data -> (powerType, livingEntity) -> new DelayAttributePower(
-                    powerType,
-                    livingEntity,
-                    data
-                )
-        ).allowCondition();
+    @Override
+    public @NotNull PowerConfiguration<?> getConfig() {
+        return createFactory(ShapeShifterCurseFabric.identifier("delay_attribute"));
+    }
+
+    public static PowerConfiguration<DelayAttributePower> createFactory(net.minecraft.util.Identifier id) {
+        return PowerConfiguration.of(id, DATA_FACTORY);
     }
 }

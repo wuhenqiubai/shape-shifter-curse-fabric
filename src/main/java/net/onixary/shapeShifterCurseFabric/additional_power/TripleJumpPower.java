@@ -1,21 +1,23 @@
 package net.onixary.shapeShifterCurseFabric.additional_power;
 
-import io.github.apace100.apoli.data.ApoliDataTypes;
-import io.github.apace100.apoli.power.Power;
+import io.github.apace100.apoli.action.EntityAction;
+import io.github.apace100.apoli.condition.EntityCondition;
+import io.github.apace100.apoli.data.TypedDataObjectFactory;
+import io.github.apace100.apoli.power.PowerConfiguration;
 import io.github.apace100.apoli.power.type.PowerType;
-import io.github.apace100.apoli.power.type.PowerType;
-import io.github.apace100.apoli.action.type.EntityActionType;
 import io.github.apace100.calio.data.SerializableData;
 import io.github.apace100.calio.data.SerializableDataTypes;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric;
+import org.jetbrains.annotations.NotNull;
 
-public class TripleJumpPower extends Power {
+import java.util.Optional;
 
-    private final ActionFactory<Entity>.Instance firstJumpAction;
-    private final ActionFactory<Entity>.Instance secondJumpAction;
-    private final ActionFactory<Entity>.Instance thirdJumpAction;
+public class TripleJumpPower extends PowerType {
+
+    private final EntityAction firstJumpAction;
+    private final EntityAction secondJumpAction;
+    private final EntityAction thirdJumpAction;
     private final float firstJumpMultiplier;
     private final float secondJumpMultiplier;
     private final float thirdJumpMultiplier;
@@ -23,10 +25,41 @@ public class TripleJumpPower extends Power {
 
     private int jumpCount = 0;
     private int ticksOnGround = 0;
-    private float activeMultiplier = 1.0f; // 用于存储当前跳跃的倍率
+    private float activeMultiplier = 1.0f;
 
-    public TripleJumpPower(PowerType<?> type, LivingEntity entity, ActionFactory<Entity>.Instance firstJumpAction, ActionFactory<Entity>.Instance secondJumpAction, ActionFactory<Entity>.Instance thirdJumpAction, float firstJumpMultiplier, float secondJumpMultiplier, float thirdJumpMultiplier, int resetTicksOnGround) {
-        super(type, entity);
+    public static final TypedDataObjectFactory<TripleJumpPower> DATA_FACTORY =
+            PowerType.createConditionedDataFactory(
+                    new SerializableData()
+                            .add("first_jump_action", EntityAction.DATA_TYPE.optional(), Optional.empty())
+                            .add("second_jump_action", EntityAction.DATA_TYPE.optional(), Optional.empty())
+                            .add("third_jump_action", EntityAction.DATA_TYPE.optional(), Optional.empty())
+                            .add("first_jump_multiplier", SerializableDataTypes.FLOAT, 1.0f)
+                            .add("second_jump_multiplier", SerializableDataTypes.FLOAT, 1.5f)
+                            .add("third_jump_multiplier", SerializableDataTypes.FLOAT, 2.0f)
+                            .add("reset_ticks_on_ground", SerializableDataTypes.INT, 10),
+                    (data, condition) -> new TripleJumpPower(
+                            data.get("first_jump_action"),
+                            data.get("second_jump_action"),
+                            data.get("third_jump_action"),
+                            data.getFloat("first_jump_multiplier"),
+                            data.getFloat("second_jump_multiplier"),
+                            data.getFloat("third_jump_multiplier"),
+                            data.getInt("reset_ticks_on_ground"),
+                            condition),
+                    (power, sd) -> sd.instance()
+                            .set("first_jump_action", power.firstJumpAction)
+                            .set("second_jump_action", power.secondJumpAction)
+                            .set("third_jump_action", power.thirdJumpAction)
+                            .set("first_jump_multiplier", power.firstJumpMultiplier)
+                            .set("second_jump_multiplier", power.secondJumpMultiplier)
+                            .set("third_jump_multiplier", power.thirdJumpMultiplier)
+                            .set("reset_ticks_on_ground", power.resetTicksOnGround)
+            );
+
+    public TripleJumpPower(EntityAction firstJumpAction, EntityAction secondJumpAction, EntityAction thirdJumpAction,
+                           float firstJumpMultiplier, float secondJumpMultiplier, float thirdJumpMultiplier,
+                           int resetTicksOnGround, Optional<EntityCondition> condition) {
+        super(condition);
         this.firstJumpAction = firstJumpAction;
         this.secondJumpAction = secondJumpAction;
         this.thirdJumpAction = thirdJumpAction;
@@ -34,11 +67,16 @@ public class TripleJumpPower extends Power {
         this.secondJumpMultiplier = secondJumpMultiplier;
         this.thirdJumpMultiplier = thirdJumpMultiplier;
         this.resetTicksOnGround = resetTicksOnGround;
-        this.setTicking(true);
+    }
+
+    @Override
+    public void onGained() {
+        this.setTicking();
     }
 
     @Override
     public void tick() {
+        LivingEntity entity = getHolder();
         boolean shouldReset = false;
         if (!entity.isSprinting()) {
             shouldReset = true;
@@ -56,8 +94,8 @@ public class TripleJumpPower extends Power {
         }
     }
 
-    // 在跳跃前被 Mixin 调用，用于更新状态
     public void onJump() {
+        LivingEntity entity = getHolder();
         if (!isActive() || !entity.isOnGround() || !entity.isSprinting()) {
             this.activeMultiplier = 1.0f;
             return;
@@ -66,7 +104,7 @@ public class TripleJumpPower extends Power {
         ticksOnGround = 0;
         jumpCount++;
 
-        ActionFactory<Entity>.Instance action = null;
+        EntityAction action = null;
 
         switch (jumpCount) {
             case 1:
@@ -80,10 +118,9 @@ public class TripleJumpPower extends Power {
             case 3:
                 this.activeMultiplier = this.thirdJumpMultiplier;
                 action = this.thirdJumpAction;
-                jumpCount = 0; // 第三跳后重置
+                jumpCount = 0;
                 break;
             default:
-                // 如果出现意外情况，重置计数并使用默认倍率
                 jumpCount = 0;
                 this.activeMultiplier = 1.0f;
                 break;
@@ -94,33 +131,15 @@ public class TripleJumpPower extends Power {
         }
     }
 
-    // 为 Mixin 提供当前的跳跃倍率
     public float getActiveJumpMultiplier() {
         return this.activeMultiplier;
     }
 
-    public static PowerFactory createFactory() {
-        return new PowerFactory<>(
-                ShapeShifterCurseFabric.identifier("triple_jump"),
-                new SerializableData()
-                        .add("first_jump_action", ApoliDataTypes.ENTITY_ACTION, null)
-                        .add("second_jump_action", ApoliDataTypes.ENTITY_ACTION, null)
-                        .add("third_jump_action", ApoliDataTypes.ENTITY_ACTION, null)
-                        .add("first_jump_multiplier", SerializableDataTypes.FLOAT, 1.0f)
-                        .add("second_jump_multiplier", SerializableDataTypes.FLOAT, 1.5f)
-                        .add("third_jump_multiplier", SerializableDataTypes.FLOAT, 2.0f)
-                        .add("reset_ticks_on_ground", SerializableDataTypes.INT, 10),
-                data -> (type, entity) -> new TripleJumpPower(
-                        type,
-                        entity,
-                        data.get("first_jump_action"),
-                        data.get("second_jump_action"),
-                        data.get("third_jump_action"),
-                        data.getFloat("first_jump_multiplier"),
-                        data.getFloat("second_jump_multiplier"),
-                        data.getFloat("third_jump_multiplier"),
-                        data.getInt("reset_ticks_on_ground")
-                )
-        ).allowCondition();
+    @Override public @NotNull PowerConfiguration<?> getConfig() {
+        return createFactory(ShapeShifterCurseFabric.identifier("triple_jump"));
+    }
+
+    public static PowerConfiguration<TripleJumpPower> createFactory(net.minecraft.util.Identifier id) {
+        return PowerConfiguration.of(id, DATA_FACTORY);
     }
 }

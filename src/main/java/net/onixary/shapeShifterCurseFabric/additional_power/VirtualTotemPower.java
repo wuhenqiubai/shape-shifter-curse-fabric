@@ -1,9 +1,10 @@
 package net.onixary.shapeShifterCurseFabric.additional_power;
 
-import io.github.apace100.apoli.data.ApoliDataTypes;
-import io.github.apace100.apoli.power.CooldownPower;
-import io.github.apace100.apoli.power.type.PowerType;
-import io.github.apace100.apoli.power.type.PowerType;
+import io.github.apace100.apoli.action.EntityAction;
+import io.github.apace100.apoli.condition.EntityCondition;
+import io.github.apace100.apoli.data.TypedDataObjectFactory;
+import io.github.apace100.apoli.power.PowerConfiguration;
+import io.github.apace100.apoli.power.type.CooldownPowerType;
 import io.github.apace100.apoli.util.HudRender;
 import io.github.apace100.calio.data.SerializableData;
 import io.github.apace100.calio.data.SerializableDataTypes;
@@ -28,11 +29,10 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 
-// 由于网络同步问题 仅支持玩家实体 非玩家实体不会触发客户端效果
-public class VirtualTotemPower extends CooldownPower {
+public class VirtualTotemPower extends CooldownPowerType {
     public static final HashMap<Identifier, BiConsumer<PlayerEntity, ItemStack>> virtualTotemTypeMap = new HashMap<>();
 
     static {
@@ -58,22 +58,42 @@ public class VirtualTotemPower extends CooldownPower {
         });
     }
 
-    public Identifier virtualTotemType;  // 用于播放动画
-    public ItemStack totemStack;  // 当VirtualTotemPowerID == 0时 模拟原版不死图腾
-    private final List<Consumer<Entity>> entityAction;
+    public Identifier virtualTotemType;
+    public ItemStack totemStack;
+    private final List<EntityAction> entityAction;
     private final int totemHealth;
     private final List<StatusEffectInstance> totemStatusEffects;
 
-    public VirtualTotemPower(PowerType<?> type, LivingEntity entity, SerializableData.Instance data) {
-        super(type, entity, data.get("cooldown"), data.get("hud_render"));
+    public static final TypedDataObjectFactory<VirtualTotemPower> DATA_FACTORY =
+            TypedDataObjectFactory.simple(
+                    new SerializableData()
+                            .add("virtual_totem_type", SerializableDataTypes.IDENTIFIER, ShapeShifterCurseFabric.identifier("default"))
+                            .add("totem_stack", SerializableDataTypes.ITEM_STACK, new ItemStack(Items.TOTEM_OF_UNDYING, 1))
+                            .add("entity_actions", EntityAction.DATA_TYPE.list().optional(), Optional.empty())
+                            .add("totem_health", SerializableDataTypes.INT, 1)
+                            .add("totem_status_effects", SerializableDataTypes.STATUS_EFFECT_INSTANCES, null)
+                            .add("cooldown", SerializableDataTypes.INT, 1200)
+                            .add("hud_render", HudRender.DATA_TYPE, HudRender.DONT_RENDER),
+                    data -> new VirtualTotemPower(data),
+                    (power, sd) -> sd.instance()
+                            .set("virtual_totem_type", power.virtualTotemType)
+                            .set("totem_stack", power.totemStack)
+                            .set("entity_actions", power.entityAction)
+                            .set("totem_health", power.totemHealth)
+                            .set("totem_status_effects", power.totemStatusEffects)
+                            .set("cooldown", power.getCooldown())
+                            .set("hud_render", power.getRenderSettings())
+            );
+
+    public VirtualTotemPower(SerializableData.Instance data) {
+        super(data.getInt("cooldown"), data.get("hud_render"));
         this.virtualTotemType = data.get("virtual_totem_type");
         this.totemStack = data.get("totem_stack");
         this.entityAction = data.get("entity_actions");
-        this.totemHealth = data.get("totem_health");
+        this.totemHealth = data.getInt("totem_health");
         this.totemStatusEffects = data.get("totem_status_effects");
     }
 
-    // 应该不用同步配置 Apoli应该会把SerializableData.Instance同步到客户端
     public NbtElement toTag() {
         return super.toTag();
     }
@@ -83,29 +103,31 @@ public class VirtualTotemPower extends CooldownPower {
     }
 
     public void use() {
-        if (this.entity == null) {
+        LivingEntity entity = getHolder();
+        if (entity == null) {
             ShapeShifterCurseFabric.LOGGER.error("VirtualTotemPower: entity is null");
             return;
         }
-        this.entity.setHealth(this.totemHealth);
+        entity.setHealth(this.totemHealth);
         if (this.totemStatusEffects != null) {
             for (StatusEffectInstance statusEffectInstance : this.totemStatusEffects) {
-                this.entity.addStatusEffect(new StatusEffectInstance(statusEffectInstance));
+                entity.addStatusEffect(new StatusEffectInstance(statusEffectInstance));
             }
         }
         if (this.entityAction != null) {
-            for (Consumer<Entity> consumer : this.entityAction) {
-                consumer.accept(this.entity);
+            for (EntityAction action : this.entityAction) {
+                action.accept(entity);
             }
         }
-        if (!this.entity.getWorld().isClient && this.entity instanceof ServerPlayerEntity serverPlayerEntity) {
+        if (!entity.getWorld().isClient && entity instanceof ServerPlayerEntity serverPlayerEntity) {
             ModPacketsS2CServer.sendActiveVirtualTotem(serverPlayerEntity, this);
         }
         super.use();
     }
 
     public @Nullable PacketByteBuf create_packet_byte_buf() {
-        if (this.entity instanceof ServerPlayerEntity serverPlayerEntity) {
+        LivingEntity entity = getHolder();
+        if (entity instanceof ServerPlayerEntity serverPlayerEntity) {
             PacketByteBuf packetByteBuf = PacketByteBufs.create();
             packetByteBuf.writeUuid(serverPlayerEntity.getUuid());
             packetByteBuf.writeIdentifier(this.virtualTotemType);
@@ -124,19 +146,11 @@ public class VirtualTotemPower extends CooldownPower {
         }
     }
 
-    public static PowerFactory<?> createFactory() {
-        return new PowerFactory<>(
-                ShapeShifterCurseFabric.identifier("virtual_totem"),
-                new SerializableData()
-                        .add("virtual_totem_type", SerializableDataTypes.IDENTIFIER, ShapeShifterCurseFabric.identifier("default"))
-                        .add("totem_stack", SerializableDataTypes.ITEM_STACK, new ItemStack(Items.TOTEM_OF_UNDYING, 1))
-                        .add("entity_actions", ApoliDataTypes.ENTITY_ACTIONS, null)
-                        .add("totem_health", SerializableDataTypes.INT, 1)  // 默认1
-                        .add("totem_status_effects", SerializableDataTypes.STATUS_EFFECT_INSTANCES, null)
-                        .add("cooldown", SerializableDataTypes.INT, 1200)  // 默认1分钟
-                        .add("hud_render", ApoliDataTypes.HUD_RENDER, HudRender.DONT_RENDER),
-                data -> (powerType, entity) -> new VirtualTotemPower(powerType, entity, data)
-        ).allowCondition();
+    @Override public @NotNull PowerConfiguration<?> getConfig() {
+        return createFactory(ShapeShifterCurseFabric.identifier("virtual_totem"));
     }
 
+    public static PowerConfiguration<VirtualTotemPower> createFactory(net.minecraft.util.Identifier id) {
+        return PowerConfiguration.of(id, DATA_FACTORY);
+    }
 }

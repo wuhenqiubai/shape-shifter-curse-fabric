@@ -1,26 +1,31 @@
 package net.onixary.shapeShifterCurseFabric.additional_power;
 
-import io.github.apace100.apoli.power.Power;
-import io.github.apace100.apoli.power.type.PowerType;
+import io.github.apace100.apoli.condition.EntityCondition;
+import io.github.apace100.apoli.data.TypedDataObjectFactory;
+import io.github.apace100.apoli.power.PowerConfiguration;
 import io.github.apace100.apoli.power.type.PowerType;
 import io.github.apace100.calio.data.SerializableData;
-import net.minecraft.entity.LivingEntity;
 import net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric;
+import org.jetbrains.annotations.NotNull;
 
-public class BreathingUnderWaterPower extends Power {
+import java.util.Optional;
 
-    public BreathingUnderWaterPower(PowerType<?> type, LivingEntity entity) {
-        super(type, entity);
+public class BreathingUnderWaterPower extends PowerType {
+
+    public static final TypedDataObjectFactory<BreathingUnderWaterPower> DATA_FACTORY =
+            PowerType.createConditionedDataFactory(
+                    new SerializableData(),
+                    (data, condition) -> new BreathingUnderWaterPower(condition),
+                    (power, sd) -> sd.instance()
+            );
+
+    public BreathingUnderWaterPower(Optional<EntityCondition> condition) { super(condition); }
+
+    @Override public @NotNull PowerConfiguration<?> getConfig() {
+        return createFactory(ShapeShifterCurseFabric.identifier("breathing_under_water"));
     }
 
-    public static PowerFactory<?> createFactory() {
-        return new PowerFactory<>(
-                ShapeShifterCurseFabric.identifier("breathing_under_water"),
-                new SerializableData(),
-                data -> (powerType, livingEntity) -> new BreathingUnderWaterPower(
-                        powerType,
-                        livingEntity
-                )
-        ).allowCondition();
+    public static PowerConfiguration<BreathingUnderWaterPower> createFactory(net.minecraft.util.Identifier id) {
+        return PowerConfiguration.of(id, DATA_FACTORY);
     }
 }

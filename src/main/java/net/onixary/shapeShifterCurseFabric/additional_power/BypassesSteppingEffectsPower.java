@@ -1,22 +1,31 @@
 package net.onixary.shapeShifterCurseFabric.additional_power;
 
-import io.github.apace100.apoli.power.Power;
-import io.github.apace100.apoli.power.type.PowerType;
+import io.github.apace100.apoli.condition.EntityCondition;
+import io.github.apace100.apoli.data.TypedDataObjectFactory;
+import io.github.apace100.apoli.power.PowerConfiguration;
 import io.github.apace100.apoli.power.type.PowerType;
 import io.github.apace100.calio.data.SerializableData;
-import net.minecraft.entity.LivingEntity;
 import net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric;
+import org.jetbrains.annotations.NotNull;
 
-public class BypassesSteppingEffectsPower extends Power {
-    public BypassesSteppingEffectsPower(PowerType<?> type, LivingEntity entity) {
-        super(type, entity);
+import java.util.Optional;
+
+public class BypassesSteppingEffectsPower extends PowerType {
+
+    public static final TypedDataObjectFactory<BypassesSteppingEffectsPower> DATA_FACTORY =
+            PowerType.createConditionedDataFactory(
+                    new SerializableData(),
+                    (data, condition) -> new BypassesSteppingEffectsPower(condition),
+                    (power, sd) -> sd.instance()
+            );
+
+    public BypassesSteppingEffectsPower(Optional<EntityCondition> condition) { super(condition); }
+
+    @Override public @NotNull PowerConfiguration<?> getConfig() {
+        return createFactory(ShapeShifterCurseFabric.identifier("bypasses_stepping_effects"));
     }
 
-    public static PowerFactory createFactory() {
-        return new PowerFactory<>(
-                ShapeShifterCurseFabric.identifier("bypass_stepping_effect"),
-                new SerializableData(),
-                data -> (type, entity) -> new BypassesSteppingEffectsPower(type, entity)
-        ).allowCondition();
+    public static PowerConfiguration<BypassesSteppingEffectsPower> createFactory(net.minecraft.util.Identifier id) {
+        return PowerConfiguration.of(id, DATA_FACTORY);
     }
 }

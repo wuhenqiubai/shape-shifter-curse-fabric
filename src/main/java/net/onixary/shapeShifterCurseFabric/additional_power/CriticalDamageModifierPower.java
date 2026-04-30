@@ -1,24 +1,39 @@
 package net.onixary.shapeShifterCurseFabric.additional_power;
 
-import io.github.apace100.apoli.data.ApoliDataTypes;
-import io.github.apace100.apoli.power.Power;
+import io.github.apace100.apoli.action.EntityAction;
+import io.github.apace100.apoli.condition.EntityCondition;
+import io.github.apace100.apoli.data.TypedDataObjectFactory;
+import io.github.apace100.apoli.power.PowerConfiguration;
 import io.github.apace100.apoli.power.type.PowerType;
-import io.github.apace100.apoli.power.type.PowerType;
-import io.github.apace100.apoli.action.type.EntityActionType;
 import io.github.apace100.calio.data.SerializableData;
 import io.github.apace100.calio.data.SerializableDataTypes;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric;
+import org.jetbrains.annotations.NotNull;
 
-public class CriticalDamageModifierPower extends Power {
+import java.util.Optional;
 
-    private final ActionFactory<Entity>.Instance action;
+public class CriticalDamageModifierPower extends PowerType {
+
+    private final EntityAction action;
     private final float multiplier;
 
-    public CriticalDamageModifierPower(PowerType<?> type, LivingEntity entity, ActionFactory<Entity>.Instance action, float multiplier) {
-        super(type, entity);
-        this.action = action;
+    public static final TypedDataObjectFactory<CriticalDamageModifierPower> DATA_FACTORY =
+            PowerType.createConditionedDataFactory(
+                    new SerializableData()
+                            .add("action", EntityAction.DATA_TYPE.optional(), Optional.empty())
+                            .add("multiplier", SerializableDataTypes.FLOAT, 1.5f),
+                    (data, cond) -> new CriticalDamageModifierPower(
+                            data.get("action"),
+                            data.getFloat("multiplier"),
+                            cond),
+                    (power, sd) -> sd.instance()
+            );
+
+    public CriticalDamageModifierPower(Optional<EntityAction> action, float multiplier,
+                                       Optional<EntityCondition> powerCondition) {
+        super(powerCondition);
+        this.action = action.orElse(null);
         this.multiplier = multiplier;
     }
 
@@ -28,22 +43,16 @@ public class CriticalDamageModifierPower extends Power {
 
     public void executeAction() {
         if (action != null) {
-            action.accept(entity);
+            action.accept(getHolder());
         }
     }
 
-    public static PowerFactory createFactory() {
-        return new PowerFactory<>(
-                ShapeShifterCurseFabric.identifier("critical_damage_modifier"),
-                new SerializableData()
-                        .add("action", ApoliDataTypes.ENTITY_ACTION, null)
-                        .add("multiplier", SerializableDataTypes.FLOAT, 1.5f),
-                data -> (type, entity) -> new CriticalDamageModifierPower(
-                        type,
-                        entity,
-                        data.get("action"),
-                        data.getFloat("multiplier")
-                )
-        ).allowCondition();
+    @Override
+    public @NotNull PowerConfiguration<?> getConfig() {
+        return createFactory(ShapeShifterCurseFabric.identifier("critical_damage_modifier"));
+    }
+
+    public static PowerConfiguration<CriticalDamageModifierPower> createFactory(net.minecraft.util.Identifier id) {
+        return PowerConfiguration.of(id, DATA_FACTORY);
     }
 }

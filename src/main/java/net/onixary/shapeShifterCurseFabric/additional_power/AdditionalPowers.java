@@ -15,16 +15,16 @@ public class AdditionalPowers {
     public static final PowerReference HOSTILE_IRON_GOLEM = PowerReference.of(ShapeShifterCurseFabric.identifier("hostile_iron_golem"));
 
     public static void register() {
-        register(AddSustainedInstinctPower.getFactory());
-        register(AddImmediateInstinctPower.getFactory());
-        register(CrawlingPower.getFactory());
+register(AddSustainedInstinctPower.createFactory(ShapeShifterCurseFabric.identifier("add_sustained_instinct")));
+        register(AddImmediateInstinctPower.createFactory(ShapeShifterCurseFabric.identifier("add_immediate_instinct")));
+        register(CrawlingPower.createFactory(ShapeShifterCurseFabric.identifier("crawling")));
         register(ScalePower.getFactory());
-        register(LevitatePower.getFactory());
+        register(LevitatePower.createFactory(ShapeShifterCurseFabric.identifier("levitate")));
         register(AttractByEntityPower.getFactory());
         register(LootingPower.createFactory());
         register(ProjectileDodgePower.createFactory());
         register(WaterFlexibilityPower.createFactory());
-        register(AlwaysSweepingPower.createFactory());
+        register(AlwaysSweepingPower.createFactory(ShapeShifterCurseFabric.identifier("always_sweeping")));
         register(FallingProtectionPower.createFactory());
         register(EnhancedFallingAttackPower.createFactory());
         register(TripleJumpPower.createFactory());
@@ -33,10 +33,10 @@ public class AdditionalPowers {
         register(BurnDamageModifierPower.createFactory());
         register(CriticalDamageModifierPower.createFactory());
         register(SnowballBlockTransformPower.createFactory());
-        register(BatBlockAttachPower.createFactory());
+        register(BatBlockAttachPower.createFactory(ShapeShifterCurseFabric.identifier("bat_block_attach")));
         register(ActionOnJumpPower.createFactory());
         register(NoRenderArmPower.createFactory());
-        register(CustomEdiblePower.createFactory());
+        register(CustomEdiblePower.createFactory(ShapeShifterCurseFabric.identifier("custom_edible")));
         register(NoStepSoundPower.createFactory());
         register(PillagerFriendlyPower.createFactory());
         register(PreventBerryEffectPower.createFactory());
@@ -50,7 +50,7 @@ public class AdditionalPowers {
         register(ActionOnSprintingToSneakingPower.createFactory());
         register(ModifyStepHeightPower.createFactory());
         register(KeepSneakingPower.createFactory());
-        register(DelayAttributePower.createFactory());
+        register(DelayAttributePower.createFactory(ShapeShifterCurseFabric.identifier("delay_attribute")));
         register(AlwaysSprintSwimmingPower.createFactory());
         register(ActionOnSplashPotionTakeEffect.createFactory());
         register(ConditionScalePower.createFactory());
@@ -67,19 +67,19 @@ public class AdditionalPowers {
         register(ActionOnEntityInRangePower.createFactory());
         register(ApplyEffectPower.createFactory());
         register(OptionalEffectImmunityPower.createFactory());
-        register(ManaTypePower.createFactory());
+        register(ManaTypePower.createFactory(ShapeShifterCurseFabric.identifier("mana_type_power")));
         register(ManaAttributePower.createFactory());
-        register(ConditionedManaAttributePower.createFactory());
+        register(ConditionedManaAttributePower.createFactory(ShapeShifterCurseFabric.identifier("conditioned_mana_attribute")));
         register(HissPhantomPower.createFactory());
         register(BypassesLandingEffectsPower.createFactory());
         register(BypassesSteppingEffectsPower.createFactory());
         register(FormCameraBobbingPower.createFactory());
         register(SlowdownPercentPower.createFactory());
-        register(ChargePower.createFactory());
-        register(ItemStorePower.createFactory());
+        register(ChargePower.createFactory(ShapeShifterCurseFabric.identifier("charge_action")));
+        register(ItemStorePower.createFactory(ShapeShifterCurseFabric.identifier("item_store")));
         register(ModifyFallDamagePower.createFactory());
         register(VirtualShieldPower.createFactory());
-        register(RenderTrinketsSlotPower.createFactory());
+        register(RenderTrinketsSlotPower.createFactory(ShapeShifterCurseFabric.identifier("render_accessory_slot")));
     }
 
     private static <T extends PowerType> PowerConfiguration<T> register(PowerConfiguration<T> config) {

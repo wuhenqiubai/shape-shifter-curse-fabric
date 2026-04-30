@@ -1,43 +1,49 @@
 package net.onixary.shapeShifterCurseFabric.additional_power;
 
-import io.github.apace100.apoli.data.ApoliDataTypes;
-import io.github.apace100.apoli.power.Power;
+import io.github.apace100.apoli.condition.EntityCondition;
+import io.github.apace100.apoli.data.TypedDataObjectFactory;
+import io.github.apace100.apoli.power.PowerConfiguration;
 import io.github.apace100.apoli.power.type.PowerType;
-import io.github.apace100.apoli.power.type.PowerType;
-import io.github.apace100.apoli.condition.type.EntityConditionType;
 import io.github.apace100.calio.data.SerializableData;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric;
+import org.jetbrains.annotations.NotNull;
 
-public class KeepSneakingPower extends Power {
+import java.util.Optional;
 
-    private final ConditionFactory<LivingEntity>.Instance condition;
+public class KeepSneakingPower extends PowerType {
 
-    public KeepSneakingPower(PowerType<?> type, LivingEntity entity, ConditionFactory<LivingEntity>.Instance condition) {
-        super(type, entity);
-        this.condition = condition;
+    private final EntityCondition condition;
+
+    public static final TypedDataObjectFactory<KeepSneakingPower> DATA_FACTORY =
+            PowerType.createConditionedDataFactory(
+                    new SerializableData()
+                            .add("condition", EntityCondition.DATA_TYPE.optional(), Optional.empty()),
+                    (data, cond) -> new KeepSneakingPower(
+                            data.get("condition"),
+                            cond),
+                    (power, sd) -> sd.instance()
+            );
+
+    public KeepSneakingPower(Optional<EntityCondition> condition, Optional<EntityCondition> powerCondition) {
+        super(powerCondition);
+        this.condition = condition.orElse(null);
     }
 
     public boolean shouldForceSneak(PlayerEntity player) {
-        // 在水中时不强制潜行
         if (player.isSubmergedInWater() || player.isInsideWaterOrBubbleColumn()) {
             return false;
         }
-
-        return (condition == null || condition.test(entity));
+        return (condition == null || condition.test(getHolder()));
     }
 
-    public static PowerFactory createFactory() {
-        return new PowerFactory<>(
-                ShapeShifterCurseFabric.identifier("keep_sneaking"),
-                new SerializableData()
-                        .add("condition", ApoliDataTypes.ENTITY_CONDITION, null),
-                data -> (powerType, livingEntity) -> new KeepSneakingPower(
-                        powerType,
-                        livingEntity,
-                        data.get("condition")
-                )
-        ).allowCondition();
+    @Override
+    public @NotNull PowerConfiguration<?> getConfig() {
+        return createFactory(ShapeShifterCurseFabric.identifier("keep_sneaking"));
+    }
+
+    public static PowerConfiguration<KeepSneakingPower> createFactory(net.minecraft.util.Identifier id) {
+        return PowerConfiguration.of(id, DATA_FACTORY);
     }
 }

@@ -1,20 +1,34 @@
 package net.onixary.shapeShifterCurseFabric.additional_power;
 
-import io.github.apace100.apoli.power.Power;
-import io.github.apace100.apoli.power.type.PowerType;
+import io.github.apace100.apoli.condition.EntityCondition;
+import io.github.apace100.apoli.data.TypedDataObjectFactory;
+import io.github.apace100.apoli.power.PowerConfiguration;
 import io.github.apace100.apoli.power.type.PowerType;
 import io.github.apace100.calio.data.SerializableData;
 import io.github.apace100.calio.data.SerializableDataTypes;
-import net.minecraft.entity.LivingEntity;
 import net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric;
+import org.jetbrains.annotations.NotNull;
 
-public class LootingPower extends Power {
+import java.util.Optional;
+
+public class LootingPower extends PowerType {
 
     private final int level;
     private final int maxLevel;
 
-    public LootingPower(PowerType<?> type, LivingEntity entity, int level, int maxLevel)  {
-        super(type, entity);
+    public static final TypedDataObjectFactory<LootingPower> DATA_FACTORY =
+            PowerType.createConditionedDataFactory(
+                    new SerializableData()
+                            .add("level", SerializableDataTypes.INT, 1)
+                            .add("max_level", SerializableDataTypes.INT, Integer.MAX_VALUE),
+                    (data, condition) -> new LootingPower(data.getInt("level"), data.getInt("max_level"), condition),
+                    (power, sd) -> sd.instance()
+                            .set("level", power.level)
+                            .set("max_level", power.maxLevel)
+            );
+
+    public LootingPower(int level, int maxLevel, Optional<EntityCondition> condition) {
+        super(condition);
         this.level = level;
         this.maxLevel = maxLevel;
     }
@@ -31,19 +45,11 @@ public class LootingPower extends Power {
         return Math.min(preProcessLevel + level, maxLevel);
     }
 
-    // 工厂方法
-    public static PowerFactory<?> createFactory() {
-        return new PowerFactory<>(
-                ShapeShifterCurseFabric.identifier("simple_looting"),
-                new SerializableData()
-                        .add("level", SerializableDataTypes.INT, 1)
-                        .add("max_level", SerializableDataTypes.INT, Integer.MAX_VALUE),
-                data -> (powerType, entity) -> new LootingPower(
-                        powerType,
-                        entity,
-                        data.getInt("level"),
-                        data.getInt("max_level")
-                )
-        ).allowCondition();
+    @Override public @NotNull PowerConfiguration<?> getConfig() {
+        return createFactory(ShapeShifterCurseFabric.identifier("simple_looting"));
+    }
+
+    public static PowerConfiguration<LootingPower> createFactory(net.minecraft.util.Identifier id) {
+        return PowerConfiguration.of(id, DATA_FACTORY);
     }
 }

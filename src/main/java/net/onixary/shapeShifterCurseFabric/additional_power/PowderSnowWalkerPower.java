@@ -1,23 +1,31 @@
 package net.onixary.shapeShifterCurseFabric.additional_power;
 
-import io.github.apace100.apoli.power.Power;
-import io.github.apace100.apoli.power.type.PowerType;
+import io.github.apace100.apoli.condition.EntityCondition;
+import io.github.apace100.apoli.data.TypedDataObjectFactory;
+import io.github.apace100.apoli.power.PowerConfiguration;
 import io.github.apace100.apoli.power.type.PowerType;
 import io.github.apace100.calio.data.SerializableData;
-import net.minecraft.entity.LivingEntity;
 import net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric;
+import org.jetbrains.annotations.NotNull;
 
-public class PowderSnowWalkerPower extends Power {
+import java.util.Optional;
 
-    public PowderSnowWalkerPower(PowerType<?> type, LivingEntity entity) {
-        super(type, entity);
+public class PowderSnowWalkerPower extends PowerType {
+
+    public static final TypedDataObjectFactory<PowderSnowWalkerPower> DATA_FACTORY =
+            PowerType.createConditionedDataFactory(
+                    new SerializableData(),
+                    (data, condition) -> new PowderSnowWalkerPower(condition),
+                    (power, sd) -> sd.instance()
+            );
+
+    public PowderSnowWalkerPower(Optional<EntityCondition> condition) { super(condition); }
+
+    @Override public @NotNull PowerConfiguration<?> getConfig() {
+        return createFactory(ShapeShifterCurseFabric.identifier("powder_snow_walker"));
     }
 
-    public static PowerFactory createFactory() {
-        return new PowerFactory<>(
-                ShapeShifterCurseFabric.identifier("powder_snow_walker"),
-                new SerializableData(),
-                data -> (type, entity) -> new PowderSnowWalkerPower(type, entity)
-        ).allowCondition();
+    public static PowerConfiguration<PowderSnowWalkerPower> createFactory(net.minecraft.util.Identifier id) {
+        return PowerConfiguration.of(id, DATA_FACTORY);
     }
 }

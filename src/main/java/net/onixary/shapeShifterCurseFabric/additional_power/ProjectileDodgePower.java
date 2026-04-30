@@ -1,25 +1,26 @@
 package net.onixary.shapeShifterCurseFabric.additional_power;
 
-import io.github.apace100.apoli.data.ApoliDataTypes;
-import io.github.apace100.apoli.power.Power;
+import io.github.apace100.apoli.action.EntityAction;
+import io.github.apace100.apoli.condition.EntityCondition;
+import io.github.apace100.apoli.data.TypedDataObjectFactory;
+import io.github.apace100.apoli.power.PowerConfiguration;
 import io.github.apace100.apoli.power.type.PowerType;
-import io.github.apace100.apoli.power.type.PowerType;
-import io.github.apace100.apoli.action.type.EntityActionType;
 import io.github.apace100.calio.data.SerializableData;
 import io.github.apace100.calio.data.SerializableDataTypes;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.util.math.Vec3d;
 import net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Predicate;
 
-public class ProjectileDodgePower extends Power {
-    private final ActionFactory<Entity>.Instance action;
-    private final Predicate<Entity> entityCondition;
+public class ProjectileDodgePower extends PowerType {
+    private final EntityAction action;
+    private final Predicate<LivingEntity> entityCondition;
     private final double range;
     private final double dodgeSpeed;
     private final double triggerDistance;
@@ -27,12 +28,36 @@ public class ProjectileDodgePower extends Power {
     private int timer;
     private boolean dodgeRight;
 
-    public ProjectileDodgePower(PowerType<?> type, LivingEntity entity,
-                                ActionFactory<Entity>.Instance action,
-                                Predicate<Entity> entityCondition,
-                                double range, double dodgeSpeed,
-                                double triggerDistance, int cooldown) {
-        super(type, entity);
+    public static final TypedDataObjectFactory<ProjectileDodgePower> DATA_FACTORY =
+            PowerType.createConditionedDataFactory(
+                    new SerializableData()
+                            .add("action", EntityAction.DATA_TYPE.optional(), Optional.empty())
+                            .add("entity_condition", EntityCondition.DATA_TYPE.optional(), Optional.empty())
+                            .add("range", SerializableDataTypes.DOUBLE, 5.0)
+                            .add("dodge_speed", SerializableDataTypes.DOUBLE, 1.0)
+                            .add("trigger_distance", SerializableDataTypes.DOUBLE, 4.0)
+                            .add("cooldown", SerializableDataTypes.INT, 20),
+                    (data, condition) -> new ProjectileDodgePower(
+                            data.get("action"),
+                            data.get("entity_condition"),
+                            data.getDouble("range"),
+                            data.getDouble("dodge_speed"),
+                            data.getDouble("trigger_distance"),
+                            data.getInt("cooldown"),
+                            condition),
+                    (power, sd) -> sd.instance()
+                            .set("action", power.action)
+                            .set("entity_condition", power.entityCondition)
+                            .set("range", power.range)
+                            .set("dodge_speed", power.dodgeSpeed)
+                            .set("trigger_distance", power.triggerDistance)
+                            .set("cooldown", power.cooldown)
+            );
+
+    public ProjectileDodgePower(EntityAction action, Predicate<LivingEntity> entityCondition,
+                                 double range, double dodgeSpeed, double triggerDistance, int cooldown,
+                                 Optional<EntityCondition> condition) {
+        super(condition);
         this.action = action;
         this.entityCondition = entityCondition;
         this.range = range;
@@ -41,44 +66,38 @@ public class ProjectileDodgePower extends Power {
         this.cooldown = cooldown;
         this.timer = 0;
         this.dodgeRight = true;
-        this.setTicking(true);
     }
 
     @Override
-    public void tick() {
-        if (!(this.entity instanceof PlayerEntity player) || player.isSpectator()) return;
+    public void onGained() {
+        this.setTicking();
+    }
+
+    @Override
+    public void serverTick() {
+        LivingEntity entity = getHolder();
+        if (!(entity instanceof PlayerEntity player) || player.isSpectator()) return;
         if (player.getWorld().isClient()) return;
 
-        if(!entityCondition.test(player)) {return;}
+        if (entityCondition != null && !entityCondition.test(player)) { return; }
 
-        // 获取玩家周围的投射物
         List<ProjectileEntity> projectiles = player.getWorld()
                 .getEntitiesByClass(ProjectileEntity.class,
                         player.getBoundingBox().expand(range),
                         projectile -> {
-                            // 排除玩家自己的投射物
                             if (projectile.getOwner() == player) {
                                 return false;
                             }
-
-                            // 使用多重条件检查投射物是否在飞行中
                             if (projectile.isOnGround()) {
                                 return false;
                             }
-
-                            // 检查inGround字段(如果可能通过Mixin访问)
-                            // 如果无法通过Mixin，则跳过此检查
-
-                            // 检查投射物的移动是否实际发生
                             Vec3d prevPos = projectile.prevX != 0 ? new Vec3d(projectile.prevX, projectile.prevY, projectile.prevZ) : null;
                             if (prevPos != null) {
                                 double movement = prevPos.distanceTo(projectile.getPos());
                                 if (movement < 0.1) {
-                                    return false; // 投射物没有移动，可能已经停止
+                                    return false;
                                 }
                             }
-
-                            //ShapeShifterCurseFabric.LOGGER.info("飞行中投射物: " + projectile.getUuid());
                             return true;
                         });
 
@@ -87,45 +106,32 @@ public class ProjectileDodgePower extends Power {
         }
 
         for (ProjectileEntity projectile : projectiles) {
-            // 检查投射物是否朝玩家飞来
             if (isProjectileApproaching(projectile, player)) {
-                // 执行躲避
                 if (timer <= 0) {
                     performDodge(player, projectile);
-                    timer = cooldown; // 设置冷却
+                    timer = cooldown;
                 }
-                break; // 一次只躲避一个投射物
+                break;
             }
         }
     }
 
     private boolean isProjectileApproaching(ProjectileEntity projectile, PlayerEntity player) {
-        // 检查距离是否在触发范围内
         double distance = projectile.getPos().distanceTo(player.getPos());
         if (distance > triggerDistance) return false;
 
-        // 计算投射物到玩家的方向向量
         Vec3d toPlayer = player.getPos().subtract(projectile.getPos()).normalize();
-
-        // 获取投射物的速度向量并归一化
         Vec3d projectileVelocity = projectile.getVelocity().normalize();
-
-        // 使用点积判断投射物是否朝向玩家（值越大，方向越接近）
         double dot = toPlayer.dotProduct(projectileVelocity);
-
-        // 如果点积大于0.7，表示投射物大致朝向玩家（夹角小于约45度）
         return dot > 0.7;
     }
 
     private void performDodge(PlayerEntity player, ProjectileEntity projectile) {
-        // 获取投射物速度的水平分量
         Vec3d projectileVel = projectile.getVelocity();
         Vec3d horizontalVel = new Vec3d(projectileVel.x, 0, projectileVel.z).normalize();
 
-        // 随机选择躲避方向
-        dodgeRight = !dodgeRight; // 交替方向，避免单一方向
+        dodgeRight = !dodgeRight;
 
-        // 计算垂直方向向量（左右）
         Vec3d dodgeDirection;
         if (dodgeRight) {
             dodgeDirection = new Vec3d(-horizontalVel.z, 0, horizontalVel.x).normalize();
@@ -133,7 +139,6 @@ public class ProjectileDodgePower extends Power {
             dodgeDirection = new Vec3d(horizontalVel.z, 0, -horizontalVel.x).normalize();
         }
         ShapeShifterCurseFabric.LOGGER.info("正在躲避投射物: " + projectile.getUuid());
-        // 应用躲避速度
         player.addVelocity(dodgeDirection.multiply(dodgeSpeed));
         player.velocityModified = true;
         if (action != null) {
@@ -141,26 +146,11 @@ public class ProjectileDodgePower extends Power {
         }
     }
 
-    public static PowerFactory<?> createFactory() {
-        return new PowerFactory<>(
-                ShapeShifterCurseFabric.identifier("projectile_dodge"),
-                new SerializableData()
-                        .add("action", ApoliDataTypes.ENTITY_ACTION, null)
-                        .add("entity_condition", ApoliDataTypes.ENTITY_CONDITION, null)
-                        .add("range", SerializableDataTypes.DOUBLE, 5.0)
-                        .add("dodge_speed", SerializableDataTypes.DOUBLE, 1.0)
-                        .add("trigger_distance", SerializableDataTypes.DOUBLE, 4.0)
-                        .add("cooldown", SerializableDataTypes.INT, 20),
-                data -> (powerType, entity) -> new ProjectileDodgePower(
-                        powerType,
-                        entity,
-                        data.get("action"),
-                        data.get("entity_condition"),
-                        data.getDouble("range"),
-                        data.getDouble("dodge_speed"),
-                        data.getDouble("trigger_distance"),
-                        data.getInt("cooldown")
-                )
-        ).allowCondition();
+    @Override public @NotNull PowerConfiguration<?> getConfig() {
+        return createFactory(ShapeShifterCurseFabric.identifier("projectile_dodge"));
+    }
+
+    public static PowerConfiguration<ProjectileDodgePower> createFactory(net.minecraft.util.Identifier id) {
+        return PowerConfiguration.of(id, DATA_FACTORY);
     }
 }

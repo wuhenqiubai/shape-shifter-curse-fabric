@@ -1,47 +1,67 @@
-// ModifyStepHeightPower.java
 package net.onixary.shapeShifterCurseFabric.additional_power;
 
-import io.github.apace100.apoli.data.ApoliDataTypes;
-import io.github.apace100.apoli.power.Power;
+import io.github.apace100.apoli.condition.EntityCondition;
+import io.github.apace100.apoli.data.TypedDataObjectFactory;
+import io.github.apace100.apoli.power.PowerConfiguration;
 import io.github.apace100.apoli.power.type.PowerType;
-import io.github.apace100.apoli.power.type.PowerType;
-import io.github.apace100.apoli.condition.type.EntityConditionType;
 import io.github.apace100.calio.data.SerializableData;
 import io.github.apace100.calio.data.SerializableDataTypes;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric;
+import org.jetbrains.annotations.NotNull;
 import virtuoel.pehkui.api.ScaleData;
 import virtuoel.pehkui.api.ScaleTypes;
 
-public class ModifyStepHeightPower extends Power {
+import java.util.Optional;
+
+public class ModifyStepHeightPower extends PowerType {
 
     private final float stepHeightScale;
-    private final ConditionFactory<LivingEntity>.Instance condition;
+    private final EntityCondition condition;
     private final boolean affectSneak;
 
-    public ModifyStepHeightPower(PowerType<?> type, LivingEntity entity, float stepHeightScale, ConditionFactory<LivingEntity>.Instance condition, boolean affectSneak) {
-        super(type, entity);
+    public static final TypedDataObjectFactory<ModifyStepHeightPower> DATA_FACTORY =
+            PowerType.createConditionedDataFactory(
+                    new SerializableData()
+                            .add("step_height_scale", SerializableDataTypes.FLOAT)
+                            .add("condition", EntityCondition.DATA_TYPE.optional(), Optional.empty())
+                            .add("affect_sneak", SerializableDataTypes.BOOLEAN, true),
+                    (data, condition) -> new ModifyStepHeightPower(
+                            data.getFloat("step_height_scale"),
+                            data.get("condition"),
+                            data.getBoolean("affect_sneak"),
+                            condition),
+                    (power, sd) -> sd.instance()
+                            .set("step_height_scale", power.stepHeightScale)
+                            .set("condition", power.condition)
+                            .set("affect_sneak", power.affectSneak)
+            );
+
+    public ModifyStepHeightPower(float stepHeightScale, EntityCondition condition, boolean affectSneak,
+                                  Optional<EntityCondition> powerCondition) {
+        super(powerCondition);
         this.stepHeightScale = stepHeightScale;
         this.condition = condition;
         this.affectSneak = affectSneak;
-        this.setTicking(true);
+    }
+
+    @Override
+    public void onGained() {
+        this.setTicking();
     }
 
     @Override
     public void tick() {
-        super.tick();
-
+        LivingEntity entity = getHolder();
         if (entity instanceof ServerPlayerEntity) {
             boolean isEffective = (condition == null || condition.test(entity));
             ScaleData scaleDataStepHeight = ScaleTypes.STEP_HEIGHT.getScaleData(entity);
 
             if (isEffective) {
-                // 条件满足时应用缩放
                 scaleDataStepHeight.setScale(stepHeightScale);
                 scaleDataStepHeight.setPersistence(true);
-            } else{
-                // 条件不满足时恢复默认
+            } else {
                 scaleDataStepHeight.setScale(1.0f);
                 scaleDataStepHeight.setPersistence(true);
             }
@@ -50,38 +70,33 @@ public class ModifyStepHeightPower extends Power {
 
     @Override
     public void onRemoved() {
-        super.onRemoved();
-        ScaleData scaleDataStepHeight = ScaleTypes.STEP_HEIGHT.getScaleData(entity);
-        scaleDataStepHeight.setScale(1.0f);
-        scaleDataStepHeight.setPersistence(true);
+        LivingEntity entity = getHolder();
+        if (entity != null) {
+            ScaleData scaleDataStepHeight = ScaleTypes.STEP_HEIGHT.getScaleData(entity);
+            scaleDataStepHeight.setScale(1.0f);
+            scaleDataStepHeight.setPersistence(true);
+        }
     }
 
     @Override
     public void onLost() {
-        super.onRemoved();
-        ScaleData scaleDataStepHeight = ScaleTypes.STEP_HEIGHT.getScaleData(entity);
-        scaleDataStepHeight.setScale(1.0f);
-        scaleDataStepHeight.setPersistence(true);
+        LivingEntity entity = getHolder();
+        if (entity != null) {
+            ScaleData scaleDataStepHeight = ScaleTypes.STEP_HEIGHT.getScaleData(entity);
+            scaleDataStepHeight.setScale(1.0f);
+            scaleDataStepHeight.setPersistence(true);
+        }
     }
 
     public boolean shouldAffectSneak() {
         return affectSneak;
     }
 
-    public static PowerFactory createFactory() {
-        return new PowerFactory<>(
-                ShapeShifterCurseFabric.identifier("modify_step_height"),
-                new SerializableData()
-                        .add("step_height_scale", SerializableDataTypes.FLOAT)
-                        .add("condition", ApoliDataTypes.ENTITY_CONDITION, null)
-                        .add("affect_sneak", SerializableDataTypes.BOOLEAN, true),
-                data -> (powerType, livingEntity) -> new ModifyStepHeightPower(
-                        powerType,
-                        livingEntity,
-                        data.getFloat("step_height_scale"),
-                        data.get("condition"),
-                        data.getBoolean("affect_sneak")
-                )
-        ).allowCondition();
+    @Override public @NotNull PowerConfiguration<?> getConfig() {
+        return createFactory(ShapeShifterCurseFabric.identifier("modify_step_height"));
+    }
+
+    public static PowerConfiguration<ModifyStepHeightPower> createFactory(net.minecraft.util.Identifier id) {
+        return PowerConfiguration.of(id, DATA_FACTORY);
     }
 }

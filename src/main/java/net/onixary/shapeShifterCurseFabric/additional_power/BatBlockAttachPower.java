@@ -1,8 +1,10 @@
 package net.onixary.shapeShifterCurseFabric.additional_power;
 
+import io.github.apace100.apoli.action.EntityAction;
+import io.github.apace100.apoli.condition.EntityCondition;
 import io.github.apace100.apoli.data.ApoliDataTypes;
-import io.github.apace100.apoli.power.Power;
-import io.github.apace100.apoli.power.type.PowerType;
+import io.github.apace100.apoli.data.TypedDataObjectFactory;
+import io.github.apace100.apoli.power.PowerConfiguration;
 import io.github.apace100.apoli.power.type.PowerType;
 import io.github.apace100.calio.data.SerializableData;
 import io.github.apace100.calio.data.SerializableDataTypes;
@@ -21,24 +23,21 @@ import net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric;
 import net.onixary.shapeShifterCurseFabric.networking.ModPacketsS2CServer;
 import net.onixary.shapeShifterCurseFabric.player_animation.v3.AnimRegistries;
 import net.onixary.shapeShifterCurseFabric.player_animation.v3.AnimUtils;
-import net.onixary.shapeShifterCurseFabric.player_animation.v3.IPlayerAnimController;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.function.Consumer;
+import java.util.Optional;
 import java.util.function.Predicate;
 
 import static net.onixary.shapeShifterCurseFabric.additional_power.BatAttachEventHandler.getBatAttachPower;
 
-// XuHaoNan: 之后尝试重构这个逻辑 不过不太着急
-
-public class BatBlockAttachPower extends Power {
+public class BatBlockAttachPower extends PowerType {
 
     private final Predicate<Entity> entityAttachCondition;
     private final Predicate<CachedBlockPosition> blockCondition;
-    private final Consumer<LivingEntity> sideAttachAction;
-    private final Consumer<LivingEntity> bottomAttachAction;
+    private final EntityAction sideAttachAction;
+    private final EntityAction bottomAttachAction;
     private final int bottomAttachInterval;
 
-    // 吸附状态
     private boolean isAttached = false;
     private AttachType attachType = AttachType.NONE;
     private BlockPos attachedBlockPos = null;
@@ -49,25 +48,43 @@ public class BatBlockAttachPower extends Power {
         NONE, SIDE, BOTTOM
     }
 
-    public BatBlockAttachPower(PowerType<?> type, LivingEntity entity,
+    public static final TypedDataObjectFactory<BatBlockAttachPower> DATA_FACTORY =
+            PowerType.createConditionedDataFactory(
+                    new SerializableData()
+                            .add("attach_condition", EntityCondition.DATA_TYPE.optional(), Optional.empty())
+                            .add("block_condition", ApoliDataTypes.BLOCK_CONDITION, null)
+                            .add("side_attach_action", EntityAction.DATA_TYPE.optional(), Optional.empty())
+                            .add("bottom_attach_action", EntityAction.DATA_TYPE.optional(), Optional.empty())
+                            .add("bottom_attach_interval", SerializableDataTypes.INT, 20),
+                    (data, condition) -> new BatBlockAttachPower(
+                            condition,
+                            data.get("attach_condition"),
+                            data.get("block_condition"),
+                            data.get("side_attach_action"),
+                            data.get("bottom_attach_action"),
+                            data.getInt("bottom_attach_interval")
+                    ),
+                    (power, sd) -> sd.instance()
+            );
+
+    public BatBlockAttachPower(Optional<EntityCondition> condition,
                                Predicate<Entity> entityAttachCondition,
                                Predicate<CachedBlockPosition> blockCondition,
-                               Consumer<LivingEntity> sideAttachAction,
-                               Consumer<LivingEntity> bottomAttachAction,
+                               EntityAction sideAttachAction,
+                               EntityAction bottomAttachAction,
                                int bottomAttachInterval) {
-        super(type, entity);
+        super(condition);
         this.entityAttachCondition = entityAttachCondition;
         this.blockCondition = blockCondition;
         this.sideAttachAction = sideAttachAction;
         this.bottomAttachAction = bottomAttachAction;
         this.bottomAttachInterval = bottomAttachInterval;
-        this.setTicking(true);
+        this.setTicking();
         this.shouldTickWhenInactive();
     }
 
     public static void syncClientState(PlayerEntity player, boolean isAttached, int attachTypeOrdinal,
                                        BlockPos attachedPos, Direction attachedSide) {
-        // 获取玩家的BatBlockAttachPower实例
         BatBlockAttachPower power = getBatAttachPower(player);
         if (power != null) {
             power.isAttached = isAttached;
@@ -76,7 +93,6 @@ public class BatBlockAttachPower extends Power {
             power.attachedSide = attachedSide;
             power.bottomAttachTimer = 0;
 
-            // 如果是吸附状态，立即设置客户端位置
             if (isAttached && attachedPos != null && attachedSide != null) {
                 Vec3d targetPos;
                 if (power.attachType == AttachType.SIDE) {
@@ -87,39 +103,29 @@ public class BatBlockAttachPower extends Power {
 
                 player.setPosition(targetPos.x, targetPos.y, targetPos.z);
                 player.setVelocity(Vec3d.ZERO);
-                //System.out.println("Debug: CLIENT position synced to " + targetPos);
             }
-
-            //System.out.println("Debug: Client state synced - isAttached=" + isAttached +
-            //        ", attachType=" + power.attachType);
         }
-
     }
 
     @Override
-    public void tick() {
-        super.tick();
+    public void serverTick() {
+        LivingEntity entity = getHolder();
 
         if (!(entity instanceof PlayerEntity player)) {
             return;
         }
 
-        // 只在服务端处理方块检查和detach逻辑
         if (!player.getWorld().isClient()) {
             if (isAttached && attachedBlockPos != null) {
                 World world = entity.getWorld();
                 BlockState blockState = world.getBlockState(attachedBlockPos);
 
-                //System.out.println("Debug: SERVER Tick checking block at " + attachedBlockPos + ", isAir: " + blockState.isAir());
-
                 if (blockState.isAir()) {
-                    //System.out.println("Debug: SERVER Block is air, force detaching");
-                    detach(player,false);
+                    detach(player, false);
                     return;
                 }
             }
 
-            // 服务端处理定时动作
             if (isAttached && attachType == AttachType.BOTTOM && bottomAttachAction != null) {
                 bottomAttachTimer++;
                 if (bottomAttachTimer >= bottomAttachInterval) {
@@ -129,7 +135,6 @@ public class BatBlockAttachPower extends Power {
             }
         }
 
-        // 客户端和服务端都执行位置维持
         if (isAttached) {
             maintainAttachPosition(player);
 
@@ -150,8 +155,7 @@ public class BatBlockAttachPower extends Power {
 
         BlockPos blockPos = hitResult.getBlockPos();
 
-        if (blockCondition != null && !blockCondition.test(new CachedBlockPosition(entity.getWorld(), blockPos, true))) {
-            //System.out.println("Debug: Block condition failed");
+        if (blockCondition != null && !blockCondition.test(new CachedBlockPosition(getHolder().getWorld(), blockPos, true))) {
             return false;
         }
 
@@ -159,22 +163,17 @@ public class BatBlockAttachPower extends Power {
 
         boolean attached = false;
         if (hitSide == Direction.DOWN) {
-            //System.out.println("Debug: Attaching to bottom");
             attachToBottom(player, blockPos);
             attached = true;
         } else if (hitSide.getAxis().isHorizontal()) {
-            //System.out.println("Debug: Attaching to side");
             attachToSide(player, blockPos, hitSide);
             attached = true;
         }
 
-        // 在设置位置后发送同步包
         if (attached && !player.getWorld().isClient() && player instanceof ServerPlayerEntity serverPlayer) {
-            // 添加小延迟确保位置设置生效
             player.getWorld().getServer().execute(() -> {
                 ModPacketsS2CServer.sendBatAttachState(serverPlayer, isAttached, attachType.ordinal(),
                         attachedBlockPos, attachedSide);
-                // 广播给附近的其他玩家
                 ModPacketsS2CServer.broadcastBatAttachState(serverPlayer, isAttached, attachType.ordinal(),
                         attachedBlockPos, attachedSide);
             });
@@ -189,7 +188,6 @@ public class BatBlockAttachPower extends Power {
         attachedBlockPos = blockPos;
         attachedSide = side;
 
-        // 立即在服务端设置位置
         Vec3d attachPos = Vec3d.ofCenter(blockPos).add(Vec3d.of(side.getVector()).multiply(0.75d)).add(0, -0.5, 0);
         player.setPosition(attachPos.x, attachPos.y, attachPos.z);
         player.setVelocity(Vec3d.ZERO);
@@ -197,7 +195,6 @@ public class BatBlockAttachPower extends Power {
         player.velocityDirty = true;
         player.velocityModified = true;
 
-        // 修改动作 最好在服务器端执行 虽然客户端也能执行 但是客户端还是会发送包到服务器进行处理
         AnimUtils.playPowerAnimLoop(player, AnimRegistries.POWER_ANIM_ATTACH_SIDE, AnimUtils.AnimationSendSideType.ONLY_SERVER);
     }
 
@@ -208,7 +205,6 @@ public class BatBlockAttachPower extends Power {
         attachedSide = Direction.DOWN;
         bottomAttachTimer = 0;
 
-        // 立即在服务端设置位置
         Vec3d attachPos = Vec3d.ofCenter(blockPos).add(0, -1.5f, 0);
         player.setPosition(attachPos.x, attachPos.y, attachPos.z);
         player.setVelocity(Vec3d.ZERO);
@@ -216,63 +212,47 @@ public class BatBlockAttachPower extends Power {
         player.velocityDirty = true;
         player.velocityModified = true;
 
-        // 修改动作 最好在服务器端执行 虽然客户端也能执行 但是客户端还是会发送包到服务器进行处理
         AnimUtils.playPowerAnimLoop(player, AnimRegistries.POWER_ANIM_ATTACH_BOTTOM, AnimUtils.AnimationSendSideType.ONLY_SERVER);
     }
-
 
     public void detach(PlayerEntity player, boolean isByJump) {
         if (!isAttached) {
             return;
         }
 
-        //System.out.println("Debug: detached on SERVER");
-
-        // 如果是侧面吸附并且有跳跃动作，执行动作
         if (attachType == AttachType.SIDE && sideAttachAction != null) {
-            sideAttachAction.accept(entity);
+            sideAttachAction.accept(getHolder());
         }
 
-        // 重置状态
         isAttached = false;
-        AttachType oldAttachType = attachType;
         attachType = AttachType.NONE;
         attachedBlockPos = null;
         attachedSide = null;
         bottomAttachTimer = 0;
 
-        // 重置物理状态
         player.setOnGround(false);
         player.setVelocity(Vec3d.ZERO);
         player.addVelocity(0, 0.4f, 0);
-        if(isByJump){
-            // 获取玩家面向方向的水平向量
+        if (isByJump) {
             float yaw = player.getYaw();
             double yawRadians = Math.toRadians(yaw);
 
-            // 计算水平方向向量（忽略Y轴）
             double dirX = -Math.sin(yawRadians);
             double dirZ = Math.cos(yawRadians);
 
-            // 设置推进速度（可以调整0.5这个数值来改变推进力度）
             double jumpSpeed = 1.25f;
-            // 同时添加向上的速度
             player.addVelocity(dirX * jumpSpeed, 0.4f, dirZ * jumpSpeed);
         }
         player.velocityDirty = true;
         player.velocityModified = true;
 
-        // 同步到客户端
         if (player instanceof ServerPlayerEntity serverPlayer) {
             ModPacketsS2CServer.sendBatAttachState(serverPlayer, false, AttachType.NONE.ordinal(), null, null);
-            // 广播给附近的其他玩家
             ModPacketsS2CServer.broadcastBatAttachState(serverPlayer, false, AttachType.NONE.ordinal(), null, null);
         }
 
-        // 修改动作 最好在服务器端执行 虽然客户端也能执行 但是客户端还是会发送包到服务器进行处理
         AnimUtils.stopPowerAnimWithIDs(player, AnimUtils.AnimationSendSideType.ONLY_SERVER, AnimRegistries.POWER_ANIM_ATTACH_SIDE, AnimRegistries.POWER_ANIM_ATTACH_BOTTOM);
     }
-
 
     private void maintainAttachPosition(PlayerEntity player) {
         if (attachedBlockPos == null || attachedSide == null) {
@@ -286,36 +266,19 @@ public class BatBlockAttachPower extends Power {
             targetPos = Vec3d.ofCenter(attachedBlockPos).add(0, -1.5f, 0);
         }
 
-        // 类似蜂蜜块的完全停止效果
-        Vec3d currentVelocity = player.getVelocity();
-
-        // 完全重置速度，类似蜘蛛网效果
         player.setVelocity(0, 0, 0);
-
-        // 强制设置位置
         player.setPosition(targetPos.x, targetPos.y, targetPos.z);
-
-        // 模拟蜂蜜块的粘性效果
         player.slowMovement(player.getBlockStateAtPos(), new Vec3d(0.0, 0.0, 0.0));
-
-        // 设置为在地面状态避免摔落伤害
         player.setOnGround(true);
         player.fallDistance = 0;
-
-        // 直接操作移动相关字段，类似原版的处理方式
         player.horizontalSpeed = 0;
         player.distanceTraveled = 0;
         player.speed = 0;
-
-        // 重置移动输入相关字段
         player.sidewaysSpeed = 0;
         player.upwardSpeed = 0;
         player.forwardSpeed = 0;
-
-        // 标记速度已变更
         player.velocityDirty = true;
         player.velocityModified = true;
-
     }
 
     private void maintainFacingDirection(PlayerEntity player) {
@@ -323,24 +286,21 @@ public class BatBlockAttachPower extends Power {
             return;
         }
 
-        // 计算面向吸附表面的角度
         float targetYaw = getTargetYaw();
-
         player.setBodyYaw(targetYaw);
         player.prevBodyYaw = targetYaw;
     }
 
-    // Getter 方法
     public float getTargetYaw() {
         if (attachedSide == null) {
-            return entity.getYaw();
+            return getHolder().getYaw();
         }
         return switch (attachedSide) {
             case NORTH -> 0.0f;
             case SOUTH -> 180.0f;
             case WEST -> -90.0f;
             case EAST -> 90.0f;
-            default -> entity.getYaw();
+            default -> getHolder().getYaw();
         };
     }
 
@@ -360,37 +320,24 @@ public class BatBlockAttachPower extends Power {
         return attachedSide;
     }
 
-    // 用于处理跳跃取消吸附
     public void handleJump(PlayerEntity player) {
         if (isAttached) {
             detach(player, true);
         }
     }
 
-    // 用于处理右键取消吸附
     public void handleRightClick(PlayerEntity player) {
         if (isAttached) {
             detach(player, false);
         }
     }
 
-    public static PowerFactory createFactory() {
-        return new PowerFactory<>(
-                ShapeShifterCurseFabric.identifier("bat_block_attach"),
-                new SerializableData()
-                        .add("attach_condition", ApoliDataTypes.ENTITY_CONDITION, null)
-                        .add("block_condition", ApoliDataTypes.BLOCK_CONDITION, null)
-                        .add("side_attach_action", ApoliDataTypes.ENTITY_ACTION, null)
-                        .add("bottom_attach_action", ApoliDataTypes.ENTITY_ACTION, null)
-                        .add("bottom_attach_interval", SerializableDataTypes.INT, 20),
-                data -> (type, entity) -> new BatBlockAttachPower(
-                        type,
-                        entity,
-                        data.get("attach_condition"),
-                        data.get("block_condition"),
-                        data.get("side_attach_action"),
-                        data.get("bottom_attach_action"),
-                        data.getInt("bottom_attach_interval"))
-        ).allowCondition();
+    @Override
+    public @NotNull PowerConfiguration<?> getConfig() {
+        return createFactory(ShapeShifterCurseFabric.identifier("bat_block_attach"));
+    }
+
+    public static PowerConfiguration<BatBlockAttachPower> createFactory(net.minecraft.util.Identifier id) {
+        return PowerConfiguration.of(id, DATA_FACTORY);
     }
 }

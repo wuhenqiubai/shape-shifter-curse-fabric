@@ -1,12 +1,11 @@
 package net.onixary.shapeShifterCurseFabric.additional_power;
 
+import io.github.apace100.apoli.action.EntityAction;
 import io.github.apace100.apoli.component.PowerHolderComponent;
-import io.github.apace100.apoli.data.ApoliDataTypes;
-import io.github.apace100.apoli.power.Active;
-import io.github.apace100.apoli.power.Power;
+import io.github.apace100.apoli.condition.EntityCondition;
+import io.github.apace100.apoli.data.TypedDataObjectFactory;
+import io.github.apace100.apoli.power.PowerConfiguration;
 import io.github.apace100.apoli.power.type.PowerType;
-import io.github.apace100.apoli.power.type.PowerType;
-import io.github.apace100.apoli.action.type.EntityActionType;
 import io.github.apace100.calio.data.SerializableData;
 import io.github.apace100.calio.data.SerializableDataTypes;
 import me.shedaniel.cloth.clothconfig.shadowed.blue.endless.jankson.annotation.Nullable;
@@ -16,13 +15,13 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.util.Identifier;
 import net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Optional;
 import java.util.function.Predicate;
 
-// 蓄力Power API写的最全的一个 如果想用请测试
-
-public class ChargePower extends Power implements Active {
+public class ChargePower extends PowerType {
     public static class ChargeTier {
         public int tier;
         public boolean enable;
@@ -30,12 +29,12 @@ public class ChargePower extends Power implements Active {
         public Predicate<Entity> condition;
         public Predicate<Entity> canChargeCondition;
         public Predicate<Entity> autoFireCondition;
-        public ActionFactory<Entity>.Instance useAction;
-        public ActionFactory<Entity>.Instance tickAction;
-        public ActionFactory<Entity>.Instance chargeTickAction;
-        public ActionFactory<Entity>.Instance chargeCompleteAction;
-        public ActionFactory<Entity>.Instance chargeCompleteUseAction;
-        public ActionFactory<Entity>.Instance chargeCompleteTickAction;
+        public EntityAction useAction;
+        public EntityAction tickAction;
+        public EntityAction chargeTickAction;
+        public EntityAction chargeCompleteAction;
+        public EntityAction chargeCompleteUseAction;
+        public EntityAction chargeCompleteTickAction;
         public int cooldown;
 
         public ChargeTier(SerializableData.Instance data, int index) {
@@ -55,23 +54,24 @@ public class ChargePower extends Power implements Active {
         }
 
         public void tick(ChargePower power) {
+            LivingEntity entity = power.getHolder();
             boolean checkAutoFire = false;
             if (!power.isCharging) {
                 return;
             }
             if (power.nowTier + 1 == this.tier) {
-                if (this.canChargeCondition != null && !this.canChargeCondition.test(power.entity)) {
+                if (this.canChargeCondition != null && !this.canChargeCondition.test(entity)) {
                     power.ChargeTime = power.ChargeTime - 1;
                 } else {
                     if (this.chargeTickAction != null) {
-                        this.chargeTickAction.accept(power.entity);
+                        this.chargeTickAction.accept(entity);
                     }
                     if (power.ChargeTime >= this.chargeTime) {
-                        if (this.condition != null && !this.condition.test(power.entity)) {
+                        if (this.condition != null && !this.condition.test(entity)) {
                             power.ChargeTime = this.chargeTime - 1;
                         } else {
                             if (this.chargeCompleteAction != null) {
-                                this.chargeCompleteAction.accept(power.entity);
+                                this.chargeCompleteAction.accept(entity);
                             }
                             power.nowTier = this.tier;
                             power.updateTier();
@@ -82,29 +82,30 @@ public class ChargePower extends Power implements Active {
             }
             if (power.nowTier == this.tier) {
                 if (this.tickAction != null) {
-                    this.tickAction.accept(power.entity);
+                    this.tickAction.accept(entity);
                 }
             }
             if (power.nowTier >= this.tier) {
                 if (this.chargeCompleteTickAction != null) {
-                    this.chargeCompleteTickAction.accept(power.entity);
+                    this.chargeCompleteTickAction.accept(entity);
                 }
             }
-            if (checkAutoFire && this.autoFireCondition != null && this.autoFireCondition.test(power.entity)) {
+            if (checkAutoFire && this.autoFireCondition != null && this.autoFireCondition.test(entity)) {
                 power.fire(false);
             }
         }
 
         public void use(ChargePower power) {
+            LivingEntity entity = power.getHolder();
             if (power.nowTier == this.tier) {
                 if (this.useAction != null) {
-                    this.useAction.accept(power.entity);
+                    this.useAction.accept(entity);
                 }
                 power.nowCooldown = this.cooldown;
             }
             if (power.nowTier >= this.tier) {
                 if (this.chargeCompleteUseAction != null) {
-                    this.chargeCompleteUseAction.accept(power.entity);
+                    this.chargeCompleteUseAction.accept(entity);
                 }
             }
         }
@@ -115,7 +116,6 @@ public class ChargePower extends Power implements Active {
     public @Nullable Identifier chargePowerID = null;
     public int nowTier = 0;
     public int renderTier = 0;
-    public Key ActiveKey;
     public int ChargeTime = 0;
     public ArrayList<ChargeTier> ChargeTierList = new ArrayList<>();
     public int nowCooldown = 0;
@@ -124,8 +124,36 @@ public class ChargePower extends Power implements Active {
     private long nowTick = 0;
     private long lastTick = 0;
 
-    public ChargePower(PowerType<?> type, LivingEntity entity, SerializableData.Instance data) {
-        super(type, entity);
+    public static final TypedDataObjectFactory<ChargePower> DATA_FACTORY =
+            PowerType.createConditionedDataFactory(
+                    buildSerializableData(),
+                    (data, condition) -> new ChargePower(condition, data),
+                    (power, sd) -> sd.instance()
+            );
+
+    private static SerializableData buildSerializableData() {
+        SerializableData factoryJson = new SerializableData()
+                .add("charge_power_id", SerializableDataTypes.IDENTIFIER, null);
+        for (int index = 0; index < TierCount; index++) {
+            factoryJson
+                    .add(String.format("tier%d_enable", index), SerializableDataTypes.BOOLEAN, index == 0)
+                    .add(String.format("tier%d_charge_time", index), SerializableDataTypes.INT, index == 0 ? 0 : -1)
+                    .add(String.format("tier%d_condition", index), EntityCondition.DATA_TYPE.optional(), Optional.empty())
+                    .add(String.format("tier%d_can_charge_condition", index), EntityCondition.DATA_TYPE.optional(), Optional.empty())
+                    .add(String.format("tier%d_auto_fire_condition", index), EntityCondition.DATA_TYPE.optional(), Optional.empty())
+                    .add(String.format("tier%d_use_action", index), EntityAction.DATA_TYPE.optional(), Optional.empty())
+                    .add(String.format("tier%d_tick_action", index), EntityAction.DATA_TYPE.optional(), Optional.empty())
+                    .add(String.format("tier%d_charge_tick_action", index), EntityAction.DATA_TYPE.optional(), Optional.empty())
+                    .add(String.format("tier%d_charge_complete_action", index), EntityAction.DATA_TYPE.optional(), Optional.empty())
+                    .add(String.format("tier%d_charge_complete_use_action", index), EntityAction.DATA_TYPE.optional(), Optional.empty())
+                    .add(String.format("tier%d_charge_complete_tick_action", index), EntityAction.DATA_TYPE.optional(), Optional.empty())
+                    .add(String.format("tier%d_cooldown", index), SerializableDataTypes.INT, 0);
+        }
+        return factoryJson;
+    }
+
+    public ChargePower(Optional<EntityCondition> condition, SerializableData.Instance data) {
+        super(condition);
         for (int index = 0; index < TierCount; index++) {
             ChargeTier chargeTier = new ChargeTier(data, index);
             if (chargeTier.enable) {
@@ -135,8 +163,7 @@ public class ChargePower extends Power implements Active {
             }
         }
         this.chargePowerID = data.get("charge_power_id");
-        this.setKey(data.get("key"));
-        this.setTicking(true);
+        this.setTicking();
     }
 
     public void fire(boolean AddTick) {
@@ -155,7 +182,7 @@ public class ChargePower extends Power implements Active {
     }
 
     @Override
-    public void tick() {
+    public void serverTick() {
         if (nowCooldown > 0) {
             nowCooldown--;
         } else {
@@ -180,19 +207,9 @@ public class ChargePower extends Power implements Active {
         this.ChargeTime++;
     }
 
-    @Override
-    public Key getKey() {
-        return ActiveKey;
-    }
-
-    @Override
-    public void setKey(Key key) {
-        this.ActiveKey = key;
-    }
-
     public void updateTier() {
         this.renderTier = this.nowTier;
-        PowerHolderComponent.syncPower(this.entity, this.getType());
+        PowerHolderComponent.sync(getHolder());
     }
 
     public NbtElement toTag() {
@@ -205,33 +222,12 @@ public class ChargePower extends Power implements Active {
         this.renderTier = ((NbtCompound) tag).getInt("renderTier");
     }
 
-    public static PowerFactory<?> createFactory() {
-        SerializableData factoryJson = new SerializableData()
-                .add("charge_power_id", SerializableDataTypes.IDENTIFIER, null)
-                .add("key", ApoliDataTypes.BACKWARDS_COMPATIBLE_KEY, new Active.Key());
-        for (int index = 0; index < TierCount; index++) {
-            factoryJson
-                    .add(String.format("tier%d_enable", index), SerializableDataTypes.BOOLEAN, index == 0)  // 是否启用这个阶段
-                    .add(String.format("tier%d_charge_time", index), SerializableDataTypes.INT, index == 0 ? 0 : -1)  // 这个阶段需要充能的时间
-                    .add(String.format("tier%d_condition", index), ApoliDataTypes.ENTITY_CONDITION, null)  // 是否可以到达这个阶段
-                    .add(String.format("tier%d_can_charge_condition", index), ApoliDataTypes.ENTITY_CONDITION, null)
-                    .add(String.format("tier%d_auto_fire_condition", index), ApoliDataTypes.ENTITY_CONDITION, null)
-                    .add(String.format("tier%d_use_action", index), ApoliDataTypes.ENTITY_ACTION, null)  // 到达这个阶段后松下按键时的动作
-                    .add(String.format("tier%d_tick_action", index), ApoliDataTypes.ENTITY_ACTION, null)  // 这个阶段每 Tick 执行的动作
-                    .add(String.format("tier%d_charge_tick_action", index), ApoliDataTypes.ENTITY_ACTION, null)  // 给这个阶段充能时每 Tick 执行的动作
-                    .add(String.format("tier%d_charge_complete_action", index), ApoliDataTypes.ENTITY_ACTION, null)  // 这个阶段充能完成时执行的动作
-                    .add(String.format("tier%d_charge_complete_use_action", index), ApoliDataTypes.ENTITY_ACTION, null)  // 这个阶段充能完成后松下按键时的动作(会叠加)
-                    .add(String.format("tier%d_charge_complete_tick_action", index), ApoliDataTypes.ENTITY_ACTION, null)  // 这个阶段充能完成时每 Tick 执行的动作(会叠加)
-                    .add(String.format("tier%d_cooldown", index), SerializableDataTypes.INT, 0);  // 到达这个阶段触发后的冷却时间
-        }
-        return new PowerFactory<>(
-                ShapeShifterCurseFabric.identifier("charge_action"),
-                factoryJson,
-                data -> (powerType, livingEntity) -> new ChargePower(
-                        powerType,
-                        livingEntity,
-                        data
-                ));
+    @Override
+    public @NotNull PowerConfiguration<?> getConfig() {
+        return createFactory(ShapeShifterCurseFabric.identifier("charge_action"));
     }
 
+    public static PowerConfiguration<ChargePower> createFactory(net.minecraft.util.Identifier id) {
+        return PowerConfiguration.of(id, DATA_FACTORY);
+    }
 }

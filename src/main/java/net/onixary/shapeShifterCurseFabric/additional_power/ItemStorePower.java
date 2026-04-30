@@ -1,16 +1,17 @@
 package net.onixary.shapeShifterCurseFabric.additional_power;
 
-import io.github.apace100.apoli.component.PowerHolderComponent;
-import io.github.apace100.apoli.power.Power;
-import io.github.apace100.apoli.power.type.PowerType;
-import io.github.apace100.apoli.action.type.EntityActionType;
-import io.github.apace100.apoli.condition.type.EntityConditionType;
 import io.github.apace100.apoli.action.ActionConfiguration;
 import io.github.apace100.apoli.action.context.EntityActionContext;
+import io.github.apace100.apoli.action.type.EntityActionType;
+import io.github.apace100.apoli.component.PowerHolderComponent;
 import io.github.apace100.apoli.condition.ConditionConfiguration;
+import io.github.apace100.apoli.condition.EntityCondition;
 import io.github.apace100.apoli.condition.ItemCondition;
 import io.github.apace100.apoli.condition.context.EntityConditionContext;
+import io.github.apace100.apoli.condition.type.EntityConditionType;
 import io.github.apace100.apoli.data.TypedDataObjectFactory;
+import io.github.apace100.apoli.power.PowerConfiguration;
+import io.github.apace100.apoli.power.type.PowerType;
 import io.github.apace100.calio.data.SerializableData;
 import io.github.apace100.calio.data.SerializableDataTypes;
 import me.shedaniel.cloth.clothconfig.shadowed.blue.endless.jankson.annotation.Nullable;
@@ -22,7 +23,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.util.Identifier;
-import net.minecraft.world.World;
 import net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric;
 import net.onixary.shapeShifterCurseFabric.render.tech.ItemStorePowerRender;
 import org.jetbrains.annotations.NotNull;
@@ -30,15 +30,24 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Optional;
 import java.util.function.Consumer;
 
-public class ItemStorePower extends Power implements ItemStorePowerRender.itemStorePowerRenderInterface {
+public class ItemStorePower extends PowerType implements ItemStorePowerRender.itemStorePowerRenderInterface {
     public ItemStack storedItem = ItemStack.EMPTY;
     public final @Nullable Identifier powerID;
     public int bobbingAnimationTime = 0;
     public final int Slot;
     public final int VanillaSlotStart = 2800;
 
-    public ItemStorePower(PowerType<?> type, LivingEntity entity, @Nullable Identifier powerID, int Slot) {
-        super(type, entity);
+    public static final TypedDataObjectFactory<ItemStorePower> DATA_FACTORY =
+            PowerType.createConditionedDataFactory(
+                    new SerializableData()
+                            .add("id", SerializableDataTypes.IDENTIFIER, null)
+                            .add("slot", SerializableDataTypes.INT, 0),
+                    (data, condition) -> new ItemStorePower(condition, data.get("id"), data.getInt("slot")),
+                    (power, sd) -> sd.instance()
+            );
+
+    public ItemStorePower(Optional<EntityCondition> condition, @Nullable Identifier powerID, int Slot) {
+        super(condition);
         this.powerID = powerID;
         this.Slot = Slot;
         this.setTicking();
@@ -51,24 +60,27 @@ public class ItemStorePower extends Power implements ItemStorePowerRender.itemSt
     }
 
     @Override
-    public void tick() {
+    public void serverTick() {
+        LivingEntity entity = getHolder();
         if (this.bobbingAnimationTime > 0) {
             this.bobbingAnimationTime -= 1;
         }
-        this.storedItem.inventoryTick(this.entity.getWorld(), this.entity, VanillaSlotStart + this.Slot, false);
+        this.storedItem.inventoryTick(entity.getWorld(), entity, VanillaSlotStart + this.Slot, false);
     }
 
     public void SetItem(ItemStack stack) {
-        if (this.entity.getWorld().isClient) {
+        LivingEntity entity = getHolder();
+        if (entity.getWorld().isClient) {
             return;
         }
         this.storedItem = stack.copy();
         this.bobbingAnimationTime = 5;
-        PowerHolderComponent.syncPower(this.entity, this.getType());
+        PowerHolderComponent.sync(entity);
     }
 
     public void GainItem(ItemStack stack) {
-        if (this.entity.getWorld().isClient) {
+        LivingEntity entity = getHolder();
+        if (entity.getWorld().isClient) {
             return;
         }
         if (!this.storedItem.isEmpty()) {
@@ -78,16 +90,17 @@ public class ItemStorePower extends Power implements ItemStorePowerRender.itemSt
     }
 
     public void DropItem() {
-        if (this.entity.getWorld().isClient) {
+        LivingEntity entity = getHolder();
+        if (entity.getWorld().isClient) {
             return;
         }
         if (!storedItem.isEmpty()) {
-            this.entity.getWorld().spawnEntity(
+            entity.getWorld().spawnEntity(
                     new ItemEntity(
-                            this.entity.getWorld(),
-                            this.entity.getX(),
-                            this.entity.getY(),
-                            this.entity.getZ(),
+                            entity.getWorld(),
+                            entity.getX(),
+                            entity.getY(),
+                            entity.getZ(),
                             this.storedItem
                     )
             );
@@ -96,23 +109,25 @@ public class ItemStorePower extends Power implements ItemStorePowerRender.itemSt
     }
 
     public void SwapItem(EquipmentSlot slot) {
-        if (this.entity.getWorld().isClient) {
+        LivingEntity entity = getHolder();
+        if (entity.getWorld().isClient) {
             return;
         }
-        ItemStack item = this.entity.getEquippedStack(slot);
+        ItemStack item = entity.getEquippedStack(slot);
         ItemStack stored = this.storedItem;
         this.SetItem(item);
-        this.entity.equipStack(slot, stored);
+        entity.equipStack(slot, stored);
     }
 
     public void InvokeItemAction(Consumer<ItemStack> action) {
-        if (this.entity.getWorld().isClient) {
+        LivingEntity entity = getHolder();
+        if (entity.getWorld().isClient) {
             return;
         }
         if (action != null) {
             action.accept(this.storedItem);
         }
-        PowerHolderComponent.syncPower(this.entity, this.getType());
+        PowerHolderComponent.sync(entity);
     }
 
     @Override
@@ -143,14 +158,13 @@ public class ItemStorePower extends Power implements ItemStorePowerRender.itemSt
         }
     }
 
-    public static PowerFactory<?> createFactory() {
-        return new PowerFactory<>(
-                ShapeShifterCurseFabric.identifier("item_store"),
-                new SerializableData()
-                        .add("id", SerializableDataTypes.IDENTIFIER, null)
-                        .add("slot", SerializableDataTypes.INT, 0),
-                data -> (type, entity) -> new ItemStorePower(type, entity, data.get("id"), data.getInt("slot"))
-        ).allowCondition();
+    @Override
+    public @NotNull PowerConfiguration<?> getConfig() {
+        return createFactory(ShapeShifterCurseFabric.identifier("item_store"));
+    }
+
+    public static PowerConfiguration<ItemStorePower> createFactory(net.minecraft.util.Identifier id) {
+        return PowerConfiguration.of(id, DATA_FACTORY);
     }
 
     public static @Nullable ItemStorePower findPower(Entity entity, @Nullable Identifier powerID) {
