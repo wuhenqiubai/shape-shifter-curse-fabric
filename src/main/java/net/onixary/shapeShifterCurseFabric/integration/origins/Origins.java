@@ -4,7 +4,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import io.github.apace100.apoli.Apoli;
-import io.github.apace100.apoli.power.PowerType;
+import io.github.apace100.apoli.power.type.PowerType;
 import io.github.apace100.apoli.power.PowerTypes;
 import io.github.apace100.apoli.util.NamespaceAlias;
 import io.github.apace100.calio.mixin.CriteriaRegistryInvoker;

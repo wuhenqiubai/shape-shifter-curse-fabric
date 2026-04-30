@@ -3,7 +3,7 @@ package net.onixary.shapeShifterCurseFabric.integration.origins.origin;
 import com.google.common.collect.Lists;
 import com.google.gson.*;
 import io.github.apace100.apoli.data.ApoliDataTypes;
-import io.github.apace100.apoli.power.factory.condition.ConditionFactory;
+import io.github.apace100.apoli.condition.type.EntityConditionType;
 import io.github.apace100.apoli.power.factory.condition.ConditionTypes;
 import io.github.apace100.calio.data.SerializableData;
 import io.github.apace100.calio.data.SerializableDataTypes;

@@ -1,6 +1,6 @@
 package net.onixary.shapeShifterCurseFabric.mixin.accessor;
 
-import io.github.apace100.apoli.power.PowerType;
+import io.github.apace100.apoli.power.type.PowerType;
 import io.github.apace100.apoli.power.PowerTypeRegistry;
 import net.minecraft.util.Identifier;
 import org.spongepowered.asm.mixin.Mixin;

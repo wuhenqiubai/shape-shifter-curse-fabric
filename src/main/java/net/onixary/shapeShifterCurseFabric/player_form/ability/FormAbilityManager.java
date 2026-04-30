@@ -1,7 +1,7 @@
 package net.onixary.shapeShifterCurseFabric.player_form.ability;
 
 import io.github.apace100.apoli.component.PowerHolderComponent;
-import io.github.apace100.apoli.power.PowerType;
+import io.github.apace100.apoli.power.type.PowerType;
 import io.github.apace100.apoli.power.PowerTypeRegistry;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.network.ServerPlayerEntity;

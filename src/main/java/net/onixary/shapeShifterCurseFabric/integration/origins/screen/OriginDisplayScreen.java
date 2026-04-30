@@ -1,7 +1,7 @@
 package net.onixary.shapeShifterCurseFabric.integration.origins.screen;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import io.github.apace100.apoli.power.PowerType;
+import io.github.apace100.apoli.power.type.PowerType;
 import net.onixary.shapeShifterCurseFabric.integration.origins.Origins;
 import net.onixary.shapeShifterCurseFabric.integration.origins.badge.Badge;
 import net.onixary.shapeShifterCurseFabric.integration.origins.badge.BadgeManager;

@@ -3,7 +3,7 @@ package net.onixary.shapeShifterCurseFabric.integration.origins.origin;
 import com.google.common.collect.Lists;
 import com.google.gson.JsonObject;
 import io.github.apace100.apoli.power.MultiplePowerType;
-import io.github.apace100.apoli.power.PowerType;
+import io.github.apace100.apoli.power.type.PowerType;
 import io.github.apace100.apoli.power.PowerTypeRegistry;
 import io.github.apace100.calio.data.SerializableData;
 import io.github.apace100.calio.data.SerializableDataTypes;

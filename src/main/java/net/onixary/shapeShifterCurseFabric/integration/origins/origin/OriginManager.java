@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import io.github.apace100.apoli.Apoli;
-import io.github.apace100.apoli.power.PowerType;
+import io.github.apace100.apoli.power.type.PowerType;
 import io.github.apace100.calio.data.MultiJsonDataLoader;
 import net.onixary.shapeShifterCurseFabric.integration.origins.Origins;
 import net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener;
