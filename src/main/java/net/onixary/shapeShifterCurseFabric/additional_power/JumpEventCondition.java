@@ -1,48 +1,48 @@
 package net.onixary.shapeShifterCurseFabric.additional_power;
 
-import io.github.apace100.apoli.power.factory.condition.ConditionFactory;
+import io.github.apace100.apoli.condition.ConditionConfiguration;
+import io.github.apace100.apoli.condition.context.EntityConditionContext;
+import io.github.apace100.apoli.condition.type.EntityConditionType;
+import io.github.apace100.apoli.data.TypedDataObjectFactory;
 import io.github.apace100.calio.data.SerializableData;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashSet;
 import java.util.Set;
 
-public class JumpEventCondition {
-    // 存储当前帧正在跳跃的玩家
+public class JumpEventCondition extends EntityConditionType {
+
     private static final Set<PlayerEntity> jumpingPlayers = new HashSet<>();
 
-    public static boolean condition(SerializableData.Instance data, Entity entity) {
-        if (!(entity instanceof PlayerEntity playerEntity)) {
-            return false;
-        }
+    public static final TypedDataObjectFactory<JumpEventCondition> DATA_FACTORY =
+            TypedDataObjectFactory.simple(
+                    new SerializableData(),
+                    data -> new JumpEventCondition(),
+                    (c, sd) -> sd.instance()
+            );
 
-        return jumpingPlayers.contains(playerEntity);
+    @Override
+    public boolean test(EntityConditionContext ctx) {
+        return ctx.entity() instanceof PlayerEntity p && jumpingPlayers.contains(p);
     }
 
     public static void setJumping(PlayerEntity player, boolean jumping) {
-        if (jumping) {
-            jumpingPlayers.add(player);
-        } else {
-            jumpingPlayers.remove(player);
-        }
+        if (jumping) jumpingPlayers.add(player);
+        else jumpingPlayers.remove(player);
     }
 
     public static void clearJumpState(PlayerEntity player) {
         jumpingPlayers.remove(player);
     }
 
-    // 每tick清理状态，确保跳跃状态只持续一tick
     public static void tick() {
         jumpingPlayers.clear();
     }
 
-    public static ConditionFactory<Entity> getFactory() {
-        return new ConditionFactory<>(
-                ShapeShifterCurseFabric.identifier("jump_event"),
-                new SerializableData(),
-                JumpEventCondition::condition
-        );
+    @Override
+    public @NotNull ConditionConfiguration<?> getConfig() {
+        return ConditionConfiguration.of(ShapeShifterCurseFabric.identifier("jump_event"), DATA_FACTORY);
     }
 }

@@ -1,55 +1,49 @@
 package net.onixary.shapeShifterCurseFabric.additional_power;
 
-import io.github.apace100.apoli.power.factory.condition.ConditionFactory;
+import io.github.apace100.apoli.condition.ConditionConfiguration;
+import io.github.apace100.apoli.condition.context.EntityConditionContext;
+import io.github.apace100.apoli.condition.type.EntityConditionType;
+import io.github.apace100.apoli.data.TypedDataObjectFactory;
 import io.github.apace100.calio.data.SerializableData;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.network.ClientPlayerInteractionManager;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ToolItem;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric;
+import org.jetbrains.annotations.NotNull;
 
-public class DiggingBareHandCondition {
+public class DiggingBareHandCondition extends EntityConditionType {
 
-    public static boolean condition(SerializableData.Instance data, Entity entity) {
+    public static final TypedDataObjectFactory<DiggingBareHandCondition> DATA_FACTORY =
+            TypedDataObjectFactory.simple(
+                    new SerializableData(),
+                    data -> new DiggingBareHandCondition(),
+                    (c, sd) -> sd.instance()
+            );
 
-        if (!(entity instanceof PlayerEntity playerEntity)) {
-            return false;
-        }
+    @Override
+    public boolean test(EntityConditionContext ctx) {
+        if (!(ctx.entity() instanceof PlayerEntity player)) return false;
 
-        if (playerEntity instanceof ServerPlayerEntity serverPlayerEntity) {
-            if (!serverPlayerEntity.interactionManager.mining) {
-                return false;
-            }
-
-        } else if (playerEntity instanceof ClientPlayerEntity) {
-            ClientPlayerInteractionManager interactionManager = MinecraftClient.getInstance().interactionManager;
-            if (interactionManager == null || !interactionManager.isBreakingBlock()) {
-                return false;
-            }
+        if (player instanceof ServerPlayerEntity serverPlayer) {
+            if (!serverPlayer.interactionManager.mining) return false;
+        } else if (player instanceof ClientPlayerEntity) {
+            ClientPlayerInteractionManager im = MinecraftClient.getInstance().interactionManager;
+            if (im == null || !im.isBreakingBlock()) return false;
         } else {
             return false;
         }
 
-        if(playerEntity.getInventory().getMainHandStack().isEmpty()){
-            return true;
-        }
-        else if(playerEntity.getInventory().getMainHandStack().getItem() instanceof ToolItem toolItem){
-            return toolItem.getMaterial().getMiningLevel() <= 0;
-        }
-
+        if (player.getInventory().getMainHandStack().isEmpty()) return true;
+        if (player.getInventory().getMainHandStack().getItem() instanceof ToolItem tool)
+            return tool.getMaterial().getMiningLevel() <= 0;
         return true;
-
     }
 
-    public static ConditionFactory<Entity> getFactory() {
-        return new ConditionFactory<>(
-                ShapeShifterCurseFabric.identifier("barehand_digging"),
-                new SerializableData(),
-                DiggingBareHandCondition::condition
-        );
+    @Override
+    public @NotNull ConditionConfiguration<?> getConfig() {
+        return ConditionConfiguration.of(ShapeShifterCurseFabric.identifier("barehand_digging"), DATA_FACTORY);
     }
-
 }

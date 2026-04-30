@@ -1,33 +1,35 @@
 package net.onixary.shapeShifterCurseFabric.additional_power;
 
-import io.github.apace100.apoli.power.factory.condition.ConditionFactory;
+import io.github.apace100.apoli.condition.ConditionConfiguration;
+import io.github.apace100.apoli.data.TypedDataObjectFactory;
 import io.github.apace100.calio.data.SerializableData;
+import io.github.apace100.apoli.condition.type.ItemConditionType;
+import io.github.apace100.apoli.condition.context.ItemConditionContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric;
 import net.onixary.shapeShifterCurseFabric.util.ModTags;
+import org.jetbrains.annotations.NotNull;
 
-public class IsMorphScaleItemCondition {
-    public static final String IsMorphScaleArmorTagName = "MorphScaleItem";
+public class IsMorphScaleItemCondition extends ItemConditionType {
 
-    public static boolean condition(SerializableData.Instance data, ItemStack itemStack) {
-        if (itemStack.isIn(ModTags.MorphScaleItem_Tag)) {
-            return true;
-        }
+    public static final TypedDataObjectFactory<IsMorphScaleItemCondition> DATA_FACTORY =
+            TypedDataObjectFactory.simple(
+                    new SerializableData(),
+                    data -> new IsMorphScaleItemCondition(),
+                    (c, sd) -> sd.instance()
+            );
+
+    @Override
+    public boolean test(ItemConditionContext ctx) {
+        ItemStack itemStack = ctx.stack();
+        if (itemStack.isIn(ModTags.MorphScaleItem_Tag)) return true;
         NbtCompound itemNBT = itemStack.getNbt();
-        if (itemNBT != null) {
-            if (itemNBT.getBoolean(IsMorphScaleArmorTagName)) {
-                return true;
-            }
-        }
-        return false;
+        return itemNBT != null && itemNBT.getBoolean(AdditionalItemCondition.IS_MORPH_SCALE_ARMOR_TAG);
     }
 
-    public static ConditionFactory<ItemStack> getFactory() {
-        return new ConditionFactory<ItemStack>(
-                ShapeShifterCurseFabric.identifier("is_morph_scale_item"),
-                new SerializableData(),
-                IsMorphScaleItemCondition::condition
-        );
+    @Override
+    public @NotNull ConditionConfiguration<?> getConfig() {
+        return AdditionalItemCondition.IS_MORPH_SCALE_ITEM_CONFIG;
     }
 }
