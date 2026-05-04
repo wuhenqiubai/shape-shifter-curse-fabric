@@ -1,6 +1,5 @@
 package net.onixary.shapeShifterCurseFabric.items;
 
-// FabricItemGroup removed in 1.21, use ItemGroup directly
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.*;
 import net.minecraft.potion.Potion;

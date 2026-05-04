@@ -1,72 +1,41 @@
 package net.onixary.shapeShifterCurseFabric.items.armors;
 
-import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ArmorMaterial;
 import net.minecraft.item.Items;
 import net.minecraft.recipe.Ingredient;
-import net.minecraft.sound.SoundEvent;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
+import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.util.Identifier;
+import net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric;
 
-public class MorphscaleArmorMaterial  implements ArmorMaterial {
-    public static final MorphscaleArmorMaterial INSTANCE = new MorphscaleArmorMaterial();
+import java.util.List;
+import java.util.Map;
+import java.util.function.Supplier;
 
-    private static final int[] BASE_DURABILITY = new int[] {429, 495, 528, 363};
-    private static final int[] PROTECTION_VALUES = new int[] {2, 6, 7, 2};
+public class MorphscaleArmorMaterial {
+    public static final ArmorMaterial INSTANCE = new ArmorMaterial(
+        Map.of(
+            ArmorItem.Type.HELMET, 2,
+            ArmorItem.Type.CHESTPLATE, 6,
+            ArmorItem.Type.LEGGINGS, 7,
+            ArmorItem.Type.BOOTS, 2
+        ),
+        10,
+        SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND,
+        () -> Ingredient.ofItems(Items.DIAMOND),
+        List.of(new ArmorMaterial.Layer(Identifier.of(ShapeShifterCurseFabric.MOD_ID, "morphscale"))),
+        1.0F,
+        0.0F
+    );
 
-    @Override
-    public int getDurability(ArmorItem.Type type) {
-        return switch (type) {
-            case BOOTS -> BASE_DURABILITY[0];
-            case LEGGINGS -> BASE_DURABILITY[1];
-            case CHESTPLATE -> BASE_DURABILITY[2];
-            case HELMET -> BASE_DURABILITY[3];
-            default -> 0;
-        };
-    }
+    public static RegistryEntry<ArmorMaterial> ENTRY;
 
-    @Override
-    public int getProtection(ArmorItem.Type type) {
-        // Protection values for all the slots.
-        // For reference, diamond uses 3 for boots, 6 for leggings, 8 for chestplate, and 3 for helmet,
-        // whilst leather uses 1, 2, 3 and 1 respectively.
-        return switch (type) {
-            case HELMET -> PROTECTION_VALUES[0];
-            case LEGGINGS -> PROTECTION_VALUES[1];
-            case CHESTPLATE -> PROTECTION_VALUES[2];
-            case BOOTS -> PROTECTION_VALUES[3];
-            default -> 0;
-        };
-    }
-
-    @Override
-    public int getEnchantability() {
-        return 10;
-    }
-
-    @Override
-    public SoundEvent getEquipSound() {
-        return SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND;
-    }
-
-    @Override
-    public Ingredient getRepairIngredient() {
-        return Ingredient.ofItems(Items.DIAMOND);
-    }
-
-    @Override
-    public String getName() {
-        // Must be all lowercase
-        return "morphscale";
-    }
-
-    @Override
-    public float getToughness() {
-        return 1.0F;
-    }
-
-    @Override
-    public float getKnockbackResistance() {
-        return 0;
+    public static void initialize() {
+        ENTRY = Registry.registerReference(Registries.ARMOR_MATERIAL,
+            Identifier.of(ShapeShifterCurseFabric.MOD_ID, "morphscale"), INSTANCE);
     }
 }

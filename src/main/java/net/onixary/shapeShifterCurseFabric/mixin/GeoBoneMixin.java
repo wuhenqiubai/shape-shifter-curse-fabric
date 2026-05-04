@@ -1,6 +1,6 @@
 package net.onixary.shapeShifterCurseFabric.mixin;
 
-import mod.azure.azurelib.cache.object.GeoBone;
+import mod.azure.azurelib.common.internal.common.cache.object.GeoBone;
 import net.onixary.shapeShifterCurseFabric.player_form_render.IGeoBone;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;

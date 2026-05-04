@@ -1,6 +1,6 @@
 package net.onixary.shapeShifterCurseFabric.render.tech;
 
-import mod.azure.azurelib.renderer.GeoObjectRenderer;
+import mod.azure.azurelib.common.api.client.renderer.GeoObjectRenderer;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.util.math.MatrixStack;

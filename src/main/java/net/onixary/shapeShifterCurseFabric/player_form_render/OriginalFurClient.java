@@ -3,7 +3,7 @@ package net.onixary.shapeShifterCurseFabric.player_form_render;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import dev.kosmx.playerAnim.minecraftApi.PlayerAnimationFactory;
-import mod.azure.azurelib.renderer.GeoObjectRenderer;
+import mod.azure.azurelib.common.api.client.renderer.GeoObjectRenderer;
 import net.onixary.shapeShifterCurseFabric.integration.origins.origin.Origin;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;

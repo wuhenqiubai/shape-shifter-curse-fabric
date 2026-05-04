@@ -16,7 +16,8 @@ import java.util.List;
 
 public class MorphScaleArmor extends ArmorItem {
     public MorphScaleArmor(Type type) {
-        super(MorphscaleArmorMaterial.INSTANCE, type, new Settings().maxCount(1));
+        super(MorphscaleArmorMaterial.ENTRY, type, new Settings().maxCount(1)
+                    .maxDamage(type.getMaxDamage(22)));
     }
 
     @Override

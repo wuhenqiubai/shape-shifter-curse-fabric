@@ -14,7 +14,8 @@ import java.util.List;
 
 public class NetheriteMorphScaleArmor extends ArmorItem {
     public NetheriteMorphScaleArmor(Type type) {
-        super(NetheriteMorphscaleArmorMaterial.INSTANCE, type, new Settings().maxCount(1).fireproof());
+        super(NetheriteMorphscaleArmorMaterial.ENTRY, type, new Settings().maxCount(1).fireproof()
+                    .maxDamage(type.getMaxDamage(26)));
     }
 
     @Override
