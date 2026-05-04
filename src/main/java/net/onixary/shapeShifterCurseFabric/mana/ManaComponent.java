@@ -2,9 +2,9 @@ package net.onixary.shapeShifterCurseFabric.mana;
 
 import org.ladysnake.cca.api.v3.component.sync.AutoSyncedComponent;
 import org.ladysnake.cca.api.v3.component.sync.PlayerSyncPredicate;
-import org.ladysnake.cca.api.v3.entity.PlayerComponent;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.nbt.NbtString;
@@ -24,7 +24,7 @@ import java.util.Objects;
 
 // 试试这个实验性接口 省的我缓存ModifierList了
 // 所有的公开Field尽量使用Class里的Method修改 直接修改Field可能会导致一些奇怪的同步Bug
-public class ManaComponent implements AutoSyncedComponent, PlayerComponent<ManaComponent> {
+public class ManaComponent implements AutoSyncedComponent {
 
     // 更新等级介绍 此更新指的是根据其他变量重新赋值 会清空之前的修改:
 
@@ -230,7 +230,7 @@ public class ManaComponent implements AutoSyncedComponent, PlayerComponent<ManaC
     }
 
     @Override
-    public void readFromNbt(NbtCompound nbtCompound) {
+    public void readFromNbt(NbtCompound nbtCompound, RegistryWrapper.WrapperLookup registryLookup) {
         this.readFromNbt(nbtCompound, true);
     }
 
@@ -256,19 +256,19 @@ public class ManaComponent implements AutoSyncedComponent, PlayerComponent<ManaC
         if (SaveMode) {
             if (nbtCompound.contains("MaxManaModifier")) {
                 NbtCompound maxManaCompound = nbtCompound.getCompound("MaxManaModifier");
-                this.MaxManaModifier.readFromNbt(maxManaCompound);
+                this.MaxManaModifier.readFromNbt(maxManaCompound, registryLookup);
             }
             if (nbtCompound.contains("MaxManaModifierPlayerSide")) {
                 NbtCompound maxManaPlayerSideCompound = nbtCompound.getCompound("MaxManaModifierPlayerSide");
-                this.MaxManaModifierPlayerSide.readFromNbt(maxManaPlayerSideCompound);
+                this.MaxManaModifierPlayerSide.readFromNbt(maxManaPlayerSideCompound, registryLookup);
             }
             if (nbtCompound.contains("ManaRegenModifier")) {
                 NbtCompound manaRegenCompound = nbtCompound.getCompound("ManaRegenModifier");
-                this.ManaRegenModifier.readFromNbt(manaRegenCompound);
+                this.ManaRegenModifier.readFromNbt(manaRegenCompound, registryLookup);
             }
             if (nbtCompound.contains("ManaRegenModifierPlayerSide")) {
                 NbtCompound manaRegenPlayerSideCompound = nbtCompound.getCompound("ManaRegenModifierPlayerSide");
-                this.ManaRegenModifierPlayerSide.readFromNbt(manaRegenPlayerSideCompound);
+                this.ManaRegenModifierPlayerSide.readFromNbt(manaRegenPlayerSideCompound, registryLookup);
             }
             if (nbtCompound.contains("ManaTypeSourceMap")) {
                 ManaTypeSourceMap.clear();
@@ -299,7 +299,7 @@ public class ManaComponent implements AutoSyncedComponent, PlayerComponent<ManaC
     }
 
     @Override
-    public void writeToNbt(NbtCompound nbtCompound) {
+    public void writeToNbt(NbtCompound nbtCompound, RegistryWrapper.WrapperLookup registryLookup) {
         this.writeToNbt(nbtCompound, true);
     }
 
@@ -318,16 +318,16 @@ public class ManaComponent implements AutoSyncedComponent, PlayerComponent<ManaC
         nbtCompound.putInt("tempRegenTime", tempRegenTime);
         if (SaveMode) {
             NbtCompound maxManaCompound = new NbtCompound();
-            this.MaxManaModifier.writeToNbt(maxManaCompound);
+            this.MaxManaModifier.writeToNbt(maxManaCompound, registryLookup);
             nbtCompound.put("MaxManaModifier", maxManaCompound);
             NbtCompound maxManaPlayerSideCompound = new NbtCompound();
-            this.MaxManaModifierPlayerSide.writeToNbt(maxManaPlayerSideCompound);
+            this.MaxManaModifierPlayerSide.writeToNbt(maxManaPlayerSideCompound, registryLookup);
             nbtCompound.put("MaxManaModifierPlayerSide", maxManaPlayerSideCompound);
             NbtCompound manaRegenCompound = new NbtCompound();
-            this.ManaRegenModifier.writeToNbt(manaRegenCompound);
+            this.ManaRegenModifier.writeToNbt(manaRegenCompound, registryLookup);
             nbtCompound.put("ManaRegenModifier", manaRegenCompound);
             NbtCompound manaRegenPlayerSideCompound = new NbtCompound();
-            this.ManaRegenModifierPlayerSide.writeToNbt(manaRegenPlayerSideCompound);
+            this.ManaRegenModifierPlayerSide.writeToNbt(manaRegenPlayerSideCompound, registryLookup);
             nbtCompound.put("ManaRegenModifierPlayerSide", manaRegenPlayerSideCompound);
             NbtCompound manaTypeMap = new NbtCompound();
             for (Identifier manaType : this.ManaTypeSourceMap.keySet()) {

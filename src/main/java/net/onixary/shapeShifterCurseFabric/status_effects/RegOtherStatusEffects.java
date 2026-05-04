@@ -5,6 +5,7 @@ import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectCategory;
 import net.minecraft.registry.Registries;
+import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
 import net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric;
@@ -29,7 +30,7 @@ public class RegOtherStatusEffects {
     );
 
     public static <T extends StatusEffect> T register(String path, T effect) {
-        return Registry.register(Registries.STATUS_EFFECT, new Identifier(ShapeShifterCurseFabric.MOD_ID, path), effect);
+        return Registry.register(Registries.STATUS_EFFECT, RegistryKey.of(Registries.STATUS_EFFECT.getKey(), Identifier.of(ShapeShifterCurseFabric.MOD_ID, path)), effect);
     }
 
     public static void initialize() {}

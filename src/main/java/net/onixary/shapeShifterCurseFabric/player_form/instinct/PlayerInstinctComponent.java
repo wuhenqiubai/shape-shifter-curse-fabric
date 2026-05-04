@@ -2,6 +2,7 @@ package net.onixary.shapeShifterCurseFabric.player_form.instinct;
 
 import org.ladysnake.cca.api.v3.component.sync.AutoSyncedComponent;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.nbt.NbtList;
 
 import java.util.ArrayDeque;
@@ -18,7 +19,7 @@ public class PlayerInstinctComponent implements AutoSyncedComponent {
     public Set<InstinctEffect> sustainedEffects = new HashSet<>();
 
     @Override
-    public void readFromNbt(NbtCompound nbtCompound) {
+    public void readFromNbt(NbtCompound nbtCompound, RegistryWrapper.WrapperLookup registryLookup) {
         this.immediateEffects.clear();
         this.sustainedEffects.clear();
 
@@ -43,7 +44,7 @@ public class PlayerInstinctComponent implements AutoSyncedComponent {
     }
 
     @Override
-    public void writeToNbt(NbtCompound nbtCompound) {
+    public void writeToNbt(NbtCompound nbtCompound, RegistryWrapper.WrapperLookup registryLookup) {
         // 写入 immediateEffects
         var immediateEffectsList = new NbtList();
         for (InstinctEffect effect : this.immediateEffects) {

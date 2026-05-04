@@ -6,6 +6,7 @@ import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentTarget;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.registry.Registries;
+import net.minecraft.registry.RegistryKey;
 import net.minecraft.util.Identifier;
 import net.minecraft.registry.Registry;
 
@@ -19,7 +20,7 @@ public class ModEnchantments {
     }
 
     private static Enchantment register(String path, Enchantment enchantment) {
-        Registry.register(Registries.ENCHANTMENT, new Identifier(Origins.MODID, path), enchantment);
+        Registry.register(Registries.ENCHANTMENT, RegistryKey.of(Registries.ENCHANTMENT.getKey(), Identifier.of(Origins.MODID, path)), enchantment);
         return enchantment;
     }
 }

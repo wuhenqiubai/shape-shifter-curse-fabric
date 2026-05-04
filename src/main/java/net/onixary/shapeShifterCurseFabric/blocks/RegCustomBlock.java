@@ -11,6 +11,7 @@ import net.minecraft.client.render.RenderLayer;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.registry.Registries;
+import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.Registry;
 import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.util.Identifier;
@@ -32,13 +33,13 @@ public final class RegCustomBlock {
     }
 
     private static <T extends Block> T registerWithOutItem(String path, T block) {
-        Registry.register(Registries.BLOCK, new Identifier(ShapeShifterCurseFabric.MOD_ID, path), block);
+        Registry.register(Registries.BLOCK, RegistryKey.of(Registries.BLOCK.getKey(), Identifier.of(ShapeShifterCurseFabric.MOD_ID, path)), block);
         return block;
     }
 
     private static <T extends Block> T register(String path, T block) {
-        Registry.register(Registries.BLOCK, new Identifier(ShapeShifterCurseFabric.MOD_ID, path), block);
-        Registry.register(Registries.ITEM, new Identifier(ShapeShifterCurseFabric.MOD_ID, path), new BlockItem(block, new Item.Settings()));
+        Registry.register(Registries.BLOCK, RegistryKey.of(Registries.BLOCK.getKey(), Identifier.of(ShapeShifterCurseFabric.MOD_ID, path)), block);
+        Registry.register(Registries.ITEM, RegistryKey.of(Registries.ITEM.getKey(), Identifier.of(ShapeShifterCurseFabric.MOD_ID, path)), new BlockItem(block, new Item.Settings()));
         return block;
     }
 

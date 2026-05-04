@@ -3,6 +3,7 @@ package net.onixary.shapeShifterCurseFabric.minion;
 import org.ladysnake.cca.api.v3.component.Component;
 import org.ladysnake.cca.api.v3.component.sync.AutoSyncedComponent;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.nbt.NbtHelper;
 import net.minecraft.nbt.NbtIntArray;
 import net.minecraft.nbt.NbtList;
@@ -18,7 +19,7 @@ public class PlayerMinionComponent implements Component, AutoSyncedComponent {
     public ConcurrentHashMap<Identifier, Long> minionsCooldown = new ConcurrentHashMap<>();
 
     @Override
-    public void readFromNbt(NbtCompound nbtCompound) {
+    public void readFromNbt(NbtCompound nbtCompound, RegistryWrapper.WrapperLookup registryLookup) {
         try {
             NbtCompound minionsNbt = nbtCompound.getCompound("minions");
             for (String key : minionsNbt.getKeys()) {
@@ -48,7 +49,7 @@ public class PlayerMinionComponent implements Component, AutoSyncedComponent {
     }
 
     @Override
-    public void writeToNbt(NbtCompound nbtCompound) {
+    public void writeToNbt(NbtCompound nbtCompound, RegistryWrapper.WrapperLookup registryLookup) {
         NbtCompound minionsNbt = new NbtCompound();
         for (Identifier key : this.minions.keySet()) {
             NbtList uuidList = new NbtList();

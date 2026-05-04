@@ -7,6 +7,7 @@ import net.minecraft.entity.EntityDimensions;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnGroup;
 import net.minecraft.registry.Registries;
+import net.minecraft.registry.RegistryKey;
 import net.minecraft.util.Identifier;
 import net.minecraft.registry.Registry;
 
@@ -19,6 +20,6 @@ public class ModEntities {
     }
 
     public static void register() {
-        Registry.register(Registries.ENTITY_TYPE, new Identifier(Origins.MODID, "enderian_pearl"), ENDERIAN_PEARL);
+        Registry.register(Registries.ENTITY_TYPE, RegistryKey.of(Registries.ENTITY_TYPE.getKey(), Identifier.of(Origins.MODID, "enderian_pearl")), ENDERIAN_PEARL);
     }
 }

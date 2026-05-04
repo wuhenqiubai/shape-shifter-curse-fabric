@@ -11,6 +11,7 @@ import net.onixary.shapeShifterCurseFabric.integration.origins.origin.OriginRegi
 import net.onixary.shapeShifterCurseFabric.integration.origins.util.ChoseOriginCriterion;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -97,7 +98,7 @@ public class PlayerOriginComponent implements OriginComponent {
     }
 
     @Override
-    public void readFromNbt(NbtCompound compoundTag) {
+    public void readFromNbt(NbtCompound compoundTag, RegistryWrapper.WrapperLookup registryLookup) {
         if(player == null) {
             Origins.LOGGER.error("Player was null in `fromTag`! This is a bug!");
         }
@@ -193,7 +194,7 @@ public class PlayerOriginComponent implements OriginComponent {
     }
 
     @Override
-    public void writeToNbt(NbtCompound compoundTag) {
+    public void writeToNbt(NbtCompound compoundTag, RegistryWrapper.WrapperLookup registryLookup) {
         NbtList originLayerList = new NbtList();
         for(Map.Entry<OriginLayer, Origin> entry : origins.entrySet()) {
             NbtCompound layerTag = new NbtCompound();

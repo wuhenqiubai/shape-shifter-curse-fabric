@@ -6,6 +6,7 @@ import io.github.apace100.calio.data.SerializableDataType;
 import io.github.apace100.calio.data.SerializableDataTypes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.util.Identifier;
@@ -39,7 +40,7 @@ public class ManaUtils {
             return of(nbtCompound.getDouble("add"), nbtCompound.getDouble("multiply"), nbtCompound.getDouble("add_total"));
         }
 
-        public void writeToNbt(NbtCompound nbtCompound) {
+        public void writeToNbt(NbtCompound nbtCompound, RegistryWrapper.WrapperLookup registryLookup) {
             nbtCompound.putDouble("add", add);
             nbtCompound.putDouble("multiply", multiply);
             nbtCompound.putDouble("add_total", add_total);
@@ -155,7 +156,7 @@ public class ManaUtils {
             modifiers.clear();
         }
 
-        public void readFromNbt(NbtCompound nbtCompound) {
+        public void readFromNbt(NbtCompound nbtCompound, RegistryWrapper.WrapperLookup registryLookup) {
             modifiers.clear();
             if (nbtCompound.contains("modifiers")) {
                 NbtList nbtList = nbtCompound.getList("modifiers", NbtElement.COMPOUND_TYPE);
@@ -169,14 +170,14 @@ public class ManaUtils {
             }
         }
 
-        public void writeToNbt(NbtCompound nbtCompound) {
+        public void writeToNbt(NbtCompound nbtCompound, RegistryWrapper.WrapperLookup registryLookup) {
             NbtList nbtList = new NbtList();
             for (Map.Entry<Identifier, Pair<Identifier, Modifier>> modifierEntry : modifiers.entrySet()) {
                 NbtCompound modifierEntryNbt = new NbtCompound();
                 modifierEntryNbt.putString("identifier", modifierEntry.getKey().toString());
                 modifierEntryNbt.putString("conditionID", modifierEntry.getValue().getLeft().toString());
                 NbtCompound modifierNbt = new NbtCompound();
-                modifierEntry.getValue().getRight().writeToNbt(modifierNbt);
+                modifierEntry.getValue().getRight().writeToNbt(modifierNbt, registryLookup);
                 modifierEntryNbt.put("modifier", modifierNbt);
                 nbtList.add(modifierEntryNbt);
             }

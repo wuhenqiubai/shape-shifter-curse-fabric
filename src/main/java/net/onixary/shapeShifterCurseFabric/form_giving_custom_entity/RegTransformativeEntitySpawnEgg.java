@@ -6,6 +6,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroups;
 import net.minecraft.item.SpawnEggItem;
 import net.minecraft.registry.Registries;
+import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
 import net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric;
@@ -42,11 +43,11 @@ public class RegTransformativeEntitySpawnEgg {
     ));
 
     public static <T extends Item> T register(String path, T item) {
-        return Registry.register(Registries.ITEM, new Identifier(ShapeShifterCurseFabric.MOD_ID, path), item);
+        return Registry.register(Registries.ITEM, RegistryKey.of(Registries.ITEM.getKey(), Identifier.of(ShapeShifterCurseFabric.MOD_ID, path)), item);
     }
 
     public static void initialize() {
-        //Registry.register(Registries.ITEM, new Identifier(ShapeShifterCurseFabric.MOD_ID, "custom_bat_spawn_egg"), T_BAT_SPAWN_EGG);
+        //Registry.register(Registries.ITEM, RegistryKey.of(Registries.ITEM.getKey(), Identifier.of(ShapeShifterCurseFabric.MOD_ID, "custom_bat_spawn_egg")), T_BAT_SPAWN_EGG);
         ItemGroupEvents.modifyEntriesEvent(ItemGroups.SPAWN_EGGS).register(content -> {
             content.add(T_BAT_SPAWN_EGG);
             content.add(T_AXOLOTL_SPAWN_EGG);
