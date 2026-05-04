@@ -27,7 +27,7 @@ public class SpiderFluidCocoon extends Item {
                 .maxCount(64)
                 .food(
                         new FoodComponent.Builder()
-                                .hunger(6)
+                                .nutrition(6)
                                 .saturationModifier(0.8f)
                                 .statusEffect(new StatusEffectInstance(StatusEffects.POISON, 150, 0), 1.0f)
                                 .build()

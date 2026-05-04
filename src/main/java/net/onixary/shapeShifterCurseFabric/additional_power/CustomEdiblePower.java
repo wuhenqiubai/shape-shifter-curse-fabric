@@ -28,10 +28,10 @@ public class CustomEdiblePower extends Power {
         super(type, entity);
         this.ItemIdList = data.get("item_id_list");
         FoodComponent.Builder foodComponentBuilder = new FoodComponent.Builder()
-                .hunger(data.getInt("hunger"))
+                .nutrition(data.getInt("hunger"))
                 .saturationModifier(data.getFloat("saturation_modifier"));
         if (data.getBoolean("meat")) {
-            foodComponentBuilder.meat();
+            // .meat() removed in 1.21
         }
         if (data.getBoolean("always_edible")) {
             foodComponentBuilder.alwaysEdible();

@@ -37,7 +37,7 @@ public class DiggingBareHandCondition {
             return true;
         }
         else if(playerEntity.getInventory().getMainHandStack().getItem() instanceof ToolItem toolItem){
-            return toolItem.getMaterial().getMiningLevel() <= 0;
+            return true /* getMiningLevel removed in 1.21, TODO */;
         }
 
         return true;

@@ -22,7 +22,7 @@ public class PowerfulInhibitor extends Item {
         super(settings.maxCount(16)
                 .food(
                 new FoodComponent.Builder()
-                        .hunger(2)
+                        .nutrition(2)
                         .saturationModifier(0.3f)
                         .alwaysEdible()
                         .build()

@@ -85,7 +85,7 @@ public class DelayAttributePower extends Power {
         this.modifiers.forEach((mod) -> {
             if (this.entity.getAttributes().hasAttribute(mod.getAttribute())) {
                 EntityAttributeInstance instance = this.entity.getAttributeInstance(mod.getAttribute());
-                if (instance != null && !instance.hasModifier(mod.getModifier())) {
+                if (instance != null && !instance.hasModifier(mod.getModifier().id())) {
                     instance.addTemporaryModifier(mod.getModifier());
                 }
             }
@@ -104,8 +104,8 @@ public class DelayAttributePower extends Power {
         this.modifiers.forEach((mod) -> {
             if (this.entity.getAttributes().hasAttribute(mod.getAttribute())) {
                 EntityAttributeInstance instance = this.entity.getAttributeInstance(mod.getAttribute());
-                if (instance != null && instance.hasModifier(mod.getModifier())) {
-                    instance.removeModifier(mod.getModifier());
+                if (instance != null && instance.hasModifier(mod.getModifier().id())) {
+                    instance.removeModifier(mod.getModifier().id());
                 }
             }
 
@@ -116,11 +116,12 @@ public class DelayAttributePower extends Power {
         }
     }
 
-    public DelayAttributePower addModifier(EntityAttribute attribute, EntityAttributeModifier modifier) {
-        AttributedEntityAttributeModifier mod = new AttributedEntityAttributeModifier(attribute, modifier);
-        this.modifiers.add(mod);
-        return this;
-    }
+    // Disabled: EntityAttribute → RegistryEntry<EntityAttribute> in 1.21 Apoli 2.12.0
+    // public DelayAttributePower addModifier(EntityAttribute attribute, EntityAttributeModifier modifier) {
+    //     AttributedEntityAttributeModifier mod = new AttributedEntityAttributeModifier(attribute, modifier);
+    //     this.modifiers.add(mod);
+    //     return this;
+    // }
 
     public DelayAttributePower addModifier(AttributedEntityAttributeModifier modifier) {
         this.modifiers.add(modifier);

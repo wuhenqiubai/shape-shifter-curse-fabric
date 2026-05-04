@@ -1,26 +1,21 @@
 package net.onixary.shapeShifterCurseFabric.integration.origins.registry;
 
 import net.onixary.shapeShifterCurseFabric.integration.origins.Origins;
-import net.onixary.shapeShifterCurseFabric.integration.origins.enchantment.WaterProtectionEnchantment;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentTarget;
-import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.RegistryKey;
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.util.Identifier;
-import net.minecraft.registry.Registry;
 
 public class ModEnchantments {
 
-    //public static final Enchantment WATER_PROTECTION = new WaterProtectionEnchantment(Enchantment.Rarity.RARE, EnchantmentTarget.ARMOR, new EquipmentSlot[]{EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET});
+    // Water Protection is now defined via JSON data file:
+    //   data/origins/enchantment/water_protection.json
+    // Enchantment is a final class in 1.21, must use data-driven registration.
+    public static final RegistryKey<Enchantment> WATER_PROTECTION =
+        RegistryKey.of(Registries.ENCHANTMENT.getKey(), Identifier.of(Origins.MODID, "water_protection"));
 
     public static void register() {
-
-        //register("water_protection", WATER_PROTECTION);
-    }
-
-    private static Enchantment register(String path, Enchantment enchantment) {
-        Registry.register(Registries.ENCHANTMENT, RegistryKey.of(Registries.ENCHANTMENT.getKey(), Identifier.of(Origins.MODID, path)), enchantment);
-        return enchantment;
+        // Enchantment registration is handled by JSON data files in 1.21.
+        // No Java registration needed.
     }
 }

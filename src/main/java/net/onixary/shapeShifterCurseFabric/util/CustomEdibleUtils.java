@@ -105,7 +105,7 @@ public class CustomEdibleUtils {
                 }
         ).toList();
         FoodComponent.Builder builder = new FoodComponent.Builder();
-        builder.hunger(Hunger).saturationModifier(Saturation);
+        builder.nutrition(Hunger).saturationModifier(Saturation);
         if (Meat) builder.meat();
         if (AlwaysEdible) builder.alwaysEdible();
         if (Snack) builder.snack();

@@ -55,7 +55,7 @@ public class ExplosionDamageEntityAction {
         List<Entity> list = entity.getWorld().getOtherEntities(entity, new Box((double)k, (double)r, (double)t, (double)l, (double)s, (double)u));
         for(int v = 0; v < list.size(); ++v) {
             Entity target_entity = (Entity) list.get(v);
-            if (!target_entity.isImmuneToExplosion() && (entityCondition == null || entityCondition.test(new Pair<>(entity, target_entity)))) {
+            if (!false /* isImmuneToExplosion removed in 1.21 */ && (entityCondition == null || entityCondition.test(new Pair<>(entity, target_entity)))) {
                 double w = Math.sqrt(target_entity.squaredDistanceTo(ExplosionPos)) / (double)q;
                 if (w <= 1.0) {
                     double x = target_entity.getX() - ExplosionPos.getX();

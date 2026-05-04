@@ -132,7 +132,7 @@ public class ItemStorePower extends Power implements ItemStorePowerRender.itemSt
         if (tag instanceof NbtCompound compound) {
             NbtCompound itemStackNBT = compound.getCompound("stored_item");
             if (!itemStackNBT.isEmpty()) {
-                this.storedItem = ItemStack.fromNbt(itemStackNBT);
+                this.storedItem = ItemStack.fromNbt(itemStackNBT, registryLookup);
             }
             this.bobbingAnimationTime = compound.getInt("bobbing_animation_time");
         }
