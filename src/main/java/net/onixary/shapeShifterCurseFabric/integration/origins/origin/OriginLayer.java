@@ -4,7 +4,7 @@ import com.google.common.collect.Lists;
 import com.google.gson.*;
 import io.github.apace100.apoli.data.ApoliDataTypes;
 import io.github.apace100.apoli.power.factory.condition.ConditionFactory;
-import io.github.apace100.apoli.power.factory.condition.ConditionTypes;
+import io.github.apace100.apoli.registry.ApoliRegistries;
 import io.github.apace100.calio.data.SerializableData;
 import io.github.apace100.calio.data.SerializableDataTypes;
 import net.fabricmc.api.EnvType;
@@ -361,7 +361,7 @@ public class OriginLayer implements Comparable<OriginLayer> {
         public static ConditionedOrigin read(PacketByteBuf buffer) {
             ConditionFactory<Entity>.Instance condition = null;
             if(buffer.readBoolean()) {
-                condition = ConditionTypes.ENTITY.read(buffer);
+                condition = ApoliRegistries.ENTITY_CONDITION.read(buffer);
             }
             int originCount = buffer.readInt();
             List<Identifier> originList = new ArrayList<>(originCount);

@@ -6,8 +6,6 @@ import com.google.gson.JsonPrimitive;
 import io.github.apace100.apoli.Apoli;
 import io.github.apace100.apoli.power.PowerType;
 import io.github.apace100.apoli.power.PowerTypes;
-import io.github.apace100.apoli.util.NamespaceAlias;
-import io.github.apace100.calio.mixin.CriteriaRegistryInvoker;
 import io.github.apace100.calio.resource.OrderedResourceListenerInitializer;
 import io.github.apace100.calio.resource.OrderedResourceListenerManager;
 import net.onixary.shapeShifterCurseFabric.integration.origins.badge.BadgeManager;
@@ -77,8 +75,6 @@ public class Origins implements ModInitializer, OrderedResourceListenerInitializ
 			});
 		config = AutoConfig.getConfigHolder(ServerConfig.class).getConfig();
 
-		NamespaceAlias.addAlias(MODID, "apoli");
-
 		OriginsPowerTypes.register();
 		OriginsEntityConditions.register();
 
@@ -98,7 +94,7 @@ public class Origins implements ModInitializer, OrderedResourceListenerInitializ
 			//content.add(ModItems.ORB_OF_ORIGIN);
 		});
 
-		CriteriaRegistryInvoker.callRegister(ChoseOriginCriterion.INSTANCE);
+		net.minecraft.advancement.criterion.Criteria.register(ChoseOriginCriterion.INSTANCE.getId().toString(), ChoseOriginCriterion.INSTANCE);
 	}
 
 	public static void serializeConfig() {
