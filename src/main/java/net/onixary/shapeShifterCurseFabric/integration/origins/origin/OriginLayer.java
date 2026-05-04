@@ -2,14 +2,13 @@ package net.onixary.shapeShifterCurseFabric.integration.origins.origin;
 
 import com.google.common.collect.Lists;
 import com.google.gson.*;
-import io.github.apace100.apoli.data.ApoliDataTypes;
+import io.github.apace100.apoli.condition.context.EntityConditionContext;
 import io.github.apace100.apoli.condition.type.EntityConditionType;
-import io.github.apace100.apoli.power.factory.condition.ConditionTypes;
+import io.github.apace100.apoli.data.ApoliDataTypes;
 import io.github.apace100.calio.data.SerializableData;
 import io.github.apace100.calio.data.SerializableDataTypes;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.Identifier;
@@ -193,7 +192,7 @@ public class OriginLayer implements Comparable<OriginLayer> {
             excludeRandomArray.forEach(je -> originsExcludedFromRandom.add(Identifier.tryParse(je.getAsString())));
         }
         if(json.has("default_origin")) {
-            this.defaultOrigin = new Identifier(JsonHelper.getString(json, "default_origin"));
+            this.defaultOrigin = Identifier.of(JsonHelper.getString(json, "default_origin"));
         }
         if(json.has("auto_choose")) {
             this.autoChooseIfNoChoice = JsonHelper.getBoolean(json, "auto_choose");
@@ -322,24 +321,24 @@ public class OriginLayer implements Comparable<OriginLayer> {
             excludeRandomArray.forEach(je -> layer.originsExcludedFromRandom.add(Identifier.tryParse(je.getAsString())));
         }
         if(json.has("default_origin")) {
-            layer.defaultOrigin = new Identifier(JsonHelper.getString(json, "default_origin"));
+            layer.defaultOrigin = Identifier.of(JsonHelper.getString(json, "default_origin"));
         }
         layer.autoChooseIfNoChoice = JsonHelper.getBoolean(json, "auto_choose", false);
         layer.hidden = JsonHelper.getBoolean(json, "hidden", false);
         return layer;
     }
 
-    public static class ConditionedOrigin {
-        private final ConditionFactory<Entity>.Instance condition;
+public static class ConditionedOrigin {
+        private final EntityConditionType condition;
         private final List<Identifier> origins;
 
-        public ConditionedOrigin(ConditionFactory<Entity>.Instance condition, List<Identifier> origins) {
+        public ConditionedOrigin(EntityConditionType condition, List<Identifier> origins) {
             this.condition = condition;
             this.origins = origins;
         }
 
         public boolean isConditionFulfilled(PlayerEntity playerEntity) {
-            return condition == null || condition.test(playerEntity);
+            return condition == null || condition.test(new EntityConditionContext(playerEntity));
         }
 
         public List<Identifier> getOrigins() {
@@ -352,16 +351,16 @@ public class OriginLayer implements Comparable<OriginLayer> {
         public void write(PacketByteBuf buffer) {
             buffer.writeBoolean(condition != null);
             if(condition != null)
-                condition.write(buffer);
+                EntityConditionType.DATA_HANDLER.send(buffer, condition);
             buffer.writeInt(origins.size());
             origins.forEach(buffer::writeIdentifier);
         }
 
         @Environment(EnvType.CLIENT)
         public static ConditionedOrigin read(PacketByteBuf buffer) {
-            ConditionFactory<Entity>.Instance condition = null;
+            EntityConditionType condition = null;
             if(buffer.readBoolean()) {
-                condition = ConditionTypes.ENTITY.read(buffer);
+                condition = EntityConditionType.DATA_HANDLER.receive(buffer);
             }
             int originCount = buffer.readInt();
             List<Identifier> originList = new ArrayList<>(originCount);
@@ -381,9 +380,9 @@ public class OriginLayer implements Comparable<OriginLayer> {
                 throw new JsonParseException("Expected origin in layer to be either a string or an object.");
             } else if(element.isJsonObject()) {
                 SerializableData.Instance data = conditionedOriginObjectData.read(element.getAsJsonObject());
-                return new ConditionedOrigin((ConditionFactory<Entity>.Instance)data.get("condition"), (List<Identifier>)data.get("origins"));
+                return new ConditionedOrigin((EntityConditionType)data.get("condition"), (List<Identifier>)data.get("origins"));
             }
             throw new JsonParseException("Expected origin in layer to be either a string or an object.");
         }
-    }
+}
 }

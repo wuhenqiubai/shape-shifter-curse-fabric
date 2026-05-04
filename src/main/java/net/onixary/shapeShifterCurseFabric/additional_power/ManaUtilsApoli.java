@@ -2,14 +2,15 @@ package net.onixary.shapeShifterCurseFabric.additional_power;
 
 import io.github.apace100.apoli.action.ActionConfiguration;
 import io.github.apace100.apoli.action.context.EntityActionContext;
+import io.github.apace100.apoli.action.type.BiEntityActionType;
 import io.github.apace100.apoli.action.type.EntityActionType;
 import io.github.apace100.apoli.condition.ConditionConfiguration;
 import io.github.apace100.apoli.condition.context.EntityConditionContext;
 import io.github.apace100.apoli.condition.type.EntityConditionType;
+import io.github.apace100.apoli.data.ApoliDataTypes;
 import io.github.apace100.apoli.data.TypedDataObjectFactory;
 import io.github.apace100.apoli.util.Comparison;
 import io.github.apace100.calio.data.SerializableData;
-import io.github.apace100.calio.data.SerializableData.Operations;
 import io.github.apace100.calio.data.SerializableDataTypes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -155,7 +156,7 @@ public class ManaUtilsApoli {
         public static final TypedDataObjectFactory<ManaCompareCondition> DATA_FACTORY =
                 TypedDataObjectFactory.simple(
                         new SerializableData()
-                                .add("comparison", SerializableDataTypes.COMPARISON, null)
+                                .add("comparison", ApoliDataTypes.COMPARISON, null)
                                 .add("compare_to", SerializableDataTypes.DOUBLE, 0.0d),
                         data -> new ManaCompareCondition(data.get("comparison"), data.getDouble("compare_to")),
                         (c, sd) -> sd.instance()
@@ -182,7 +183,7 @@ public class ManaUtilsApoli {
         public static final TypedDataObjectFactory<ManaPercentCompareCondition> DATA_FACTORY =
                 TypedDataObjectFactory.simple(
                         new SerializableData()
-                                .add("comparison", SerializableDataTypes.COMPARISON, null)
+                                .add("comparison", ApoliDataTypes.COMPARISON, null)
                                 .add("compare_to", SerializableDataTypes.DOUBLE, 0.0d),
                         data -> new ManaPercentCompareCondition(data.get("comparison"), data.getDouble("compare_to")),
                         (c, sd) -> sd.instance()
@@ -205,8 +206,9 @@ public class ManaUtilsApoli {
         }
     }
 
-    public static void registerAction(Consumer<ActionConfiguration<EntityActionType>> actionReg,
-                                       Consumer<?> biActionReg) {
+    @SuppressWarnings("unchecked")
+    public static void registerAction(Consumer<ActionConfiguration<? extends EntityActionType>> actionReg,
+                                       Consumer<ActionConfiguration<? extends BiEntityActionType>> biActionReg) {
         actionReg.accept(ActionConfiguration.of(
                 ShapeShifterCurseFabric.identifier("set_mana"), SetManaAction.DATA_FACTORY));
         actionReg.accept(ActionConfiguration.of(
@@ -217,7 +219,8 @@ public class ManaUtilsApoli {
                 ShapeShifterCurseFabric.identifier("gain_mana_with_time"), GainManaWithTimeAction.DATA_FACTORY));
     }
 
-    public static void registerCondition(Consumer<ConditionConfiguration<EntityConditionType>> reg) {
+    @SuppressWarnings("unchecked")
+    public static void registerCondition(Consumer<ConditionConfiguration<? extends EntityConditionType>> reg) {
         reg.accept(ConditionConfiguration.of(
                 ShapeShifterCurseFabric.identifier("has_mana"), HasManaCondition.DATA_FACTORY));
         reg.accept(ConditionConfiguration.of(

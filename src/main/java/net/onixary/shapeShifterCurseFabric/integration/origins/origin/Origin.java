@@ -2,9 +2,9 @@ package net.onixary.shapeShifterCurseFabric.integration.origins.origin;
 
 import com.google.common.collect.Lists;
 import com.google.gson.JsonObject;
-import io.github.apace100.apoli.power.MultiplePowerType;
+import io.github.apace100.apoli.power.MultiplePower;
 import io.github.apace100.apoli.power.type.PowerType;
-import io.github.apace100.apoli.power.PowerTypeRegistry;
+import io.github.apace100.apoli.power.PowerManager;
 import io.github.apace100.calio.data.SerializableData;
 import io.github.apace100.calio.data.SerializableDataTypes;
 import net.onixary.shapeShifterCurseFabric.integration.origins.Origins;
@@ -45,7 +45,7 @@ public class Origin {
     public static final Origin EMPTY;
 
     static {
-        EMPTY = register(new Origin(new Identifier(Origins.MODID, "empty"), new ItemStack(Items.AIR), Impact.NONE, -1, Integer.MAX_VALUE).setUnchoosable().setSpecial());
+        EMPTY = register(new Origin(Identifier.of(Origins.MODID, "empty"), new ItemStack(Items.AIR), Impact.NONE, -1, Integer.MAX_VALUE).setUnchoosable().setSpecial());
     }
 
     public static void init() {
@@ -68,7 +68,7 @@ public class Origin {
     }
 
     private Identifier identifier;
-    private List<PowerType<?>> powerTypes = new LinkedList<>();
+    private List<PowerType> powerTypes = new LinkedList<>();
     private final ItemStack displayItem;
     private final Impact impact;
     private boolean isChoosable;
@@ -112,12 +112,12 @@ public class Origin {
         return identifier;
     }
 
-    public Origin add(PowerType<?>... powerTypes) {
+    public Origin add(PowerType... powerTypes) {
         this.powerTypes.addAll(Lists.newArrayList(powerTypes));
         return this;
     }
 
-    public void removePowerType(PowerType<?> powerType) {
+    public void removePowerType(PowerType powerType) {
         this.powerTypes.remove(powerType);
     }
 
@@ -141,16 +141,16 @@ public class Origin {
         return this;
     }
 
-    public boolean hasPowerType(PowerType<?> powerType) {
+    public boolean hasPowerType(PowerType powerType) {
         if(powerType.getIdentifier() == null) {
             return false;
         }
         if(this.powerTypes.contains(powerType)) {
             return true;
         }
-        for (PowerType<?> pt : this.powerTypes) {
-            if (pt instanceof MultiplePowerType) {
-                if(((MultiplePowerType<?>)pt).getSubPowers().contains(powerType.getIdentifier())) {
+        for (PowerType pt : this.powerTypes) {
+            if (pt instanceof MultiplePower) {
+                if(((MultiplePower)pt).getSubPowers().contains(powerType.getIdentifier())) {
                     return true;
                 }
             }
@@ -170,7 +170,7 @@ public class Origin {
         return this.isChoosable;
     }
 
-    public Iterable<PowerType<?>> getPowerTypes() {
+    public Iterable<PowerType> getPowerTypes() {
         return powerTypes;
     }
 
@@ -238,7 +238,7 @@ public class Origin {
 
         ((List<Identifier>)data.get("powers")).forEach(powerId -> {
             try {
-                PowerType powerType = PowerTypeRegistry.get(powerId);
+                PowerType powerType = PowerManager.get(powerId);
                 origin.add(powerType);
             } catch(IllegalArgumentException e) {
                 Origins.LOGGER.error("Origin \"" + id + "\" contained unregistered power: \"" + powerId + "\"");
@@ -268,8 +268,8 @@ public class Origin {
     @Override
     public String toString() {
         String str = "Origin(" + identifier.toString() + ")[";
-        for(PowerType<?> pt : powerTypes) {
-            str += PowerTypeRegistry.getId(pt);
+        for(PowerType pt : powerTypes) {
+            str += PowerManager.getId(pt);
             str += ",";
         }
         str = str.substring(0, str.length() - 1) + "]";

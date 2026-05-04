@@ -122,3 +122,9 @@ runs/
 /.classpath
 /.factorypath
 /.claude/
+
+# Build artifacts
+build_*.txt
+compile_errors.txt
+.sisyphus/
+io/

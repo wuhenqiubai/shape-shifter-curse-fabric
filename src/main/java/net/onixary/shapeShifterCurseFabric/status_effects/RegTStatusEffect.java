@@ -42,7 +42,7 @@ public class RegTStatusEffect {
 
     private static <T extends BaseTransformativeStatusEffect> T register(String path, T effect) {
         // 固定MOD_ID的注册方法
-        Identifier id = new Identifier(ShapeShifterCurseFabric.MOD_ID, path);
+        Identifier id = Identifier.of(ShapeShifterCurseFabric.MOD_ID, path);
         return register(id, effect);
     }
 

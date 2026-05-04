@@ -14,7 +14,8 @@ import net.minecraft.loot.context.LootContext;
 import net.minecraft.loot.context.LootContextParameters;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
-import net.minecraft.util.JsonSerializer;
+// TODO: 1.21.1 - JsonSerializer removed for loot conditions, needs MapCodec rewrite
+// import net.minecraft.util.JsonSerializer;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -64,7 +65,7 @@ public class OriginLootCondition implements LootCondition {
     }
 
     public static LootCondition.Builder builder(String originId) {
-        return builder(new Identifier(originId));
+        return builder(Identifier.of(originId));
     }
 
     public static LootCondition.Builder builder(Identifier origin) {
@@ -72,13 +73,15 @@ public class OriginLootCondition implements LootCondition {
     }
 
     public static LootCondition.Builder builder(String originId, String layerId) {
-        return builder(new Identifier(originId), new Identifier(layerId));
+        return builder(Identifier.of(originId), Identifier.of(layerId));
     }
 
     public static LootCondition.Builder builder(Identifier origin, Identifier layer) {
         return () -> new OriginLootCondition(origin, layer);
     }
 
+    // TODO: 1.21.1 - Serializer needs MapCodec rewrite for loot conditions
+    /*
     public static class Serializer implements JsonSerializer<OriginLootCondition> {
         public void toJson(JsonObject jsonObject, OriginLootCondition originLootCondition, JsonSerializationContext jsonSerializationContext) {
             jsonObject.addProperty("origin", originLootCondition.origin.toString());
@@ -88,12 +91,13 @@ public class OriginLootCondition implements LootCondition {
         }
 
         public OriginLootCondition fromJson(JsonObject jsonObject, JsonDeserializationContext jsonDeserializationContext) {
-            Identifier origin = new Identifier(JsonHelper.getString(jsonObject, "origin"));
+            Identifier origin = Identifier.of(JsonHelper.getString(jsonObject, "origin"));
             if (jsonObject.has("layer")) {
-                Identifier layer = new Identifier(JsonHelper.getString(jsonObject, "layer"));
+                Identifier layer = Identifier.of(JsonHelper.getString(jsonObject, "layer"));
                 return new OriginLootCondition(origin, layer);
             }
             return new OriginLootCondition(origin);
         }
     }
+    */
 }

@@ -17,7 +17,7 @@ public class ModComponents implements EntityComponentInitializer {
     public static final ComponentKey<OriginComponent> ORIGIN;
 
     static {
-        ORIGIN = ComponentRegistry.getOrCreate(new Identifier(Origins.MODID, "origin"), OriginComponent.class);
+        ORIGIN = ComponentRegistry.getOrCreate(Identifier.of(Origins.MODID, "origin"), OriginComponent.class);
     }
 
     @Override

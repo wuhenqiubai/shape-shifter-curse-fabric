@@ -24,7 +24,7 @@ public class StartBookScreen extends BaseOwoScreen<FlowLayout> {
     // 出于翻译与动态文本的考量，不使用XML来构建
     public PlayerEntity currentPlayer;
 
-    private static final Identifier StartBook_TexID = new Identifier(MOD_ID,"textures/gui/start_book.png");
+    private static final Identifier StartBook_TexID = Identifier.of(MOD_ID,"textures/gui/start_book.png");
 
     @Override
     protected @NotNull OwoUIAdapter<FlowLayout> createAdapter() {

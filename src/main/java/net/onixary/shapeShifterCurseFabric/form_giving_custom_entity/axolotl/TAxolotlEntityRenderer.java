@@ -16,7 +16,7 @@ public class TAxolotlEntityRenderer extends MobEntityRenderer<AxolotlEntity, Axo
 
 	// 1. 删除了整个 TEXTURES 静态映射的定义
 
-	private static final Identifier TEXTURE = new Identifier(MOD_ID, "textures/entity/mob/t_axolotl.png");
+	private static final Identifier TEXTURE = Identifier.of(MOD_ID, "textures/entity/mob/t_axolotl.png");
 
 	public TAxolotlEntityRenderer(EntityRendererFactory.Context context) {
 		super(context, new AxolotlEntityModel<>(context.getPart(EntityModelLayers.AXOLOTL)), 0.5F);

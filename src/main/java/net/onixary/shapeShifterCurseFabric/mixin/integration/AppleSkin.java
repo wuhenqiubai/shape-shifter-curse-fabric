@@ -1,12 +1,7 @@
 package net.onixary.shapeShifterCurseFabric.mixin.integration;
 
-import io.github.apace100.apoli.component.PowerHolderComponent;
-import io.github.apace100.apoli.power.ModifyFoodPower;
-import io.github.apace100.apoli.util.modifier.Modifier;
-import io.github.apace100.apoli.util.modifier.ModifierUtil;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.component.type.FoodComponent;
 import net.minecraft.item.ItemStack;
@@ -15,10 +10,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import squeek.appleskin.api.food.FoodValues;
 import squeek.appleskin.helpers.FoodHelper;
-
-import java.util.List;
 
 @Mixin(FoodHelper.class)
 // 排除逻辑在net.onixary.shapeShifterCurseFabric.mixin.plugin.MixinConfigPlugin里临时注册
@@ -42,18 +34,9 @@ public class AppleSkin {
     }
 
     @Inject(method = "getModifiedFoodValues", at = @At("HEAD"), cancellable = true)
-    private static void shapeShifterCurseFabric$getModifiedFoodValues(ItemStack itemStack, PlayerEntity player, CallbackInfoReturnable<FoodValues> cir) {
-        if (player != null) {
-            FoodComponent itemFood = CustomEdibleUtils.getPowerFoodComponent(player, itemStack);
-            itemFood = itemFood != null ? itemFood : itemStack.getItem().getFoodComponent();
-            int hunger = itemFood != null ? itemFood.getHunger() : 0;
-            float saturationModifier = itemFood != null ? itemFood.getSaturationModifier() : 0.0F;
-            List<ModifyFoodPower> mfps = PowerHolderComponent.getPowers(player, ModifyFoodPower.class);
-            List<Modifier> modifiersFood = mfps.stream().filter((p) -> p.doesApply(itemStack)).flatMap((p) -> p.getFoodModifiers().stream()).toList();
-            int newFood = (int) ModifierUtil.applyModifiers((Entity) player, modifiersFood, (double)hunger);
-            List<Modifier> modifiersSaturation = mfps.stream().filter((p) -> p.doesApply(itemStack)).flatMap((p) -> p.getSaturationModifiers().stream()).toList();
-            float newSaturation = (float) ModifierUtil.applyModifiers((Entity) player, modifiersSaturation, (double)saturationModifier);
-            cir.setReturnValue(new FoodValues(newFood, newSaturation));
-        }
+    private static void shapeShifterCurseFabric$getModifiedFoodValues(ItemStack itemStack, PlayerEntity player, CallbackInfoReturnable<?> cir) {
+        // FIXME: 1.21.1 — ModifyFoodPower and FoodValues API changed. Needs update.
+        // This method requires apoli ModifyFoodPower (removed in 2.12) and AppleSkin FoodValues
+        cir.cancel();
     }
 }

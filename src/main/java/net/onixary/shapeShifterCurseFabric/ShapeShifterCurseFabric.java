@@ -102,31 +102,31 @@ public class ShapeShifterCurseFabric implements ModInitializer {
     public static float feralItemEulerX = 0.0F;
 
     // Reg custom advancement criterion
-    public static final OnEnableMod ON_ENABLE_MOD = Criteria.register(new OnEnableMod());
-    public static final OnOpenBookOfShapeShifter ON_OPEN_BOOK_OF_SHAPE_SHIFTER = Criteria.register(new OnOpenBookOfShapeShifter());
-    public static final OnEndCursedMoon ON_END_CURSED_MOON = Criteria.register(new OnEndCursedMoon());
-    public static final OnEndCursedMoonCured ON_END_CURSED_MOON_CURED = Criteria.register(new OnEndCursedMoonCured());
-    public static final OnEndCursedMoonCuredForm2 ON_END_CURSED_MOON_CURED_FORM_2 = Criteria.register(new OnEndCursedMoonCuredForm2());
-    public static final OnGetTransformEffect ON_GET_TRANSFORM_EFFECT = Criteria.register(new OnGetTransformEffect());
-    public static final OnSleepWhenHaveTransformEffect ON_SLEEP_WHEN_HAVE_TRANSFORM_EFFECT = Criteria.register(new OnSleepWhenHaveTransformEffect());
-    public static final OnTransform0 ON_TRANSFORM_0 = Criteria.register(new OnTransform0());
-    public static final OnTransform1 ON_TRANSFORM_1 = Criteria.register(new OnTransform1());
-    public static final OnTransform2 ON_TRANSFORM_2 = Criteria.register(new OnTransform2());
-    public static final OnTransformByCatalyst ON_TRANSFORM_BY_CATALYST = Criteria.register(new OnTransformByCatalyst());
-    public static final OnTransformByCure ON_TRANSFORM_BY_CURE = Criteria.register(new OnTransformByCure());
-    public static final OnUseGoldenApple ON_USE_GOLDEN_APPLE = Criteria.register(new OnUseGoldenApple());
-    public static final OnTransformByCureFinal ON_TRANSFORM_BY_CURE_FINAL = Criteria.register(new OnTransformByCureFinal());
-    public static final OnTransformEffectFade ON_TRANSFORM_EFFECT_FADE = Criteria.register(new OnTransformEffectFade());
-    public static final OnTriggerCursedMoon ON_TRIGGER_CURSED_MOON = Criteria.register(new OnTriggerCursedMoon());
-    public static final OnTriggerCursedMoonForm2 ON_TRIGGER_CURSED_MOON_FORM_2 = Criteria.register(new OnTriggerCursedMoonForm2());
-    public static final OnFirstJoinWithMod ON_FIRST_JOIN_WITH_MOD = Criteria.register(new OnFirstJoinWithMod());
-    public static final OnEndCursedMoonBuggedForm2 ON_END_CURSED_MOON_BUGGED_FORM_2 = Criteria.register(new OnEndCursedMoonBuggedForm2());
+    public static final OnEnableMod ON_ENABLE_MOD = Criteria.register("on_enable_mod", new OnEnableMod());
+    public static final OnOpenBookOfShapeShifter ON_OPEN_BOOK_OF_SHAPE_SHIFTER = Criteria.register("on_open_book_of_shape_shifter", new OnOpenBookOfShapeShifter());
+    public static final OnEndCursedMoon ON_END_CURSED_MOON = Criteria.register("on_end_cursed_moon", new OnEndCursedMoon());
+    public static final OnEndCursedMoonCured ON_END_CURSED_MOON_CURED = Criteria.register("on_end_cursed_moon_cured", new OnEndCursedMoonCured());
+    public static final OnEndCursedMoonCuredForm2 ON_END_CURSED_MOON_CURED_FORM_2 = Criteria.register("on_end_cursed_moon_cured_form_2", new OnEndCursedMoonCuredForm2());
+    public static final OnGetTransformEffect ON_GET_TRANSFORM_EFFECT = Criteria.register("on_get_transform_effect", new OnGetTransformEffect());
+    public static final OnSleepWhenHaveTransformEffect ON_SLEEP_WHEN_HAVE_TRANSFORM_EFFECT = Criteria.register("on_sleep_when_have_transform_effect", new OnSleepWhenHaveTransformEffect());
+    public static final OnTransform0 ON_TRANSFORM_0 = Criteria.register("on_transform_0", new OnTransform0());
+    public static final OnTransform1 ON_TRANSFORM_1 = Criteria.register("on_transform_1", new OnTransform1());
+    public static final OnTransform2 ON_TRANSFORM_2 = Criteria.register("on_transform_2", new OnTransform2());
+    public static final OnTransformByCatalyst ON_TRANSFORM_BY_CATALYST = Criteria.register("on_transform_by_catalyst", new OnTransformByCatalyst());
+    public static final OnTransformByCure ON_TRANSFORM_BY_CURE = Criteria.register("on_transform_by_cure", new OnTransformByCure());
+    public static final OnUseGoldenApple ON_USE_GOLDEN_APPLE = Criteria.register("on_use_golden_apple", new OnUseGoldenApple());
+    public static final OnTransformByCureFinal ON_TRANSFORM_BY_CURE_FINAL = Criteria.register("on_transform_by_cure_final", new OnTransformByCureFinal());
+    public static final OnTransformEffectFade ON_TRANSFORM_EFFECT_FADE = Criteria.register("on_transform_effect_fade", new OnTransformEffectFade());
+    public static final OnTriggerCursedMoon ON_TRIGGER_CURSED_MOON = Criteria.register("on_trigger_cursed_moon", new OnTriggerCursedMoon());
+    public static final OnTriggerCursedMoonForm2 ON_TRIGGER_CURSED_MOON_FORM_2 = Criteria.register("on_trigger_cursed_moon_form_2", new OnTriggerCursedMoonForm2());
+    public static final OnFirstJoinWithMod ON_FIRST_JOIN_WITH_MOD = Criteria.register("on_first_join_with_mod", new OnFirstJoinWithMod());
+    public static final OnEndCursedMoonBuggedForm2 ON_END_CURSED_MOON_BUGGED_FORM_2 = Criteria.register("on_end_cursed_moon_bugged_form_2", new OnEndCursedMoonBuggedForm2());
 
     // Reg custom entities
     // Bat
     public static final EntityType<TransformativeBatEntity> T_BAT = Registry.register(
             Registries.ENTITY_TYPE,
-            new Identifier(ShapeShifterCurseFabric.MOD_ID, "t_bat"),
+            Identifier.of(ShapeShifterCurseFabric.MOD_ID, "t_bat"),
             FabricEntityTypeBuilder.create(SpawnGroup.AMBIENT, TransformativeBatEntity::new)
                     .dimensions(EntityDimensions.fixed(0.5f, 0.9f))
                     .build()
@@ -134,7 +134,7 @@ public class ShapeShifterCurseFabric implements ModInitializer {
     // Axolotl
     public static final EntityType<TransformativeAxolotlEntity> T_AXOLOTL = Registry.register(
             Registries.ENTITY_TYPE,
-            new Identifier(ShapeShifterCurseFabric.MOD_ID, "t_axolotl"),
+            Identifier.of(ShapeShifterCurseFabric.MOD_ID, "t_axolotl"),
             FabricEntityTypeBuilder.create(SpawnGroup.AXOLOTLS, TransformativeAxolotlEntity::new)
                     .dimensions(EntityDimensions.fixed(0.75f, 0.42f))
                     .build()
@@ -142,7 +142,7 @@ public class ShapeShifterCurseFabric implements ModInitializer {
     // Ocelot
     public static final EntityType<TransformativeOcelotEntity> T_OCELOT = Registry.register(
             Registries.ENTITY_TYPE,
-            new Identifier(ShapeShifterCurseFabric.MOD_ID, "t_ocelot"),
+            Identifier.of(ShapeShifterCurseFabric.MOD_ID, "t_ocelot"),
             FabricEntityTypeBuilder.create(SpawnGroup.MONSTER, TransformativeOcelotEntity::new)
                     .dimensions(EntityDimensions.fixed(0.6f, 0.7f))
                     .build()
@@ -150,7 +150,7 @@ public class ShapeShifterCurseFabric implements ModInitializer {
 
     public static final EntityType<TransformativeWolfEntity> T_WOLF = Registry.register(
             Registries.ENTITY_TYPE,
-            new Identifier(ShapeShifterCurseFabric.MOD_ID, "t_wolf"),
+            Identifier.of(ShapeShifterCurseFabric.MOD_ID, "t_wolf"),
             FabricEntityTypeBuilder.create(SpawnGroup.CREATURE, TransformativeWolfEntity::new)
                 .dimensions(EntityDimensions.fixed(0.6f, 0.85f))
                 .build()
@@ -158,7 +158,7 @@ public class ShapeShifterCurseFabric implements ModInitializer {
 
     public static final EntityType<TransformativeSpiderEntity> T_SPIDER = Registry.register(
             Registries.ENTITY_TYPE,
-            new Identifier(ShapeShifterCurseFabric.MOD_ID, "t_spider"),
+            Identifier.of(ShapeShifterCurseFabric.MOD_ID, "t_spider"),
             FabricEntityTypeBuilder.create(SpawnGroup.MONSTER, TransformativeSpiderEntity::new)
                     .dimensions(EntityDimensions.fixed(1.4f, 0.9f))
                     .build()
@@ -169,7 +169,7 @@ public class ShapeShifterCurseFabric implements ModInitializer {
 
 
     public static Identifier identifier(String path) {
-        return new Identifier(MOD_ID, path);
+        return Identifier.of(MOD_ID, path);
     }
 
 
@@ -368,7 +368,7 @@ public class ShapeShifterCurseFabric implements ModInitializer {
             if (EffectManager.hasTransformativeEffect(player)) {
                 EffectManager.ActiveTransformativeEffect(player);
                 // 触发自定义成就
-                ON_SLEEP_WHEN_HAVE_TRANSFORM_EFFECT.trigger(player);
+                ON_SLEEP_WHEN_HAVE_TRANSFORM_EFFECT.trigger(player, conditions -> true);
                 player.sendMessage(Text.translatable("info.shape-shifter-curse.origin_form_sleep_when_attached").formatted(Formatting.LIGHT_PURPLE));
             }
         }
@@ -401,7 +401,7 @@ public class ShapeShifterCurseFabric implements ModInitializer {
                     // 取消效果
                     cancelEffect(player);
                     // 触发自定义成就
-                    ShapeShifterCurseFabric.ON_TRANSFORM_EFFECT_FADE.trigger(player);
+                    ShapeShifterCurseFabric.ON_TRANSFORM_EFFECT_FADE.trigger(player, conditions -> true);
                 }
             }
 

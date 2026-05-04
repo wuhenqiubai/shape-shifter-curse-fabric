@@ -1,7 +1,6 @@
 package net.onixary.shapeShifterCurseFabric.mixin;
 
 import io.github.apace100.apoli.component.PowerHolderComponent;
-import io.github.apace100.apoli.power.ModifySlipperinessPower;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;

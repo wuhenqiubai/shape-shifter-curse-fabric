@@ -44,10 +44,11 @@ public class CustomEdiblePower extends PowerType {
         super(condition);
         this.ItemIdList = data.get("item_id_list");
         FoodComponent.Builder foodComponentBuilder = new FoodComponent.Builder()
-                .hunger(data.getInt("hunger"))
+                .nutrition(data.getInt("hunger"))
                 .saturationModifier(data.getFloat("saturation_modifier"));
         if (data.getBoolean("meat")) {
-            foodComponentBuilder.meat();
+            // In 1.21.1, FoodComponent.Builder no longer has .meat() method
+            // The meat property is now handled via ConsumableComponent
         }
         if (data.getBoolean("always_edible")) {
             foodComponentBuilder.alwaysEdible();

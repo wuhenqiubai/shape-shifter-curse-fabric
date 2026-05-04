@@ -21,7 +21,7 @@ public record SpriteBadge(Identifier spriteId) implements Badge {
     }
 
     @Override
-    public List<TooltipComponent> getTooltipComponents(PowerType<?> powerType, int widthLimit, float time, TextRenderer textRenderer) {
+    public List<TooltipComponent> getTooltipComponents(PowerType powerType, int widthLimit, float time, TextRenderer textRenderer) {
         return new ArrayList<>();
     }
 

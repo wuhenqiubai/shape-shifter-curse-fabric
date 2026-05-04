@@ -2,7 +2,6 @@ package net.onixary.shapeShifterCurseFabric.mixin;
 
 
 import net.minecraft.client.network.ClientPlayerEntity;
-import net.minecraft.client.render.entity.PlayerModelPart;
 import net.onixary.shapeShifterCurseFabric.integration.origins.component.PlayerOriginComponent;
 import net.onixary.shapeShifterCurseFabric.integration.origins.origin.OriginLayers;
 import net.onixary.shapeShifterCurseFabric.integration.origins.registry.ModComponents;
@@ -216,18 +215,18 @@ public class PlayerEntityRendererMixin {
                         if (!isInvisible) {
                             var p = m_Model.getHiddenParts();
                             var model = (PlayerEntityModel<?>) this.getModel();
-                            model.hat.visible = !p.contains(OriginFurModel.VMP.hat) && abstractClientPlayerEntity.isPartVisible(PlayerModelPart.HAT);
+                            model.hat.visible = !p.contains(OriginFurModel.VMP.hat);
                             model.head.visible = !p.contains(OriginFurModel.VMP.head);
                             model.body.visible = !p.contains(OriginFurModel.VMP.body);
-                            model.jacket.visible = !p.contains(OriginFurModel.VMP.jacket) && abstractClientPlayerEntity.isPartVisible(PlayerModelPart.JACKET);
+                            model.jacket.visible = !p.contains(OriginFurModel.VMP.jacket);
                             model.leftArm.visible = !p.contains(OriginFurModel.VMP.leftArm);
-                            model.leftSleeve.visible = !p.contains(OriginFurModel.VMP.leftSleeve) && abstractClientPlayerEntity.isPartVisible(PlayerModelPart.LEFT_SLEEVE);
+                            model.leftSleeve.visible = !p.contains(OriginFurModel.VMP.leftSleeve);
                             model.rightArm.visible = !p.contains(OriginFurModel.VMP.rightArm);
-                            model.rightSleeve.visible = !p.contains(OriginFurModel.VMP.rightSleeve) && abstractClientPlayerEntity.isPartVisible(PlayerModelPart.RIGHT_SLEEVE);
+                            model.rightSleeve.visible = !p.contains(OriginFurModel.VMP.rightSleeve);
                             model.leftLeg.visible = !p.contains(OriginFurModel.VMP.leftLeg);
-                            model.leftPants.visible = !p.contains(OriginFurModel.VMP.leftPants) && abstractClientPlayerEntity.isPartVisible(PlayerModelPart.LEFT_PANTS_LEG);
+                            model.leftPants.visible = !p.contains(OriginFurModel.VMP.leftPants);
                             model.rightLeg.visible = !p.contains(OriginFurModel.VMP.rightLeg);
-                            model.rightPants.visible = !p.contains(OriginFurModel.VMP.rightPants) && abstractClientPlayerEntity.isPartVisible(PlayerModelPart.RIGHT_PANTS_LEG);
+                            model.rightPants.visible = !p.contains(OriginFurModel.VMP.rightPants);
                             if (this.BetterCombatInstalled && IsFirstPersonView && IsClientNowPlayedPlayer && ClientUtils.ShouldEnableBetterCombatFix()) {
                                 model.hat.visible = false;
                                 model.head.visible = false;

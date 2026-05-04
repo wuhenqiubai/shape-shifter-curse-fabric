@@ -1,3 +1,5 @@
+// TODO: 1.21.1 - ArmorItem constructor changed, ArmorMaterial API changed. Needs full rewrite.
+/*
 package net.onixary.shapeShifterCurseFabric.items.armors;
 
 import net.minecraft.client.item.TooltipContext;
@@ -20,3 +22,4 @@ public class NetheriteMorphScaleArmor extends ArmorItem {
         tooltip.add(Text.translatable("item.shape-shifter-curse.morphscale_armor.tooltip").formatted(Formatting.YELLOW));
     }
 }
+*/

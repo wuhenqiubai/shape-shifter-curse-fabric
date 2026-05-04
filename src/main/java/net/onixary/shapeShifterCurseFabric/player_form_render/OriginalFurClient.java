@@ -3,7 +3,7 @@ package net.onixary.shapeShifterCurseFabric.player_form_render;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import dev.kosmx.playerAnim.minecraftApi.PlayerAnimationFactory;
-import mod.azure.azurelib.renderer.GeoObjectRenderer;
+import mod.azure.azurelib.common.api.client.renderer.GeoObjectRenderer;
 import net.onixary.shapeShifterCurseFabric.integration.origins.origin.Origin;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
@@ -98,14 +98,14 @@ public class OriginalFurClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         if (FabricLoader.getInstance().isModLoaded("player-animator") || FabricLoader.getInstance().isModLoaded("playeranimator")) {
-            PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(new Identifier("originfurs", "item_renderer"), 9999, ItemRendererFeatureAnim::new);
+            PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(Identifier.of("originfurs", "item_renderer"), 9999, ItemRendererFeatureAnim::new);
         }
         WorldRenderEvents.END.register(context -> isRenderingInWorld = false);
         WorldRenderEvents.START.register(context -> isRenderingInWorld = true);
         ResourceManagerHelper.get(ResourceType.CLIENT_RESOURCES).registerReloadListener(new SimpleSynchronousResourceReloadListener() {
             @Override
             public Identifier getFabricId() {
-                return new Identifier("originalfur", "furs");
+                return Identifier.of("originalfur", "furs");
             }
 
             final String r_M = "\\/([A-Za-z0-9_.-]+)\\.json";
@@ -117,14 +117,14 @@ public class OriginalFurClient implements ClientModInitializer {
                 for (var res : resources.keySet()) {
                     String itemName = res.getPath().substring(res.getPath().indexOf('/')+1, res.getPath().lastIndexOf('.'));
                     //System.out.println(itemName);
-                    Identifier id = new Identifier("origins", itemName);
+                    Identifier id = Identifier.of("origins", itemName);
                     var p = itemName.split("\\.", 2);
                     if (p.length > 1) {
                         id = Identifier.of(p[0], p[1]);
                     }
                     //System.out.println(id);
                     assert id != null;
-                    id = new Identifier(id.getNamespace(), id.getPath().replace('/', '.').replace('\\', '.'));
+                    id = Identifier.of(id.getNamespace(), id.getPath().replace('/', '.').replace('\\', '.'));
                     if (!res.getNamespace().contentEquals("orif-defaults")) {
                         FUR_REGISTRY.remove(id);
                         FUR_RESOURCES.remove(id);

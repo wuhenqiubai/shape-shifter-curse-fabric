@@ -1,9 +1,9 @@
 package net.onixary.shapeShifterCurseFabric.screen_effect;
 
-import ladysnake.satin.api.event.ShaderEffectRenderCallback;
-import ladysnake.satin.api.managed.ManagedShaderEffect;
-import ladysnake.satin.api.managed.ShaderEffectManager;
-import ladysnake.satin.api.managed.uniform.Uniform1f;
+import org.ladysnake.satin.api.event.ShaderEffectRenderCallback;
+import org.ladysnake.satin.api.managed.ManagedShaderEffect;
+import org.ladysnake.satin.api.managed.ShaderEffectManager;
+import org.ladysnake.satin.api.managed.uniform.Uniform1f;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gl.Framebuffer;
@@ -14,7 +14,7 @@ import org.jetbrains.annotations.Nullable;
 import static net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric.MOD_ID;
 
 public final class TransformFX implements ShaderEffectRenderCallback, ClientTickEvents.EndTick {
-    public static final Identifier TRANSFORM_EFFECT_SHADER_ID = new Identifier(MOD_ID,"shaders/post/transform_effect.json");
+    public static final Identifier TRANSFORM_EFFECT_SHADER_ID = Identifier.of(MOD_ID,"shaders/post/transform_effect.json");
 
     public static final TransformFX INSTANCE = new TransformFX();
     private final MinecraftClient mc = MinecraftClient.getInstance();

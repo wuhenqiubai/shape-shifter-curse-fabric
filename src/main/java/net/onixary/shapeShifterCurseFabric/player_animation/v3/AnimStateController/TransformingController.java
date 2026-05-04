@@ -57,9 +57,9 @@ public class TransformingController extends AbstractAnimStateController {
 
     @Override
     public void registerAnim(PlayerEntity player, AnimSystem.AnimSystemData data) {
-        anim_on_transform_default = new AnimationHolder(new Identifier(MOD_ID, "player_on_transform"), true);
-        anim_on_transform_normal_to_feral = new AnimationHolder(new Identifier(MOD_ID, "player_on_transform_normal_to_feral"), true);
-        anim_on_transform_feral_to_normal = new AnimationHolder(new Identifier(MOD_ID, "player_on_transform_feral_to_normal"), true);
+        anim_on_transform_default = new AnimationHolder(Identifier.of(MOD_ID, "player_on_transform"), true);
+        anim_on_transform_normal_to_feral = new AnimationHolder(Identifier.of(MOD_ID, "player_on_transform_normal_to_feral"), true);
+        anim_on_transform_feral_to_normal = new AnimationHolder(Identifier.of(MOD_ID, "player_on_transform_feral_to_normal"), true);
         super.registerAnim(player, data);
     }
 

@@ -1,18 +1,22 @@
 package net.onixary.shapeShifterCurseFabric.items;
 
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.PotionContentsComponent;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.*;
 import net.minecraft.potion.Potion;
-import net.minecraft.potion.PotionUtil;
+// TODO: 1.21.1 - PotionUtil replaced by DataComponentTypes
+// import net.minecraft.potion.PotionUtil;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric;
-import net.onixary.shapeShifterCurseFabric.items.armors.MorphScaleArmor;
-import net.onixary.shapeShifterCurseFabric.items.armors.NetheriteMorphScaleArmor;
+// FIXME: 1.21.1 — MorphScaleArmor and NetheriteMorphScaleArmor not yet migrated
+// import net.onixary.shapeShifterCurseFabric.items.armors.MorphScaleArmor;
+// import net.onixary.shapeShifterCurseFabric.items.armors.NetheriteMorphScaleArmor;
 import net.onixary.shapeShifterCurseFabric.items.tools.*;
 import net.onixary.shapeShifterCurseFabric.items.trinkets.*;
 
@@ -38,15 +42,16 @@ public class RegCustomItem {
     public static final Item MOONDUST_MATRIX = register("moondust_matrix", new MoonDustMatrix(new Item.Settings()));
     // morphscale armor
     public static final Item MORPHSCALE_CORE = register("morphscale_core", new Item(new Item.Settings()));
-    public static final Item MORPHSCALE_HEADRING = register("morphscale_headring", new MorphScaleArmor(ArmorItem.Type.HELMET));
-    public static final Item MORPHSCALE_VEST = register("morphscale_vest", new MorphScaleArmor(ArmorItem.Type.CHESTPLATE));
-    public static final Item MORPHSCALE_CUISH = register("morphscale_cuish", new MorphScaleArmor(ArmorItem.Type.LEGGINGS));
-    public static final Item MORPHSCALE_ANKLET = register("morphscale_anklet", new MorphScaleArmor(ArmorItem.Type.BOOTS));
+    // FIXME: 1.21.1 — MorphScale armor needs ArmorMaterial API migration
+    // public static final Item MORPHSCALE_HEADRING = register("morphscale_headring", new MorphScaleArmor(ArmorItem.Type.HELMET));
+    // public static final Item MORPHSCALE_VEST = register("morphscale_vest", new MorphScaleArmor(ArmorItem.Type.CHESTPLATE));
+    // public static final Item MORPHSCALE_CUISH = register("morphscale_cuish", new MorphScaleArmor(ArmorItem.Type.LEGGINGS));
+    // public static final Item MORPHSCALE_ANKLET = register("morphscale_anklet", new MorphScaleArmor(ArmorItem.Type.BOOTS));
     // netherite morphscale armor
-    public static final Item NETHERITE_MORPHSCALE_HEADRING = register("netherite_morphscale_headring", new NetheriteMorphScaleArmor(ArmorItem.Type.HELMET));
-    public static final Item NETHERITE_MORPHSCALE_VEST = register("netherite_morphscale_vest", new NetheriteMorphScaleArmor(ArmorItem.Type.CHESTPLATE));
-    public static final Item NETHERITE_MORPHSCALE_CUISH = register("netherite_morphscale_cuish", new NetheriteMorphScaleArmor(ArmorItem.Type.LEGGINGS));
-    public static final Item NETHERITE_MORPHSCALE_ANKLET = register("netherite_morphscale_anklet", new NetheriteMorphScaleArmor(ArmorItem.Type.BOOTS));
+    // public static final Item NETHERITE_MORPHSCALE_HEADRING = register("netherite_morphscale_headring", new NetheriteMorphScaleArmor(ArmorItem.Type.HELMET));
+    // public static final Item NETHERITE_MORPHSCALE_VEST = register("netherite_morphscale_vest", new NetheriteMorphScaleArmor(ArmorItem.Type.CHESTPLATE));
+    // public static final Item NETHERITE_MORPHSCALE_CUISH = register("netherite_morphscale_cuish", new NetheriteMorphScaleArmor(ArmorItem.Type.LEGGINGS));
+    // public static final Item NETHERITE_MORPHSCALE_ANKLET = register("netherite_morphscale_anklet", new NetheriteMorphScaleArmor(ArmorItem.Type.BOOTS));
     // 模组自定义物品
     public static final Item MOONDUST_CRYSTAL_SHARD = register("moondust_crystal_shard", new MoonDustCrystalShard(new MoonDustCrystalShard.Settings()));
     public static final Item ECTOPLASM_RAG = register("ectoplasm_rag", new Item(new Item.Settings()));
@@ -87,7 +92,7 @@ public class RegCustomItem {
 
     public static ItemStack buildPotion(Item PotionItem, Potion potion) {
         ItemStack potionStack = new ItemStack(PotionItem);
-        PotionUtil.setPotion(potionStack, potion);
+        potionStack.set(DataComponentTypes.POTION_CONTENTS, new PotionContentsComponent(potion));
         return potionStack;
     }
 
@@ -121,14 +126,15 @@ public class RegCustomItem {
                 entries.add(CREATIVE_INHIBITOR);
                 entries.add(CATALYST);
                 entries.add(POWERFUL_CATALYST);
-                entries.add(MORPHSCALE_HEADRING);
-                entries.add(MORPHSCALE_VEST);
-                entries.add(MORPHSCALE_CUISH);
-                entries.add(MORPHSCALE_ANKLET);
-                entries.add(NETHERITE_MORPHSCALE_HEADRING);
-                entries.add(NETHERITE_MORPHSCALE_VEST);
-                entries.add(NETHERITE_MORPHSCALE_CUISH);
-                entries.add(NETHERITE_MORPHSCALE_ANKLET);
+                // FIXME: 1.21.1 — MorphScale armor not yet migrated
+                // entries.add(MORPHSCALE_HEADRING);
+                // entries.add(MORPHSCALE_VEST);
+                // entries.add(MORPHSCALE_CUISH);
+                // entries.add(MORPHSCALE_ANKLET);
+                // entries.add(NETHERITE_MORPHSCALE_HEADRING);
+                // entries.add(NETHERITE_MORPHSCALE_VEST);
+                // entries.add(NETHERITE_MORPHSCALE_CUISH);
+                // entries.add(NETHERITE_MORPHSCALE_ANKLET);
                 entries.add(DIAMOND_MINING_CLAW);
                 entries.add(MOONDUST_CRYSTAL_SHARD);
                 entries.add(ECTOPLASM_RAG);
@@ -179,7 +185,7 @@ public class RegCustomItem {
             .build();
 
     public static <T extends Item> T register(String path, T item) {
-        return Registry.register(Registries.ITEM, new Identifier(ShapeShifterCurseFabric.MOD_ID, path), item);
+        return Registry.register(Registries.ITEM, Identifier.of(ShapeShifterCurseFabric.MOD_ID, path), item);
     }
 
     public static void initialize() {

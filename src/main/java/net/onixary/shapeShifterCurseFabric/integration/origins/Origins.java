@@ -4,10 +4,8 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import io.github.apace100.apoli.Apoli;
+import io.github.apace100.apoli.power.PowerManager;
 import io.github.apace100.apoli.power.type.PowerType;
-import io.github.apace100.apoli.power.PowerTypes;
-import io.github.apace100.apoli.util.NamespaceAlias;
-import io.github.apace100.calio.mixin.CriteriaRegistryInvoker;
 import io.github.apace100.calio.resource.OrderedResourceListenerInitializer;
 import io.github.apace100.calio.resource.OrderedResourceListenerManager;
 import net.onixary.shapeShifterCurseFabric.integration.origins.badge.BadgeManager;
@@ -77,9 +75,7 @@ public class Origins implements ModInitializer, OrderedResourceListenerInitializ
 			});
 		config = AutoConfig.getConfigHolder(ServerConfig.class).getConfig();
 
-		NamespaceAlias.addAlias(MODID, "apoli");
-
-		OriginsPowerTypes.register();
+OriginsPowerTypes.register();
 		OriginsEntityConditions.register();
 
 		ModBlocks.register();
@@ -98,7 +94,7 @@ public class Origins implements ModInitializer, OrderedResourceListenerInitializ
 			//content.add(ModItems.ORB_OF_ORIGIN);
 		});
 
-		CriteriaRegistryInvoker.callRegister(ChoseOriginCriterion.INSTANCE);
+		net.minecraft.advancement.criterion.Criteria.register(ChoseOriginCriterion.INSTANCE);
 	}
 
 	public static void serializeConfig() {
@@ -110,7 +106,7 @@ public class Origins implements ModInitializer, OrderedResourceListenerInitializ
 	}
 
 	public static Identifier identifier(String path) {
-		return new Identifier(Origins.MODID, path);
+		return Identifier.of(Origins.MODID, path);
 	}
 
 	@Override
@@ -126,7 +122,7 @@ public class Origins implements ModInitializer, OrderedResourceListenerInitializ
 
 		IdentifiableResourceReloadListener badgeLoader = BadgeManager.REGISTRY.getLoader();
 		manager.register(ResourceType.SERVER_DATA, badgeLoader).before(powerData).complete();
-		PowerTypes.DEPENDENCIES.add(badgeLoader.getFabricId());
+		PowerManager.DEPENDENCIES.add(badgeLoader.getFabricId());
 	}
 
 	@Config(name = Origins.MODID + "_server")

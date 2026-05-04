@@ -2,6 +2,7 @@ package net.onixary.shapeShifterCurseFabric.additional_power;
 
 import io.github.apace100.apoli.action.ActionConfiguration;
 import io.github.apace100.apoli.action.context.EntityActionContext;
+import io.github.apace100.apoli.action.type.BiEntityActionType;
 import io.github.apace100.apoli.action.type.EntityActionType;
 import io.github.apace100.apoli.condition.ConditionConfiguration;
 import io.github.apace100.apoli.condition.context.EntityConditionContext;
@@ -75,7 +76,7 @@ public class ItemCooldownCA {
     }
 
     public static void registerAction(Consumer<ActionConfiguration<SetItemCooldownAction>> actionReg,
-                                       Consumer<?> biActionReg) {
+                                       Consumer<ActionConfiguration<? extends BiEntityActionType>> biActionReg) {
         actionReg.accept(ActionConfiguration.of(
                 ShapeShifterCurseFabric.identifier("set_item_cooldown"), SetItemCooldownAction.DATA_FACTORY));
     }

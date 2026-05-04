@@ -19,7 +19,7 @@ import org.joml.Quaternionf;
 import static net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric.MOD_ID;
 
 public class BookOfShapeShifterScreenV2_P1 extends Screen {
-    private static final Identifier page_texID = new Identifier(MOD_ID,"textures/gui/codex_page_1.png");
+    private static final Identifier page_texID = Identifier.of(MOD_ID,"textures/gui/codex_page_1.png");
     public PlayerEntity currentPlayer;
     public static final int BookSizeX = 350;
     public static final int BookSizeY = 220;

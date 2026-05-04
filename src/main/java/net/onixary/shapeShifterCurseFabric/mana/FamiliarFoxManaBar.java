@@ -15,8 +15,8 @@ import static net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric.MOD_ID
 public class FamiliarFoxManaBar implements IManaRender{
     private static final MinecraftClient mc = MinecraftClient.getInstance();
 
-    private static final Identifier BarTexFullID = new Identifier(MOD_ID, "textures/gui/familiar_fox_mana_bar_full.png");
-    private static final Identifier BarTexEmptyID = new Identifier(MOD_ID, "textures/gui/familiar_fox_mana_bar_empty.png");
+    private static final Identifier BarTexFullID = Identifier.of(MOD_ID, "textures/gui/familiar_fox_mana_bar_full.png");
+    private static final Identifier BarTexEmptyID = Identifier.of(MOD_ID, "textures/gui/familiar_fox_mana_bar_empty.png");
 
     @Override
     public boolean OverrideInstinctBar() {

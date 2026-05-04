@@ -2,7 +2,7 @@ package net.onixary.shapeShifterCurseFabric.player_form.ability;
 
 import io.github.apace100.apoli.component.PowerHolderComponent;
 import io.github.apace100.apoli.power.type.PowerType;
-import io.github.apace100.apoli.power.PowerTypeRegistry;
+import io.github.apace100.apoli.power.PowerManager;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
@@ -156,8 +156,8 @@ public class FormAbilityManager {
     }
 
     private static void applyPower(PlayerEntity player, Identifier powerId, Identifier powerSource) {
-        if (PowerTypeRegistry.contains(powerId)) {
-            PowerType<?> powerType = PowerTypeRegistry.get(powerId);
+        if (PowerManager.contains(powerId)) {
+            PowerType powerType = PowerManager.get(powerId);
             if (powerType != null) {
                 PowerHolderComponent powerHolder = PowerHolderComponent.KEY.get(player);
                 powerHolder.addPower(powerType, powerSource);
@@ -170,13 +170,13 @@ public class FormAbilityManager {
                     boolean FoundPower = false;
                     for (int i = 0; i < 20; i++) {
                         Thread.sleep(100);
-                        if (PowerTypeRegistry.contains(powerId)) {
+                        if (PowerManager.contains(powerId)) {
                             FoundPower = true;
                             break;
                         }
                     }
                     if (FoundPower) {
-                        PowerType<?> powerType = PowerTypeRegistry.get(powerId);
+                        PowerType powerType = PowerManager.get(powerId);
                         if (powerType != null) {
                             PowerHolderComponent powerHolder = PowerHolderComponent.KEY.get(player);
                             powerHolder.addPower(powerType, powerSource);

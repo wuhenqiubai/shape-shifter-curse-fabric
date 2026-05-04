@@ -66,8 +66,8 @@ public class SummonMinionWolfNearbyAction {
 
         @Override
         public void accept(BiEntityActionContext context) {
-            Entity owner = reverse ? context.actor2() : context.actor1();
-            Entity spawnNearbyTarget = reverse ? context.actor1() : context.actor2();
+            Entity owner = reverse ? context.target() : context.actor();
+            Entity spawnNearbyTarget = reverse ? context.actor() : context.target();
             spawnMinions(owner, spawnNearbyTarget);
         }
 
@@ -98,8 +98,8 @@ public class SummonMinionWolfNearbyAction {
             }
             if (summonSuccess) {
                 MinionRegister.SetCoolDown(AnubisWolfMinionEntity.MinionID, player);
-                ownerAction.ifPresent(a -> a.accept(owner));
-                targetAction.ifPresent(a -> a.accept(spawnNearbyTarget));
+                ownerAction.ifPresent(a -> a.accept(new EntityActionContext(owner)));
+                targetAction.ifPresent(a -> a.accept(new EntityActionContext(spawnNearbyTarget)));
                 if (player.getWorld() instanceof ServerWorld serverWorld) {
                     player.getWorld().playSound(null, player.getBlockPos(), SoundEvents.ENTITY_WOLF_GROWL, player.getSoundCategory(), 1.0f, 1.5f);
                     serverWorld.spawnParticles(player, ParticleTypes.SOUL_FIRE_FLAME, true, player.getBlockPos().getX() + 0.5f, player.getBlockPos().getY() + 0.5f, player.getBlockPos().getZ() + 0.5f, 8, 0, 0, 0, 0);

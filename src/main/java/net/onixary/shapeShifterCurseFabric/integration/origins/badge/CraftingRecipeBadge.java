@@ -54,7 +54,7 @@ public record CraftingRecipeBadge(Identifier spriteId,
     }
 
     @Override
-    public List<TooltipComponent> getTooltipComponents(PowerType<?> powerType, int widthLimit, float time, TextRenderer textRenderer) {
+    public List<TooltipComponent> getTooltipComponents(PowerType powerType, int widthLimit, float time, TextRenderer textRenderer) {
         List<TooltipComponent> tooltips = new LinkedList<>();
         if(MinecraftClient.getInstance().world == null) {
             Origins.LOGGER.warn("Could not construct crafting recipe badge, because world was null");

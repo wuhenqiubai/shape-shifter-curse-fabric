@@ -34,7 +34,7 @@ public record TooltipBadge(Identifier spriteId, Text text) implements Badge {
     }
 
     @Override
-    public List<TooltipComponent> getTooltipComponents(PowerType<?> powerType, int widthLimit, float time, TextRenderer textRenderer) {
+    public List<TooltipComponent> getTooltipComponents(PowerType powerType, int widthLimit, float time, TextRenderer textRenderer) {
         List<TooltipComponent> tooltips = new LinkedList<>();
         addLines(tooltips, text, textRenderer, widthLimit);
         return tooltips;

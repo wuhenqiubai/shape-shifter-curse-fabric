@@ -1,6 +1,6 @@
 package net.onixary.shapeShifterCurseFabric.items;
 
-import net.minecraft.client.item.TooltipContext;
+import net.minecraft.item.Item.TooltipContext;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;

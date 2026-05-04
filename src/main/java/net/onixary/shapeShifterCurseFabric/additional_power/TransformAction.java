@@ -2,6 +2,7 @@ package net.onixary.shapeShifterCurseFabric.additional_power;
 
 import io.github.apace100.apoli.action.ActionConfiguration;
 import io.github.apace100.apoli.action.context.EntityActionContext;
+import io.github.apace100.apoli.action.type.BiEntityActionType;
 import io.github.apace100.apoli.action.type.EntityActionType;
 import io.github.apace100.apoli.data.TypedDataObjectFactory;
 import io.github.apace100.calio.data.SerializableData;
@@ -90,8 +91,9 @@ public class TransformAction {
         }
     }
 
-    public static void registerAction(Consumer<ActionConfiguration<TransformToFormAction>> actionReg,
-                                       Consumer<?> biActionReg) {
+    @SuppressWarnings("unchecked")
+    public static void registerAction(Consumer<ActionConfiguration<? extends EntityActionType>> actionReg,
+                                       Consumer<ActionConfiguration<? extends BiEntityActionType>> biActionReg) {
         actionReg.accept(ActionConfiguration.of(
                 ShapeShifterCurseFabric.identifier("transform_to_form"),
                 TransformToFormAction.DATA_FACTORY

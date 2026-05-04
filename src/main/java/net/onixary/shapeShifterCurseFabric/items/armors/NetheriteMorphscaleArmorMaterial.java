@@ -1,3 +1,5 @@
+// TODO: 1.21.1 - ArmorMaterial interface changed significantly. Needs full rewrite with new record-based API.
+/*
 package net.onixary.shapeShifterCurseFabric.items.armors;
 
 import net.minecraft.item.ArmorItem;
@@ -15,8 +17,6 @@ public class NetheriteMorphscaleArmorMaterial implements ArmorMaterial {
 
     @Override
     public int getDurability(ArmorItem.Type type) {
-        // Replace this multiplier by a constant value for the durability of the armor.
-        // For reference, diamond uses 33 for all armor pieces, whilst leather uses 5.
         return switch (type) {
             case BOOTS -> BASE_DURABILITY[0];
             case LEGGINGS -> BASE_DURABILITY[1];
@@ -28,9 +28,6 @@ public class NetheriteMorphscaleArmorMaterial implements ArmorMaterial {
 
     @Override
     public int getProtection(ArmorItem.Type type) {
-        // Protection values for all the slots.
-        // For reference, diamond uses 3 for boots, 6 for leggings, 8 for chestplate, and 3 for helmet,
-        // whilst leather uses 1, 2, 3 and 1 respectively.
         return switch (type) {
             case HELMET -> PROTECTION_VALUES[0];
             case LEGGINGS -> PROTECTION_VALUES[1];
@@ -57,7 +54,6 @@ public class NetheriteMorphscaleArmorMaterial implements ArmorMaterial {
 
     @Override
     public String getName() {
-        // Must be all lowercase
         return "netherite_morphscale";
     }
 
@@ -71,3 +67,4 @@ public class NetheriteMorphscaleArmorMaterial implements ArmorMaterial {
         return 0.1f;
     }
 }
+*/

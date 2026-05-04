@@ -99,8 +99,8 @@ public class DelayAttributePower extends PowerType {
         float previousMaxHealth = entity.getMaxHealth();
         float previousHealthPercent = entity.getHealth() / previousMaxHealth;
         this.modifiers.forEach((mod) -> {
-            if (entity.getAttributes().hasAttribute(mod.getAttribute())) {
-                EntityAttributeInstance instance = entity.getAttributeInstance(mod.getAttribute());
+            if (entity.getAttributes().hasAttribute(net.minecraft.registry.entry.RegistryEntry.of(mod.getAttribute()))) {
+                EntityAttributeInstance instance = entity.getAttributeInstance(net.minecraft.registry.entry.RegistryEntry.of(mod.getAttribute()));
                 if (instance != null && !instance.hasModifier(mod.getModifier())) {
                     instance.addTemporaryModifier(mod.getModifier());
                 }
@@ -118,8 +118,8 @@ public class DelayAttributePower extends PowerType {
         float previousMaxHealth = entity.getMaxHealth();
         float previousHealthPercent = entity.getHealth() / previousMaxHealth;
         this.modifiers.forEach((mod) -> {
-            if (entity.getAttributes().hasAttribute(mod.getAttribute())) {
-                EntityAttributeInstance instance = entity.getAttributeInstance(mod.getAttribute());
+            if (entity.getAttributes().hasAttribute(net.minecraft.registry.entry.RegistryEntry.of(mod.getAttribute()))) {
+                EntityAttributeInstance instance = entity.getAttributeInstance(net.minecraft.registry.entry.RegistryEntry.of(mod.getAttribute()));
                 if (instance != null && instance.hasModifier(mod.getModifier())) {
                     instance.removeModifier(mod.getModifier());
                 }

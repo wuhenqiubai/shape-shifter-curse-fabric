@@ -2,8 +2,8 @@ package net.onixary.shapeShifterCurseFabric.util;
 
 import net.fabricmc.fabric.api.event.player.AttackEntityCallback;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityGroup;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.mob.IllagerEntity;
 import net.minecraft.entity.mob.WitchEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ActionResult;
@@ -58,7 +58,7 @@ public class AttackEntityDataTracker {
             lastAttackWitchTimeMap.put(player.getUuid(), world.getTime());
         }
         if (target instanceof LivingEntity livingEntity) {
-            if (livingEntity.getGroup() == EntityGroup.ILLAGER || livingEntity.getType().isIn(ModTags.Illager_Tag)) {
+            if (livingEntity instanceof IllagerEntity || livingEntity.getType().isIn(ModTags.Illager_Tag)) {
                 lastAttackPillagerTimeMap.put(player.getUuid(), world.getTime());
             }
         }

@@ -1,6 +1,7 @@
 package net.onixary.shapeShifterCurseFabric.additional_power;
 
 import io.github.apace100.apoli.action.EntityAction;
+import io.github.apace100.apoli.action.context.EntityActionContext;
 import io.github.apace100.apoli.component.PowerHolderComponent;
 import io.github.apace100.apoli.condition.EntityCondition;
 import io.github.apace100.apoli.data.TypedDataObjectFactory;
@@ -64,14 +65,14 @@ public class ChargePower extends PowerType {
                     power.ChargeTime = power.ChargeTime - 1;
                 } else {
                     if (this.chargeTickAction != null) {
-                        this.chargeTickAction.accept(entity);
+                        this.chargeTickAction.accept(new EntityActionContext(entity, entity.getPos()));
                     }
                     if (power.ChargeTime >= this.chargeTime) {
                         if (this.condition != null && !this.condition.test(entity)) {
                             power.ChargeTime = this.chargeTime - 1;
                         } else {
                             if (this.chargeCompleteAction != null) {
-                                this.chargeCompleteAction.accept(entity);
+                                this.chargeCompleteAction.accept(new EntityActionContext(entity, entity.getPos()));
                             }
                             power.nowTier = this.tier;
                             power.updateTier();
@@ -82,12 +83,12 @@ public class ChargePower extends PowerType {
             }
             if (power.nowTier == this.tier) {
                 if (this.tickAction != null) {
-                    this.tickAction.accept(entity);
+                    this.tickAction.accept(new EntityActionContext(entity, entity.getPos()));
                 }
             }
             if (power.nowTier >= this.tier) {
                 if (this.chargeCompleteTickAction != null) {
-                    this.chargeCompleteTickAction.accept(entity);
+                    this.chargeCompleteTickAction.accept(new EntityActionContext(entity, entity.getPos()));
                 }
             }
             if (checkAutoFire && this.autoFireCondition != null && this.autoFireCondition.test(entity)) {
@@ -99,13 +100,13 @@ public class ChargePower extends PowerType {
             LivingEntity entity = power.getHolder();
             if (power.nowTier == this.tier) {
                 if (this.useAction != null) {
-                    this.useAction.accept(entity);
+                    this.useAction.accept(new EntityActionContext(entity, entity.getPos()));
                 }
                 power.nowCooldown = this.cooldown;
             }
             if (power.nowTier >= this.tier) {
                 if (this.chargeCompleteUseAction != null) {
-                    this.chargeCompleteUseAction.accept(entity);
+                    this.chargeCompleteUseAction.accept(new EntityActionContext(entity, entity.getPos()));
                 }
             }
         }

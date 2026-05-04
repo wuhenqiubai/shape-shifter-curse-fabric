@@ -20,7 +20,7 @@ public interface Badge extends DataObject<Badge> {
     boolean hasTooltip();
     
     @Environment(EnvType.CLIENT)
-    List<TooltipComponent> getTooltipComponents(PowerType<?> powerType, int widthLimit, float time, TextRenderer textRenderer);
+    List<TooltipComponent> getTooltipComponents(PowerType powerType, int widthLimit, float time, TextRenderer textRenderer);
 
     SerializableData.Instance toData(SerializableData.Instance instance);
 

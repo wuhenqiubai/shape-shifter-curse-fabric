@@ -26,6 +26,6 @@ public interface AutoBadgeCallback {
         }
     );
 
-    void createAutoBadge(Identifier powerId, PowerType<?> powerType, List<Badge> badgeList);
+    void createAutoBadge(Identifier powerId, PowerType powerType, List<Badge> badgeList);
 
 }

@@ -1,6 +1,7 @@
 package net.onixary.shapeShifterCurseFabric.integration.origins.badge;
 
 import io.github.apace100.apoli.power.*;
+import io.github.apace100.apoli.power.type.PowerType;
 import io.github.apace100.calio.data.SerializableData;
 import net.onixary.shapeShifterCurseFabric.integration.origins.util.PowerKeyManager;
 import net.minecraft.client.font.TextRenderer;
@@ -37,7 +38,7 @@ public record KeybindBadge(Identifier spriteId, String text) implements Badge {
     }
 
     @Override
-    public List<TooltipComponent> getTooltipComponents(PowerType<?> powerType, int widthLimit, float time, TextRenderer textRenderer) {
+    public List<TooltipComponent> getTooltipComponents(PowerType powerType, int widthLimit, float time, TextRenderer textRenderer) {
         List<TooltipComponent> tooltips = new LinkedList<>();
         Text keyText;
         keyText = ((MutableText)Text.of("["))

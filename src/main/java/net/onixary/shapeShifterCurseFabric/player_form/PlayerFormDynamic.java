@@ -6,9 +6,7 @@ import com.google.gson.JsonObject;
 import net.minecraft.entity.player.PlayerEntity;
 import io.github.apace100.apoli.power.Power;
 import io.github.apace100.apoli.power.type.PowerType;
-import io.github.apace100.apoli.power.type.PowerType;
 import io.github.apace100.apoli.registry.ApoliRegistries;
-import io.github.apace100.apoli.util.NamespaceAlias;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Pair;
 import net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric;
@@ -291,26 +289,28 @@ public class PlayerFormDynamic extends PlayerFormBase{
     }
 
     private Identifier registerPower(JsonObject powerData) {
-        Identifier powerID = new Identifier(this.FormID.getNamespace(), this.FormID.getPath() + "_tpower_" + this.TempPowerIndex);
+        Identifier powerID = Identifier.of(this.FormID.getNamespace(), this.FormID.getPath() + "_tpower_" + this.TempPowerIndex);
         if (powerData == null) {
             return null;
         }
         try {
             Identifier PowerID = Identifier.tryParse(powerData.get("type").getAsString());
-            PowerFactory<Power> pf = null;
-            if (NamespaceAlias.hasAlias(PowerID)) {
-                pf = ApoliRegistries.POWER_FACTORY.get(NamespaceAlias.resolveAlias(PowerID));
-            }
-            else {
-                pf = ApoliRegistries.POWER_FACTORY.get(PowerID);
-            }
+            // FIXME: 1.21.1 — NamespaceAlias removed, PowerFactory replaced by PowerType in Apoli 2.12
+            // FIXME: 1.21.1 — Dynamic power registration API completely changed. PowerType is now abstract.
+            // The old PowerFactory<Power>.Instance and PowerType(powerID, pi) patterns no longer exist.
+            // This entire method needs to be rewritten for Apoli 2.12's TypedDataObjectFactory-based system.
+            ShapeShifterCurseFabric.LOGGER.warn("Dynamic power registration not yet migrated to Apoli 2.12: {}", powerData.toString());
+            return null;
+            /*
+            PowerType<?> pf = (PowerType<?>) ApoliRegistries.POWER_TYPE.get(PowerID);
             if (pf == null) {
                 ShapeShifterCurseFabric.LOGGER.warn("Power Factory is null! From {}", this.FormID.toString());
                 return null;
             }
             PowerFactory<Power>.Instance pi = pf.read(powerData);
-            PowerType<?> powerType = new PowerType<>(powerID, pi);
+            PowerType powerType = new PowerType(powerID, pi);
             PowerTypeRegistryAccessor.Invoke_Update(powerID, powerType);
+            */
         } catch (Exception e) {
             ShapeShifterCurseFabric.LOGGER.warn("Failed to register power: {}", powerData.toString());
             return null;

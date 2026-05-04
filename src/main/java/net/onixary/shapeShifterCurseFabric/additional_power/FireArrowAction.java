@@ -3,6 +3,7 @@ package net.onixary.shapeShifterCurseFabric.additional_power;
 import io.github.apace100.apoli.action.ActionConfiguration;
 import io.github.apace100.apoli.action.EntityAction;
 import io.github.apace100.apoli.action.context.EntityActionContext;
+import io.github.apace100.apoli.action.type.BiEntityActionType;
 import io.github.apace100.apoli.action.type.EntityActionType;
 import io.github.apace100.apoli.data.TypedDataObjectFactory;
 import io.github.apace100.calio.data.SerializableData;
@@ -76,7 +77,7 @@ public class FireArrowAction extends EntityActionType {
     private void spawnFireArrow(LivingEntity owner) {
         ArrowItem arrowItem = (ArrowItem) Items.ARROW;
         ItemStack itemStack = new ItemStack(arrowItem);
-        PersistentProjectileEntity arrow = arrowItem.createArrow(owner.getWorld(), itemStack, hasOwner ? owner : null);
+        PersistentProjectileEntity arrow = arrowItem.createArrow(owner.getWorld(), itemStack, hasOwner ? owner : null, itemStack);
         if (fireTime > 0) arrow.setOnFireFor(fireTime);
         if (noGravity) arrow.setNoGravity(true);
         arrow.setVelocity(owner, owner.getPitch(), owner.getYaw(), 0.0F, speed, spread);
@@ -84,7 +85,7 @@ public class FireArrowAction extends EntityActionType {
         if (critical) arrow.setCritical(true);
         arrow.pickupType = PersistentProjectileEntity.PickupPermission.CREATIVE_ONLY;
         if (owner.getWorld().spawnEntity(arrow)) {
-            projectileAction.ifPresent(a -> a.accept(arrow));
+            projectileAction.ifPresent(a -> a.accept(new EntityActionContext(arrow)));
         }
     }
 
@@ -98,7 +99,7 @@ public class FireArrowAction extends EntityActionType {
     }
 
     public static void registerAction(Consumer<ActionConfiguration<FireArrowAction>> actionReg,
-                                       Consumer<?> biActionReg) {
+                                       Consumer<ActionConfiguration<? extends BiEntityActionType>> biActionReg) {
         actionReg.accept(createConfig(ShapeShifterCurseFabric.identifier("fire_arrow")));
     }
 }

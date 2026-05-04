@@ -1,6 +1,8 @@
 package net.onixary.shapeShifterCurseFabric.additional_power;
 
 import io.github.apace100.apoli.action.EntityAction;
+import io.github.apace100.apoli.action.context.EntityActionContext;
+import io.github.apace100.apoli.condition.BlockCondition;
 import io.github.apace100.apoli.condition.EntityCondition;
 import io.github.apace100.apoli.data.ApoliDataTypes;
 import io.github.apace100.apoli.data.TypedDataObjectFactory;
@@ -52,7 +54,7 @@ public class BatBlockAttachPower extends PowerType {
             PowerType.createConditionedDataFactory(
                     new SerializableData()
                             .add("attach_condition", EntityCondition.DATA_TYPE.optional(), Optional.empty())
-                            .add("block_condition", ApoliDataTypes.BLOCK_CONDITION, null)
+                            .add("block_condition", BlockCondition.DATA_TYPE, null)
                             .add("side_attach_action", EntityAction.DATA_TYPE.optional(), Optional.empty())
                             .add("bottom_attach_action", EntityAction.DATA_TYPE.optional(), Optional.empty())
                             .add("bottom_attach_interval", SerializableDataTypes.INT, 20),
@@ -129,7 +131,7 @@ public class BatBlockAttachPower extends PowerType {
             if (isAttached && attachType == AttachType.BOTTOM && bottomAttachAction != null) {
                 bottomAttachTimer++;
                 if (bottomAttachTimer >= bottomAttachInterval) {
-                    bottomAttachAction.accept(entity);
+                    bottomAttachAction.accept(new EntityActionContext(entity, entity.getPos()));
                     bottomAttachTimer = 0;
                 }
             }
@@ -221,7 +223,7 @@ public class BatBlockAttachPower extends PowerType {
         }
 
         if (attachType == AttachType.SIDE && sideAttachAction != null) {
-            sideAttachAction.accept(getHolder());
+            sideAttachAction.accept(new EntityActionContext(getHolder(), getHolder().getPos()));
         }
 
         isAttached = false;

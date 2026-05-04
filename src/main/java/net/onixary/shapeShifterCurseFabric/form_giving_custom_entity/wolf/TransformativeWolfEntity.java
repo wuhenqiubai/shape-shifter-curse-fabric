@@ -163,7 +163,7 @@ public class TransformativeWolfEntity extends WolfEntity implements ITMob {
 
     @Override
     protected Identifier getLootTableId() {
-        return new Identifier(ShapeShifterCurseFabric.MOD_ID, "entities/t_wolf");
+        return Identifier.of(ShapeShifterCurseFabric.MOD_ID, "entities/t_wolf");
     }
 
     @Override

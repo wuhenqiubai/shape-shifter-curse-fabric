@@ -1,6 +1,7 @@
 package net.onixary.shapeShifterCurseFabric.additional_power;
 
 import io.github.apace100.apoli.action.EntityAction;
+import io.github.apace100.apoli.action.context.EntityActionContext;
 import io.github.apace100.apoli.component.PowerHolderComponent;
 import io.github.apace100.apoli.condition.EntityCondition;
 import io.github.apace100.apoli.data.TypedDataObjectFactory;
@@ -135,11 +136,11 @@ public class AttractByEntityPower extends PowerType {
             player.velocityModified = true;
 
             if (entityAction != null) {
-                entityAction.accept(targetEntity);
+                entityAction.accept(new EntityActionContext(targetEntity, targetEntity.getPos()));
             }
 
             if (selfAction != null) {
-                selfAction.accept(player);
+                selfAction.accept(new EntityActionContext(player, player.getPos()));
             }
 
             PowerHolderComponent.sync(player);

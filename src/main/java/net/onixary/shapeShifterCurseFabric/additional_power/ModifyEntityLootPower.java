@@ -1,6 +1,7 @@
 package net.onixary.shapeShifterCurseFabric.additional_power;
 
 import io.github.apace100.apoli.condition.EntityCondition;
+import io.github.apace100.apoli.condition.ItemCondition;
 import io.github.apace100.apoli.data.TypedDataObjectFactory;
 import io.github.apace100.apoli.power.PowerConfiguration;
 import io.github.apace100.apoli.power.type.PowerType;
@@ -24,7 +25,7 @@ public class ModifyEntityLootPower extends PowerType {
     public static final TypedDataObjectFactory<ModifyEntityLootPower> DATA_FACTORY =
             PowerType.createConditionedDataFactory(
                     new SerializableData()
-                            .add("from_item_condition", io.github.apace100.apoli.data.ApoliDataTypes.ITEM_CONDITION, null)
+                            .add("from_item_condition", ItemCondition.DATA_TYPE, null)
                             .add("chance", SerializableDataTypes.FLOAT, 0.0f)
                             .add("target_item", SerializableDataTypes.ITEM, null)
                             .add("target_item_stack", SerializableDataTypes.ITEM_STACK, null),
@@ -58,7 +59,7 @@ public class ModifyEntityLootPower extends PowerType {
         if (randomSource.nextFloat() < this.chance) {
             if (targetItem != null) {
                 ItemStack finalItemStack = new ItemStack(targetItem, itemStack.getCount());
-                finalItemStack.setNbt(itemStack.getNbt());
+                finalItemStack.applyComponentsFrom(itemStack.getComponents());
                 return finalItemStack;
             } else if (targetItemStack != null) {
                 return targetItemStack.copy();

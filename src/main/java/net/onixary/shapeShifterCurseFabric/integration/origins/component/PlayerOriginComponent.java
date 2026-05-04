@@ -2,7 +2,7 @@ package net.onixary.shapeShifterCurseFabric.integration.origins.component;
 
 import io.github.apace100.apoli.component.PowerHolderComponent;
 import io.github.apace100.apoli.power.type.PowerType;
-import io.github.apace100.apoli.power.PowerTypeRegistry;
+import io.github.apace100.apoli.power.PowerManager;
 import net.onixary.shapeShifterCurseFabric.integration.origins.Origins;
 import net.onixary.shapeShifterCurseFabric.integration.origins.origin.Origin;
 import net.onixary.shapeShifterCurseFabric.integration.origins.origin.OriginLayer;
@@ -83,7 +83,7 @@ public class PlayerOriginComponent implements OriginComponent {
 
     private void grantPowersFromOrigin(Origin origin, PowerHolderComponent powerComponent) {
         Identifier source = origin.getIdentifier();
-        for(PowerType<?> powerType : origin.getPowerTypes()) {
+        for(PowerType powerType : origin.getPowerTypes()) {
             if(!powerComponent.hasPower(powerType, source)) {
                 powerComponent.addPower(powerType, source);
             }
@@ -92,7 +92,7 @@ public class PlayerOriginComponent implements OriginComponent {
 
     private void revokeRemovedPowers(Origin origin, PowerHolderComponent powerComponent) {
         Identifier source = origin.getIdentifier();
-        List<PowerType<?>> powersByOrigin = powerComponent.getPowersFromSource(source);
+        List<PowerType> powersByOrigin = powerComponent.getPowersFromSource(source);
         powersByOrigin.stream().filter(p -> !origin.hasPowerType(p)).forEach(p -> powerComponent.removePower(p, source));
     }
 
@@ -106,7 +106,7 @@ public class PlayerOriginComponent implements OriginComponent {
 
         if(compoundTag.contains("Origin")) {
             try {
-                OriginLayer defaultOriginLayer = OriginLayers.getLayer(new Identifier(Origins.MODID, "origin"));
+                OriginLayer defaultOriginLayer = OriginLayers.getLayer(Identifier.of(Origins.MODID, "origin"));
                 this.origins.put(defaultOriginLayer, OriginRegistry.get(Identifier.tryParse(compoundTag.getString("Origin"))));
             } catch(IllegalArgumentException e) {
                 Origins.LOGGER.warn("Player " + player.getDisplayName().getContent() + " had old origin which could not be migrated: " + compoundTag.getString("Origin"));
@@ -168,7 +168,7 @@ public class PlayerOriginComponent implements OriginComponent {
                     NbtCompound powerTag = powerList.getCompound(i);
                     Identifier powerTypeId = Identifier.tryParse(powerTag.getString("Type"));
                     try {
-                        PowerType<?> type = PowerTypeRegistry.get(powerTypeId);
+                        PowerType type = PowerManager.get(powerTypeId);
                         if(powerComponent.hasPower(type)) {
                             NbtElement data = powerTag.get("Data");
                             try {

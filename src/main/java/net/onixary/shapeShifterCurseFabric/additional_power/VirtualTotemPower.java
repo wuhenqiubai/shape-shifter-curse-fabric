@@ -1,6 +1,7 @@
 package net.onixary.shapeShifterCurseFabric.additional_power;
 
 import io.github.apace100.apoli.action.EntityAction;
+import io.github.apace100.apoli.action.context.EntityActionContext;
 import io.github.apace100.apoli.condition.EntityCondition;
 import io.github.apace100.apoli.data.TypedDataObjectFactory;
 import io.github.apace100.apoli.power.PowerConfiguration;
@@ -116,7 +117,7 @@ public class VirtualTotemPower extends CooldownPowerType {
         }
         if (this.entityAction != null) {
             for (EntityAction action : this.entityAction) {
-                action.accept(entity);
+                action.accept(new EntityActionContext(entity));
             }
         }
         if (!entity.getWorld().isClient && entity instanceof ServerPlayerEntity serverPlayerEntity) {
@@ -131,7 +132,7 @@ public class VirtualTotemPower extends CooldownPowerType {
             PacketByteBuf packetByteBuf = PacketByteBufs.create();
             packetByteBuf.writeUuid(serverPlayerEntity.getUuid());
             packetByteBuf.writeIdentifier(this.virtualTotemType);
-            packetByteBuf.writeItemStack(this.totemStack);
+            ItemStack.PACKET_CODEC.encode(packetByteBuf, this.totemStack);
             return packetByteBuf;
         }
         return null;

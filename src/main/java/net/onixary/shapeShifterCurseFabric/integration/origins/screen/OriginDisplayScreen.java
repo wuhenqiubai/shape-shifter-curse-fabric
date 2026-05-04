@@ -28,7 +28,7 @@ import java.util.List;
 
 public class OriginDisplayScreen extends Screen {
 
-    private static final Identifier WINDOW = new Identifier(Origins.MODID, "textures/gui/choose_origin.png");
+    private static final Identifier WINDOW = Identifier.of(Origins.MODID, "textures/gui/choose_origin.png");
     private Origin origin;
     private OriginLayer layer;
     private boolean isOriginRandom;
@@ -324,12 +324,12 @@ public class OriginDisplayScreen extends Screen {
     }
 
     private class RenderedBadge {
-        private final PowerType<?> powerType;
+        private final PowerType powerType;
         private final Badge badge;
         private final int x;
         private final int y;
 
-        public RenderedBadge(PowerType<?> powerType, Badge badge, int x, int y) {
+        public RenderedBadge(PowerType powerType, Badge badge, int x, int y) {
             this.powerType = powerType;
             this.badge = badge;
             this.x = x;

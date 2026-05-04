@@ -2,9 +2,9 @@ package net.onixary.shapeShifterCurseFabric.mixin.mob;
 
 import io.github.apace100.apoli.component.PowerHolderComponent;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityGroup;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.mob.CaveSpiderEntity;
+import net.minecraft.entity.mob.IllagerEntity;
 import net.minecraft.entity.mob.SpiderEntity;
 import net.minecraft.entity.mob.WitchEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -27,7 +27,7 @@ public abstract class MobEntityTeamMixin {
         if (other instanceof PlayerEntity player) {
             if(self instanceof LivingEntity livingEntity) {
                 // 双重判断 提升其他Mod的兼容性 (没有就加Illager_Tag)
-                if ((livingEntity.getGroup() == EntityGroup.ILLAGER || livingEntity.getType().isIn(ModTags.Illager_Tag)) && PowerHolderComponent.hasPower(player, PillagerFriendlyPower.class)) {
+                if ((livingEntity instanceof IllagerEntity || livingEntity.getType().isIn(ModTags.Illager_Tag)) && PowerHolderComponent.hasPower(player, PillagerFriendlyPower.class)) {
                     cir.setReturnValue(true);
                 }
                 if ((livingEntity instanceof WitchEntity || livingEntity.getType().isIn(ModTags.Witch_Tag)) && PowerHolderComponent.hasPower(player, WitchFriendlyPower.class)) {

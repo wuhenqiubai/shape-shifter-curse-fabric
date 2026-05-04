@@ -27,11 +27,11 @@ public class PlayerMinionComponent implements Component, AutoSyncedComponent {
                 for (net.minecraft.nbt.NbtElement nbtElement : uuidList) {
                     uuids.add(NbtHelper.toUuid(nbtElement));
                 }
-                this.minions.put(new Identifier(key), uuids);
+                this.minions.put(Identifier.of(key), uuids);
             }
             NbtCompound minionsCooldownNbt = nbtCompound.getCompound("minionsCooldown");
             for (String key : minionsCooldownNbt.getKeys()) {
-                this.minionsCooldown.put(new Identifier(key), minionsCooldownNbt.getLong(key));
+                this.minionsCooldown.put(Identifier.of(key), minionsCooldownNbt.getLong(key));
             }
         } catch (IllegalArgumentException e) {
             this.minions = new ConcurrentHashMap<>();

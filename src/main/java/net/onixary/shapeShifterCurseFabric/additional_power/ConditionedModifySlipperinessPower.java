@@ -1,5 +1,6 @@
 package net.onixary.shapeShifterCurseFabric.additional_power;
 
+import io.github.apace100.apoli.condition.BlockCondition;
 import io.github.apace100.apoli.condition.EntityCondition;
 import io.github.apace100.apoli.data.TypedDataObjectFactory;
 import io.github.apace100.apoli.power.PowerConfiguration;
@@ -24,7 +25,7 @@ public class ConditionedModifySlipperinessPower extends PowerType {
     public static final TypedDataObjectFactory<ConditionedModifySlipperinessPower> DATA_FACTORY =
             PowerType.createConditionedDataFactory(
                     new SerializableData()
-                            .add("block_condition", SerializableDataTypes.BLOCK_CONDITION, null)
+                            .add("block_condition", BlockCondition.DATA_TYPE, null)
                             .add("entity_condition", EntityCondition.DATA_TYPE.optional(), Optional.empty())
                             .add("modifier", SerializableDataTypes.FLOAT),
                     (data, cond) -> new ConditionedModifySlipperinessPower(

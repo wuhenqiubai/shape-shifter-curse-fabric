@@ -1,3 +1,5 @@
+// TODO: 1.21.1 - ArmorMaterial interface changed significantly. Needs full rewrite with new record-based API.
+/*
 package net.onixary.shapeShifterCurseFabric.items.armors;
 
 import net.minecraft.entity.EquipmentSlot;
@@ -27,9 +29,6 @@ public class MorphscaleArmorMaterial  implements ArmorMaterial {
 
     @Override
     public int getProtection(ArmorItem.Type type) {
-        // Protection values for all the slots.
-        // For reference, diamond uses 3 for boots, 6 for leggings, 8 for chestplate, and 3 for helmet,
-        // whilst leather uses 1, 2, 3 and 1 respectively.
         return switch (type) {
             case HELMET -> PROTECTION_VALUES[0];
             case LEGGINGS -> PROTECTION_VALUES[1];
@@ -56,7 +55,6 @@ public class MorphscaleArmorMaterial  implements ArmorMaterial {
 
     @Override
     public String getName() {
-        // Must be all lowercase
         return "morphscale";
     }
 
@@ -70,3 +68,4 @@ public class MorphscaleArmorMaterial  implements ArmorMaterial {
         return 0;
     }
 }
+*/

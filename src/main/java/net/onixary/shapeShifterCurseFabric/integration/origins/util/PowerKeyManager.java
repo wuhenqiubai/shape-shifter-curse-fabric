@@ -24,14 +24,14 @@ public class PowerKeyManager {
     }
 
     private static String getKeyFromPower(Identifier powerId) {
-        if(PowerTypeRegistry.contains(powerId)) {
-            PowerType<?> powerType = PowerTypeRegistry.get(powerId);
+        if(PowerManager.contains(powerId)) {
+            PowerType powerType = PowerManager.get(powerId);
             Power power = powerType.create(null);
             String key = "";
             if (power instanceof Active) {
                 key = ((Active) power).getKey().key;
-            } else if (powerType instanceof MultiplePowerType<?>) {
-                List<Identifier> subs = ((MultiplePowerType<?>) powerType).getSubPowers();
+            } else if (powerType instanceof MultiplePower) {
+                List<Identifier> subs = ((MultiplePower) powerType).getSubPowers();
                 for (Identifier sub : subs) {
                     String subKey = getKeyFromPower(sub);
                     if (!subKey.isEmpty()) {

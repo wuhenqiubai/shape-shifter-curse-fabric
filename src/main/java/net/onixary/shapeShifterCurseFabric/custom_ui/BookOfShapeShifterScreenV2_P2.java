@@ -15,7 +15,7 @@ import net.onixary.shapeShifterCurseFabric.data.CodexData;
 import static net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric.MOD_ID;
 
 public class BookOfShapeShifterScreenV2_P2 extends Screen {
-    private static final Identifier page_texID = new Identifier(MOD_ID,"textures/gui/codex_page_2.png");
+    private static final Identifier page_texID = Identifier.of(MOD_ID,"textures/gui/codex_page_2.png");
     public PlayerEntity currentPlayer;
     public static final int BookSizeX = 350;
     public static final int BookSizeY = 220;

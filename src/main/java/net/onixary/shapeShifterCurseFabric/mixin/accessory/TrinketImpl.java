@@ -35,7 +35,7 @@ public class TrinketImpl implements Trinket {
             return slotDataCache.get(slot.hashCode());
         }
         SlotType slotType = slot.inventory().getSlotType();
-        AccessoryItem.SlotData data = new AccessoryItem.SlotData(new Identifier("trinket", "%s/%s".formatted(slotType.getGroup(), slotType.getName())), slot.index());
+        AccessoryItem.SlotData data = new AccessoryItem.SlotData(Identifier.of("trinket", "%s/%s".formatted(slotType.getGroup(), slotType.getName())), slot.index());
         slotDataCache.put(slot.hashCode(), data);
         return data;
     }

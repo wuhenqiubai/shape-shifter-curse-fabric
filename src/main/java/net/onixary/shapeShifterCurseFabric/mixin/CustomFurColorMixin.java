@@ -1,7 +1,7 @@
 package net.onixary.shapeShifterCurseFabric.mixin;
 
 import mod.azure.azurelib.core.animatable.GeoAnimatable;
-import mod.azure.azurelib.renderer.GeoRenderer;
+import mod.azure.azurelib.common.internal.client.renderer.GeoRenderer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.render.RenderLayer;

@@ -1,6 +1,7 @@
 package net.onixary.shapeShifterCurseFabric.additional_power;
 
 import io.github.apace100.apoli.action.EntityAction;
+import io.github.apace100.apoli.action.context.EntityActionContext;
 import io.github.apace100.apoli.condition.EntityCondition;
 import io.github.apace100.apoli.data.TypedDataObjectFactory;
 import io.github.apace100.apoli.power.PowerConfiguration;
@@ -43,7 +44,7 @@ public class BurnDamageModifierPower extends PowerType {
 
     public void executeAction(Entity target) {
         if (action != null) {
-            action.accept(target);
+            action.accept(new EntityActionContext(target, target.getPos()));
         }
     }
 

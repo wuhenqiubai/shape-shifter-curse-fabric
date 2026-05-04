@@ -40,7 +40,7 @@ public class ModPacketsC2S {
                 ModPackets.VALIDATE_START_BOOK_BUTTON,
                 net.onixary.shapeShifterCurseFabric.networking.ModPacketsC2S::onPressStartBookButton);
         ServerPlayNetworking.registerGlobalReceiver(
-                new Identifier(ShapeShifterCurseFabric.MOD_ID, "update_skin_setting"),
+                Identifier.of(ShapeShifterCurseFabric.MOD_ID, "update_skin_setting"),
                 (server, player, handler, buf, responseSender) -> {
                     boolean keepOriginalSkin = buf.readBoolean();
                     server.execute(() -> {

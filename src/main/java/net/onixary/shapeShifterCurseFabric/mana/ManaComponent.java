@@ -232,7 +232,7 @@ public class ManaComponent implements AutoSyncedComponent, RespawnableComponent<
     }
 
     @Override
-    public void readFromNbt(NbtCompound nbtCompound) {
+    public void readFromNbt(NbtCompound nbtCompound, RegistryWrapper.WrapperLookup registryLookup) {
         this.readFromNbt(nbtCompound, true);
     }
 
@@ -301,7 +301,7 @@ public class ManaComponent implements AutoSyncedComponent, RespawnableComponent<
     }
 
     @Override
-    public void writeToNbt(NbtCompound nbtCompound) {
+    public void writeToNbt(NbtCompound nbtCompound, RegistryWrapper.WrapperLookup registryLookup) {
         this.writeToNbt(nbtCompound, true);
     }
 

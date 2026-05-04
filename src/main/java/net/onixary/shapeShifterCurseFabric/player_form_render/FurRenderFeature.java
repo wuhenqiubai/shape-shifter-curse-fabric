@@ -3,7 +3,7 @@ package net.onixary.shapeShifterCurseFabric.player_form_render;
 import dev.kosmx.playerAnim.api.TransformType;
 import dev.kosmx.playerAnim.api.layered.IAnimation;
 import dev.kosmx.playerAnim.core.util.Vec3f;
-import mod.azure.azurelib.cache.object.GeoBone;
+import mod.azure.azurelib.common.internal.common.cache.object.GeoBone;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.model.Model;
 import net.minecraft.client.model.ModelPart;

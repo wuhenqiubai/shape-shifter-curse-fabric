@@ -2,8 +2,8 @@ package net.onixary.shapeShifterCurseFabric.mixin;
 
 
 import io.github.apace100.apoli.component.PowerHolderComponent;
-import mod.azure.azurelib.cache.object.BakedGeoModel;
-import mod.azure.azurelib.cache.object.GeoBone;
+import mod.azure.azurelib.common.internal.common.cache.object.BakedGeoModel;
+import mod.azure.azurelib.common.internal.common.cache.object.GeoBone;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.model.ModelPart;
@@ -42,7 +42,7 @@ public abstract class OverrideSkinFirstPersonMixin extends LivingEntityRenderer<
 
     // 自定义皮肤路径
     @Unique
-    private static final Identifier CUSTOM_SKIN = new Identifier(ShapeShifterCurseFabric.MOD_ID, "textures/entity/base_player/ssc_base_skin.png");
+    private static final Identifier CUSTOM_SKIN = Identifier.of(ShapeShifterCurseFabric.MOD_ID, "textures/entity/base_player/ssc_base_skin.png");
 
     @Inject(method = "renderArm", at = @At("HEAD"), cancellable = true)
     private void shape_shifter_curse$RenderArm_HEAD(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, AbstractClientPlayerEntity player, ModelPart arm, ModelPart sleeve, CallbackInfo ci) {
@@ -63,11 +63,11 @@ public abstract class OverrideSkinFirstPersonMixin extends LivingEntityRenderer<
             // 设置手臂组件是否显示
             if (IsRenderRight) {
                 arm.visible = !OFModel.hiddenParts.contains(OriginFurModel.VMP.rightArm);
-                sleeve.visible = !OFModel.hiddenParts.contains(OriginFurModel.VMP.rightSleeve) && player.isPartVisible(PlayerModelPart.RIGHT_SLEEVE);
+                sleeve.visible = !OFModel.hiddenParts.contains(OriginFurModel.VMP.rightSleeve);
             }
             else {
                 arm.visible = !OFModel.hiddenParts.contains(OriginFurModel.VMP.leftArm);
-                sleeve.visible = !OFModel.hiddenParts.contains(OriginFurModel.VMP.leftSleeve) && player.isPartVisible(PlayerModelPart.LEFT_SLEEVE);
+                sleeve.visible = !OFModel.hiddenParts.contains(OriginFurModel.VMP.leftSleeve);
             }
         }
     }

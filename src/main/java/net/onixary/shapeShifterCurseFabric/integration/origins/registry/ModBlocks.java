@@ -24,9 +24,9 @@ public class ModBlocks {
     }
 
     private static void register(String blockName, Block block, boolean withBlockItem) {
-        Registry.register(Registries.BLOCK, new Identifier(Origins.MODID, blockName), block);
+        Registry.register(Registries.BLOCK, Identifier.of(Origins.MODID, blockName), block);
         if(withBlockItem) {
-            Registry.register(Registries.ITEM, new Identifier(Origins.MODID, blockName), new BlockItem(block, new Item.Settings()));
+            Registry.register(Registries.ITEM, Identifier.of(Origins.MODID, blockName), new BlockItem(block, new Item.Settings()));
         }
     }
 }

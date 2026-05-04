@@ -1,6 +1,7 @@
 package net.onixary.shapeShifterCurseFabric.additional_power;
 
 import io.github.apace100.apoli.action.EntityAction;
+import io.github.apace100.apoli.action.context.EntityActionContext;
 import io.github.apace100.apoli.condition.EntityCondition;
 import io.github.apace100.apoli.data.TypedDataObjectFactory;
 import io.github.apace100.apoli.power.PowerConfiguration;
@@ -38,13 +39,13 @@ public class EnhancedFallingAttackPower extends PowerType {
 
     public void executeTargetAction(Entity target) {
         if (targetActionOnHit != null) {
-            targetActionOnHit.accept(target);
+            targetActionOnHit.accept(new EntityActionContext(target));
         }
     }
 
     public void executeSelfAction() {
         if (selfActionOnHit != null) {
-            selfActionOnHit.accept(getHolder());
+            selfActionOnHit.accept(new EntityActionContext(getHolder()));
         }
     }
 

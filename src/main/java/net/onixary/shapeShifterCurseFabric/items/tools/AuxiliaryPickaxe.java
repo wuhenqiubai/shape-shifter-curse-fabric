@@ -1,6 +1,6 @@
 package net.onixary.shapeShifterCurseFabric.items.tools;
 
-import net.minecraft.client.item.TooltipContext;
+import net.minecraft.item.Item.TooltipContext;
 import net.minecraft.item.*;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;

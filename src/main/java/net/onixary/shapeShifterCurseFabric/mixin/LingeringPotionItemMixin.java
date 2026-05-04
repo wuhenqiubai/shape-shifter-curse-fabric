@@ -1,9 +1,10 @@
 package net.onixary.shapeShifterCurseFabric.mixin;
 
-import net.minecraft.client.item.TooltipContext;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.PotionContentsComponent;
+import net.minecraft.item.Item.TooltipContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.LingeringPotionItem;
-import net.minecraft.potion.PotionUtil;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
@@ -21,7 +22,7 @@ import java.util.List;
 public class LingeringPotionItemMixin {
     @Inject(method = "appendTooltip", at = @At("RETURN"))
     public void appendTooltip(ItemStack stack, World world, List<Text> tooltip, TooltipContext context, CallbackInfo ci) {
-        if (PotionUtil.getPotion(stack) != RegCustomPotions.CUSTOM_STATUE_FORM_POTION) {
+        if (!PotionContentsComponent.getOrDefault(stack.get(DataComponentTypes.POTION_CONTENTS), PotionContentsComponent.DEFAULT).matches(RegCustomPotions.CUSTOM_STATUE_FORM_POTION)) {
             return;
         }
         Identifier CTPFormID = CTPUtils.getCTPFormIDFromNBT(stack.getNbt());

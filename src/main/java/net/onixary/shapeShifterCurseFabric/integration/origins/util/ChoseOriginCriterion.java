@@ -1,28 +1,25 @@
 package net.onixary.shapeShifterCurseFabric.integration.origins.util;
 
-import com.google.gson.JsonObject;
-import com.google.gson.JsonPrimitive;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.onixary.shapeShifterCurseFabric.integration.origins.Origins;
 import net.onixary.shapeShifterCurseFabric.integration.origins.origin.Origin;
 import net.minecraft.advancement.criterion.AbstractCriterion;
-import net.minecraft.advancement.criterion.AbstractCriterionConditions;
-import net.minecraft.predicate.entity.AdvancementEntityPredicateDeserializer;
-import net.minecraft.predicate.entity.AdvancementEntityPredicateSerializer;
 import net.minecraft.predicate.entity.LootContextPredicate;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.JsonHelper;
+
+import java.util.Optional;
 
 public class ChoseOriginCriterion extends AbstractCriterion<ChoseOriginCriterion.Conditions> {
 
     public static ChoseOriginCriterion INSTANCE = new ChoseOriginCriterion();
 
-    private static final Identifier ID = new Identifier(Origins.MODID, "chose_origin");
+    private static final Identifier ID = Identifier.of(Origins.MODID, "chose_origin");
 
     @Override
-    protected Conditions conditionsFromJson(JsonObject obj, LootContextPredicate playerPredicate, AdvancementEntityPredicateDeserializer predicateDeserializer) {
-        Identifier id = Identifier.tryParse(JsonHelper.getString(obj, "origin"));
-        return new Conditions(playerPredicate, id);
+    public Codec<Conditions> getConditionsCodec() {
+        return Conditions.CODEC;
     }
 
     public void trigger(ServerPlayerEntity player, Origin origin) {
@@ -34,22 +31,20 @@ public class ChoseOriginCriterion extends AbstractCriterion<ChoseOriginCriterion
         return ID;
     }
 
-    public static class Conditions extends AbstractCriterionConditions {
-        private final Identifier originId;
-
-        public Conditions(LootContextPredicate player, Identifier originId) {
-            super(ChoseOriginCriterion.ID, player);
-            this.originId = originId;
-        }
+    public record Conditions(Optional<LootContextPredicate> player, Identifier originId) implements AbstractCriterion.Conditions {
+        public static final Codec<Conditions> CODEC = RecordCodecBuilder.create(instance ->
+                instance.group(
+                        LootContextPredicate.CODEC.optionalFieldOf("player").forGetter(Conditions::player),
+                        Identifier.CODEC.fieldOf("origin").forGetter(Conditions::originId)
+                ).apply(instance, Conditions::new)
+        );
 
         public boolean matches(Origin origin) {
             return origin.getIdentifier().equals(originId);
         }
 
-        public JsonObject toJson(AdvancementEntityPredicateSerializer predicateSerializer) {
-            JsonObject jsonObject = super.toJson(predicateSerializer);
-            jsonObject.add("origin", new JsonPrimitive(originId.toString()));
-            return jsonObject;
+        @Override
+        public void validate(net.minecraft.predicate.entity.LootContextPredicateValidator validator) {
         }
     }
 }

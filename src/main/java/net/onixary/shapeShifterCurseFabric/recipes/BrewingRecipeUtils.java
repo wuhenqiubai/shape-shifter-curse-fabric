@@ -10,34 +10,23 @@ import net.minecraft.recipe.Ingredient;
 import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
 import net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric;
-import org.jetbrains.annotations.Nullable;
-
 import java.util.List;
 
 // 酿造配方实际上不属于原版配方系统 但是都叫Recipe了 还是放到RecipePackage里吧
+// FIXME: BrewingRecipeRegistry.Recipe is final in 1.21.1 — DynamicRecipe wrapper removed,
+// targetForm tracking lost. Dynamic recipe reload needs rethinking.
 public class BrewingRecipeUtils {
-    public static class DynamicRecipe<T> extends BrewingRecipeRegistry.Recipe<T> {  // 可以用 InstanceOf 来区分是否为动态配方
-        public @Nullable Identifier targetForm;
-
-        public DynamicRecipe(T input, Ingredient ingredient, T output, Identifier targetForm) {
-            super(input, ingredient, output);
-            this.targetForm = targetForm;
-        }
-    }
-
-    private static final List<DynamicRecipe<Potion>> POTION_RECIPES = Lists.newArrayList();
-    private static final List<DynamicRecipe<Item>> ITEM_RECIPES = Lists.newArrayList();
+    private static final List<BrewingRecipeRegistry.Recipe<Potion>> DYNAMIC_POTION_RECIPES = Lists.newArrayList();
+    private static final List<BrewingRecipeRegistry.Recipe<Item>> DYNAMIC_ITEM_RECIPES = Lists.newArrayList();
 
     public static void onLoadDynamicBrewingRecipesStart() {
-        POTION_RECIPES.clear();
-        ITEM_RECIPES.clear();
-        BrewingRecipeRegistry.POTION_RECIPES.removeIf(recipe -> recipe instanceof DynamicRecipe);
-        BrewingRecipeRegistry.ITEM_RECIPES.removeIf(recipe -> recipe instanceof DynamicRecipe);
+        DYNAMIC_POTION_RECIPES.clear();
+        DYNAMIC_ITEM_RECIPES.clear();
     }
 
     public static void onLoadDynamicBrewingRecipesEnd() {
-        BrewingRecipeRegistry.POTION_RECIPES.addAll(POTION_RECIPES);
-        BrewingRecipeRegistry.ITEM_RECIPES.addAll(ITEM_RECIPES);
+        BrewingRecipeRegistry.POTION_RECIPES.addAll(DYNAMIC_POTION_RECIPES);
+        BrewingRecipeRegistry.ITEM_RECIPES.addAll(DYNAMIC_ITEM_RECIPES);
     }
 
     /*
@@ -76,10 +65,6 @@ public class BrewingRecipeUtils {
         Identifier input = Identifier.tryParse(recipeJson.get("input").getAsString());
         Identifier ingredient = Identifier.tryParse(recipeJson.get("ingredient").getAsString());
         Identifier output = Identifier.tryParse(recipeJson.get("output").getAsString());
-        Identifier targetForm = null;
-        if (recipeJson.has("target_form")) {
-            targetForm = Identifier.tryParse(recipeJson.get("target_form").getAsString());
-        }
         if (input == null || ingredient == null || output == null) {
             ShapeShifterCurseFabric.LOGGER.error("recipe json has invalid input or ingredient or output");
             return;
@@ -90,12 +75,12 @@ public class BrewingRecipeUtils {
             case "potion" -> {
                 Potion inputPotion = Registries.POTION.get(input);
                 Potion outputPotion = Registries.POTION.get(output);
-                POTION_RECIPES.add(new DynamicRecipe<>(inputPotion, ingredientObject, outputPotion, targetForm));
+                DYNAMIC_POTION_RECIPES.add(new BrewingRecipeRegistry.Recipe<>(inputPotion, ingredientObject, outputPotion));
             }
             case "item" -> {
                 Item inputItem = Registries.ITEM.get(input);
                 Item outputItem = Registries.ITEM.get(output);
-                ITEM_RECIPES.add(new DynamicRecipe<>(inputItem, ingredientObject, outputItem, targetForm));
+                DYNAMIC_ITEM_RECIPES.add(new BrewingRecipeRegistry.Recipe<>(inputItem, ingredientObject, outputItem));
             }
         }
         return;

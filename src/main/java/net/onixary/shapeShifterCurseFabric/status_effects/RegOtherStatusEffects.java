@@ -29,7 +29,7 @@ public class RegOtherStatusEffects {
     );
 
     public static <T extends StatusEffect> T register(String path, T effect) {
-        return Registry.register(Registries.STATUS_EFFECT, new Identifier(ShapeShifterCurseFabric.MOD_ID, path), effect);
+        return Registry.register(Registries.STATUS_EFFECT, Identifier.of(ShapeShifterCurseFabric.MOD_ID, path), effect);
     }
 
     public static void initialize() {}

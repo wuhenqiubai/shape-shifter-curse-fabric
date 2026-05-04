@@ -15,11 +15,12 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.TntEntity;
 import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.Pair;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.World;
 import net.minecraft.world.event.GameEvent;
 import net.minecraft.world.explosion.Explosion;
 import net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric;
@@ -64,7 +65,7 @@ public class ExplosionDamageEntityAction extends EntityActionType {
     }
 
     @Override
-    public ActionConfiguration<EntityActionType> getConfig() {
+    public ActionConfiguration<?> getConfig() {
         return createConfig(ShapeShifterCurseFabric.identifier("explosion_damage_entity"));
     }
 
@@ -82,6 +83,13 @@ public class ExplosionDamageEntityAction extends EntityActionType {
         DamageSource source = entity.getWorld().getDamageSources().explosion(entity, entity);
         entity.getWorld().emitGameEvent(entity, GameEvent.EXPLODE, new Vec3d(ExplosionPos.getX(), ExplosionPos.getY(), ExplosionPos.getZ()));
 
+        // Create a dummy explosion for immunity checks
+        Explosion dummyExplosion = new Explosion(
+                entity.getWorld(), entity,
+                ExplosionPos.getX(), ExplosionPos.getY(), ExplosionPos.getZ(),
+                power, false, Explosion.DestructionType.KEEP
+        );
+
         float q = power * 2.0F;
         int k = MathHelper.floor(ExplosionPos.getX() - (double)q - 1.0);
         int l = MathHelper.floor(ExplosionPos.getX() + (double)q + 1.0);
@@ -92,7 +100,7 @@ public class ExplosionDamageEntityAction extends EntityActionType {
         List<Entity> list = entity.getWorld().getOtherEntities(entity, new Box((double)k, (double)r, (double)t, (double)l, (double)s, (double)u));
         for(int v = 0; v < list.size(); ++v) {
             Entity target_entity = list.get(v);
-            if (!target_entity.isImmuneToExplosion() && (entityCondition == null || entityCondition.test(target_entity))) {
+            if (!target_entity.isImmuneToExplosion(dummyExplosion) && (entityCondition == null || entityCondition.test(target_entity))) {
                 double w = Math.sqrt(target_entity.squaredDistanceTo(ExplosionPos)) / (double)q;
                 if (w <= 1.0) {
                     double x = target_entity.getX() - ExplosionPos.getX();
@@ -109,8 +117,9 @@ public class ExplosionDamageEntityAction extends EntityActionType {
                             target_entity.damage(source, (float)((int)((ac * ac + ac) / 2.0 * 7.0 * (double)q + 1.0)));
                         }
                         double ad;
-                        if (target_entity instanceof LivingEntity livingEntity) {
-                            ad = net.minecraft.enchantment.EnchantmentHelper.getProtectionAmount(livingEntity.getServerWorld(null), livingEntity, source);
+                        if (target_entity instanceof LivingEntity livingEntity && entity.getWorld() instanceof ServerWorld serverWorld) {
+                            ad = net.minecraft.enchantment.EnchantmentHelper.getProtectionAmount(
+                                    serverWorld, livingEntity, source);
                             // In 1.21, ProtectionEnchantment.transformExplosionKnockback is replaced
                             // Keep the original knockback logic but use vanilla approach
                             if (ac > 0) {
@@ -127,7 +136,7 @@ public class ExplosionDamageEntityAction extends EntityActionType {
                         Vec3d vec3d2 = new Vec3d(x, y, z);
                         target_entity.setVelocity(target_entity.getVelocity().add(vec3d2));
                         if (entityAction != null) {
-                            entityAction.accept(target_entity);
+                            entityAction.accept(new EntityActionContext(target_entity));
                         }
                     }
                 }

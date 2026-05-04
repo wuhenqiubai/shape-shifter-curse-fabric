@@ -2,12 +2,13 @@ package net.onixary.shapeShifterCurseFabric.mixin;
 
 import io.github.apace100.apoli.component.PowerHolderComponent;
 import io.github.apace100.apoli.integration.ModifyValueCallback;
-import io.github.apace100.apoli.power.AttributeModifyTransferPower;
 import io.github.apace100.apoli.power.Power;
 import io.github.apace100.apoli.util.modifier.Modifier;
 import io.github.apace100.apoli.util.modifier.ModifierUtil;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.PotionContentsComponent;
 import net.minecraft.entity.AreaEffectCloudEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
@@ -22,7 +23,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.thrown.PotionEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.potion.PotionUtil;
 import net.minecraft.registry.tag.DamageTypeTags;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.math.BlockPos;
@@ -92,7 +92,7 @@ public abstract class LivingEntityMixin {
         if (attacker instanceof ServerPlayerEntity) {
             if(entity instanceof WitchEntity || entity instanceof EvokerEntity) {
                 if (Math.random() < StaticParams.FAMILIAR_CURSE_POTION_DROP_PROBABILITY){
-                    ItemStack customPotion = PotionUtil.setPotion(new ItemStack(Items.SPLASH_POTION), RegCustomPotions.FAMILIAR_FOX_FORM_POTION);
+                    ItemStack customPotion = PotionContentsComponent.createStack(Items.SPLASH_POTION, RegCustomPotions.FAMILIAR_FOX_FORM_POTION);
                     entity.getWorld().spawnEntity(
                             new ItemEntity(
                                     entity.getWorld(),

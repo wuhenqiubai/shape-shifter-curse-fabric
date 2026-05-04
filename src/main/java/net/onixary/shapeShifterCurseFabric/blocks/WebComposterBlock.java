@@ -59,7 +59,7 @@ public class WebComposterBlock extends Block implements InventoryProvider {
         if (itemStack.isIn(ModTags.Meat_Tag)) {
             return true;
         }
-        FoodComponent foodComponent = itemStack.getItem().getFoodComponent();
+        FoodComponent foodComponent = itemStack.get(net.minecraft.component.DataComponentTypes.FOOD);
         if (foodComponent != null && foodComponent.isMeat()) {
             return true;
         }
@@ -67,7 +67,7 @@ public class WebComposterBlock extends Block implements InventoryProvider {
     }
 
     public static float getIncreaseChance(ItemStack itemStack) {
-        FoodComponent foodComponent = itemStack.getItem().getFoodComponent();
+        FoodComponent foodComponent = itemStack.get(net.minecraft.component.DataComponentTypes.FOOD);
         if (foodComponent != null) {
             // 统一概率即可
             //return Math.min(1.0f, foodComponent.getHunger() / 6.0f);

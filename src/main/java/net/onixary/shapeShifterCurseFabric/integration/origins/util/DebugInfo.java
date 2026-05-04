@@ -1,6 +1,6 @@
 package net.onixary.shapeShifterCurseFabric.integration.origins.util;
 
-import io.github.apace100.apoli.power.PowerTypeRegistry;
+import io.github.apace100.apoli.power.PowerManager;
 import net.onixary.shapeShifterCurseFabric.integration.origins.Origins;
 import net.onixary.shapeShifterCurseFabric.integration.origins.origin.OriginLayers;
 import net.onixary.shapeShifterCurseFabric.integration.origins.origin.OriginRegistry;
@@ -12,7 +12,7 @@ public class DebugInfo {
             "Registry Size at " + at,
             "Origins: " + OriginRegistry.size(),
             "Layers:  " + OriginLayers.size(),
-            "Powers:  " + PowerTypeRegistry.size()
+            "Powers:  " + PowerManager.size()
         });
     }
     private static void printInfo(String[] lines) {

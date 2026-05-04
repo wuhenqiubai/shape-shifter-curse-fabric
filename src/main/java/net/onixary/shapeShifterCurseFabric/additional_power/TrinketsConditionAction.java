@@ -5,11 +5,13 @@ import dev.emi.trinkets.api.TrinketInventory;
 import dev.emi.trinkets.api.TrinketsApi;
 import io.github.apace100.apoli.action.ActionConfiguration;
 import io.github.apace100.apoli.action.context.EntityActionContext;
+import io.github.apace100.apoli.action.type.BiEntityActionType;
 import io.github.apace100.apoli.action.type.EntityActionType;
 import io.github.apace100.apoli.condition.ConditionConfiguration;
 import io.github.apace100.apoli.condition.EntityCondition;
 import io.github.apace100.apoli.condition.ItemCondition;
 import io.github.apace100.apoli.condition.context.EntityConditionContext;
+import io.github.apace100.apoli.condition.context.ItemConditionContext;
 import io.github.apace100.apoli.condition.type.EntityConditionType;
 import io.github.apace100.apoli.data.TypedDataObjectFactory;
 import io.github.apace100.calio.data.SerializableData;
@@ -70,13 +72,13 @@ public class TrinketsConditionAction {
                 if (groupInv == null) yield rDefault;
                 TrinketInventory inv = groupInv.get(slot);
                 if (inv == null) yield rDefault;
-                yield condition.map(c -> c.test(inv.getStack(slotIndex))).orElse(rDefault);
+                yield condition.map(c -> c.test(new ItemConditionContext(livingEntity.getWorld(), inv.getStack(slotIndex)))).orElse(rDefault);
             }
             case "curios" -> {
                 if (!AccessoryUtils.LOADED_Curios) yield rDefault;
                 List<ItemStack> stacks = CurioUtils.getEntitySlot(livingEntity, slot);
                 if (stacks == null || slotIndex >= stacks.size()) yield rDefault;
-                yield condition.map(c -> c.test(stacks.get(slotIndex))).orElse(rDefault);
+                yield condition.map(c -> c.test(new ItemConditionContext(livingEntity.getWorld(), stacks.get(slotIndex)))).orElse(rDefault);
             }
             default -> rDefault;
         };
@@ -296,7 +298,7 @@ public class TrinketsConditionAction {
         @Override
         public void accept(EntityActionContext ctx) {
             if (!(ctx.entity() instanceof LivingEntity le) || itemAction.isEmpty()) return;
-            Consumer<ItemStack> action = itemAction.get()::test;
+            Consumer<ItemStack> action = stack -> itemAction.get().test(new ItemConditionContext(le.getWorld(), stack));
             invokeEquipped(le, accessoryMod, group, slot, slotIndex, Optional.of(action));
         }
 
@@ -306,15 +308,17 @@ public class TrinketsConditionAction {
         }
     }
 
-    public static void registerCondition(Consumer<ConditionConfiguration<EquipAccessoryCondition>> reg) {
+    @SuppressWarnings("unchecked")
+    public static void registerCondition(Consumer<ConditionConfiguration<? extends EntityConditionType>> reg) {
         reg.accept(ConditionConfiguration.of(
                 ShapeShifterCurseFabric.identifier("equip_accessory"), EquipAccessoryCondition.DATA_FACTORY));
         reg.accept(ConditionConfiguration.of(
                 ShapeShifterCurseFabric.identifier("check_accessory"), CheckAccessoryCondition.DATA_FACTORY));
     }
 
-    public static void registerAction(Consumer<ActionConfiguration<DropAccessoryAction>> actionReg,
-                                       Consumer<?> biActionReg) {
+    @SuppressWarnings("unchecked")
+    public static void registerAction(Consumer<ActionConfiguration<? extends EntityActionType>> actionReg,
+                                       Consumer<ActionConfiguration<? extends BiEntityActionType>> biActionReg) {
         actionReg.accept(ActionConfiguration.of(
                 ShapeShifterCurseFabric.identifier("drop_accessory"), DropAccessoryAction.DATA_FACTORY));
         actionReg.accept(ActionConfiguration.of(

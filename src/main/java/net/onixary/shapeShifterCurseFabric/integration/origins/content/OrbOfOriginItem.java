@@ -10,7 +10,7 @@ import net.onixary.shapeShifterCurseFabric.integration.origins.registry.ModCompo
 import io.netty.buffer.Unpooled;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.fabric.api.util.NbtType;
-import net.minecraft.client.item.TooltipContext;
+import net.minecraft.item.Item.TooltipContext;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;

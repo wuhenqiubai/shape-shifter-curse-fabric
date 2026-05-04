@@ -13,7 +13,12 @@ public class AdditionalEntityActions {
     public static final ActionConfiguration<SetFallingDistanceAction> SET_FALLING_DISTANCE = registerEntityAction(SetFallingDistanceAction.createConfig(ShapeShifterCurseFabric.identifier("set_falling_distance")));
     public static final ActionConfiguration<SpawnParticlesInCircleAction> SPAWN_PARTICLES_IN_CIRCLE = registerEntityAction(SpawnParticlesInCircleAction.createConfig(ShapeShifterCurseFabric.identifier("spawn_particles_in_circle")));
     public static final ActionConfiguration<SummonMinionWolfNearbyAction.SummonAction> SUMMON_MINION_WOLF = registerEntityAction(SummonMinionWolfNearbyAction.createConfig(ShapeShifterCurseFabric.identifier("summon_anubis_wolf_minion")));
-    public static final ActionConfiguration<SummonMinionWolfNearbyAction.SummonBIAction> SUMMON_MINION_WOLF_BI = registerBiEntityAction(SummonMinionWolfNearbyAction.createBIConfig(ShapeShifterCurseFabric.identifier("bi_summon_anubis_wolf_minion")));
+    public static final ActionConfiguration<SummonMinionWolfNearbyAction.SummonBIAction> SUMMON_MINION_WOLF_BI;
+
+    static {
+        SUMMON_MINION_WOLF_BI = SummonMinionWolfNearbyAction.createBIConfig(ShapeShifterCurseFabric.identifier("bi_summon_anubis_wolf_minion"));
+        registerBiEntityAction(SUMMON_MINION_WOLF_BI);
+    }
     public static final ActionConfiguration<TransformAction.TransformToFormAction> TRANSFORM_TO_FORM = registerEntityAction(ActionConfiguration.of(ShapeShifterCurseFabric.identifier("transform_to_form"), TransformAction.TransformToFormAction.DATA_FACTORY));
     public static final ActionConfiguration<TransformAction.GiveCustomTransformEffectAction> GIVE_CUSTOM_TRANSFORM_EFFECT = registerEntityAction(ActionConfiguration.of(ShapeShifterCurseFabric.identifier("give_custom_transform_effect"), TransformAction.GiveCustomTransformEffectAction.DATA_FACTORY));
     public static final ActionConfiguration<FireArrowAction> FIRE_ARROW = registerEntityAction(FireArrowAction.createConfig(ShapeShifterCurseFabric.identifier("fire_arrow")));
@@ -24,23 +29,27 @@ public class AdditionalEntityActions {
     public static final ActionConfiguration<ExplosionDamageEntityAction> EXPLOSION_DAMAGE_ENTITY = registerEntityAction(ExplosionDamageEntityAction.createConfig(ShapeShifterCurseFabric.identifier("explosion_damage_entity")));
 
     public static void register() {
-        TransformAction.registerAction(AdditionalEntityActions::registerEntityAction, AdditionalEntityActions::registerBiEntityAction);
+        TransformAction.registerAction(AdditionalEntityActions::registerEntityAction, (ActionConfiguration<? extends BiEntityActionType> c) -> registerBiEntityAction(c));
         ExplosionDamageEntityAction.register(AdditionalEntityActions::registerEntityAction);
-        SummonMinionWolfNearbyAction.register(AdditionalEntityActions::registerEntityAction, AdditionalEntityActions::registerBiEntityAction);
-        PlayPowerAnimationAction.register(AdditionalEntityActions::registerEntityAction, AdditionalEntityActions::registerBiEntityAction);
-        TrinketsConditionAction.registerAction(AdditionalEntityActions::registerEntityAction, AdditionalEntityActions::registerBiEntityAction);
-        ManaUtilsApoli.registerAction(AdditionalEntityActions::registerEntityAction, AdditionalEntityActions::registerBiEntityAction);
-        FireArrowAction.registerAction(AdditionalEntityActions::registerEntityAction, AdditionalEntityActions::registerBiEntityAction);
-        WebBridgeAction.registerAction(AdditionalEntityActions::registerEntityAction, AdditionalEntityActions::registerBiEntityAction);
-        ItemStorePower.registerAction(AdditionalEntityActions::registerEntityAction, AdditionalEntityActions::registerBiEntityAction);
-        ItemCooldownCA.registerAction(AdditionalEntityActions::registerEntityAction, AdditionalEntityActions::registerBiEntityAction);
+        SummonMinionWolfNearbyAction.register(AdditionalEntityActions::registerEntityAction, (ActionConfiguration<? extends BiEntityActionType> c) -> registerBiEntityAction(c));
+        PlayPowerAnimationAction.register(AdditionalEntityActions::registerEntityAction, (ActionConfiguration<? extends BiEntityActionType> c) -> registerBiEntityAction(c));
+        TrinketsConditionAction.registerAction(AdditionalEntityActions::registerEntityAction, (ActionConfiguration<? extends BiEntityActionType> c) -> registerBiEntityAction(c));
+        ManaUtilsApoli.registerAction(AdditionalEntityActions::registerEntityAction, (ActionConfiguration<? extends BiEntityActionType> c) -> registerBiEntityAction(c));
+        FireArrowAction.registerAction(AdditionalEntityActions::registerEntityAction, (ActionConfiguration<? extends BiEntityActionType> c) -> registerBiEntityAction(c));
+        WebBridgeAction.registerAction(AdditionalEntityActions::registerEntityAction, (ActionConfiguration<? extends BiEntityActionType> c) -> registerBiEntityAction(c));
+        ItemStorePower.registerAction(AdditionalEntityActions::registerEntityAction, (ActionConfiguration<? extends BiEntityActionType> c) -> registerBiEntityAction(c));
+        ItemCooldownCA.registerAction(AdditionalEntityActions::registerEntityAction, (ActionConfiguration<? extends BiEntityActionType> c) -> registerBiEntityAction(c));
     }
 
+    @SuppressWarnings("unchecked")
     public static <T extends EntityActionType> ActionConfiguration<T> registerEntityAction(ActionConfiguration<T> config) {
-        return Registry.register(ApoliRegistries.ENTITY_ACTION_TYPE, config.id(), config);
+        ActionConfiguration<EntityActionType> casted = (ActionConfiguration<EntityActionType>) config;
+        return (ActionConfiguration<T>) Registry.register(ApoliRegistries.ENTITY_ACTION_TYPE, casted.id(), casted);
     }
 
-    public static <T extends BiEntityActionType> ActionConfiguration<T> registerBiEntityAction(ActionConfiguration<T> config) {
-        return Registry.register(ApoliRegistries.BIENTITY_ACTION_TYPE, config.id(), config);
+    @SuppressWarnings("unchecked")
+    public static void registerBiEntityAction(ActionConfiguration<? extends BiEntityActionType> config) {
+        Registry.register(ApoliRegistries.BIENTITY_ACTION_TYPE, config.id(),
+                (ActionConfiguration<BiEntityActionType>) (Object) config);
     }
 }

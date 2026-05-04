@@ -9,7 +9,7 @@ import dev.emi.trinkets.api.TrinketComponent;
 import dev.emi.trinkets.api.TrinketsApi;
 import io.github.apace100.apoli.component.PowerHolderComponent;
 import io.github.apace100.apoli.power.type.PowerType;
-import io.github.apace100.apoli.power.PowerTypeRegistry;
+import io.github.apace100.apoli.power.PowerManager;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.Registries;
@@ -145,7 +145,7 @@ public class TrinketUtils {
         }
 
         private void AddPower(PlayerEntity player, Identifier powerID, Identifier sourceID) {
-            PowerType<?> powerType = PowerTypeRegistry.get(powerID);
+            PowerType powerType = PowerManager.get(powerID);
             if (powerType != null) {
                 PowerHolderComponent powerHolder = PowerHolderComponent.KEY.get(player);
                 powerHolder.addPower(powerType, sourceID);
@@ -153,7 +153,7 @@ public class TrinketUtils {
         }
 
         private void RemovePower(PlayerEntity player, Identifier powerID, Identifier sourceID) {
-            PowerType<?> powerType = PowerTypeRegistry.get(powerID);
+            PowerType powerType = PowerManager.get(powerID);
             if (powerType != null) {
                 PowerHolderComponent powerHolder = PowerHolderComponent.KEY.get(player);
                 powerHolder.removePower(powerType, sourceID);
@@ -265,7 +265,7 @@ public class TrinketUtils {
                     SlotReference slot = accessoryPair.getLeft();
                     ItemStack stack = accessoryPair.getRight();
                     SlotType slotType = slot.inventory().getSlotType();
-                    AccessoryItem.SlotData data = new AccessoryItem.SlotData(new Identifier("trinkets", "%s/%s".formatted(slotType.getGroup(), slotType.getName())), slot.index());
+                    AccessoryItem.SlotData data = new AccessoryItem.SlotData(Identifier.of("trinkets", "%s/%s".formatted(slotType.getGroup(), slotType.getName())), slot.index());
                     allAccessory.add(new Pair<>(data, stack));
                 }
             }
@@ -276,7 +276,7 @@ public class TrinketUtils {
                 List<ItemStack> stacks = entry.getValue();
                 int Index = 0;
                 for (ItemStack stack : stacks) {
-                    AccessoryItem.SlotData data = new AccessoryItem.SlotData(new Identifier("curios", slotName), Index);
+                    AccessoryItem.SlotData data = new AccessoryItem.SlotData(Identifier.of("curios", slotName), Index);
                     allAccessory.add(new Pair<>(data, stack));
                     Index++;
                 }

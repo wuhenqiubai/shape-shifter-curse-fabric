@@ -2,6 +2,7 @@ package net.onixary.shapeShifterCurseFabric.additional_power;
 
 import io.github.apace100.apoli.action.ActionConfiguration;
 import io.github.apace100.apoli.action.context.EntityActionContext;
+import io.github.apace100.apoli.action.type.BiEntityActionType;
 import io.github.apace100.apoli.action.type.EntityActionType;
 import io.github.apace100.apoli.component.PowerHolderComponent;
 import io.github.apace100.apoli.condition.ConditionConfiguration;
@@ -141,7 +142,8 @@ public class ItemStorePower extends PowerType implements ItemStorePowerRender.it
     public NbtElement toTag() {
         NbtCompound tag = new NbtCompound();
         NbtCompound itemTag = new NbtCompound();
-        this.storedItem.writeNbt(itemTag);
+        NbtElement encoded = ItemStack.CODEC.encodeStart(net.minecraft.nbt.NbtOps.INSTANCE, this.storedItem).getOrThrow();
+        itemTag.put("item", encoded);
         tag.put("stored_item", itemTag);
         tag.putInt("bobbing_animation_time", this.bobbingAnimationTime);
         return tag;
@@ -152,7 +154,7 @@ public class ItemStorePower extends PowerType implements ItemStorePowerRender.it
         if (tag instanceof NbtCompound compound) {
             NbtCompound itemStackNBT = compound.getCompound("stored_item");
             if (!itemStackNBT.isEmpty()) {
-                this.storedItem = ItemStack.fromNbt(itemStackNBT);
+                this.storedItem = ItemStack.CODEC.parse(net.minecraft.nbt.NbtOps.INSTANCE, itemStackNBT.get("item")).getOrThrow();
             }
             this.bobbingAnimationTime = compound.getInt("bobbing_animation_time");
         }
@@ -207,7 +209,7 @@ public class ItemStorePower extends PowerType implements ItemStorePowerRender.it
         public boolean test(EntityConditionContext ctx) {
             ItemStorePower power = findPower(ctx.entity(), powerId);
             if (power == null) return defaultVal;
-            return itemCondition.map(c -> c.test(power.storedItem)).orElse(defaultVal);
+            return itemCondition.map(c -> c.test(ctx.entity().getWorld(), power.storedItem)).orElse(defaultVal);
         }
 
         @Override
@@ -216,7 +218,8 @@ public class ItemStorePower extends PowerType implements ItemStorePowerRender.it
         }
     }
 
-    public static void registerAction(Consumer<ActionConfiguration<EntityActionType>> actionReg, Consumer<?> biActionReg) {
+    @SuppressWarnings("unchecked")
+    public static void registerAction(Consumer<ActionConfiguration<? extends EntityActionType>> actionReg, Consumer<ActionConfiguration<? extends BiEntityActionType>> biActionReg) {
         actionReg.accept(ActionConfiguration.of(
                 ShapeShifterCurseFabric.identifier("gain_store_power_item"), GainStoreItemAction.DATA_FACTORY));
         actionReg.accept(ActionConfiguration.of(
@@ -342,7 +345,7 @@ public class ItemStorePower extends PowerType implements ItemStorePowerRender.it
         public void accept(EntityActionContext ctx) {
             ItemStorePower power = findPower(ctx.entity(), powerId);
             if (power != null && itemAction.isPresent()) {
-                power.InvokeItemAction(stack -> itemAction.get().test(stack));
+                power.InvokeItemAction(stack -> itemAction.get().test(ctx.entity().getWorld(), stack));
             }
         }
 

@@ -7,8 +7,8 @@ import net.minecraft.util.Identifier;
 import net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric;
 
 public class MorphscaleArmorRenderer extends AzArmorRenderer {
-    private static final Identifier MODEL = new Identifier(ShapeShifterCurseFabric.MOD_ID,"geo/item/morphscale_armor.geo.json");
-    private static final Identifier TEXTURE = new Identifier(ShapeShifterCurseFabric.MOD_ID,"textures/item/morphscale_armor.png");
+    private static final Identifier MODEL = Identifier.of(ShapeShifterCurseFabric.MOD_ID,"geo/item/morphscale_armor.geo.json");
+    private static final Identifier TEXTURE = Identifier.of(ShapeShifterCurseFabric.MOD_ID,"textures/item/morphscale_armor.png");
 
     public MorphscaleArmorRenderer() {
         super(AzArmorRendererConfig.builder(MODEL, TEXTURE).build());

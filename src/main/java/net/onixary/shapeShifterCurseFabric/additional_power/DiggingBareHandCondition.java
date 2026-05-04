@@ -38,7 +38,7 @@ public class DiggingBareHandCondition extends EntityConditionType {
 
         if (player.getInventory().getMainHandStack().isEmpty()) return true;
         if (player.getInventory().getMainHandStack().getItem() instanceof ToolItem tool)
-            return tool.getMaterial().getMiningLevel() <= 0;
+            return !tool.getMaterial().isCorrectForDrops(tool.getDefaultStack(), net.minecraft.block.Blocks.STONE.getDefaultState());
         return true;
     }
 

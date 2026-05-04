@@ -14,7 +14,7 @@ import static net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric.MOD_ID
 
 @Environment(EnvType.CLIENT)
 public class TSpiderEntityRenderer extends MobEntityRenderer<TransformativeSpiderEntity, SpiderEntityModel<TransformativeSpiderEntity>> {
-	private static final Identifier TEXTURE = new Identifier(MOD_ID,"textures/entity/mob/t_spider.png");
+	private static final Identifier TEXTURE = Identifier.of(MOD_ID,"textures/entity/mob/t_spider.png");
 
 	public TSpiderEntityRenderer(EntityRendererFactory.Context context) {
 		super(context, new SpiderEntityModel<>(context.getPart(EntityModelLayers.SPIDER)), 0.8F);

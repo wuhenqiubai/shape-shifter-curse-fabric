@@ -1,37 +1,32 @@
 package net.onixary.shapeShifterCurseFabric.advancement;
 
-import com.google.gson.JsonObject;
+import com.mojang.serialization.Codec;
 import net.minecraft.advancement.criterion.AbstractCriterion;
-import net.minecraft.advancement.criterion.AbstractCriterionConditions;
-import net.minecraft.predicate.entity.AdvancementEntityPredicateDeserializer;
 import net.minecraft.predicate.entity.LootContextPredicate;
+
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.util.Identifier;
-import net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric;
 
-public class OnEndCursedMoonCured extends AbstractCriterion<OnEndCursedMoonCured.Condition> {
-    public static final Identifier ID = new Identifier(ShapeShifterCurseFabric.MOD_ID, "on_end_cursed_moon_cured");
+import java.util.Optional;
+import java.util.function.Predicate;
 
+public class OnEndCursedMoonCured extends AbstractCriterion<OnEndCursedMoonCured.Conditions> {
     @Override
-    public Identifier getId() {
-        return ID;
+    public Codec<Conditions> getConditionsCodec() {
+        return Conditions.CODEC;
     }
 
-    public void trigger(ServerPlayerEntity player) {
-        trigger(player, condition -> {
-            return true;
-        });
+    public void trigger(ServerPlayerEntity player, Predicate<Conditions> predicate) {
+        super.trigger(player, predicate);
     }
 
-    @Override
-    protected Condition conditionsFromJson(JsonObject obj, LootContextPredicate playerPredicate, AdvancementEntityPredicateDeserializer predicateDeserializer) {
-        return new Condition();
-    }
+    public record Conditions(Optional<LootContextPredicate> player) implements AbstractCriterion.Conditions {
+        public static final Codec<Conditions> CODEC = LootContextPredicate.CODEC
+                .optionalFieldOf("player")
+                .xmap(Conditions::new, Conditions::player)
+                .codec();
 
-    public static class Condition extends AbstractCriterionConditions {
-
-        public Condition() {
-            super(ID, LootContextPredicate.EMPTY);
+        @Override
+        public void validate(net.minecraft.predicate.entity.LootContextPredicateValidator validator) {
         }
     }
 }

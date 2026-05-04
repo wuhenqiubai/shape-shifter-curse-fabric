@@ -1,3 +1,4 @@
+/*
 package net.onixary.shapeShifterCurseFabric.integration.origins.enchantment;
 
 import net.minecraft.enchantment.Enchantment;
@@ -35,3 +36,4 @@ public class WaterProtectionEnchantment extends Enchantment {
         return super.canAccept(other);
     }
 }
+*/

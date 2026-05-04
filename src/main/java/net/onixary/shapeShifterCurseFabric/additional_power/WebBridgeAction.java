@@ -3,6 +3,7 @@ package net.onixary.shapeShifterCurseFabric.additional_power;
 import io.github.apace100.apoli.action.ActionConfiguration;
 import io.github.apace100.apoli.action.EntityAction;
 import io.github.apace100.apoli.action.context.EntityActionContext;
+import io.github.apace100.apoli.action.type.BiEntityActionType;
 import io.github.apace100.apoli.action.type.EntityActionType;
 import io.github.apace100.apoli.data.TypedDataObjectFactory;
 import io.github.apace100.calio.data.SerializableData;
@@ -99,7 +100,7 @@ public class WebBridgeAction {
             WebBullet bullet = new WebBullet(livingEntity, tier);
             bullet.setVelocity(livingEntity, livingEntity.getPitch(), livingEntity.getYaw(), 0.0f, speed, divergence);
             livingEntity.getWorld().spawnEntity(bullet);
-            projectileAction.ifPresent(a -> a.accept(bullet));
+            projectileAction.ifPresent(a -> a.accept(new EntityActionContext(bullet)));
         }
 
         @Override
@@ -140,8 +141,9 @@ public class WebBridgeAction {
         }
     }
 
-    public static void registerAction(Consumer<ActionConfiguration<WebBridgeEntityAction>> actionReg,
-                                       Consumer<?> biActionReg) {
+    @SuppressWarnings("unchecked")
+    public static void registerAction(Consumer<ActionConfiguration<? extends EntityActionType>> actionReg,
+                                       Consumer<ActionConfiguration<? extends BiEntityActionType>> biActionReg) {
         actionReg.accept(ActionConfiguration.of(
                 ShapeShifterCurseFabric.identifier("web_bridge"), WebBridgeEntityAction.DATA_FACTORY));
         actionReg.accept(ActionConfiguration.of(

@@ -1,5 +1,6 @@
 package net.onixary.shapeShifterCurseFabric.additional_power;
 
+import io.github.apace100.apoli.condition.BlockCondition;
 import io.github.apace100.apoli.condition.EntityCondition;
 import io.github.apace100.apoli.data.TypedDataObjectFactory;
 import io.github.apace100.apoli.power.PowerConfiguration;
@@ -27,7 +28,7 @@ public class ModifyBlockDropPower extends PowerType {
     public static final TypedDataObjectFactory<ModifyBlockDropPower> DATA_FACTORY =
             PowerType.createConditionedDataFactory(
                     new SerializableData()
-                            .add("block_condition", io.github.apace100.apoli.data.ApoliDataTypes.BLOCK_CONDITION, null)
+                            .add("block_condition", io.github.apace100.apoli.data.BlockCondition.DATA_TYPE, null)
                             .add("chance", SerializableDataTypes.FLOAT, 0.0f)
                             .add("target_item_stack_list", SerializableDataTypes.ITEM_STACKS, null),
                     (data, condition) -> new ModifyBlockDropPower(

@@ -5,18 +5,15 @@ import com.google.gson.JsonObject;
 import io.github.apace100.apoli.integration.PostPowerLoadCallback;
 import io.github.apace100.apoli.integration.PrePowerReloadCallback;
 import io.github.apace100.apoli.power.*;
+import io.github.apace100.apoli.power.type.PowerType;
 import io.github.apace100.calio.registry.DataObjectRegistry;
 import net.onixary.shapeShifterCurseFabric.integration.origins.Origins;
 import net.onixary.shapeShifterCurseFabric.integration.origins.integration.AutoBadgeCallback;
 import net.onixary.shapeShifterCurseFabric.integration.origins.networking.ModPackets;
 import io.netty.buffer.Unpooled;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.network.PacketByteBuf;
-import net.minecraft.recipe.Recipe;
-import net.minecraft.recipe.ShapedRecipe;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
 import java.util.HashMap;
@@ -81,7 +78,7 @@ public final class BadgeManager {
         ServerPlayNetworking.send(player, ModPackets.BADGE_LIST, badgeData);
     }
 
-    public static void readCustomBadges(Identifier powerId, Identifier factoryId, boolean isSubPower, JsonElement data, PowerType<?> powerType) {
+    public static void readCustomBadges(Identifier powerId, Identifier factoryId, boolean isSubPower, JsonElement data, PowerType powerType) {
         if(!(powerType.isHidden() || isSubPower)) {
             if(data.isJsonArray()) {
                 BADGES.computeIfAbsent(powerId, id -> new LinkedList<>());
@@ -116,7 +113,7 @@ public final class BadgeManager {
         }
     }
 
-    public static void readAutoBadges(Identifier powerId, Identifier factoryId, boolean isSubPower, JsonObject json, PowerType<?> powerType) {
+    public static void readAutoBadges(Identifier powerId, Identifier factoryId, boolean isSubPower, JsonObject json, PowerType powerType) {
         if(BADGES.containsKey(powerId) || powerType.isHidden() || isSubPower) {
             // No auto-badges should be created if:
             // - The power has custom badges defined in the data
@@ -124,10 +121,10 @@ public final class BadgeManager {
             // - The power is a sub-power
             return;
         }
-        if(powerType instanceof MultiplePowerType<?> mp) {
+        if(powerType instanceof MultiplePower mp) {
             // Multiple powers retrieve their automatic badges from all sub-powers
             List<Badge> badgeList = BADGES.computeIfAbsent(powerId, id -> new LinkedList<>());
-            mp.getSubPowers().stream().map(PowerTypeRegistry::get).forEach(subPowerType ->
+            mp.getSubPowers().stream().map(PowerManager::get).forEach(subPowerType ->
                 AutoBadgeCallback.EVENT.invoker().createAutoBadge(subPowerType.getIdentifier(), subPowerType, badgeList)
             );
         } else {
@@ -136,25 +133,8 @@ public final class BadgeManager {
         }
     }
 
-    public static void createAutoBadges(Identifier powerId, PowerType<?> powerType, List<Badge> badgeList) {
-        Power power = powerType.create(null);
-        if(power instanceof Active active) {
-            boolean toggle = active instanceof TogglePower || active instanceof ToggleNightVisionPower;
-            Identifier autoBadgeId = toggle ? TOGGLE_BADGE_ID : ACTIVE_BADGE_ID;
-            if(REGISTRY.containsId(autoBadgeId)) {
-                badgeList.add(REGISTRY.get(autoBadgeId));
-            } else {
-                badgeList.add(new KeybindBadge(toggle ? TOGGLE_BADGE_SPRITE : ACTIVE_BADGE_SPRITE,
-                    toggle ? "origins.gui.badge.toggle"
-                        : "origins.gui.badge.active"
-                ));
-            }
-        } else if(power instanceof RecipePower recipePower) {
-            Recipe<CraftingInventory> recipe = recipePower.getRecipe();
-            String type = (Recipe<?>)recipe instanceof ShapedRecipe ? "shaped" : "shapeless";
-            badgeList.add(new CraftingRecipeBadge(RECIPE_BADGE_SPRITE, recipe,
-                Text.translatable("origins.gui.badge.recipe.crafting." + type), null
-            ));
-        }
+    public static void createAutoBadges(Identifier powerId, PowerType powerType, List<Badge> badgeList) {
+        // Auto-badge creation disabled - old Apoli Power class hierarchy (Active, TogglePower, RecipePower) no longer exists in Apoli 2.12
+        // TODO: Re-implement using Apoli 2.12 PowerType API when available
     }
 }

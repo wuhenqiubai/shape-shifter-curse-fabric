@@ -18,6 +18,7 @@ import net.minecraft.client.render.VertexFormats;
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.text.Text;
+import net.onixary.shapeShifterCurseFabric.items.RegCustomItem;
 import net.minecraft.util.Identifier;
 import net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric;
 import net.onixary.shapeShifterCurseFabric.additional_power.CustomEdiblePower;
@@ -56,9 +57,9 @@ import static net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric.*;
 
 public class ShapeShifterCurseFabricClient implements ClientModInitializer {
 	// 由于咒文生物使用的都是原版模型，所以无需注册Layer
-	//public static final EntityModelLayer T_BAT_LAYER = new EntityModelLayer(new Identifier(MOD_ID, "t_bat"), "main");
-	//public static final EntityModelLayer T_AXOLOTL_LAYER = new EntityModelLayer(new Identifier(MOD_ID, "t_axolotl"), "main");
-	//public static final EntityModelLayer T_OCELOT_LAYER = new EntityModelLayer(new Identifier(MOD_ID, "t_ocelot"), "main");
+	//public static final EntityModelLayer T_BAT_LAYER = new EntityModelLayer(Identifier.of(MOD_ID, "t_bat"), "main");
+	//public static final EntityModelLayer T_AXOLOTL_LAYER = new EntityModelLayer(Identifier.of(MOD_ID, "t_axolotl"), "main");
+	//public static final EntityModelLayer T_OCELOT_LAYER = new EntityModelLayer(Identifier.of(MOD_ID, "t_ocelot"), "main");
 
 	public static MinecraftClient getClient() {
 		return MinecraftClient.getInstance();
@@ -272,7 +273,7 @@ public class ShapeShifterCurseFabricClient implements ClientModInitializer {
 	{
 		CoreShaderRegistrationCallback.EVENT.register(context -> {
 			// 1. 定义着色器的 Identifier
-			Identifier shaderId = new Identifier(ShapeShifterCurseFabric.MOD_ID, "fur_gradient_remap");
+			Identifier shaderId = Identifier.of(ShapeShifterCurseFabric.MOD_ID, "fur_gradient_remap");
 
 			// 2. 使用 context.register 方法注册
 			//    这个方法会处理底层的加载逻辑

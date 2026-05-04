@@ -141,7 +141,7 @@ public class TransformManager {
                 toForm = getRandomOrBuffForm(player);
                 // 触发自定义成就
                 // Trigger custom achievement
-                ShapeShifterCurseFabric.ON_TRANSFORM_0.trigger((ServerPlayerEntity) player);
+                ShapeShifterCurseFabric.ON_TRANSFORM_0.trigger((ServerPlayerEntity) player, conditions -> true);
                 break;
             case 0:
                 toForm = currentFormGroup.getForm(1);
@@ -155,7 +155,7 @@ public class TransformManager {
                     data._isRegressedFromFinal = true;
                     // 触发自定义成就
                     // Trigger custom achievement
-                    ShapeShifterCurseFabric.ON_TRIGGER_CURSED_MOON_FORM_2.trigger((ServerPlayerEntity) player);
+                    ShapeShifterCurseFabric.ON_TRIGGER_CURSED_MOON_FORM_2.trigger((ServerPlayerEntity) player, conditions -> true);
                 }
                 else{
                     ShapeShifterCurseFabric.LOGGER.info("Triggered transformation when at max phase, this should not happen!");
@@ -450,13 +450,13 @@ public class TransformManager {
         if(!isByCure){
             switch(toFormIndex){
                 case 0:
-                    ShapeShifterCurseFabric.ON_TRANSFORM_0.trigger((ServerPlayerEntity) player);
+                    ShapeShifterCurseFabric.ON_TRANSFORM_0.trigger((ServerPlayerEntity) player, conditions -> true);
                     break;
                 case 1:
-                    ShapeShifterCurseFabric.ON_TRANSFORM_1.trigger((ServerPlayerEntity) player);
+                    ShapeShifterCurseFabric.ON_TRANSFORM_1.trigger((ServerPlayerEntity) player, conditions -> true);
                     break;
                 case 2:
-                    ShapeShifterCurseFabric.ON_TRANSFORM_2.trigger((ServerPlayerEntity) player);
+                    ShapeShifterCurseFabric.ON_TRANSFORM_2.trigger((ServerPlayerEntity) player, conditions -> true);
                     break;
                 default:
                     break;

@@ -1,6 +1,7 @@
 package net.onixary.shapeShifterCurseFabric.additional_power;
 
 import io.github.apace100.apoli.action.EntityAction;
+import io.github.apace100.apoli.action.context.EntityActionContext;
 import io.github.apace100.apoli.condition.EntityCondition;
 import io.github.apace100.apoli.data.TypedDataObjectFactory;
 import io.github.apace100.apoli.power.PowerConfiguration;
@@ -142,7 +143,7 @@ public class ProjectileDodgePower extends PowerType {
         player.addVelocity(dodgeDirection.multiply(dodgeSpeed));
         player.velocityModified = true;
         if (action != null) {
-            action.accept(player);
+            action.accept(new EntityActionContext(player));
         }
     }
 

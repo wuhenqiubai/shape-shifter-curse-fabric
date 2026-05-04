@@ -12,7 +12,7 @@ import static net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric.MOD_ID
 
 public class RegPlayerInstinctComponent implements EntityComponentInitializer {
     public static final ComponentKey<PlayerInstinctComponent> PLAYER_INSTINCT_COMP =
-            ComponentRegistry.getOrCreate(new Identifier(MOD_ID, "player_instinct_component"), PlayerInstinctComponent.class);
+            ComponentRegistry.getOrCreate(Identifier.of(MOD_ID, "player_instinct_component"), PlayerInstinctComponent.class);
 
     @Override
     public void registerEntityComponentFactories(EntityComponentFactoryRegistry registry) {

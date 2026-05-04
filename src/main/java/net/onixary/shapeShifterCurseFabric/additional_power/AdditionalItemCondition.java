@@ -6,7 +6,7 @@ import io.github.apace100.apoli.condition.type.ItemConditionType;
 import io.github.apace100.apoli.data.TypedDataObjectFactory;
 import io.github.apace100.apoli.registry.ApoliRegistries;
 import io.github.apace100.calio.data.SerializableData;
-import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.component.type.AttributeModifierSlot;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.item.ItemStack;
@@ -29,9 +29,11 @@ public class AdditionalItemCondition {
 
     public static void register() {}
 
+    @SuppressWarnings("unchecked")
     private static <T extends ItemConditionType> ConditionConfiguration<T> register(Identifier id, TypedDataObjectFactory<T> factory) {
         ConditionConfiguration<T> config = ConditionConfiguration.of(id, factory);
-        Registry.register(ApoliRegistries.ITEM_CONDITION_TYPE, id, config);
+        Registry.register(ApoliRegistries.ITEM_CONDITION_TYPE, id,
+                (ConditionConfiguration<ItemConditionType>) (Object) config);
         return config;
     }
 
@@ -46,12 +48,15 @@ public class AdditionalItemCondition {
         @Override
         public boolean test(ItemConditionContext ctx) {
             Collection<EntityAttributeModifier> modifiers = ctx.stack().getItem()
-                    .getAttributeModifiers(ctx.stack(), EquipmentSlot.MAINHAND)
-                    .get(EntityAttributes.GENERIC_ATTACK_DAMAGE);
+                    .getAttributeModifiers()
+                    .modifiers().stream()
+                    .filter(e -> e.attribute().equals(EntityAttributes.ATTACK_DAMAGE))
+                    .flatMap(e -> e.modifiers().stream())
+                    .toList();
             double totalAdd = 0;
             for (EntityAttributeModifier modifier : modifiers) {
-                if (modifier.getOperation() == EntityAttributeModifier.Operation.ADDITION) {
-                    totalAdd += modifier.getValue();
+                if (modifier.operation() == EntityAttributeModifier.Operation.ADD_VALUE) {
+                    totalAdd += modifier.value();
                 }
             }
             return totalAdd > 1;

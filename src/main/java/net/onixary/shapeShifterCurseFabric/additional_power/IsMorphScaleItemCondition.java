@@ -6,7 +6,8 @@ import io.github.apace100.calio.data.SerializableData;
 import io.github.apace100.apoli.condition.type.ItemConditionType;
 import io.github.apace100.apoli.condition.context.ItemConditionContext;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtCompound;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.NbtComponent;
 import net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric;
 import net.onixary.shapeShifterCurseFabric.util.ModTags;
 import org.jetbrains.annotations.NotNull;
@@ -24,8 +25,8 @@ public class IsMorphScaleItemCondition extends ItemConditionType {
     public boolean test(ItemConditionContext ctx) {
         ItemStack itemStack = ctx.stack();
         if (itemStack.isIn(ModTags.MorphScaleItem_Tag)) return true;
-        NbtCompound itemNBT = itemStack.getNbt();
-        return itemNBT != null && itemNBT.getBoolean(AdditionalItemCondition.IS_MORPH_SCALE_ARMOR_TAG);
+        NbtComponent customData = itemStack.get(DataComponentTypes.CUSTOM_DATA);
+        return customData != null && customData.copyNbt().getBoolean(AdditionalItemCondition.IS_MORPH_SCALE_ARMOR_TAG);
     }
 
     @Override

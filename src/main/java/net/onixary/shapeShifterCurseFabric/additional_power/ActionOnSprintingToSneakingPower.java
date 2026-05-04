@@ -1,6 +1,7 @@
 package net.onixary.shapeShifterCurseFabric.additional_power;
 
 import io.github.apace100.apoli.action.EntityAction;
+import io.github.apace100.apoli.action.context.EntityActionContext;
 import io.github.apace100.apoli.condition.EntityCondition;
 import io.github.apace100.apoli.data.TypedDataObjectFactory;
 import io.github.apace100.apoli.power.PowerConfiguration;
@@ -42,7 +43,7 @@ public class ActionOnSprintingToSneakingPower extends PowerType {
         if (entity instanceof PlayerEntity player) {
             if (entityCondition == null || entityCondition.test(player)) {
                 if (entityAction != null) {
-                    entityAction.accept(player);
+                    entityAction.accept(new EntityActionContext(player));
                     ShapeShifterCurseFabric.LOGGER.info("ActionOnSprintingToSneakingPower executed for player");
                 }
             }

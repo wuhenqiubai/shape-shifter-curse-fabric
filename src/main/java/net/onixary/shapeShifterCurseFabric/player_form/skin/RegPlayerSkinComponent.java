@@ -11,7 +11,7 @@ import net.onixary.shapeShifterCurseFabric.player_form.ability.PlayerFormCompone
 
 public class RegPlayerSkinComponent  implements EntityComponentInitializer {
     public static final ComponentKey<PlayerSkinComponent> SKIN_SETTINGS =
-            ComponentRegistry.getOrCreate(new Identifier(ShapeShifterCurseFabric.MOD_ID, "skin_settings"), PlayerSkinComponent.class);
+            ComponentRegistry.getOrCreate(Identifier.of(ShapeShifterCurseFabric.MOD_ID, "skin_settings"), PlayerSkinComponent.class);
 
     @Override
     public void registerEntityComponentFactories(EntityComponentFactoryRegistry registry) {

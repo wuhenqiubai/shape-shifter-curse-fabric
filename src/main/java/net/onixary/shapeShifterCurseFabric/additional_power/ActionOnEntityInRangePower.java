@@ -1,6 +1,7 @@
 package net.onixary.shapeShifterCurseFabric.additional_power;
 
 import io.github.apace100.apoli.action.EntityAction;
+import io.github.apace100.apoli.action.context.EntityActionContext;
 import io.github.apace100.apoli.component.PowerHolderComponent;
 import io.github.apace100.apoli.condition.EntityCondition;
 import io.github.apace100.apoli.data.ApoliDataTypes;
@@ -12,7 +13,9 @@ import io.github.apace100.calio.data.SerializableDataTypes;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Box;
+import net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -71,13 +74,13 @@ public class ActionOnEntityInRangePower extends PowerType {
             for (Entity targetEntity : entities) {
                 if (targetEntity.isAlive() && !targetEntity.isSpectator()) {
                     if (entityAction != null) {
-                        entityAction.accept(targetEntity);
+                        entityAction.accept(new EntityActionContext(targetEntity));
                     }
                 }
             }
 
             if (selfAction != null) {
-                selfAction.accept(player);
+                selfAction.accept(new EntityActionContext(player));
             }
 
             // 旧: PowerHolderComponent.syncPower(entity, this.type)
@@ -106,11 +109,9 @@ public class ActionOnEntityInRangePower extends PowerType {
 
     @Override
     public @NotNull PowerConfiguration<?> getConfig() {
-        // 返回这个 PowerType 的配置
-        PowerConfiguration<ActionOnEntityInRangePower> config = PowerConfiguration.of(ActionOnEntityInRangePower.class);
-        if (getPower() != null) {
-            config = config.withData(toData());
-        }
-        return config;
+        return PowerConfiguration.dataFactory(
+                ShapeShifterCurseFabric.identifier("action_on_entity_in_range"),
+                createFactory()
+        );
     }
 }

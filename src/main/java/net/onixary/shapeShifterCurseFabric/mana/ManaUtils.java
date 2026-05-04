@@ -161,8 +161,8 @@ public class ManaUtils {
                 NbtList nbtList = nbtCompound.getList("modifiers", NbtElement.COMPOUND_TYPE);
                 for (NbtElement nbtElement : nbtList) {
                     NbtCompound modifierEntryNbt = (NbtCompound) nbtElement;
-                    Identifier identifier = new Identifier(modifierEntryNbt.getString("identifier"));
-                    Identifier conditionID = new Identifier(modifierEntryNbt.getString("conditionID"));
+                    Identifier identifier = Identifier.of(modifierEntryNbt.getString("identifier"));
+                    Identifier conditionID = Identifier.of(modifierEntryNbt.getString("conditionID"));
                     Modifier modifier = Modifier.readFromNbt(modifierEntryNbt.getCompound("modifier"));
                     modifiers.put(identifier, new Pair<>(conditionID, modifier));
                 }

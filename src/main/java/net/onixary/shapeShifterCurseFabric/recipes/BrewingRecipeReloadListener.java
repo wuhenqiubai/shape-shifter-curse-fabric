@@ -12,7 +12,7 @@ import java.io.IOException;
 public class BrewingRecipeReloadListener implements SimpleSynchronousResourceReloadListener {
     @Override
     public Identifier getFabricId() {
-        return new Identifier(ShapeShifterCurseFabric.MOD_ID, "dynamic_brewing_recipes");
+        return Identifier.of(ShapeShifterCurseFabric.MOD_ID, "dynamic_brewing_recipes");
     }
 
     @Override

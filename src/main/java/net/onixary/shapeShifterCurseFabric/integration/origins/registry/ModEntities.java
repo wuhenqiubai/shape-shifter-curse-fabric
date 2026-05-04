@@ -19,6 +19,6 @@ public class ModEntities {
     }
 
     public static void register() {
-        Registry.register(Registries.ENTITY_TYPE, new Identifier(Origins.MODID, "enderian_pearl"), ENDERIAN_PEARL);
+        Registry.register(Registries.ENTITY_TYPE, Identifier.of(Origins.MODID, "enderian_pearl"), ENDERIAN_PEARL);
     }
 }

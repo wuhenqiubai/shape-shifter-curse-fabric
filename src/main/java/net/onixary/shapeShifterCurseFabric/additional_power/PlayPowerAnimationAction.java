@@ -2,6 +2,7 @@ package net.onixary.shapeShifterCurseFabric.additional_power;
 
 import io.github.apace100.apoli.action.ActionConfiguration;
 import io.github.apace100.apoli.action.context.EntityActionContext;
+import io.github.apace100.apoli.action.type.BiEntityActionType;
 import io.github.apace100.apoli.action.type.EntityActionType;
 import io.github.apace100.apoli.data.TypedDataObjectFactory;
 import io.github.apace100.calio.data.SerializableData;
@@ -166,8 +167,9 @@ public class PlayPowerAnimationAction {
         }
     }
 
-    public static void register(Consumer<ActionConfiguration<EntityActionType>> actionReg,
-                                 Consumer<?> biActionReg) {
+    @SuppressWarnings("unchecked")
+    public static void register(Consumer<ActionConfiguration<? extends EntityActionType>> actionReg,
+                                 Consumer<ActionConfiguration<? extends BiEntityActionType>> biActionReg) {
         actionReg.accept(ActionConfiguration.of(
                 ShapeShifterCurseFabric.identifier("play_power_animation_with_time"),
                 PlayWithTimeAction.DATA_FACTORY

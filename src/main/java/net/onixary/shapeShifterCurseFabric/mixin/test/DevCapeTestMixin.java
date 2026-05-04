@@ -20,7 +20,7 @@ public class DevCapeTestMixin {
         // 只在开发环境中生效
         if (FabricLoader.getInstance().isDevelopmentEnvironment()) {
             // 返回一个默认的披风纹理
-            cir.setReturnValue(new Identifier("textures/entity/cape/cape.png"));
+            cir.setReturnValue(Identifier.of("textures/entity/cape/cape.png"));
         }
     }
 
