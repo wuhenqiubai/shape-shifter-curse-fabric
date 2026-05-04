@@ -1,6 +1,6 @@
 package net.onixary.shapeShifterCurseFabric.form_giving_custom_entity;
 
-import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
+// FabricItemSettings removed in 1.21, use Item.Settings directly
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroups;
@@ -22,23 +22,23 @@ public class RegTransformativeEntitySpawnEgg {
     //);
 
     public static final Item T_BAT_SPAWN_EGG = register("custom_bat_spawn_egg", new SpawnEggItem(
-            T_BAT,  0x8B8B8B, 0x1F1F1F,new FabricItemSettings()
+            T_BAT,  0x8B8B8B, 0x1F1F1F,new Item.Settings()
     ));
 
     public static final Item T_AXOLOTL_SPAWN_EGG = register("custom_axolotl_spawn_egg", new SpawnEggItem(
-            T_AXOLOTL,  0x8B8B8B,0xe4a7ae, new FabricItemSettings()
+            T_AXOLOTL,  0x8B8B8B,0xe4a7ae, new Item.Settings()
     ));
 
     public static final Item T_OCELOT_SPAWN_EGG = register("custom_ocelot_spawn_egg", new SpawnEggItem(
-            ShapeShifterCurseFabric.T_OCELOT,  0x8B8B8B,0xfc801d, new FabricItemSettings()
+            ShapeShifterCurseFabric.T_OCELOT,  0x8B8B8B,0xfc801d, new Item.Settings()
     ));
 
     public static final Item T_WOLF_SPAWN_EGG = register("custom_wolf_spawn_egg", new SpawnEggItem(
-            ShapeShifterCurseFabric.T_WOLF,  0x8B8B8B,0xffd355, new FabricItemSettings()
+            ShapeShifterCurseFabric.T_WOLF,  0x8B8B8B,0xffd355, new Item.Settings()
     ));
 
     public static final Item T_SPIDER_SPAWN_EGG = register("custom_spider_spawn_egg", new SpawnEggItem(
-            ShapeShifterCurseFabric.T_SPIDER,  0x8B8B8B,0xff9060, new FabricItemSettings()
+            ShapeShifterCurseFabric.T_SPIDER,  0x8B8B8B,0xff9060, new Item.Settings()
     ));
 
     public static <T extends Item> T register(String path, T item) {

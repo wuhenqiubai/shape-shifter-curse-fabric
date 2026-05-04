@@ -1,16 +1,17 @@
 package net.onixary.shapeShifterCurseFabric.advancement;
 
-import com.google.gson.JsonObject;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.advancement.criterion.AbstractCriterion;
-import net.minecraft.advancement.criterion.AbstractCriterionConditions;
-import net.minecraft.predicate.entity.AdvancementEntityPredicateDeserializer;
 import net.minecraft.predicate.entity.LootContextPredicate;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
 import net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric;
 
+import java.util.Optional;
+
 public class OnOpenBookOfShapeShifter extends AbstractCriterion<OnOpenBookOfShapeShifter.Condition> {
-    public static final Identifier ID = new Identifier(ShapeShifterCurseFabric.MOD_ID, "on_open_book_of_shape_shifter");
+    public static final Identifier ID = Identifier.of(ShapeShifterCurseFabric.MOD_ID, "on_open_book_of_shape_shifter");
 
     @Override
     public Identifier getId() {
@@ -18,20 +19,23 @@ public class OnOpenBookOfShapeShifter extends AbstractCriterion<OnOpenBookOfShap
     }
 
     public void trigger(ServerPlayerEntity player) {
-        trigger(player, condition -> {
-            return true;
-        });
+        trigger(player, Condition::requirementsMet);
     }
 
     @Override
-    protected Condition conditionsFromJson(JsonObject obj, LootContextPredicate playerPredicate, AdvancementEntityPredicateDeserializer predicateDeserializer) {
-        return new Condition();
+    public Codec<Condition> getConditionsCodec() {
+        return Condition.CODEC;
     }
 
-    public static class Condition extends AbstractCriterionConditions {
+    public record Condition(Optional<LootContextPredicate> player) implements AbstractCriterion.Conditions {
+        public static final Codec<Condition> CODEC = RecordCodecBuilder.create(instance ->
+            instance.group(
+                LootContextPredicate.CODEC.optionalFieldOf("player").forGetter(Condition::player)
+            ).apply(instance, Condition::new)
+        );
 
-        public Condition() {
-            super(ID, LootContextPredicate.EMPTY);
+        public boolean requirementsMet() {
+            return true;
         }
     }
 }

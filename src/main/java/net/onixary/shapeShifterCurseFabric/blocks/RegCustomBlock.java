@@ -6,7 +6,7 @@ import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.MapColor;
-import net.minecraft.block.enums.Instrument;
+import net.minecraft.block.enums.NoteBlockInstrument;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
@@ -21,8 +21,8 @@ public final class RegCustomBlock {
     // TODO TEMP_WEB_BRIDGE 仅在测试时有物品 发布时记得用 registerWithOutItem
     public static final Block TEMP_WEB_BRIDGE = register("temp_web_bridge", new TempWebBridgeBlock(AbstractBlock.Settings.create().mapColor(MapColor.WHITE_GRAY).strength(4.0f).ticksRandomly().noCollision().dynamicBounds().dropsNothing().solidBlock(Blocks::never).burnable().sounds(BlockSoundGroup.WOOL)));
 
-    public static final Block WEB_COMPOSTER = register("web_composter", new WebComposterBlock(AbstractBlock.Settings.create().mapColor(MapColor.WHITE_GRAY).instrument(Instrument.BASS).strength(0.6F).sounds(BlockSoundGroup.WOOL).burnable().nonOpaque()));
-    public static final Block DEW_COVERED_COBWEB = register("dew_covered_cobweb", new DewCoveredCobwebBlock(AbstractBlock.Settings.create().mapColor(MapColor.WHITE_GRAY).instrument(Instrument.BELL).strength(1.0F).sounds(BlockSoundGroup.WOOL).noCollision().nonOpaque()));
+    public static final Block WEB_COMPOSTER = register("web_composter", new WebComposterBlock(AbstractBlock.Settings.create().mapColor(MapColor.WHITE_GRAY).instrument(NoteBlockInstrument.BASS).strength(0.6F).sounds(BlockSoundGroup.WOOL).burnable().nonOpaque()));
+    public static final Block DEW_COVERED_COBWEB = register("dew_covered_cobweb", new DewCoveredCobwebBlock(AbstractBlock.Settings.create().mapColor(MapColor.WHITE_GRAY).instrument(NoteBlockInstrument.BELL).strength(1.0F).sounds(BlockSoundGroup.WOOL).noCollision().nonOpaque()));
 
     public static void ClientInit() {
         // transparent透明模式不写Z，会出现自排序问题遮挡自己，只需要镂空的模型应该使用getCutout
