@@ -10,7 +10,8 @@ import net.onixary.shapeShifterCurseFabric.integration.origins.registry.ModCompo
 import io.netty.buffer.Unpooled;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.fabric.api.util.NbtType;
-import net.minecraft.client.item.TooltipContext;
+import net.minecraft.item.Item.TooltipContext;
+import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -64,7 +65,7 @@ public class OrbOfOriginItem extends Item {
     }
 
     @Override
-    public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
+    public void appendTooltip(ItemStack stack, Item.TooltipContext context, List<Text> tooltip, TooltipType type) {
         Map<OriginLayer, Origin> targets = getTargets(stack);
         for(Map.Entry<OriginLayer, Origin> target : targets.entrySet()) {
             if(target.getValue() == Origin.EMPTY) {

@@ -1,6 +1,6 @@
 package net.onixary.shapeShifterCurseFabric.items;
 
-import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
+// FabricItemGroup removed in 1.21, use ItemGroup directly
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.*;
 import net.minecraft.potion.Potion;
@@ -108,7 +108,7 @@ public class RegCustomItem {
         return potionStacks;
     }
 
-    public static final ItemGroup SSC_GROUP = FabricItemGroup.builder()
+    public static final ItemGroup SSC_GROUP = ItemGroup.builder()
             .icon(() -> new ItemStack(ICON_CURSED_MOON))
             .displayName(Text.translatable("itemGroup.shape_shifter_curse.sscitems"))
             .entries((context, entries) -> {

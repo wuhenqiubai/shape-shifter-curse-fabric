@@ -1,6 +1,8 @@
 package net.onixary.shapeShifterCurseFabric.items.trinkets;
 
-import net.minecraft.client.item.TooltipContext;
+import net.minecraft.item.Item;
+import net.minecraft.item.Item.TooltipContext;
+import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
@@ -16,7 +18,7 @@ public class CollarOfTensionTrinket extends AccessoryItem {
     }
 
     @Override
-    public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
+    public void appendTooltip(ItemStack stack, Item.TooltipContext context, List<Text> tooltip, TooltipType type) {
         tooltip.add(Text.translatable("item.shape-shifter-curse.collar_of_tension.tooltip").formatted(Formatting.YELLOW));
     }
 }
