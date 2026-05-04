@@ -36,6 +36,10 @@ loom {
 
 
 repositories {
+    // Local maven repo for patched dependencies (must be first)
+    maven {
+        url = uri("${project.projectDir}/libs/maven_local")
+    }
     // Add repositories to retrieve artifacts from in here.
     // You should only use this when depending on other mods because
     // Loom adds the essential maven repositories to download Minecraft and libraries from automatically.
@@ -94,6 +98,10 @@ repositories {
         url = "https://maven.ladysnake.org/releases"
     }
     maven {
+        name = "Ladysnake Mods (snapshots)"
+        url = "https://maven.ladysnake.org/snapshots"
+    }
+    maven {
         url = "https://maven.cafeteria.dev"
         content {
             includeGroup "net.adriantodt.fabricmc"
@@ -111,9 +119,7 @@ repositories {
     maven {
         url = "https://jitpack.io"
     }
-    maven {
-        url = "https://maven.shedaniel.me"
-    }
+    // maven { url = "https://maven.shedaniel.me" } // Disabled: GMM not compatible with Loom
     maven {
         url = "https://maven.terraformersmc.com"
     }
@@ -156,8 +162,8 @@ dependencies {
     //compileOnly "mod.azure.azurelib:azurelib-common-1.20.1:2.0.41"
 
     //Fabric or Quilt
-    modImplementation "mod.azure.azurelib:azurelib-fabric-1.20.1:${azurelib_version}"
-    include "mod.azure.azurelib:azurelib-fabric-1.20.1:${azurelib_version}"
+    modImplementation "mod.azure.azurelib:azurelib-fabric-1.21.1:${azurelib_version}"
+    include "mod.azure.azurelib:azurelib-fabric-1.21.1:${azurelib_version}"
     //modCompileOnly "maven.modrinth:azurelib:2.1.17"
 
 
@@ -182,10 +188,7 @@ dependencies {
     //include "io.github.ladysnake:PlayerAbilityLib:${pal_version}"
 
     // Apoli by Apace100
-
-    // modImplementation "com.github.apace100:apoli:${project.apoli_version}"
-    // include "com.github.apace100:apoli:${project.apoli_version}"
-    // 使用Ladysnake Mods的源 用正常的版本号
+    // 1.21.1 alpha versions are on Ladysnake snapshots maven
     modImplementation "io.github.apace100:apoli:${project.apoli_version}"
     include "io.github.apace100:apoli:${project.apoli_version}"
 
@@ -200,10 +203,10 @@ dependencies {
     //modImplementation "com.github.eggohito:BreathingLib:${project.breathing_lib_version}"
     //include "com.github.eggohito:BreathingLib:${project.breathing_lib_version}"
 
-    modApi("dev.onyxstudios.cardinal-components-api:cardinal-components-base:${cca_version}") {
+    modApi("org.ladysnake.cardinal-components-api:cardinal-components-base:${cca_version}") {
         exclude(group: "net.fabricmc.fabric-api")
     }
-    modApi("dev.onyxstudios.cardinal-components-api:cardinal-components-entity:${cca_version}") {
+    modApi("org.ladysnake.cardinal-components-api:cardinal-components-entity:${cca_version}") {
         exclude(group: "net.fabricmc.fabric-api")
     }
 
@@ -236,9 +239,9 @@ dependencies {
     modCompileOnly "maven.modrinth:first-person-model:mquWPSix"
     modRuntimeOnly "maven.modrinth:first-person-model:mquWPSix"
 
-    // AppleSkin
-    modCompileOnly "squeek.appleskin:appleskin-fabric:mc1.20-2.5.1"
-    modLocalRuntime "squeek.appleskin:appleskin-fabric:mc1.20-2.5.1"
+    // AppleSkin - disabled for 1.21.1 port, needs version update
+    // modCompileOnly "squeek.appleskin:appleskin-fabric:mc1.20-2.5.1"
+    // modLocalRuntime "squeek.appleskin:appleskin-fabric:mc1.20-2.5.1"
 
     modCompileOnly "maven.modrinth:vivecraft:9Sa2NEEb"
     annotationProcessor(files("libs/mixinextras-fabric-0.2.0-beta.8.jar"))
@@ -260,7 +263,7 @@ processResources {
     }
 }
 
-def targetJavaVersion = 17
+def targetJavaVersion = 21
 tasks.withType(JavaCompile).configureEach {
     // ensure that the encoding is set to UTF-8, no matter what the system default is
     // this fixes some edge cases with special characters not displaying correctly
