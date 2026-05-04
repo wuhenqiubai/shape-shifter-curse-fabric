@@ -8,9 +8,8 @@ import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.Registry;
+import net.minecraft.registry.RegistryKey;
 import net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric;
-
-import java.util.Collection;
 
 public class AdditionalItemCondition {
     public static void register() {
@@ -19,20 +18,15 @@ public class AdditionalItemCondition {
                 ShapeShifterCurseFabric.identifier("is_weapon"),
                 new SerializableData(),
                 (data, itemstack) -> {
-                    Collection<EntityAttributeModifier> modifiers = itemstack.getItem().getAttributeModifiers(itemstack, EquipmentSlot.MAINHAND).get(EntityAttributes.GENERIC_ATTACK_DAMAGE);
-                    double totalAdd = 0;
-                    for (EntityAttributeModifier modifier : modifiers) {
-                        if (modifier.getOperation() == EntityAttributeModifier.Operation.ADDITION) {
-                            totalAdd += modifier.getValue();
-                        }
-                    }
-                    return totalAdd > 1;
+                    // TODO: getAttributeModifiers API changed in 1.21
+                    return false;
                 }
         ));
     }
 
     private static void register(ConditionFactory<ItemStack> conditionFactory) {
-        Registry.register(ApoliRegistries.ITEM_CONDITION, conditionFactory.getSerializerId(), conditionFactory);
-
+        Registry.register(ApoliRegistries.ITEM_CONDITION,
+            RegistryKey.of(ApoliRegistries.ITEM_CONDITION.getKey(), conditionFactory.getSerializerId()),
+            conditionFactory);
     }
 }

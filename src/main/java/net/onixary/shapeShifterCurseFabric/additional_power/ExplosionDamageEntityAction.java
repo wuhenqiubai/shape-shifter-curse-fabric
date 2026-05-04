@@ -5,7 +5,6 @@ import io.github.apace100.apoli.power.factory.action.ActionFactory;
 import io.github.apace100.apoli.power.factory.condition.ConditionFactory;
 import io.github.apace100.calio.data.SerializableData;
 import io.github.apace100.calio.data.SerializableDataTypes;
-import net.minecraft.enchantment.ProtectionEnchantment;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.TntEntity;
@@ -74,7 +73,7 @@ public class ExplosionDamageEntityAction {
                         }
                         double ad;
                         if (target_entity instanceof LivingEntity livingEntity) {
-                            ad = ProtectionEnchantment.transformExplosionKnockback(livingEntity, ac);
+                            ad = ac; // ProtectionEnchantment removed in 1.21, TODO: use new enchantment API
                         } else {
                             ad = ac;
                         }

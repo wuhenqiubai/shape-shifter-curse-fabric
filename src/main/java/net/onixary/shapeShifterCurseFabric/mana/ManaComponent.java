@@ -8,7 +8,7 @@ import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.nbt.NbtString;
-import net.minecraft.network.PacketByteBuf;
+import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
@@ -340,17 +340,17 @@ public class ManaComponent implements AutoSyncedComponent {
     }
 
     @Override
-    public void writeSyncPacket(PacketByteBuf buf, ServerPlayerEntity recipient) {
+    public void writeSyncPacket(RegistryByteBuf buf, ServerPlayerEntity recipient) {
         NbtCompound tag = new NbtCompound();
-        this.writeToNbt(tag, false);
+        this.writeToNbt(tag, buf.getRegistryManager());
         buf.writeNbt(tag);
     }
 
     @Override
-    public void applySyncPacket(PacketByteBuf buf) {
+    public void applySyncPacket(RegistryByteBuf buf) {
         NbtCompound tag = buf.readNbt();
         if (tag != null) {
-            this.readFromNbt(tag, false);
+            this.readFromNbt(tag, buf.getRegistryManager());
         }
 
     }

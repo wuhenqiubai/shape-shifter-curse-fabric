@@ -17,9 +17,11 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import static net.minecraft.client.gui.widget.ClickableWidget.WIDGETS_TEXTURE;
+import net.minecraft.util.Identifier;
 
 public class ItemStorePowerRender {
+    private static final Identifier WIDGETS_TEXTURE = Identifier.of("textures/gui/sprites/widget.png");
+
     public static interface itemStorePowerRenderInterface {
         public int getSlot();
         public ItemStack getStack();

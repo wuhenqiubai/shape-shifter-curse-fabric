@@ -1,15 +1,15 @@
 package net.onixary.shapeShifterCurseFabric.integration.origins.registry;
 
 import net.onixary.shapeShifterCurseFabric.integration.origins.Origins;
-import net.onixary.shapeShifterCurseFabric.integration.origins.util.OriginLootCondition;
+// OriginLootCondition disabled for 1.21 port
 import net.fabricmc.fabric.api.loot.v2.LootTableEvents;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentLevelEntry;
 import net.minecraft.item.EnchantedBookItem;
 import net.minecraft.item.Items;
 import net.minecraft.loot.LootPool;
-import net.minecraft.loot.condition.LootCondition;
-import net.minecraft.loot.condition.LootConditionType;
+// LootCondition API changed in 1.21
+// LootConditionType API changed in 1.21
 import net.minecraft.loot.entry.EmptyEntry;
 import net.minecraft.loot.entry.ItemEntry;
 import net.minecraft.loot.function.SetNbtLootFunction;
@@ -17,7 +17,7 @@ import net.minecraft.loot.provider.number.ConstantLootNumberProvider;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.JsonSerializer;
+// JsonSerializer removed in 1.21
 import net.minecraft.registry.Registry;
 
 public class ModLoot {
