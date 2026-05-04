@@ -3,7 +3,8 @@ package net.onixary.shapeShifterCurseFabric.items;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.*;
 import net.minecraft.potion.Potion;
-import net.minecraft.potion.PotionUtil;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.PotionContentsComponent;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.Registry;
@@ -87,7 +88,7 @@ public class RegCustomItem {
 
     public static ItemStack buildPotion(Item PotionItem, Potion potion) {
         ItemStack potionStack = new ItemStack(PotionItem);
-        PotionUtil.setPotion(potionStack, potion);
+        potionStack.set(DataComponentTypes.POTION_CONTENTS, new PotionContentsComponent(potion));
         return potionStack;
     }
 

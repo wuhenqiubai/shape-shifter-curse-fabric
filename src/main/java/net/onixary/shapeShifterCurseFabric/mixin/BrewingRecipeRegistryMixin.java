@@ -4,7 +4,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
-import net.minecraft.potion.PotionUtil;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.PotionContentsComponent;
 import net.minecraft.recipe.BrewingRecipeRegistry;
 import net.onixary.shapeShifterCurseFabric.recipes.BrewingRecipeUtils;
 import net.onixary.shapeShifterCurseFabric.status_effects.CTPUtils;
@@ -21,7 +22,7 @@ public class BrewingRecipeRegistryMixin {
             return;
         }
         ItemStack resultPotion = cir.getReturnValue();
-        Potion potion = PotionUtil.getPotion(input);
+        Potion potion = input.getOrDefault(DataComponentTypes.POTION_CONTENTS, PotionContentsComponent.DEFAULT).potion().orElse(null).value();
         Item item = input.getItem();
         for(int i = 0, j = BrewingRecipeRegistry.ITEM_RECIPES.size(); i < j; ++i) {
             BrewingRecipeRegistry.Recipe<Item> recipe = BrewingRecipeRegistry.ITEM_RECIPES.get(i);

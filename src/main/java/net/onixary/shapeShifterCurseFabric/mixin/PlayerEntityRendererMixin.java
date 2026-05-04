@@ -2,7 +2,7 @@ package net.onixary.shapeShifterCurseFabric.mixin;
 
 
 import net.minecraft.client.network.ClientPlayerEntity;
-import net.minecraft.client.render.entity.PlayerModelPart;
+// PlayerModelPart removed in 1.21
 import net.onixary.shapeShifterCurseFabric.integration.origins.component.PlayerOriginComponent;
 import net.onixary.shapeShifterCurseFabric.integration.origins.origin.OriginLayers;
 import net.onixary.shapeShifterCurseFabric.integration.origins.registry.ModComponents;

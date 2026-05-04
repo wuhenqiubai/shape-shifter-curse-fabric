@@ -6,7 +6,8 @@ import net.minecraft.entity.mob.WitchEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.thrown.PotionEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.potion.PotionUtil;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.PotionContentsComponent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -43,7 +44,7 @@ public abstract class WitchEntityMixin {
 
                     // 创建自定义溅射式药水
                     PotionEntity customPotion = new PotionEntity(world, witch);
-                    ItemStack potionStack = PotionUtil.setPotion(new ItemStack(net.minecraft.item.Items.SPLASH_POTION), RegCustomPotions.FAMILIAR_FOX_FORM_POTION);
+                    ItemStack potionStack = new ItemStack(net.minecraft.item.Items.SPLASH_POTION).set(DataComponentTypes.POTION_CONTENTS, new PotionContentsComponent(RegCustomPotions.FAMILIAR_FOX_FORM_POTION));
                     customPotion.setItem(potionStack);
 
                     customPotion.setPitch(customPotion.getPitch() - -20.0F);

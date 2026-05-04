@@ -8,7 +8,8 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.thrown.PotionEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
-import net.minecraft.potion.PotionUtil;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.PotionContentsComponent;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.Box;
@@ -59,7 +60,7 @@ public class PotionEntityMixin {
 
     @Inject(method = "applyLingeringPotion", at = @At("HEAD"))
     private void onApplyLingeringPotion(ItemStack stack, Potion potion, CallbackInfo ci) {
-        List<StatusEffectInstance> effects = PotionUtil.getPotionEffects(stack);
+        List<StatusEffectInstance> effects = stack.getOrDefault(DataComponentTypes.POTION_CONTENTS, PotionContentsComponent.DEFAULT).customEffects();
         if (effects.isEmpty()) {
             PotionEntity self = (PotionEntity) (Object) this;
             Box box = self.getBoundingBox().expand(3.0, 2.0, 3.0);
