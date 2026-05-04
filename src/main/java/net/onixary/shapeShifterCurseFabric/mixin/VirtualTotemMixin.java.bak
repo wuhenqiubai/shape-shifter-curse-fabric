@@ -4,7 +4,7 @@ import io.github.apace100.apoli.component.PowerHolderComponent;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.registry.tag.DamageTypeTags;
-import net.onixary.shapeShifterCurseFabric.additional_power.VirtualTotemPower;
+// VirtualTotemPower disabled for 1.21 port
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
