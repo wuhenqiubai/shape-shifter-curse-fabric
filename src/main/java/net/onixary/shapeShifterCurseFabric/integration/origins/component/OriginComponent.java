@@ -1,6 +1,6 @@
 package net.onixary.shapeShifterCurseFabric.integration.origins.component;
 
-import dev.onyxstudios.cca.api.v3.component.sync.AutoSyncedComponent;
+import org.ladysnake.cca.api.v3.component.sync.AutoSyncedComponent;
 import io.github.apace100.apoli.component.PowerHolderComponent;
 import io.github.apace100.apoli.power.ModifyPlayerSpawnPower;
 import io.github.apace100.apoli.power.Power;

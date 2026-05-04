@@ -1,6 +1,6 @@
 package net.onixary.shapeShifterCurseFabric.player_form.ability;
 
-import dev.onyxstudios.cca.api.v3.component.sync.AutoSyncedComponent;
+import org.ladysnake.cca.api.v3.component.sync.AutoSyncedComponent;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.Identifier;
 import net.onixary.shapeShifterCurseFabric.player_form.PlayerFormBase;

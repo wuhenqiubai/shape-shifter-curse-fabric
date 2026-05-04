@@ -2,11 +2,11 @@ package net.onixary.shapeShifterCurseFabric.render.render_layer;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
-import ladysnake.satin.api.event.EntitiesPreRenderCallback;
-import ladysnake.satin.api.event.ShaderEffectRenderCallback;
-import ladysnake.satin.api.managed.ManagedCoreShader;
-import ladysnake.satin.api.managed.ShaderEffectManager;
-import ladysnake.satin.api.managed.uniform.Uniform1f;
+import org.ladysnake.satin.api.event.EntitiesPreRenderCallback;
+import org.ladysnake.satin.api.event.ShaderEffectRenderCallback;
+import org.ladysnake.satin.api.managed.ManagedCoreShader;
+import org.ladysnake.satin.api.managed.ShaderEffectManager;
+import org.ladysnake.satin.api.managed.uniform.Uniform1f;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.util.Identifier;

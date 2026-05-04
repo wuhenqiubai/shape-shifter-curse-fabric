@@ -1,7 +1,7 @@
 package net.onixary.shapeShifterCurseFabric.player_form.skin;
 
-import dev.onyxstudios.cca.api.v3.component.Component;
-import dev.onyxstudios.cca.api.v3.component.sync.AutoSyncedComponent;
+import org.ladysnake.cca.api.v3.component.Component;
+import org.ladysnake.cca.api.v3.component.sync.AutoSyncedComponent;
 import net.minecraft.nbt.NbtCompound;
 import net.onixary.shapeShifterCurseFabric.util.FormTextureUtils;
 

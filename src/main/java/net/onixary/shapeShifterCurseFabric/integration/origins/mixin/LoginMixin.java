@@ -1,6 +1,6 @@
 package net.onixary.shapeShifterCurseFabric.integration.origins.mixin;
 
-import dev.onyxstudios.cca.api.v3.component.ComponentProvider;
+import org.ladysnake.cca.api.v3.component.ComponentProvider;
 import net.onixary.shapeShifterCurseFabric.integration.origins.badge.BadgeManager;
 import net.onixary.shapeShifterCurseFabric.integration.origins.component.OriginComponent;
 import net.onixary.shapeShifterCurseFabric.integration.origins.networking.ModPackets;
