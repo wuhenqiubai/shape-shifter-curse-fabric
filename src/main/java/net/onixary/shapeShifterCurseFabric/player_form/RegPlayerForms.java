@@ -19,88 +19,88 @@ public class RegPlayerForms {
     // Builtin PlayerForms
     // 在Java中null不能使用equals方法
     // Original
-    public static PlayerFormBase ORIGINAL_BEFORE_ENABLE = registerPlayerForm(new PlayerFormBase(new Identifier(ShapeShifterCurseFabric.MOD_ID, "original_before_enable")));
-    public static PlayerFormBase ORIGINAL_SHIFTER = registerPlayerForm(new PlayerFormBase(new Identifier(ShapeShifterCurseFabric.MOD_ID, "original_shifter")));
+    public static PlayerFormBase ORIGINAL_BEFORE_ENABLE = registerPlayerForm(new PlayerFormBase(Identifier.of(ShapeShifterCurseFabric.MOD_ID, "original_before_enable")));
+    public static PlayerFormBase ORIGINAL_SHIFTER = registerPlayerForm(new PlayerFormBase(Identifier.of(ShapeShifterCurseFabric.MOD_ID, "original_shifter")));
     // Bat
-    public static PlayerFormBase BAT_0 = registerPlayerForm(new PlayerFormBase(new Identifier(ShapeShifterCurseFabric.MOD_ID, "bat_0")).setPhase(PlayerFormPhase.PHASE_0));
-    public static PlayerFormBase BAT_1 = registerPlayerForm(new Form_Bat1(new Identifier(ShapeShifterCurseFabric.MOD_ID, "bat_1")).setPhase(PlayerFormPhase.PHASE_1));
-    public static PlayerFormBase BAT_2 = registerPlayerForm(new Form_Bat2(new Identifier(ShapeShifterCurseFabric.MOD_ID, "bat_2")).setPhase(PlayerFormPhase.PHASE_2).setHasSlowFall(true).setOverrideHandAnim(true));
-    public static PlayerFormBase BAT_3 = registerPlayerForm(new Form_Bat3(new Identifier(ShapeShifterCurseFabric.MOD_ID, "bat_3")).setPhase(PlayerFormPhase.PHASE_3).setHasSlowFall(true).setOverrideHandAnim(true));
+    public static PlayerFormBase BAT_0 = registerPlayerForm(new PlayerFormBase(Identifier.of(ShapeShifterCurseFabric.MOD_ID, "bat_0")).setPhase(PlayerFormPhase.PHASE_0));
+    public static PlayerFormBase BAT_1 = registerPlayerForm(new Form_Bat1(Identifier.of(ShapeShifterCurseFabric.MOD_ID, "bat_1")).setPhase(PlayerFormPhase.PHASE_1));
+    public static PlayerFormBase BAT_2 = registerPlayerForm(new Form_Bat2(Identifier.of(ShapeShifterCurseFabric.MOD_ID, "bat_2")).setPhase(PlayerFormPhase.PHASE_2).setHasSlowFall(true).setOverrideHandAnim(true));
+    public static PlayerFormBase BAT_3 = registerPlayerForm(new Form_Bat3(Identifier.of(ShapeShifterCurseFabric.MOD_ID, "bat_3")).setPhase(PlayerFormPhase.PHASE_3).setHasSlowFall(true).setOverrideHandAnim(true));
     // Axolotl
-    public static PlayerFormBase AXOLOTL_0 = registerPlayerForm(new PlayerFormBase(new Identifier(ShapeShifterCurseFabric.MOD_ID, "axolotl_0")).setPhase(PlayerFormPhase.PHASE_0));
-    public static PlayerFormBase AXOLOTL_1 = registerPlayerForm(new Form_Axolotl1(new Identifier(ShapeShifterCurseFabric.MOD_ID, "axolotl_1")).setPhase(PlayerFormPhase.PHASE_1));
-    public static PlayerFormBase AXOLOTL_2 = registerPlayerForm(new Form_Axolotl2(new Identifier(ShapeShifterCurseFabric.MOD_ID, "axolotl_2")).setPhase(PlayerFormPhase.PHASE_2));
-    public static PlayerFormBase AXOLOTL_3 = registerPlayerForm(new Form_Axolotl3(new Identifier(ShapeShifterCurseFabric.MOD_ID, "axolotl_3")).setPhase(PlayerFormPhase.PHASE_3)).setCanRushJump(true);
+    public static PlayerFormBase AXOLOTL_0 = registerPlayerForm(new PlayerFormBase(Identifier.of(ShapeShifterCurseFabric.MOD_ID, "axolotl_0")).setPhase(PlayerFormPhase.PHASE_0));
+    public static PlayerFormBase AXOLOTL_1 = registerPlayerForm(new Form_Axolotl1(Identifier.of(ShapeShifterCurseFabric.MOD_ID, "axolotl_1")).setPhase(PlayerFormPhase.PHASE_1));
+    public static PlayerFormBase AXOLOTL_2 = registerPlayerForm(new Form_Axolotl2(Identifier.of(ShapeShifterCurseFabric.MOD_ID, "axolotl_2")).setPhase(PlayerFormPhase.PHASE_2));
+    public static PlayerFormBase AXOLOTL_3 = registerPlayerForm(new Form_Axolotl3(Identifier.of(ShapeShifterCurseFabric.MOD_ID, "axolotl_3")).setPhase(PlayerFormPhase.PHASE_3)).setCanRushJump(true);
     // Ocelot
-    public static PlayerFormBase OCELOT_0 = registerPlayerForm(new PlayerFormBase(new Identifier(ShapeShifterCurseFabric.MOD_ID, "ocelot_0")).setPhase(PlayerFormPhase.PHASE_0));
-    public static PlayerFormBase OCELOT_1 = registerPlayerForm(new PlayerFormBase(new Identifier(ShapeShifterCurseFabric.MOD_ID, "ocelot_1")).setPhase(PlayerFormPhase.PHASE_1));
-    public static PlayerFormBase OCELOT_2 = registerPlayerForm(new Form_Ocelot2(new Identifier(ShapeShifterCurseFabric.MOD_ID, "ocelot_2")).setPhase(PlayerFormPhase.PHASE_2).setCanSneakRush(true).setCanRushJump(true));
-    public static PlayerFormBase OCELOT_3 = registerPlayerForm(new Form_Ocelot3(new Identifier(ShapeShifterCurseFabric.MOD_ID, "ocelot_3")).setPhase(PlayerFormPhase.PHASE_3).setCanSneakRush(true));
+    public static PlayerFormBase OCELOT_0 = registerPlayerForm(new PlayerFormBase(Identifier.of(ShapeShifterCurseFabric.MOD_ID, "ocelot_0")).setPhase(PlayerFormPhase.PHASE_0));
+    public static PlayerFormBase OCELOT_1 = registerPlayerForm(new PlayerFormBase(Identifier.of(ShapeShifterCurseFabric.MOD_ID, "ocelot_1")).setPhase(PlayerFormPhase.PHASE_1));
+    public static PlayerFormBase OCELOT_2 = registerPlayerForm(new Form_Ocelot2(Identifier.of(ShapeShifterCurseFabric.MOD_ID, "ocelot_2")).setPhase(PlayerFormPhase.PHASE_2).setCanSneakRush(true).setCanRushJump(true));
+    public static PlayerFormBase OCELOT_3 = registerPlayerForm(new Form_Ocelot3(Identifier.of(ShapeShifterCurseFabric.MOD_ID, "ocelot_3")).setPhase(PlayerFormPhase.PHASE_3).setCanSneakRush(true));
     // FamiliarFox
-    public static PlayerFormBase FAMILIAR_FOX_0 = registerPlayerForm(new PlayerFormBase(new Identifier(ShapeShifterCurseFabric.MOD_ID, "familiar_fox_0")).setPhase(PlayerFormPhase.PHASE_0));
-    public static PlayerFormBase FAMILIAR_FOX_1 = registerPlayerForm(new PlayerFormBase(new Identifier(ShapeShifterCurseFabric.MOD_ID, "familiar_fox_1")).setPhase(PlayerFormPhase.PHASE_1));
-    public static PlayerFormBase FAMILIAR_FOX_2 = registerPlayerForm(new Form_FamiliarFox2(new Identifier(ShapeShifterCurseFabric.MOD_ID, "familiar_fox_2")).setPhase(PlayerFormPhase.PHASE_2));
-    public static PlayerFormBase FAMILIAR_FOX_3 = registerPlayerForm(new Form_FamiliarFox3(new Identifier(ShapeShifterCurseFabric.MOD_ID, "familiar_fox_3")).setPhase(PlayerFormPhase.PHASE_3));
+    public static PlayerFormBase FAMILIAR_FOX_0 = registerPlayerForm(new PlayerFormBase(Identifier.of(ShapeShifterCurseFabric.MOD_ID, "familiar_fox_0")).setPhase(PlayerFormPhase.PHASE_0));
+    public static PlayerFormBase FAMILIAR_FOX_1 = registerPlayerForm(new PlayerFormBase(Identifier.of(ShapeShifterCurseFabric.MOD_ID, "familiar_fox_1")).setPhase(PlayerFormPhase.PHASE_1));
+    public static PlayerFormBase FAMILIAR_FOX_2 = registerPlayerForm(new Form_FamiliarFox2(Identifier.of(ShapeShifterCurseFabric.MOD_ID, "familiar_fox_2")).setPhase(PlayerFormPhase.PHASE_2));
+    public static PlayerFormBase FAMILIAR_FOX_3 = registerPlayerForm(new Form_FamiliarFox3(Identifier.of(ShapeShifterCurseFabric.MOD_ID, "familiar_fox_3")).setPhase(PlayerFormPhase.PHASE_3));
     // SnowFox
-    public static PlayerFormBase SNOW_FOX_0 = registerPlayerForm(new PlayerFormBase(new Identifier(ShapeShifterCurseFabric.MOD_ID, "snow_fox_0")).setPhase(PlayerFormPhase.PHASE_0));
-    public static PlayerFormBase SNOW_FOX_1 = registerPlayerForm(new PlayerFormBase(new Identifier(ShapeShifterCurseFabric.MOD_ID, "snow_fox_1")).setPhase(PlayerFormPhase.PHASE_1));
-    public static PlayerFormBase SNOW_FOX_2 = registerPlayerForm(new Form_SnowFox2(new Identifier(ShapeShifterCurseFabric.MOD_ID, "snow_fox_2")).setPhase(PlayerFormPhase.PHASE_2));
-    public static PlayerFormBase SNOW_FOX_3 = registerPlayerForm(new Form_SnowFox3(new Identifier(ShapeShifterCurseFabric.MOD_ID, "snow_fox_3")).setPhase(PlayerFormPhase.PHASE_3));
+    public static PlayerFormBase SNOW_FOX_0 = registerPlayerForm(new PlayerFormBase(Identifier.of(ShapeShifterCurseFabric.MOD_ID, "snow_fox_0")).setPhase(PlayerFormPhase.PHASE_0));
+    public static PlayerFormBase SNOW_FOX_1 = registerPlayerForm(new PlayerFormBase(Identifier.of(ShapeShifterCurseFabric.MOD_ID, "snow_fox_1")).setPhase(PlayerFormPhase.PHASE_1));
+    public static PlayerFormBase SNOW_FOX_2 = registerPlayerForm(new Form_SnowFox2(Identifier.of(ShapeShifterCurseFabric.MOD_ID, "snow_fox_2")).setPhase(PlayerFormPhase.PHASE_2));
+    public static PlayerFormBase SNOW_FOX_3 = registerPlayerForm(new Form_SnowFox3(Identifier.of(ShapeShifterCurseFabric.MOD_ID, "snow_fox_3")).setPhase(PlayerFormPhase.PHASE_3));
     // AnubisWolf
-    public static PlayerFormBase ANUBIS_WOLF_0 = registerPlayerForm(new PlayerFormBase(new Identifier(ShapeShifterCurseFabric.MOD_ID, "anubis_wolf_0")).setPhase(PlayerFormPhase.PHASE_0));
-    public static PlayerFormBase ANUBIS_WOLF_1 = registerPlayerForm(new PlayerFormBase(new Identifier(ShapeShifterCurseFabric.MOD_ID, "anubis_wolf_1")).setPhase(PlayerFormPhase.PHASE_1));
-    public static PlayerFormBase ANUBIS_WOLF_2 = registerPlayerForm(new PlayerFormBase(new Identifier(ShapeShifterCurseFabric.MOD_ID, "anubis_wolf_2")).setPhase(PlayerFormPhase.PHASE_2));
-    public static PlayerFormBase ANUBIS_WOLF_3 = registerPlayerForm(new Form_AnubisWolf3(new Identifier(ShapeShifterCurseFabric.MOD_ID, "anubis_wolf_3")).setPhase(PlayerFormPhase.PHASE_3));
+    public static PlayerFormBase ANUBIS_WOLF_0 = registerPlayerForm(new PlayerFormBase(Identifier.of(ShapeShifterCurseFabric.MOD_ID, "anubis_wolf_0")).setPhase(PlayerFormPhase.PHASE_0));
+    public static PlayerFormBase ANUBIS_WOLF_1 = registerPlayerForm(new PlayerFormBase(Identifier.of(ShapeShifterCurseFabric.MOD_ID, "anubis_wolf_1")).setPhase(PlayerFormPhase.PHASE_1));
+    public static PlayerFormBase ANUBIS_WOLF_2 = registerPlayerForm(new PlayerFormBase(Identifier.of(ShapeShifterCurseFabric.MOD_ID, "anubis_wolf_2")).setPhase(PlayerFormPhase.PHASE_2));
+    public static PlayerFormBase ANUBIS_WOLF_3 = registerPlayerForm(new Form_AnubisWolf3(Identifier.of(ShapeShifterCurseFabric.MOD_ID, "anubis_wolf_3")).setPhase(PlayerFormPhase.PHASE_3));
     // Spider
-    public static PlayerFormBase SPIDER_0 = registerPlayerForm(new Form_Spider0(new Identifier(ShapeShifterCurseFabric.MOD_ID, "spider_0")).setPhase(PlayerFormPhase.PHASE_0)).setIgnoreCursedMoon(true);
-    public static PlayerFormBase SPIDER_1 = registerPlayerForm(new Form_Spider1(new Identifier(ShapeShifterCurseFabric.MOD_ID, "spider_1")).setPhase(PlayerFormPhase.PHASE_1)).setIgnoreCursedMoon(true);
-    public static PlayerFormBase SPIDER_2 = registerPlayerForm(new Form_Spider2(new Identifier(ShapeShifterCurseFabric.MOD_ID, "spider_2")).setPhase(PlayerFormPhase.PHASE_2)).setIgnoreCursedMoon(true);
-    public static PlayerFormBase SPIDER_3 = registerPlayerForm(new Form_Spider3(new Identifier(ShapeShifterCurseFabric.MOD_ID, "spider_3")).setPhase(PlayerFormPhase.PHASE_3));
+    public static PlayerFormBase SPIDER_0 = registerPlayerForm(new Form_Spider0(Identifier.of(ShapeShifterCurseFabric.MOD_ID, "spider_0")).setPhase(PlayerFormPhase.PHASE_0)).setIgnoreCursedMoon(true);
+    public static PlayerFormBase SPIDER_1 = registerPlayerForm(new Form_Spider1(Identifier.of(ShapeShifterCurseFabric.MOD_ID, "spider_1")).setPhase(PlayerFormPhase.PHASE_1)).setIgnoreCursedMoon(true);
+    public static PlayerFormBase SPIDER_2 = registerPlayerForm(new Form_Spider2(Identifier.of(ShapeShifterCurseFabric.MOD_ID, "spider_2")).setPhase(PlayerFormPhase.PHASE_2)).setIgnoreCursedMoon(true);
+    public static PlayerFormBase SPIDER_3 = registerPlayerForm(new Form_Spider3(Identifier.of(ShapeShifterCurseFabric.MOD_ID, "spider_3")).setPhase(PlayerFormPhase.PHASE_3));
     // ALLAY_SP
-    public static PlayerFormBase ALLAY_SP = registerPlayerForm(new Form_Allay(new Identifier(ShapeShifterCurseFabric.MOD_ID, "allay_sp")).setPhase(PlayerFormPhase.PHASE_SP));
+    public static PlayerFormBase ALLAY_SP = registerPlayerForm(new Form_Allay(Identifier.of(ShapeShifterCurseFabric.MOD_ID, "allay_sp")).setPhase(PlayerFormPhase.PHASE_SP));
     // FERAL_CAT_SP
-    public static PlayerFormBase FERAL_CAT_SP = registerPlayerForm(new Form_FeralCatSP(new Identifier(ShapeShifterCurseFabric.MOD_ID, "feral_cat_sp")).setPhase(PlayerFormPhase.PHASE_SP));
+    public static PlayerFormBase FERAL_CAT_SP = registerPlayerForm(new Form_FeralCatSP(Identifier.of(ShapeShifterCurseFabric.MOD_ID, "feral_cat_sp")).setPhase(PlayerFormPhase.PHASE_SP));
 
     /* 未支持数据包时代的占位形态 现在可以使用数据添加形态了
     // Custom Form
-    public static PlayerFormBase ALPHA_0 = registerPlayerForm(new PlayerFormBase(new Identifier(ShapeShifterCurseFabric.MOD_ID, "alpha_0")).setPhase(PlayerFormPhase.PHASE_0).setIsCustomForm(true));
-    public static PlayerFormBase ALPHA_1 = registerPlayerForm(new PlayerFormBase(new Identifier(ShapeShifterCurseFabric.MOD_ID, "alpha_1")).setPhase(PlayerFormPhase.PHASE_1).setIsCustomForm(true));
-    public static PlayerFormBase ALPHA_2 = registerPlayerForm(new PlayerFormBase(new Identifier(ShapeShifterCurseFabric.MOD_ID, "alpha_2")).setPhase(PlayerFormPhase.PHASE_2).setIsCustomForm(true));
-    public static PlayerFormBase BETA_0 = registerPlayerForm(new PlayerFormBase(new Identifier(ShapeShifterCurseFabric.MOD_ID, "beta_0")).setPhase(PlayerFormPhase.PHASE_0).setIsCustomForm(true));
-    public static PlayerFormBase BETA_1 = registerPlayerForm(new PlayerFormBase(new Identifier(ShapeShifterCurseFabric.MOD_ID, "beta_1")).setPhase(PlayerFormPhase.PHASE_1).setIsCustomForm(true));
-    public static PlayerFormBase BETA_2 = registerPlayerForm(new PlayerFormBase(new Identifier(ShapeShifterCurseFabric.MOD_ID, "beta_2")).setPhase(PlayerFormPhase.PHASE_2).setIsCustomForm(true));
-    public static PlayerFormBase GAMMA_0 = registerPlayerForm(new PlayerFormBase(new Identifier(ShapeShifterCurseFabric.MOD_ID, "gamma_0")).setPhase(PlayerFormPhase.PHASE_0).setIsCustomForm(true));
-    public static PlayerFormBase GAMMA_1 = registerPlayerForm(new PlayerFormBase(new Identifier(ShapeShifterCurseFabric.MOD_ID, "gamma_1")).setPhase(PlayerFormPhase.PHASE_1).setIsCustomForm(true));
-    public static PlayerFormBase GAMMA_2 = registerPlayerForm(new PlayerFormBase(new Identifier(ShapeShifterCurseFabric.MOD_ID, "gamma_2")).setPhase(PlayerFormPhase.PHASE_2).setIsCustomForm(true));
-    public static PlayerFormBase OMEGA_SP = registerPlayerForm(new PlayerFormBase(new Identifier(ShapeShifterCurseFabric.MOD_ID, "omega_sp")).setPhase(PlayerFormPhase.PHASE_SP).setIsCustomForm(true));
-    public static PlayerFormBase PSI_SP = registerPlayerForm(new PlayerFormBase(new Identifier(ShapeShifterCurseFabric.MOD_ID, "psi_sp")).setPhase(PlayerFormPhase.PHASE_SP).setIsCustomForm(true));
-    public static PlayerFormBase CHI_SP = registerPlayerForm(new PlayerFormBase(new Identifier(ShapeShifterCurseFabric.MOD_ID, "chi_sp")).setPhase(PlayerFormPhase.PHASE_SP).setIsCustomForm(true));
-    public static PlayerFormBase PHI_SP = registerPlayerForm(new Form_FeralBase(new Identifier(ShapeShifterCurseFabric.MOD_ID, "phi_sp")).setPhase(PlayerFormPhase.PHASE_SP).setIsCustomForm(true));
+    public static PlayerFormBase ALPHA_0 = registerPlayerForm(new PlayerFormBase(Identifier.of(ShapeShifterCurseFabric.MOD_ID, "alpha_0")).setPhase(PlayerFormPhase.PHASE_0).setIsCustomForm(true));
+    public static PlayerFormBase ALPHA_1 = registerPlayerForm(new PlayerFormBase(Identifier.of(ShapeShifterCurseFabric.MOD_ID, "alpha_1")).setPhase(PlayerFormPhase.PHASE_1).setIsCustomForm(true));
+    public static PlayerFormBase ALPHA_2 = registerPlayerForm(new PlayerFormBase(Identifier.of(ShapeShifterCurseFabric.MOD_ID, "alpha_2")).setPhase(PlayerFormPhase.PHASE_2).setIsCustomForm(true));
+    public static PlayerFormBase BETA_0 = registerPlayerForm(new PlayerFormBase(Identifier.of(ShapeShifterCurseFabric.MOD_ID, "beta_0")).setPhase(PlayerFormPhase.PHASE_0).setIsCustomForm(true));
+    public static PlayerFormBase BETA_1 = registerPlayerForm(new PlayerFormBase(Identifier.of(ShapeShifterCurseFabric.MOD_ID, "beta_1")).setPhase(PlayerFormPhase.PHASE_1).setIsCustomForm(true));
+    public static PlayerFormBase BETA_2 = registerPlayerForm(new PlayerFormBase(Identifier.of(ShapeShifterCurseFabric.MOD_ID, "beta_2")).setPhase(PlayerFormPhase.PHASE_2).setIsCustomForm(true));
+    public static PlayerFormBase GAMMA_0 = registerPlayerForm(new PlayerFormBase(Identifier.of(ShapeShifterCurseFabric.MOD_ID, "gamma_0")).setPhase(PlayerFormPhase.PHASE_0).setIsCustomForm(true));
+    public static PlayerFormBase GAMMA_1 = registerPlayerForm(new PlayerFormBase(Identifier.of(ShapeShifterCurseFabric.MOD_ID, "gamma_1")).setPhase(PlayerFormPhase.PHASE_1).setIsCustomForm(true));
+    public static PlayerFormBase GAMMA_2 = registerPlayerForm(new PlayerFormBase(Identifier.of(ShapeShifterCurseFabric.MOD_ID, "gamma_2")).setPhase(PlayerFormPhase.PHASE_2).setIsCustomForm(true));
+    public static PlayerFormBase OMEGA_SP = registerPlayerForm(new PlayerFormBase(Identifier.of(ShapeShifterCurseFabric.MOD_ID, "omega_sp")).setPhase(PlayerFormPhase.PHASE_SP).setIsCustomForm(true));
+    public static PlayerFormBase PSI_SP = registerPlayerForm(new PlayerFormBase(Identifier.of(ShapeShifterCurseFabric.MOD_ID, "psi_sp")).setPhase(PlayerFormPhase.PHASE_SP).setIsCustomForm(true));
+    public static PlayerFormBase CHI_SP = registerPlayerForm(new PlayerFormBase(Identifier.of(ShapeShifterCurseFabric.MOD_ID, "chi_sp")).setPhase(PlayerFormPhase.PHASE_SP).setIsCustomForm(true));
+    public static PlayerFormBase PHI_SP = registerPlayerForm(new Form_FeralBase(Identifier.of(ShapeShifterCurseFabric.MOD_ID, "phi_sp")).setPhase(PlayerFormPhase.PHASE_SP).setIsCustomForm(true));
      */
 
     // Builtin PlayerFormGroups
-    public static PlayerFormGroup ORIGINAL_FORM = registerPlayerFormGroup(new PlayerFormGroup(new Identifier(ShapeShifterCurseFabric.MOD_ID, "original_form")).addForm(ORIGINAL_BEFORE_ENABLE, -2));
-    public static PlayerFormGroup BASE_FORM = registerPlayerFormGroup(new PlayerFormGroup(new Identifier(ShapeShifterCurseFabric.MOD_ID, "base_form")).addForm(ORIGINAL_SHIFTER, -1));
-    public static PlayerFormGroup BAT_FORM = registerPlayerFormGroup(new PlayerFormGroup(new Identifier(ShapeShifterCurseFabric.MOD_ID, "bat_form")).addForm(BAT_0, 0).addForm(BAT_1, 1).addForm(BAT_2, 2).addForm(BAT_3, 3));
-    public static PlayerFormGroup AXOLOTL_FORM = registerPlayerFormGroup(new PlayerFormGroup(new Identifier(ShapeShifterCurseFabric.MOD_ID, "axolotl_form")).addForm(AXOLOTL_0, 0).addForm(AXOLOTL_1, 1).addForm(AXOLOTL_2, 2).addForm(AXOLOTL_3, 3));
-    public static PlayerFormGroup OCELOT_FORM = registerPlayerFormGroup(new PlayerFormGroup(new Identifier(ShapeShifterCurseFabric.MOD_ID, "ocelot_form")).addForm(OCELOT_0, 0).addForm(OCELOT_1, 1).addForm(OCELOT_2, 2).addForm(OCELOT_3, 3));
-    public static PlayerFormGroup FAMILIAR_FOX_FORM = registerPlayerFormGroup(new PlayerFormGroup(new Identifier(ShapeShifterCurseFabric.MOD_ID, "familiar_fox_form")).addForm(FAMILIAR_FOX_0, 0).addForm(FAMILIAR_FOX_1, 1).addForm(FAMILIAR_FOX_2, 2).addForm(FAMILIAR_FOX_3, 3));
-    public static PlayerFormGroup SNOW_FOX_FORM = registerPlayerFormGroup(new PlayerFormGroup(new Identifier(ShapeShifterCurseFabric.MOD_ID, "snow_fox_form")).addForm(SNOW_FOX_0, 0).addForm(SNOW_FOX_1, 1).addForm(SNOW_FOX_2, 2).addForm(SNOW_FOX_3, 3));
-    public static PlayerFormGroup ALLAY_FORM = registerPlayerFormGroup(new PlayerFormGroup(new Identifier(ShapeShifterCurseFabric.MOD_ID, "allay_form")).addForm(ALLAY_SP, 5));
-    public static PlayerFormGroup FERAL_CAT_FORM = registerPlayerFormGroup(new PlayerFormGroup(new Identifier(ShapeShifterCurseFabric.MOD_ID, "feral_cat_form")).addForm(FERAL_CAT_SP, 5));
-    public static PlayerFormGroup ANUBIS_WOLF_FORM = registerPlayerFormGroup(new PlayerFormGroup(new Identifier(ShapeShifterCurseFabric.MOD_ID, "anubis_wolf_form")).addForm(ANUBIS_WOLF_0, 0).addForm(ANUBIS_WOLF_1, 1).addForm(ANUBIS_WOLF_2, 2).addForm(ANUBIS_WOLF_3, 3));
-    public static PlayerFormGroup SPIDER_FORM = registerPlayerFormGroup(new PlayerFormGroup(new Identifier(ShapeShifterCurseFabric.MOD_ID, "spider_form")).addForm(SPIDER_0, 0).addForm(SPIDER_1, 1).addForm(SPIDER_2, 2).addForm(SPIDER_3, 3));
+    public static PlayerFormGroup ORIGINAL_FORM = registerPlayerFormGroup(new PlayerFormGroup(Identifier.of(ShapeShifterCurseFabric.MOD_ID, "original_form")).addForm(ORIGINAL_BEFORE_ENABLE, -2));
+    public static PlayerFormGroup BASE_FORM = registerPlayerFormGroup(new PlayerFormGroup(Identifier.of(ShapeShifterCurseFabric.MOD_ID, "base_form")).addForm(ORIGINAL_SHIFTER, -1));
+    public static PlayerFormGroup BAT_FORM = registerPlayerFormGroup(new PlayerFormGroup(Identifier.of(ShapeShifterCurseFabric.MOD_ID, "bat_form")).addForm(BAT_0, 0).addForm(BAT_1, 1).addForm(BAT_2, 2).addForm(BAT_3, 3));
+    public static PlayerFormGroup AXOLOTL_FORM = registerPlayerFormGroup(new PlayerFormGroup(Identifier.of(ShapeShifterCurseFabric.MOD_ID, "axolotl_form")).addForm(AXOLOTL_0, 0).addForm(AXOLOTL_1, 1).addForm(AXOLOTL_2, 2).addForm(AXOLOTL_3, 3));
+    public static PlayerFormGroup OCELOT_FORM = registerPlayerFormGroup(new PlayerFormGroup(Identifier.of(ShapeShifterCurseFabric.MOD_ID, "ocelot_form")).addForm(OCELOT_0, 0).addForm(OCELOT_1, 1).addForm(OCELOT_2, 2).addForm(OCELOT_3, 3));
+    public static PlayerFormGroup FAMILIAR_FOX_FORM = registerPlayerFormGroup(new PlayerFormGroup(Identifier.of(ShapeShifterCurseFabric.MOD_ID, "familiar_fox_form")).addForm(FAMILIAR_FOX_0, 0).addForm(FAMILIAR_FOX_1, 1).addForm(FAMILIAR_FOX_2, 2).addForm(FAMILIAR_FOX_3, 3));
+    public static PlayerFormGroup SNOW_FOX_FORM = registerPlayerFormGroup(new PlayerFormGroup(Identifier.of(ShapeShifterCurseFabric.MOD_ID, "snow_fox_form")).addForm(SNOW_FOX_0, 0).addForm(SNOW_FOX_1, 1).addForm(SNOW_FOX_2, 2).addForm(SNOW_FOX_3, 3));
+    public static PlayerFormGroup ALLAY_FORM = registerPlayerFormGroup(new PlayerFormGroup(Identifier.of(ShapeShifterCurseFabric.MOD_ID, "allay_form")).addForm(ALLAY_SP, 5));
+    public static PlayerFormGroup FERAL_CAT_FORM = registerPlayerFormGroup(new PlayerFormGroup(Identifier.of(ShapeShifterCurseFabric.MOD_ID, "feral_cat_form")).addForm(FERAL_CAT_SP, 5));
+    public static PlayerFormGroup ANUBIS_WOLF_FORM = registerPlayerFormGroup(new PlayerFormGroup(Identifier.of(ShapeShifterCurseFabric.MOD_ID, "anubis_wolf_form")).addForm(ANUBIS_WOLF_0, 0).addForm(ANUBIS_WOLF_1, 1).addForm(ANUBIS_WOLF_2, 2).addForm(ANUBIS_WOLF_3, 3));
+    public static PlayerFormGroup SPIDER_FORM = registerPlayerFormGroup(new PlayerFormGroup(Identifier.of(ShapeShifterCurseFabric.MOD_ID, "spider_form")).addForm(SPIDER_0, 0).addForm(SPIDER_1, 1).addForm(SPIDER_2, 2).addForm(SPIDER_3, 3));
 
 
     /* 未支持数据包时代的占位形态 现在可以使用数据添加形态了
     // Custom Form
-    public static PlayerFormGroup ALPHA_FORM = registerPlayerFormGroup(new PlayerFormGroup(new Identifier(ShapeShifterCurseFabric.MOD_ID, "alpha_form")).addForm(ALPHA_0, 0).addForm(ALPHA_1, 1).addForm(ALPHA_2, 2));
-    public static PlayerFormGroup BETA_FORM = registerPlayerFormGroup(new PlayerFormGroup(new Identifier(ShapeShifterCurseFabric.MOD_ID, "beta_form")).addForm(BETA_0, 0).addForm(BETA_1, 1).addForm(BETA_2, 2));
-    public static PlayerFormGroup GAMMA_FORM = registerPlayerFormGroup(new PlayerFormGroup(new Identifier(ShapeShifterCurseFabric.MOD_ID, "gamma_form")).addForm(GAMMA_0, 0).addForm(GAMMA_1, 1).addForm(GAMMA_2, 2));
-    public static PlayerFormGroup OMEGA_SP_FORM = registerPlayerFormGroup(new PlayerFormGroup(new Identifier(ShapeShifterCurseFabric.MOD_ID, "omega_sp_form")).addForm(OMEGA_SP, 5));
-    public static PlayerFormGroup PSI_SP_FORM = registerPlayerFormGroup(new PlayerFormGroup(new Identifier(ShapeShifterCurseFabric.MOD_ID, "psi_sp_form")).addForm(PSI_SP, 5));
-    public static PlayerFormGroup CHI_SP_FORM = registerPlayerFormGroup(new PlayerFormGroup(new Identifier(ShapeShifterCurseFabric.MOD_ID, "chi_sp_form")).addForm(CHI_SP, 5));
-    public static PlayerFormGroup PHI_SP_FORM = registerPlayerFormGroup(new PlayerFormGroup(new Identifier(ShapeShifterCurseFabric.MOD_ID, "phi_sp_form")).addForm(PHI_SP, 5));
+    public static PlayerFormGroup ALPHA_FORM = registerPlayerFormGroup(new PlayerFormGroup(Identifier.of(ShapeShifterCurseFabric.MOD_ID, "alpha_form")).addForm(ALPHA_0, 0).addForm(ALPHA_1, 1).addForm(ALPHA_2, 2));
+    public static PlayerFormGroup BETA_FORM = registerPlayerFormGroup(new PlayerFormGroup(Identifier.of(ShapeShifterCurseFabric.MOD_ID, "beta_form")).addForm(BETA_0, 0).addForm(BETA_1, 1).addForm(BETA_2, 2));
+    public static PlayerFormGroup GAMMA_FORM = registerPlayerFormGroup(new PlayerFormGroup(Identifier.of(ShapeShifterCurseFabric.MOD_ID, "gamma_form")).addForm(GAMMA_0, 0).addForm(GAMMA_1, 1).addForm(GAMMA_2, 2));
+    public static PlayerFormGroup OMEGA_SP_FORM = registerPlayerFormGroup(new PlayerFormGroup(Identifier.of(ShapeShifterCurseFabric.MOD_ID, "omega_sp_form")).addForm(OMEGA_SP, 5));
+    public static PlayerFormGroup PSI_SP_FORM = registerPlayerFormGroup(new PlayerFormGroup(Identifier.of(ShapeShifterCurseFabric.MOD_ID, "psi_sp_form")).addForm(PSI_SP, 5));
+    public static PlayerFormGroup CHI_SP_FORM = registerPlayerFormGroup(new PlayerFormGroup(Identifier.of(ShapeShifterCurseFabric.MOD_ID, "chi_sp_form")).addForm(CHI_SP, 5));
+    public static PlayerFormGroup PHI_SP_FORM = registerPlayerFormGroup(new PlayerFormGroup(Identifier.of(ShapeShifterCurseFabric.MOD_ID, "phi_sp_form")).addForm(PHI_SP, 5));
      */
 
     public static <T extends PlayerFormBase> T registerPlayerForm(T form) {

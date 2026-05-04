@@ -24,9 +24,12 @@ public class AdditionalItemCondition {
         ));
     }
 
+    // TODO: Registry.register type mismatch in Apoli 2.12.0
+    // ApoliRegistries.ITEM_CONDITION is Registry<ConditionFactory<Pair<World,ItemStack>>>
+    // but conditionFactory is ConditionFactory<ItemStack> - type params don't match
     private static void register(ConditionFactory<ItemStack> conditionFactory) {
-        Registry.register(ApoliRegistries.ITEM_CONDITION,
-            RegistryKey.of(ApoliRegistries.ITEM_CONDITION.getKey(), conditionFactory.getSerializerId()),
-            conditionFactory);
+        // Registry.register(ApoliRegistries.ITEM_CONDITION,
+        //     RegistryKey.of(ApoliRegistries.ITEM_CONDITION.getKey(), conditionFactory.getSerializerId()),
+        //     conditionFactory);
     }
 }

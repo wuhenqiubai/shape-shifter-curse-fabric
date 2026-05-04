@@ -13,7 +13,6 @@ import java.util.Optional;
 public class OnEnableMod extends AbstractCriterion<OnEnableMod.Condition> {
     public static final Identifier ID = Identifier.of(ShapeShifterCurseFabric.MOD_ID, "on_enable_mod");
 
-    @Override
     public Identifier getId() {
         return ID;
     }

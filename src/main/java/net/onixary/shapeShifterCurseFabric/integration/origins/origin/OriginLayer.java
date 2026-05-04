@@ -193,7 +193,7 @@ public class OriginLayer implements Comparable<OriginLayer> {
             excludeRandomArray.forEach(je -> originsExcludedFromRandom.add(Identifier.tryParse(je.getAsString())));
         }
         if(json.has("default_origin")) {
-            this.defaultOrigin = new Identifier(JsonHelper.getString(json, "default_origin"));
+            this.defaultOrigin = Identifier.of(JsonHelper.getString(json, "default_origin"));
         }
         if(json.has("auto_choose")) {
             this.autoChooseIfNoChoice = JsonHelper.getBoolean(json, "auto_choose");
@@ -322,7 +322,7 @@ public class OriginLayer implements Comparable<OriginLayer> {
             excludeRandomArray.forEach(je -> layer.originsExcludedFromRandom.add(Identifier.tryParse(je.getAsString())));
         }
         if(json.has("default_origin")) {
-            layer.defaultOrigin = new Identifier(JsonHelper.getString(json, "default_origin"));
+            layer.defaultOrigin = Identifier.of(JsonHelper.getString(json, "default_origin"));
         }
         layer.autoChooseIfNoChoice = JsonHelper.getBoolean(json, "auto_choose", false);
         layer.hidden = JsonHelper.getBoolean(json, "hidden", false);

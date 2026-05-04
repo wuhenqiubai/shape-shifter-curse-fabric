@@ -66,7 +66,7 @@ public class OriginManager extends MultiJsonDataLoader implements IdentifiableRe
 
 	@Override
 	public Identifier getFabricId() {
-		return new Identifier(Origins.MODID, "origins");
+		return Identifier.of(Origins.MODID, "origins");
 	}
 
 	@Override

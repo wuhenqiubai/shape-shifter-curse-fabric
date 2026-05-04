@@ -13,7 +13,6 @@ import java.util.Optional;
 public class OnUseGoldenApple extends AbstractCriterion<OnUseGoldenApple.Condition> {
     public static final Identifier ID = Identifier.of(ShapeShifterCurseFabric.MOD_ID, "on_use_golden_apple");
 
-    @Override
     public Identifier getId() {
         return ID;
     }

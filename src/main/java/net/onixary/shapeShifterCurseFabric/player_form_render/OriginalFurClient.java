@@ -98,14 +98,14 @@ public class OriginalFurClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         if (FabricLoader.getInstance().isModLoaded("player-animator") || FabricLoader.getInstance().isModLoaded("playeranimator")) {
-            PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(new Identifier("originfurs", "item_renderer"), 9999, ItemRendererFeatureAnim::new);
+            PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(Identifier.of("originfurs", "item_renderer"), 9999, ItemRendererFeatureAnim::new);
         }
         WorldRenderEvents.END.register(context -> isRenderingInWorld = false);
         WorldRenderEvents.START.register(context -> isRenderingInWorld = true);
         ResourceManagerHelper.get(ResourceType.CLIENT_RESOURCES).registerReloadListener(new SimpleSynchronousResourceReloadListener() {
             @Override
             public Identifier getFabricId() {
-                return new Identifier("originalfur", "furs");
+                return Identifier.of("originalfur", "furs");
             }
 
             final String r_M = "\\/([A-Za-z0-9_.-]+)\\.json";

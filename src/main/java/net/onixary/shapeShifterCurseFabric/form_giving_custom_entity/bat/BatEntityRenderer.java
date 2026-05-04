@@ -14,7 +14,7 @@ import net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric;
 import static net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric.MOD_ID;
 
 public class BatEntityRenderer extends MobEntityRenderer<BatEntity, net.minecraft.client.render.entity.model.BatEntityModel> {
-    private static final Identifier TEXTURE = new Identifier(MOD_ID,"textures/entity/mob/t_bat.png");
+    private static final Identifier TEXTURE = Identifier.of(MOD_ID, "textures/entity/mob/t_bat.png");
 
     public BatEntityRenderer(EntityRendererFactory.Context context) {
         super(context, new BatEntityModel(context.getPart(EntityModelLayers.BAT)), 0.25F);

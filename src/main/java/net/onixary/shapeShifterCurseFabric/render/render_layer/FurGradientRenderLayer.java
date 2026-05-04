@@ -14,7 +14,7 @@ import net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric;
 
 public abstract class FurGradientRenderLayer {
 
-    public static final ManagedCoreShader furGradientRemap = ShaderEffectManager.getInstance().manageCoreShader(new Identifier(ShapeShifterCurseFabric.MOD_ID, "fur_gradient_remap"));
+    public static final ManagedCoreShader furGradientRemap = ShaderEffectManager.getInstance().manageCoreShader(Identifier.of(ShapeShifterCurseFabric.MOD_ID, "fur_gradient_remap"));
     private static final Uniform1f uniformSTime = furGradientRemap.findUniform1f("STime");
     private static int ticks;
 

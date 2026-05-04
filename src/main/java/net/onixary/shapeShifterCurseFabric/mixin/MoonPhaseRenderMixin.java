@@ -16,7 +16,7 @@ public class MoonPhaseRenderMixin {
     private final Identifier Vanilla_MOON_PHASES = new Identifier("textures/environment/moon_phases.png");
 
     @Unique
-    private final Identifier CURSED_MOON_PHASES = new Identifier(MOD_ID,"textures/environment/cursed_moon_phases.png");
+    private final Identifier CURSED_MOON_PHASES = Identifier.of(MOD_ID, "textures/environment/cursed_moon_phases.png");
 
     @Unique
     public Identifier getMoonIdentifier() {

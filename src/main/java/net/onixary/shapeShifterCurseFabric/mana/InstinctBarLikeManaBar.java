@@ -15,8 +15,8 @@ import static net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric.MOD_ID
 @Environment(EnvType.CLIENT)
 public class InstinctBarLikeManaBar implements IManaRender{
     private static final MinecraftClient mc = MinecraftClient.getInstance();
-    private static final Identifier BarTexFullID = new Identifier(MOD_ID, "textures/gui/instinct_bar_full.png");
-    private static final Identifier BarTexEmptyID = new Identifier(MOD_ID, "textures/gui/instinct_bar_empty.png");
+    private static final Identifier BarTexFullID = Identifier.of(MOD_ID, "textures/gui/instinct_bar_full.png");
+    private static final Identifier BarTexEmptyID = Identifier.of(MOD_ID, "textures/gui/instinct_bar_empty.png");
 
     @Override
     public boolean OverrideInstinctBar() {

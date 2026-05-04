@@ -13,7 +13,7 @@ import static net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric.MOD_ID
 
 @Environment(EnvType.CLIENT)
 public class TOcelotEntityRenderer extends MobEntityRenderer<OcelotEntity, OcelotEntityModel<OcelotEntity>> {
-	private static final Identifier TEXTURE = new Identifier(MOD_ID,"textures/entity/mob/t_ocelot.png");
+	private static final Identifier TEXTURE = Identifier.of(MOD_ID, "textures/entity/mob/t_ocelot.png");
 
 	public TOcelotEntityRenderer(EntityRendererFactory.Context context) {
 		super(context, new OcelotEntityModel<>(context.getPart(EntityModelLayers.OCELOT)), 0.4F);

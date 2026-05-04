@@ -34,8 +34,8 @@ public class OriginalFur implements ModInitializer {
             }
         });
     }
-    @NotNull public static final Identifier S2C_REQ_ORIGIN_RESP = new Identifier("orif", "origin_response");
-    @NotNull public static final Identifier C2S_REQ_ORIGIN_UUID = new Identifier("orif", "request_player_origin");
+    @NotNull public static final Identifier S2C_REQ_ORIGIN_RESP = Identifier.of("orif", "origin_response");
+    @NotNull public static final Identifier C2S_REQ_ORIGIN_UUID = Identifier.of("orif", "request_player_origin");
     public static class RequestOriginPacket {
         public UUID requestedPlayerUUID = new UUID(0,0);
         public String requestedPlayerName = "";

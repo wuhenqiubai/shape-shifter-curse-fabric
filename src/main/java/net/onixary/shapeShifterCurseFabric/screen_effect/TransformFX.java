@@ -14,7 +14,7 @@ import org.jetbrains.annotations.Nullable;
 import static net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric.MOD_ID;
 
 public final class TransformFX implements ShaderEffectRenderCallback, ClientTickEvents.EndTick {
-    public static final Identifier TRANSFORM_EFFECT_SHADER_ID = new Identifier(MOD_ID,"shaders/post/transform_effect.json");
+    public static final Identifier TRANSFORM_EFFECT_SHADER_ID = Identifier.of(MOD_ID, "shaders/post/transform_effect.json");
 
     public static final TransformFX INSTANCE = new TransformFX();
     private final MinecraftClient mc = MinecraftClient.getInstance();

@@ -13,7 +13,6 @@ import java.util.Optional;
 public class OnEndCursedMoonCured extends AbstractCriterion<OnEndCursedMoonCured.Condition> {
     public static final Identifier ID = Identifier.of(ShapeShifterCurseFabric.MOD_ID, "on_end_cursed_moon_cured");
 
-    @Override
     public Identifier getId() {
         return ID;
     }

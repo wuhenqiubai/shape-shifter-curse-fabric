@@ -13,7 +13,6 @@ import java.util.Optional;
 public class OnOpenBookOfShapeShifter extends AbstractCriterion<OnOpenBookOfShapeShifter.Condition> {
     public static final Identifier ID = Identifier.of(ShapeShifterCurseFabric.MOD_ID, "on_open_book_of_shape_shifter");
 
-    @Override
     public Identifier getId() {
         return ID;
     }

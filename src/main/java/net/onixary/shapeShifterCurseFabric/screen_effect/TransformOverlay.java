@@ -12,8 +12,8 @@ import static net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric.MOD_ID
 
 public final class TransformOverlay {
     public static final TransformOverlay INSTANCE = new TransformOverlay();
-    private final Identifier nausea_texture = new Identifier(MOD_ID, "textures/overlay/nausea_black.png");
-    private final Identifier black_texture = new Identifier(MOD_ID, "textures/overlay/black.png");
+    private final Identifier nausea_texture = Identifier.of(MOD_ID, "textures/overlay/nausea_black.png");
+    private final Identifier black_texture = Identifier.of(MOD_ID, "textures/overlay/black.png");
 
     private boolean enableOverlay = false;
     private float strength_nausea = 0.0f;

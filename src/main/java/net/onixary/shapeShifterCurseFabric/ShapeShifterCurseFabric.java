@@ -34,34 +34,34 @@ import net.onixary.shapeShifterCurseFabric.additional_power.*;
 import net.onixary.shapeShifterCurseFabric.advancement.*;
 import net.onixary.shapeShifterCurseFabric.command.CustomFormArgumentType;
 import net.onixary.shapeShifterCurseFabric.command.FormArgumentType;
-import net.onixary.shapeShifterCurseFabric.command.ShapeShifterCurseCommand;
+// Disabled for 1.21 port: import net.onixary.shapeShifterCurseFabric.command.ShapeShifterCurseCommand;
 import net.onixary.shapeShifterCurseFabric.config.ClientConfig;
 import net.onixary.shapeShifterCurseFabric.config.CommonConfig;
 import net.onixary.shapeShifterCurseFabric.config.PlayerCustomConfig;
 import net.onixary.shapeShifterCurseFabric.entity.RegCustomEntity;
-import net.onixary.shapeShifterCurseFabric.form_giving_custom_entity.RegTransformativeEntity;
+// Disabled for 1.21 port: import net.onixary.shapeShifterCurseFabric.form_giving_custom_entity.RegTransformativeEntity;
 import net.onixary.shapeShifterCurseFabric.form_giving_custom_entity.RegTransformativeEntitySpawnEgg;
-import net.onixary.shapeShifterCurseFabric.form_giving_custom_entity.TransformativeEntitySpawning;
-import net.onixary.shapeShifterCurseFabric.form_giving_custom_entity.axolotl.TransformativeAxolotlEntity;
-import net.onixary.shapeShifterCurseFabric.form_giving_custom_entity.bat.TransformativeBatEntity;
-import net.onixary.shapeShifterCurseFabric.form_giving_custom_entity.ocelot.TransformativeOcelotEntity;
-import net.onixary.shapeShifterCurseFabric.form_giving_custom_entity.spider.TransformativeSpiderEntity;
-import net.onixary.shapeShifterCurseFabric.form_giving_custom_entity.wolf.TransformativeWolfEntity;
+// Disabled for 1.21 port: import net.onixary.shapeShifterCurseFabric.form_giving_custom_entity.TransformativeEntitySpawning;
+// Disabled for 1.21 port: import net.onixary.shapeShifterCurseFabric.form_giving_custom_entity.axolotl.TransformativeAxolotlEntity;
+// Disabled for 1.21 port: import net.onixary.shapeShifterCurseFabric.form_giving_custom_entity.bat.TransformativeBatEntity;
+// Disabled for 1.21 port: import net.onixary.shapeShifterCurseFabric.form_giving_custom_entity.ocelot.TransformativeOcelotEntity;
+// Disabled for 1.21 port: import net.onixary.shapeShifterCurseFabric.form_giving_custom_entity.spider.TransformativeSpiderEntity;
+// Disabled for 1.21 port: import net.onixary.shapeShifterCurseFabric.form_giving_custom_entity.wolf.TransformativeWolfEntity;
 import net.onixary.shapeShifterCurseFabric.blocks.RegCustomBlock;
 import net.onixary.shapeShifterCurseFabric.items.RegCustomItem;
 import net.onixary.shapeShifterCurseFabric.items.RegCustomPotions;
 import net.onixary.shapeShifterCurseFabric.mana.ManaRegistries;
 import net.onixary.shapeShifterCurseFabric.mana.ManaUtils;
 import net.onixary.shapeShifterCurseFabric.minion.MinionRegister;
-import net.onixary.shapeShifterCurseFabric.networking.ModPacketsC2S;
-import net.onixary.shapeShifterCurseFabric.networking.ModPacketsS2CServer;
+// Disabled for 1.21 port: import net.onixary.shapeShifterCurseFabric.networking.ModPacketsC2S;
+// Disabled for 1.21 port: import net.onixary.shapeShifterCurseFabric.networking.ModPacketsS2CServer;
 import net.onixary.shapeShifterCurseFabric.player_animation.form_animation.AnimationTransform;
 import net.onixary.shapeShifterCurseFabric.player_form.FormDataPackReloadListener;
 import net.onixary.shapeShifterCurseFabric.player_form.RegPlayerForms;
 import net.onixary.shapeShifterCurseFabric.player_form.ability.FormAbilityManager;
 import net.onixary.shapeShifterCurseFabric.player_form.ability.RegPlayerFormComponent;
-import net.onixary.shapeShifterCurseFabric.player_form.instinct.InstinctTicker;
-import net.onixary.shapeShifterCurseFabric.player_form.transform.TransformManager;
+// Disabled for 1.21 port: import net.onixary.shapeShifterCurseFabric.player_form.instinct.InstinctTicker;
+// Disabled for 1.21 port: import net.onixary.shapeShifterCurseFabric.player_form.transform.TransformManager;
 import net.onixary.shapeShifterCurseFabric.recipes.BrewingRecipeReloadListener;
 import net.onixary.shapeShifterCurseFabric.recipes.RecipeSerializerRegister;
 import net.onixary.shapeShifterCurseFabric.screen_effect.TransformOverlay;
@@ -124,29 +124,11 @@ public class ShapeShifterCurseFabric implements ModInitializer {
 
     // Reg custom entities
     // Bat
-    public static final EntityType<TransformativeBatEntity> T_BAT = Registry.register(
-            Registries.ENTITY_TYPE,
-            new Identifier(ShapeShifterCurseFabric.MOD_ID, "t_bat"),
-            FabricEntityTypeBuilder.create(SpawnGroup.AMBIENT, TransformativeBatEntity::new)
-                    .dimensions(EntityDimensions.fixed(0.5f, 0.9f))
-                    .build()
-    );
+    // T_BAT disabled for 1.21 port
     // Axolotl
-    public static final EntityType<TransformativeAxolotlEntity> T_AXOLOTL = Registry.register(
-            Registries.ENTITY_TYPE,
-            new Identifier(ShapeShifterCurseFabric.MOD_ID, "t_axolotl"),
-            FabricEntityTypeBuilder.create(SpawnGroup.AXOLOTLS, TransformativeAxolotlEntity::new)
-                    .dimensions(EntityDimensions.fixed(0.75f, 0.42f))
-                    .build()
-    );
+    // T_AXOLOTL disabled for 1.21 port
     // Ocelot
-    public static final EntityType<TransformativeOcelotEntity> T_OCELOT = Registry.register(
-            Registries.ENTITY_TYPE,
-            new Identifier(ShapeShifterCurseFabric.MOD_ID, "t_ocelot"),
-            FabricEntityTypeBuilder.create(SpawnGroup.MONSTER, TransformativeOcelotEntity::new)
-                    .dimensions(EntityDimensions.fixed(0.6f, 0.7f))
-                    .build()
-    );
+    // T_OCELOT disabled for 1.21 port
 
     public static final EntityType<TransformativeWolfEntity> T_WOLF = Registry.register(
             Registries.ENTITY_TYPE,
@@ -156,13 +138,7 @@ public class ShapeShifterCurseFabric implements ModInitializer {
                 .build()
     );
 
-    public static final EntityType<TransformativeSpiderEntity> T_SPIDER = Registry.register(
-            Registries.ENTITY_TYPE,
-            new Identifier(ShapeShifterCurseFabric.MOD_ID, "t_spider"),
-            FabricEntityTypeBuilder.create(SpawnGroup.MONSTER, TransformativeSpiderEntity::new)
-                    .dimensions(EntityDimensions.fixed(1.4f, 0.9f))
-                    .build()
-    );
+    // T_SPIDER disabled for 1.21 port
 
 
     private int save_timer = 0;
@@ -196,10 +172,10 @@ public class ShapeShifterCurseFabric implements ModInitializer {
         RegTStatusEffect.initialize();
         RegTStatusPotionEffect.initialize();
         PlayerEventHandler.register();
-        RegTransformativeEntity.register();
+        // RegTransformativeEntity.register(); // Disabled for 1.21 port
         RegOtherStatusEffects.initialize();
-        TransformativeEntitySpawning.addEntitySpawns();
-        BatAttachEventHandler.register();
+        // TransformativeEntitySpawning.addEntitySpawns(); // Disabled for 1.21 port
+        // BatAttachEventHandler.register(); // Disabled for 1.21 port
         RegCustomEntity.init();
         // 注册动画（需要在服务端也执行以支持变换动画的同步）
         registerAnimations();

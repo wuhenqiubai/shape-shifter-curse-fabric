@@ -13,7 +13,6 @@ import java.util.Optional;
 public class OnFirstJoinWithMod extends AbstractCriterion<OnFirstJoinWithMod.Condition> {
     public static final Identifier ID = Identifier.of(ShapeShifterCurseFabric.MOD_ID, "on_first_join_with_mod");
 
-    @Override
     public Identifier getId() {
         return ID;
     }

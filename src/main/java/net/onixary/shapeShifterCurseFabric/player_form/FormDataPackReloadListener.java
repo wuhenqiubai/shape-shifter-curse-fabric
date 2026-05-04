@@ -16,7 +16,7 @@ import java.util.List;
 public class FormDataPackReloadListener implements SimpleSynchronousResourceReloadListener {
     @Override
     public Identifier getFabricId() {
-        return new Identifier(ShapeShifterCurseFabric.MOD_ID, "ssc_form");
+        return Identifier.of(ShapeShifterCurseFabric.MOD_ID, "ssc_form");
     }
 
     @Override

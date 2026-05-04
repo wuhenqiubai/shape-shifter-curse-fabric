@@ -13,7 +13,6 @@ import java.util.Optional;
 public class OnTransformEffectFade extends AbstractCriterion<OnTransformEffectFade.Condition> {
     public static final Identifier ID = Identifier.of(ShapeShifterCurseFabric.MOD_ID, "on_transform_effect_fade");
 
-    @Override
     public Identifier getId() {
         return ID;
     }

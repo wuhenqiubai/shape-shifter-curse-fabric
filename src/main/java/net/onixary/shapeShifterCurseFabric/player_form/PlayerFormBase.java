@@ -201,10 +201,10 @@ public class PlayerFormBase {
 
     public Identifier getFormOriginID() {
         String NameSpace = Origin_NameSpace_OverWrite != null ? Origin_NameSpace_OverWrite : FormID.getNamespace();
-        return new Identifier(NameSpace, "form_" + FormID.getPath());
+        return Identifier.of(NameSpace, "form_" + FormID.getPath());
     }
 
     public Identifier getFormOriginLayerID() {
-        return OriginLayer_OverWrite != null ? OriginLayer_OverWrite : new Identifier(Origins.MODID, "origin");
+        return OriginLayer_OverWrite != null ? OriginLayer_OverWrite : Identifier.of(Origins.MODID, "origin");
     }
 }

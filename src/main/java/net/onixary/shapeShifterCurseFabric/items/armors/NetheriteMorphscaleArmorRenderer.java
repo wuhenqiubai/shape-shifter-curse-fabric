@@ -7,8 +7,8 @@ import net.minecraft.util.Identifier;
 import net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric;
 
 public class NetheriteMorphscaleArmorRenderer extends AzArmorRenderer {
-    private static final Identifier MODEL = new Identifier(ShapeShifterCurseFabric.MOD_ID,"geo/item/netherite_morphscale_armor.geo.json");
-    private static final Identifier TEXTURE = new Identifier(ShapeShifterCurseFabric.MOD_ID,"textures/item/netherite_morphscale_armor.png");
+    private static final Identifier MODEL = Identifier.of(ShapeShifterCurseFabric.MOD_ID, "geo/item/netherite_morphscale_armor.geo.json");
+    private static final Identifier TEXTURE = Identifier.of(ShapeShifterCurseFabric.MOD_ID, "textures/item/netherite_morphscale_armor.png");
 
     public NetheriteMorphscaleArmorRenderer() {
         super(AzArmorRendererConfig.builder(MODEL, TEXTURE).build());

@@ -107,7 +107,7 @@ public class PlayerOriginComponent implements OriginComponent {
 
         if(compoundTag.contains("Origin")) {
             try {
-                OriginLayer defaultOriginLayer = OriginLayers.getLayer(new Identifier(Origins.MODID, "origin"));
+                OriginLayer defaultOriginLayer = OriginLayers.getLayer(Identifier.of(Origins.MODID, "origin"));
                 this.origins.put(defaultOriginLayer, OriginRegistry.get(Identifier.tryParse(compoundTag.getString("Origin"))));
             } catch(IllegalArgumentException e) {
                 Origins.LOGGER.warn("Player " + player.getDisplayName().getContent() + " had old origin which could not be migrated: " + compoundTag.getString("Origin"));

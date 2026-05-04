@@ -12,7 +12,7 @@ import java.io.IOException;
 public class TrinketDataPackReloadListener implements SimpleSynchronousResourceReloadListener {
     @Override
     public Identifier getFabricId() {
-        return new Identifier(ShapeShifterCurseFabric.MOD_ID, "accessory_power");
+        return Identifier.of(ShapeShifterCurseFabric.MOD_ID, "accessory_power");
     }
 
     @Override

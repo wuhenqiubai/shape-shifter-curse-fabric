@@ -16,20 +16,20 @@ import net.onixary.shapeShifterCurseFabric.util.UIPositionUtils;
 import static net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric.MOD_ID;
 
 public class InstinctBarRenderer  {
-    private static final Identifier instinctBarTexFullID = new Identifier(MOD_ID, "textures/gui/instinct_bar_full.png");
-    private static final Identifier instinctBarTexEmptyID = new Identifier(MOD_ID, "textures/gui/instinct_bar_empty.png");
-    private static final Identifier instinctBarTexIncrease0ID = new Identifier(MOD_ID, "textures/gui/instinct_bar_increase0.png");
-    private static final Identifier instinctBarTexIncrease0EmptyID = new Identifier(MOD_ID, "textures/gui/instinct_bar_increase0_empty.png");
-    private static final Identifier instinctBarTexIncrease1ID = new Identifier(MOD_ID, "textures/gui/instinct_bar_increase1.png");
-    private static final Identifier instinctBarTexIncrease1EmptyID = new Identifier(MOD_ID, "textures/gui/instinct_bar_increase1_empty.png");
-    private static final Identifier instinctBarTexIncrease2ID = new Identifier(MOD_ID, "textures/gui/instinct_bar_increase2.png");
-    private static final Identifier instinctBarTexIncrease2EmptyID = new Identifier(MOD_ID, "textures/gui/instinct_bar_increase2_empty.png");
-    private static final Identifier instinctBarTexIncrease3ID = new Identifier(MOD_ID, "textures/gui/instinct_bar_increase3.png");
-    private static final Identifier instinctBarTexIncrease3EmptyID = new Identifier(MOD_ID, "textures/gui/instinct_bar_increase3_empty.png");
-    private static final Identifier instinctBarTexDecreaseID = new Identifier(MOD_ID, "textures/gui/instinct_bar_decrease.png");
-    private static final Identifier instinctBarTexDecreaseEmptyID = new Identifier(MOD_ID, "textures/gui/instinct_bar_decrease_empty.png");
-    private static final Identifier instinctBarTexLockID = new Identifier(MOD_ID, "textures/gui/instinct_bar_lock.png");
-    private static final Identifier cursedMoonLogoTexID = new Identifier(MOD_ID, "textures/gui/cursed_moon_logo.png");
+    private static final Identifier instinctBarTexFullID = Identifier.of(MOD_ID, "textures/gui/instinct_bar_full.png");
+    private static final Identifier instinctBarTexEmptyID = Identifier.of(MOD_ID, "textures/gui/instinct_bar_empty.png");
+    private static final Identifier instinctBarTexIncrease0ID = Identifier.of(MOD_ID, "textures/gui/instinct_bar_increase0.png");
+    private static final Identifier instinctBarTexIncrease0EmptyID = Identifier.of(MOD_ID, "textures/gui/instinct_bar_increase0_empty.png");
+    private static final Identifier instinctBarTexIncrease1ID = Identifier.of(MOD_ID, "textures/gui/instinct_bar_increase1.png");
+    private static final Identifier instinctBarTexIncrease1EmptyID = Identifier.of(MOD_ID, "textures/gui/instinct_bar_increase1_empty.png");
+    private static final Identifier instinctBarTexIncrease2ID = Identifier.of(MOD_ID, "textures/gui/instinct_bar_increase2.png");
+    private static final Identifier instinctBarTexIncrease2EmptyID = Identifier.of(MOD_ID, "textures/gui/instinct_bar_increase2_empty.png");
+    private static final Identifier instinctBarTexIncrease3ID = Identifier.of(MOD_ID, "textures/gui/instinct_bar_increase3.png");
+    private static final Identifier instinctBarTexIncrease3EmptyID = Identifier.of(MOD_ID, "textures/gui/instinct_bar_increase3_empty.png");
+    private static final Identifier instinctBarTexDecreaseID = Identifier.of(MOD_ID, "textures/gui/instinct_bar_decrease.png");
+    private static final Identifier instinctBarTexDecreaseEmptyID = Identifier.of(MOD_ID, "textures/gui/instinct_bar_decrease_empty.png");
+    private static final Identifier instinctBarTexLockID = Identifier.of(MOD_ID, "textures/gui/instinct_bar_lock.png");
+    private static final Identifier cursedMoonLogoTexID = Identifier.of(MOD_ID, "textures/gui/cursed_moon_logo.png");
 
     private static Identifier currentBarID = instinctBarTexFullID;
     private static Identifier currentBarEmptyID = instinctBarTexEmptyID;

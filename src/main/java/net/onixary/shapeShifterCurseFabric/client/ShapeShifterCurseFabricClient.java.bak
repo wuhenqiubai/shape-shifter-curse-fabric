@@ -21,7 +21,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric;
 import net.onixary.shapeShifterCurseFabric.additional_power.CustomEdiblePower;
-import net.onixary.shapeShifterCurseFabric.additional_power.ItemStorePower;
+// ItemStorePower disabled for 1.21 port
 import net.onixary.shapeShifterCurseFabric.additional_power.LevitatePower;
 import net.onixary.shapeShifterCurseFabric.blocks.RegCustomBlock;
 import net.onixary.shapeShifterCurseFabric.custom_ui.BookOfShapeShifterScreenV2_P1;
@@ -173,7 +173,7 @@ public class ShapeShifterCurseFabricClient implements ClientModInitializer {
 		if (!MinecraftClient.getInstance().isPaused()) {
 			ManaUtils.manaTick(minecraftClient.player);
 		}
-		PowerHolderComponent.getPowers(clientPlayer, ItemStorePower.class).forEach(ItemStorePower::clientTick);
+		// ItemStorePower disabled for 1.21 port
 	}
 
 	public static void emitTransformParticle(int duration) {
@@ -272,7 +272,7 @@ public class ShapeShifterCurseFabricClient implements ClientModInitializer {
 	{
 		CoreShaderRegistrationCallback.EVENT.register(context -> {
 			// 1. 定义着色器的 Identifier
-			Identifier shaderId = new Identifier(ShapeShifterCurseFabric.MOD_ID, "fur_gradient_remap");
+			Identifier shaderId = Identifier.of(ShapeShifterCurseFabric.MOD_ID, "fur_gradient_remap");
 
 			// 2. 使用 context.register 方法注册
 			//    这个方法会处理底层的加载逻辑

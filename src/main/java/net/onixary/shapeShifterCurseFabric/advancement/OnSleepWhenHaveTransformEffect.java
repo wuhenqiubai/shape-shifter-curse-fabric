@@ -13,7 +13,6 @@ import java.util.Optional;
 public class OnSleepWhenHaveTransformEffect extends AbstractCriterion<OnSleepWhenHaveTransformEffect.Condition> {
     public static final Identifier ID = Identifier.of(ShapeShifterCurseFabric.MOD_ID, "on_sleep_when_have_transform_effect");
 
-    @Override
     public Identifier getId() {
         return ID;
     }

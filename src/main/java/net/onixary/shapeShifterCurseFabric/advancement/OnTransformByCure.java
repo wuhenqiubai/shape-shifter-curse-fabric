@@ -13,7 +13,6 @@ import java.util.Optional;
 public class OnTransformByCure extends AbstractCriterion<OnTransformByCure.Condition> {
     public static final Identifier ID = Identifier.of(ShapeShifterCurseFabric.MOD_ID, "on_transform_by_cure");
 
-    @Override
     public Identifier getId() {
         return ID;
     }

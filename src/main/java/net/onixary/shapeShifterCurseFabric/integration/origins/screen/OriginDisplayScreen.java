@@ -28,7 +28,7 @@ import java.util.List;
 
 public class OriginDisplayScreen extends Screen {
 
-    private static final Identifier WINDOW = new Identifier(Origins.MODID, "textures/gui/choose_origin.png");
+    private static final Identifier WINDOW = Identifier.of(Origins.MODID, "textures/gui/choose_origin.png");
     private Origin origin;
     private OriginLayer layer;
     private boolean isOriginRandom;

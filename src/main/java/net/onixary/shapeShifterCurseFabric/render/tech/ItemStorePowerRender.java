@@ -10,7 +10,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Pair;
 import net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric;
-import net.onixary.shapeShifterCurseFabric.additional_power.ItemStorePower;
+// ItemStorePower disabled for 1.21 port
 import net.onixary.shapeShifterCurseFabric.util.UIPositionUtils;
 
 import java.util.ArrayList;

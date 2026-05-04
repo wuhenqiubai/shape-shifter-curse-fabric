@@ -231,10 +231,10 @@ public class ManaComponent implements AutoSyncedComponent {
 
     @Override
     public void readFromNbt(NbtCompound nbtCompound, RegistryWrapper.WrapperLookup registryLookup) {
-        this.readFromNbt(nbtCompound, true);
+        this.readFromNbt(nbtCompound, true, registryLookup);
     }
 
-    public void readFromNbt(NbtCompound nbtCompound, Boolean SaveMode) {
+    public void readFromNbt(NbtCompound nbtCompound, Boolean SaveMode, RegistryWrapper.WrapperLookup registryLookup) {
         ManaBeforeRegen = nbtCompound.getDouble("ManaBeforeRegen");
         Mana = nbtCompound.getDouble("Mana");
         this.checkManaHook();
@@ -300,10 +300,10 @@ public class ManaComponent implements AutoSyncedComponent {
 
     @Override
     public void writeToNbt(NbtCompound nbtCompound, RegistryWrapper.WrapperLookup registryLookup) {
-        this.writeToNbt(nbtCompound, true);
+        this.writeToNbt(nbtCompound, true, registryLookup);
     }
 
-    public void writeToNbt(NbtCompound nbtCompound, Boolean SaveMode) {
+    public void writeToNbt(NbtCompound nbtCompound, Boolean SaveMode, RegistryWrapper.WrapperLookup registryLookup) {
         nbtCompound.putDouble("ManaBeforeRegen", this.ManaBeforeRegen);
         nbtCompound.putDouble("Mana", Mana);
         if (this.ManaTypeID != null) {
@@ -342,7 +342,7 @@ public class ManaComponent implements AutoSyncedComponent {
     @Override
     public void writeSyncPacket(RegistryByteBuf buf, ServerPlayerEntity recipient) {
         NbtCompound tag = new NbtCompound();
-        this.writeToNbt(tag, buf.getRegistryManager());
+        this.writeToNbt(tag, false, buf.getRegistryManager());
         buf.writeNbt(tag);
     }
 
@@ -350,22 +350,19 @@ public class ManaComponent implements AutoSyncedComponent {
     public void applySyncPacket(RegistryByteBuf buf) {
         NbtCompound tag = buf.readNbt();
         if (tag != null) {
-            this.readFromNbt(tag, buf.getRegistryManager());
+            this.readFromNbt(tag, false, buf.getRegistryManager());
         }
 
     }
 
-    @Override
     public boolean shouldCopyForRespawn(boolean lossless, boolean keepInventory, boolean sameCharacter) {
         return true;
     }
 
-    @Override
     public void copyForRespawn(ManaComponent original, boolean lossless, boolean keepInventory, boolean sameCharacter) {
         this.copyFrom(original);
     }
 
-    @Override
     public void copyFrom(ManaComponent other) {
         this.Mana = other.Mana;
         this.ManaTypeID = other.ManaTypeID;

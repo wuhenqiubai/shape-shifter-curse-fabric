@@ -106,7 +106,7 @@ public class Origins implements ModInitializer, OrderedResourceListenerInitializ
 	}
 
 	public static Identifier identifier(String path) {
-		return new Identifier(Origins.MODID, path);
+		return Identifier.of(Origins.MODID, path);
 	}
 
 	@Override

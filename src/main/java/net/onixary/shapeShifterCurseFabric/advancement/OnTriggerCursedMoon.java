@@ -13,7 +13,6 @@ import java.util.Optional;
 public class OnTriggerCursedMoon extends AbstractCriterion<OnTriggerCursedMoon.Condition> {
     public static final Identifier ID = Identifier.of(ShapeShifterCurseFabric.MOD_ID, "on_trigger_cursed_moon");
 
-    @Override
     public Identifier getId() {
         return ID;
     }

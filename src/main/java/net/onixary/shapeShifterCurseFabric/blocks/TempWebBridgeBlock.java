@@ -1,5 +1,6 @@
 package net.onixary.shapeShifterCurseFabric.blocks;
 
+import com.mojang.serialization.MapCodec;
 import net.minecraft.block.*;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.FluidState;
@@ -35,6 +36,11 @@ public class TempWebBridgeBlock extends HorizontalFacingBlock {
     public TempWebBridgeBlock(AbstractBlock.Settings settings) {
         super(settings);
         this.setDefaultState((BlockState)((BlockState)this.stateManager.getDefaultState()).with(AGE, 0).with(HORIZONTAL_FACING, Direction.NORTH));
+    }
+
+    @Override
+    protected MapCodec<? extends HorizontalFacingBlock> getCodec() {
+        return createCodec(TempWebBridgeBlock::new);
     }
 
     public void randomTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
