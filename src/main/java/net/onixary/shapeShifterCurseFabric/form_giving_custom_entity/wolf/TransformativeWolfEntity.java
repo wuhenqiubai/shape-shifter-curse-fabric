@@ -49,20 +49,20 @@ public class TransformativeWolfEntity extends WolfEntity implements ITMob {
         this.goalSelector.add(1, new SwimGoal(this));
         this.goalSelector.add(1, new EscapeDangerGoal(this, 1.5));
         this.goalSelector.add(2, new SitGoal(this));
-        // TODO: AvoidLlamaGoal still exists as WolfEntity.AvoidLlamaGoal in 1.21, verify Yarn constructor
-        // this.goalSelector.add(3, new AvoidLlamaGoal<>(this, LlamaEntity.class, 24.0F, 1.5, 1.5));
+        // TODO: AvoidLlamaGoal still exists as WolfEntity.AvoidLlamaGoal in 1.21 Mojang, verify Yarn inner class name
+        // this.goalSelector.add(3, new WolfEntity.AvoidLlamaGoal<>(this, LlamaEntity.class, 24.0F, 1.5, 1.5));
         this.goalSelector.add(4, new PounceAtTargetGoal(this, 0.4F));
         this.goalSelector.add(5, new MeleeAttackGoal(this, 1.0, true));
         this.goalSelector.add(6, new AnimalMateGoal(this, 1.0));
         this.goalSelector.add(7, new WanderAroundFarGoal(this, 1.0));
-        // TODO: WolfBegGoal → BegGoal in 1.21, verify Yarn constructor
-        // this.goalSelector.add(8, new BegGoal(this, 8.0F));
+        // TODO: WolfBegGoal is standalone in 1.21 Mojang (net.minecraft.entity.ai.goal), verify Yarn name
+        // this.goalSelector.add(8, new WolfBegGoal(this, 8.0F));
         this.goalSelector.add(10, new LookAtEntityGoal(this, PlayerEntity.class, 8.0F));
         this.goalSelector.add(10, new LookAroundGoal(this));
         this.targetSelector.add(1, new ActiveTargetGoal<>(this, PlayerEntity.class, true));
         this.targetSelector.add(2, (new RevengeGoal(this, new Class[0])).setGroupRevenge(new Class[0]));
-        // TODO: UntamedActiveTargetGoal → NonTameRandomTargetGoal<T> in 1.21, verify Yarn constructor
-        // this.targetSelector.add(3, new NonTameRandomTargetGoal<>(this, TurtleEntity.class, false, TurtleEntity.BABY_TURTLE_ON_LAND_FILTER));
+        // TODO: UntamedActiveTargetGoal standalone in 1.21 Mojang (net.minecraft.entity.ai.goal), verify Yarn name; 4th param now @Nullable Predicate
+        // this.targetSelector.add(3, new UntamedActiveTargetGoal<>(this, TurtleEntity.class, false, null));
         this.targetSelector.add(4, new ActiveTargetGoal(this, AbstractSkeletonEntity.class, false));
         this.targetSelector.add(5, new UniversalAngerGoal(this, true));
     }
