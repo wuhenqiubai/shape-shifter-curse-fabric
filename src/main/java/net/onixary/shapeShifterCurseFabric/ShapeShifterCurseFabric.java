@@ -39,7 +39,7 @@ import net.onixary.shapeShifterCurseFabric.config.ClientConfig;
 import net.onixary.shapeShifterCurseFabric.config.CommonConfig;
 import net.onixary.shapeShifterCurseFabric.config.PlayerCustomConfig;
 import net.onixary.shapeShifterCurseFabric.entity.RegCustomEntity;
-import net.onixary.shapeShifterCurseFabric.form_giving_custom_entity.RegTransformativeEntity;
+// RegTransformativeEntity disabled for 1.21 port
 import net.onixary.shapeShifterCurseFabric.form_giving_custom_entity.RegTransformativeEntitySpawnEgg;
 // TransformativeEntitySpawning disabled for 1.21 port (SpawnRestriction API)
 import net.onixary.shapeShifterCurseFabric.form_giving_custom_entity.axolotl.TransformativeAxolotlEntity;
@@ -196,7 +196,7 @@ public class ShapeShifterCurseFabric implements ModInitializer {
         RegTStatusEffect.initialize();
         RegTStatusPotionEffect.initialize();
         PlayerEventHandler.register();
-        // RegTransformativeEntity.register(); // Disabled for 1.21 port (Origin/OriginLayer .bak)
+        // // Disabled for 1.21 port // Disabled for 1.21 port (Origin/OriginLayer .bak)
         RegOtherStatusEffects.initialize();
         // TransformativeEntitySpawning.addEntitySpawns(); // Disabled for 1.21 port
         BatAttachEventHandler.register();

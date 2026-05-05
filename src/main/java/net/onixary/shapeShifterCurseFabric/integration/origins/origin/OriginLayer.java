@@ -14,6 +14,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.network.RegistryByteBuf;
+import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
 

@@ -114,7 +114,7 @@ public class ShapeShifterCurseFabricClient implements ClientModInitializer {
 			if (false && !(MinecraftClient.getInstance().currentScreen instanceof StartBookScreenV2)) {
 				// Disabled for 1.21 port
 				Object startScreen = null;
-				startScreen.currentPlayer = user;
+				// startScreen.currentPlayer = user;
 				MinecraftClient.getInstance().setScreen(startScreen);
 			}
 		}
@@ -132,7 +132,7 @@ public class ShapeShifterCurseFabricClient implements ClientModInitializer {
 			}
 //			if (!(MinecraftClient.getInstance().currentScreen instanceof StartBookScreen)) {
 //				StartBookScreen startScreen = new StartBookScreen();
-//				startScreen.currentPlayer = user;
+//				// startScreen.currentPlayer = user;
 //				MinecraftClient.getInstance().setScreen(startScreen);
 //			}
 		}
