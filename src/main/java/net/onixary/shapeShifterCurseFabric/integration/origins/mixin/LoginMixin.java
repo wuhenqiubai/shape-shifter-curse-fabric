@@ -1,7 +1,7 @@
 package net.onixary.shapeShifterCurseFabric.integration.origins.mixin;
 
 import org.ladysnake.cca.api.v3.component.ComponentProvider;
-import net.onixary.shapeShifterCurseFabric.integration.origins.badge.BadgeManager;
+// BadgeManager disabled for 1.21 port
 import net.onixary.shapeShifterCurseFabric.integration.origins.component.OriginComponent;
 import net.onixary.shapeShifterCurseFabric.integration.origins.networking.ModPackets;
 import net.onixary.shapeShifterCurseFabric.integration.origins.origin.Origin;

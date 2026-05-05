@@ -12,6 +12,7 @@ import net.fabricmc.api.Environment;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.PacketByteBuf;
+import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
 
@@ -349,7 +350,7 @@ public class OriginLayer implements Comparable<OriginLayer> {
             .add("condition", ApoliDataTypes.ENTITY_CONDITION)
             .add("origins", SerializableDataTypes.IDENTIFIERS);
 
-        public void write(PacketByteBuf buffer) {
+        public void write(RegistryByteBuf buffer) {
             buffer.writeBoolean(condition != null);
             if(condition != null)
                 condition.write(buffer);
@@ -358,7 +359,7 @@ public class OriginLayer implements Comparable<OriginLayer> {
         }
 
         @Environment(EnvType.CLIENT)
-        public static ConditionedOrigin read(PacketByteBuf buffer) {
+        public static ConditionedOrigin read(RegistryByteBuf buffer) {
             ConditionFactory<Entity>.Instance condition = null;
             if(buffer.readBoolean()) {
                 condition = ApoliRegistries.ENTITY_CONDITION.read(buffer);

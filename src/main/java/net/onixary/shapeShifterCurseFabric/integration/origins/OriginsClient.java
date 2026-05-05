@@ -3,10 +3,10 @@ package net.onixary.shapeShifterCurseFabric.integration.origins;
 import io.github.apace100.apoli.ApoliClient;
 import io.github.apace100.apoli.integration.PowerClearCallback;
 import net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric;
-import net.onixary.shapeShifterCurseFabric.integration.origins.networking.ModPacketsS2C;
+// ModPacketsS2C (origins) disabled for 1.21 port
 import net.onixary.shapeShifterCurseFabric.integration.origins.registry.ModBlocks;
 import net.onixary.shapeShifterCurseFabric.integration.origins.registry.ModEntities;
-import net.onixary.shapeShifterCurseFabric.integration.origins.screen.ViewOriginScreen;
+// ViewOriginScreen disabled for 1.21 port
 import net.onixary.shapeShifterCurseFabric.integration.origins.util.PowerKeyManager;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
@@ -37,7 +37,7 @@ public class OriginsClient implements ClientModInitializer {
 
         EntityRendererRegistry.register(ModEntities.ENDERIAN_PEARL, FlyingItemEntityRenderer::new);
 
-        ModPacketsS2C.register();
+        // Disabled for 1.21 port: ModPacketsS2C.register();
         
         // 将分类放在幻形者诅咒下
         usePrimaryActivePowerKeybind = new KeyBinding("key.origins.primary_active", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_G, "category." + ShapeShifterCurseFabric.MOD_ID);
@@ -59,8 +59,10 @@ public class OriginsClient implements ClientModInitializer {
         ClientTickEvents.START_CLIENT_TICK.register(tick -> {
             // 用于显示当前的起源信息，不需要，将其注释掉
             /*while(viewCurrentOriginKeybind.wasPressed()) {
-                if(!(MinecraftClient.getInstance().currentScreen instanceof ViewOriginScreen)) {
-                    MinecraftClient.getInstance().setScreen(new ViewOriginScreen());
+                // Disabled for 1.21 port
+		if(false && !(MinecraftClient.getInstance().currentScreen instanceof ViewOriginScreen)) {
+                    // Disabled for 1.21 port
+				MinecraftClient.getInstance().setScreen(null);
                 }
             }*/
         });

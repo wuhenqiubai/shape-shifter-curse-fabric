@@ -8,7 +8,7 @@ import io.github.apace100.apoli.power.PowerType;
 import io.github.apace100.apoli.power.PowerTypes;
 import io.github.apace100.calio.resource.OrderedResourceListenerInitializer;
 import io.github.apace100.calio.resource.OrderedResourceListenerManager;
-import net.onixary.shapeShifterCurseFabric.integration.origins.badge.BadgeManager;
+// BadgeManager disabled for 1.21 port
 //import net.onixary.shapeShifterCurseFabric.integration.origins.command.OriginCommand;
 import net.onixary.shapeShifterCurseFabric.integration.origins.networking.ModPacketsC2S;
 import net.onixary.shapeShifterCurseFabric.integration.origins.origin.Origin;
