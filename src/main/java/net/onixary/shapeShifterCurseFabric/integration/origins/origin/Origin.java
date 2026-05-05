@@ -13,13 +13,11 @@ import net.onixary.shapeShifterCurseFabric.integration.origins.data.OriginsDataT
 import net.onixary.shapeShifterCurseFabric.integration.origins.registry.ModComponents;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.advancement.Advancement;
+import net.minecraft.advancement.AdvancementEntry;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.network.PacketByteBuf;
-import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
@@ -101,9 +99,9 @@ public class Origin {
         return this.upgrades.size() > 0;
     }
 
-    public Optional<OriginUpgrade> getUpgrade(Advancement advancement) {
+    public Optional<OriginUpgrade> getUpgrade(AdvancementEntry advancement) {
         for(OriginUpgrade upgrade : upgrades) {
-            if(upgrade.getAdvancementCondition().equals(advancement.getId())) {
+            if(upgrade.getAdvancementCondition().equals(advancement.id())) {
                 return Optional.of(upgrade);
             }
         }

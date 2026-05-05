@@ -18,7 +18,7 @@ public abstract class OverrideSkinThirdPersonMixin {
 
     // 自定义皮肤路径
     private static final Identifier CUSTOM_SKIN =
-            new Identifier(ShapeShifterCurseFabric.MOD_ID, "textures/entity/base_player/ssc_base_skin.png");
+            Identifier.of(ShapeShifterCurseFabric.MOD_ID, "textures/entity/base_player/ssc_base_skin.png");
 
     @Inject(
             method = "getTexture(Lnet/minecraft/entity/Entity;)Lnet/minecraft/util/Identifier;",

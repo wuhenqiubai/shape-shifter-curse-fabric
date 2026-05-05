@@ -265,7 +265,7 @@ public class TrinketUtils {
                     SlotReference slot = accessoryPair.getLeft();
                     ItemStack stack = accessoryPair.getRight();
                     SlotType slotType = slot.inventory().getSlotType();
-                    AccessoryItem.SlotData data = new AccessoryItem.SlotData(new Identifier("trinkets", "%s/%s".formatted(slotType.getGroup(), slotType.getName())), slot.index());
+                    AccessoryItem.SlotData data = new AccessoryItem.SlotData(Identifier.of("trinkets", "%s/%s".formatted(slotType.getGroup(), slotType.getName())), slot.index());
                     allAccessory.add(new Pair<>(data, stack));
                 }
             }
@@ -276,7 +276,7 @@ public class TrinketUtils {
                 List<ItemStack> stacks = entry.getValue();
                 int Index = 0;
                 for (ItemStack stack : stacks) {
-                    AccessoryItem.SlotData data = new AccessoryItem.SlotData(new Identifier("curios", slotName), Index);
+                    AccessoryItem.SlotData data = new AccessoryItem.SlotData(Identifier.of("curios", slotName), Index);
                     allAccessory.add(new Pair<>(data, stack));
                     Index++;
                 }

@@ -42,7 +42,7 @@ public abstract class OverrideSkinFirstPersonMixin extends LivingEntityRenderer<
 
     // 自定义皮肤路径
     @Unique
-    private static final Identifier CUSTOM_SKIN = new Identifier(ShapeShifterCurseFabric.MOD_ID, "textures/entity/base_player/ssc_base_skin.png");
+    private static final Identifier CUSTOM_SKIN = Identifier.of(ShapeShifterCurseFabric.MOD_ID, "textures/entity/base_player/ssc_base_skin.png");
 
     @Inject(method = "renderArm", at = @At("HEAD"), cancellable = true)
     private void shape_shifter_curse$RenderArm_HEAD(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, AbstractClientPlayerEntity player, ModelPart arm, ModelPart sleeve, CallbackInfo ci) {

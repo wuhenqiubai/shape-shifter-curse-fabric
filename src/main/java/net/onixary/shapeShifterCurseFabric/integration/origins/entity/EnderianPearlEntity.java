@@ -74,12 +74,4 @@ public class EnderianPearlEntity extends ThrownItemEntity {
 
    }
 
-   public Entity moveToWorld(ServerWorld destination) {
-      Entity entity = this.getOwner();
-      if (entity != null && entity.getWorld().getRegistryKey() != destination.getRegistryKey()) {
-         this.setOwner((Entity)null);
-      }
-
-      return super.moveToWorld(destination);
-   }
 }

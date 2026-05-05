@@ -117,14 +117,14 @@ public class OriginalFurClient implements ClientModInitializer {
                 for (var res : resources.keySet()) {
                     String itemName = res.getPath().substring(res.getPath().indexOf('/')+1, res.getPath().lastIndexOf('.'));
                     //System.out.println(itemName);
-                    Identifier id = new Identifier("origins", itemName);
+                    Identifier id = Identifier.of("origins", itemName);
                     var p = itemName.split("\\.", 2);
                     if (p.length > 1) {
                         id = Identifier.of(p[0], p[1]);
                     }
                     //System.out.println(id);
                     assert id != null;
-                    id = new Identifier(id.getNamespace(), id.getPath().replace('/', '.').replace('\\', '.'));
+                    id = Identifier.of(id.getNamespace(), id.getPath().replace('/', '.').replace('\\', '.'));
                     if (!res.getNamespace().contentEquals("orif-defaults")) {
                         FUR_REGISTRY.remove(id);
                         FUR_RESOURCES.remove(id);

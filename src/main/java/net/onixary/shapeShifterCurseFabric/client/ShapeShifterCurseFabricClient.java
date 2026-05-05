@@ -56,9 +56,9 @@ import static net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric.*;
 
 public class ShapeShifterCurseFabricClient implements ClientModInitializer {
 	// 由于咒文生物使用的都是原版模型，所以无需注册Layer
-	//public static final EntityModelLayer T_BAT_LAYER = new EntityModelLayer(new Identifier(MOD_ID, "t_bat"), "main");
-	//public static final EntityModelLayer T_AXOLOTL_LAYER = new EntityModelLayer(new Identifier(MOD_ID, "t_axolotl"), "main");
-	//public static final EntityModelLayer T_OCELOT_LAYER = new EntityModelLayer(new Identifier(MOD_ID, "t_ocelot"), "main");
+	//public static final EntityModelLayer T_BAT_LAYER = new EntityModelLayer(Identifier.of(MOD_ID, "t_bat"), "main");
+	//public static final EntityModelLayer T_AXOLOTL_LAYER = new EntityModelLayer(Identifier.of(MOD_ID, "t_axolotl"), "main");
+	//public static final EntityModelLayer T_OCELOT_LAYER = new EntityModelLayer(Identifier.of(MOD_ID, "t_ocelot"), "main");
 
 	public static MinecraftClient getClient() {
 		return MinecraftClient.getInstance();

@@ -8,7 +8,7 @@ import io.github.apace100.apoli.power.PowerType;
 import io.github.apace100.apoli.power.PowerTypes;
 import io.github.apace100.calio.resource.OrderedResourceListenerInitializer;
 import io.github.apace100.calio.resource.OrderedResourceListenerManager;
-// BadgeManager disabled for 1.21 port
+import net.onixary.shapeShifterCurseFabric.integration.origins.badge.BadgeManager;
 //import net.onixary.shapeShifterCurseFabric.integration.origins.command.OriginCommand;
 import net.onixary.shapeShifterCurseFabric.integration.origins.networking.ModPacketsC2S;
 import net.onixary.shapeShifterCurseFabric.integration.origins.origin.Origin;
@@ -94,7 +94,7 @@ public class Origins implements ModInitializer, OrderedResourceListenerInitializ
 			//content.add(ModItems.ORB_OF_ORIGIN);
 		});
 
-		net.minecraft.advancement.criterion.Criteria.register(ChoseOriginCriterion.INSTANCE.getId().toString(), ChoseOriginCriterion.INSTANCE);
+		net.minecraft.advancement.criterion.Criteria.register(ChoseOriginCriterion.ID.toString(), ChoseOriginCriterion.INSTANCE);
 	}
 
 	public static void serializeConfig() {

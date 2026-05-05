@@ -11,7 +11,7 @@ import static net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric.MOD_ID
 
 public class RegPlayerFormComponent implements EntityComponentInitializer {
     public static final ComponentKey<PlayerFormComponent> PLAYER_FORM=
-            ComponentRegistry.getOrCreate(new Identifier(MOD_ID, "player_form"), PlayerFormComponent.class);
+            ComponentRegistry.getOrCreate(Identifier.of(MOD_ID, "player_form"), PlayerFormComponent.class);
 
     @Override
     public void registerEntityComponentFactories(EntityComponentFactoryRegistry registry) {

@@ -4,16 +4,13 @@ import com.google.common.collect.Lists;
 import com.google.gson.*;
 import io.github.apace100.apoli.data.ApoliDataTypes;
 import io.github.apace100.apoli.power.factory.condition.ConditionFactory;
-import io.github.apace100.apoli.registry.ApoliRegistries;
 import io.github.apace100.calio.data.SerializableData;
 import io.github.apace100.calio.data.SerializableDataTypes;
+import net.onixary.shapeShifterCurseFabric.integration.origins.data.OriginsDataTypes;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.network.PacketByteBuf;
-import net.minecraft.network.RegistryByteBuf;
-import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
@@ -332,61 +329,47 @@ public class OriginLayer implements Comparable<OriginLayer> {
         return layer;
     }
 
-    public static class ConditionedOrigin {
-        private final ConditionFactory<Entity>.Instance condition;
-        private final List<Identifier> origins;
+    public record ConditionedOrigin(ConditionFactory<Entity>.Instance condition, List<Identifier> origins) {
 
-        public ConditionedOrigin(ConditionFactory<Entity>.Instance condition, List<Identifier> origins) {
-            this.condition = condition;
-            this.origins = origins;
-        }
+        public static final SerializableData DATA = new SerializableData()
+            .add("condition", ApoliDataTypes.ENTITY_CONDITION, null)
+            .add("origins", SerializableDataTypes.IDENTIFIERS);
 
         public boolean isConditionFulfilled(PlayerEntity playerEntity) {
             return condition == null || condition.test(playerEntity);
         }
 
+        @Deprecated
+        public ConditionFactory<Entity>.Instance getCondition() {
+            return condition;
+        }
+
+        @Deprecated
         public List<Identifier> getOrigins() {
             return origins;
         }
-        private static final SerializableData conditionedOriginObjectData = new SerializableData()
-            .add("condition", ApoliDataTypes.ENTITY_CONDITION)
-            .add("origins", SerializableDataTypes.IDENTIFIERS);
 
-        public void write(RegistryByteBuf buffer) {
-            buffer.writeBoolean(condition != null);
-            if(condition != null)
-                condition.write(buffer);
-            buffer.writeInt(origins.size());
-            origins.forEach(buffer::writeIdentifier);
+        public SerializableData.Instance toData() {
+            SerializableData.Instance data = DATA.new Instance();
+            data.set("condition", condition);
+            data.set("origins", origins);
+            return data;
         }
 
-        @Environment(EnvType.CLIENT)
-        public static ConditionedOrigin read(RegistryByteBuf buffer) {
-            ConditionFactory<Entity>.Instance condition = null;
-            if(buffer.readBoolean()) {
-                condition = ApoliRegistries.ENTITY_CONDITION.read(buffer);
-            }
-            int originCount = buffer.readInt();
-            List<Identifier> originList = new ArrayList<>(originCount);
-            for(int i = 0; i < originCount; i++) {
-                originList.add(buffer.readIdentifier());
-            }
-            return new ConditionedOrigin(condition, originList);
+        public static ConditionedOrigin fromData(SerializableData.Instance data) {
+            return new ConditionedOrigin(data.get("condition"), data.get("origins"));
         }
 
-        @SuppressWarnings("unchecked")
+        public void write(RegistryByteBuf buf) {
+            OriginsDataTypes.CONDITIONED_ORIGIN.send(buf, this);
+        }
+
+        public static ConditionedOrigin read(RegistryByteBuf buf) {
+            return OriginsDataTypes.ORIGIN_OR_CONDITIONED_ORIGIN.receive(buf);
+        }
+
         public static ConditionedOrigin read(JsonElement element) {
-            if(element.isJsonPrimitive()) {
-                JsonPrimitive elemPrimitive = element.getAsJsonPrimitive();
-                if(elemPrimitive.isString()) {
-                    return new ConditionedOrigin(null, Lists.newArrayList(Identifier.tryParse(elemPrimitive.getAsString())));
-                }
-                throw new JsonParseException("Expected origin in layer to be either a string or an object.");
-            } else if(element.isJsonObject()) {
-                SerializableData.Instance data = conditionedOriginObjectData.read(element.getAsJsonObject());
-                return new ConditionedOrigin((ConditionFactory<Entity>.Instance)data.get("condition"), (List<Identifier>)data.get("origins"));
-            }
-            throw new JsonParseException("Expected origin in layer to be either a string or an object.");
+            return OriginsDataTypes.ORIGIN_OR_CONDITIONED_ORIGIN.read(element);
         }
     }
 }

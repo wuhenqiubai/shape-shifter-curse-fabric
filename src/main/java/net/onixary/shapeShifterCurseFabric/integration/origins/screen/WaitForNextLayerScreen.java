@@ -34,7 +34,8 @@ public class WaitForNextLayerScreen extends Screen {
         OriginComponent component = ModComponents.ORIGIN.get(player);
         while(index < layerList.size()) {
             if(!component.hasOrigin(layerList.get(index)) && layerList.get(index).getOrigins(player).size() > 0) {
-                MinecraftClient.getInstance().setScreen(new ChooseOriginScreen(layerList, index, showDirtBackground));
+                // ChooseOriginScreen disabled for 1.21 port
+                MinecraftClient.getInstance().setScreen(null);
                 return;
             }
             index++;
@@ -48,15 +49,7 @@ public class WaitForNextLayerScreen extends Screen {
             openSelection();
             return;
         }
-        this.renderBackground(context);
+        super.render(context, mouseX, mouseY, delta);
     }
 
-    @Override
-    public void renderBackground(DrawContext context) {
-        if(showDirtBackground) {
-            super.renderBackgroundTexture(context);
-        } else {
-            super.renderBackground(context);
-        }
-    }
 }

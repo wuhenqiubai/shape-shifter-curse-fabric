@@ -290,7 +290,7 @@ public class PlayerFormDynamic extends PlayerFormBase{
     }
 
     private Identifier registerPower(JsonObject powerData) {
-        Identifier powerID = new Identifier(this.FormID.getNamespace(), this.FormID.getPath() + "_tpower_" + this.TempPowerIndex);
+        Identifier powerID = Identifier.of(this.FormID.getNamespace(), this.FormID.getPath() + "_tpower_" + this.TempPowerIndex);
         if (powerData == null) {
             return null;
         }

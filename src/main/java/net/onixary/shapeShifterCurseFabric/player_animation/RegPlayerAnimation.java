@@ -14,7 +14,7 @@ import static net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric.MOD_ID
 public class RegPlayerAnimation {
     public static void register() {
         //You might use the EVENT to register new animations, or you can use Mixin.
-        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(new Identifier(MOD_ID, "player_animation"), 42, (player) -> {
+        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(Identifier.of(MOD_ID, "player_animation"), 42, (player) -> {
             if (player instanceof ClientPlayerEntity) {
                 //animationStack.addAnimLayer(42, testAnimation); //Add and save the animation container for later use.
                 ModifierLayer<IAnimation> testAnimation =  new ModifierLayer<>();
@@ -29,7 +29,7 @@ public class RegPlayerAnimation {
         PlayerAnimationAccess.REGISTER_ANIMATION_EVENT.register((player, animationStack) -> {
             ModifierLayer<IAnimation> layer = new ModifierLayer<>();
             animationStack.addAnimLayer(69, layer);
-            PlayerAnimationAccess.getPlayerAssociatedData(player).set(new Identifier(MOD_ID, "player_animation"), layer);
+            PlayerAnimationAccess.getPlayerAssociatedData(player).set(Identifier.of(MOD_ID, "player_animation"), layer);
         });
         //You can add modifiers to the ModifierLayer.
     }
