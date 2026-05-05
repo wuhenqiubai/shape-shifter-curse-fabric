@@ -18,7 +18,7 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric;
-// ModPacketsS2CServer disabled for 1.21 port
+import net.onixary.shapeShifterCurseFabric.networking.ModPacketsS2CServer;
 import net.onixary.shapeShifterCurseFabric.player_animation.v3.AnimRegistries;
 import net.onixary.shapeShifterCurseFabric.player_animation.v3.AnimUtils;
 import net.onixary.shapeShifterCurseFabric.player_animation.v3.IPlayerAnimController;
@@ -172,9 +172,8 @@ public class BatBlockAttachPower extends Power {
         if (attached && !player.getWorld().isClient() && player instanceof ServerPlayerEntity serverPlayer) {
             // 添加小延迟确保位置设置生效
             player.getWorld().getServer().execute(() -> {
-                // TODO: ModPacketsS2CServer disabled for 1.21 port
-                // ModPacketsS2CServer.sendBatAttachState(serverPlayer, isAttached, attachType.ordinal(), attachedBlockPos, attachedSide);
-                // ModPacketsS2CServer.broadcastBatAttachState(serverPlayer, isAttached, attachType.ordinal(), attachedBlockPos, attachedSide);
+                ModPacketsS2CServer.sendBatAttachState(serverPlayer, isAttached, attachType.ordinal(), attachedBlockPos, attachedSide);
+                ModPacketsS2CServer.broadcastBatAttachState(serverPlayer, isAttached, attachType.ordinal(), attachedBlockPos, attachedSide);
             });
         }
 
@@ -262,9 +261,8 @@ public class BatBlockAttachPower extends Power {
 
         // 同步到客户端
         if (player instanceof ServerPlayerEntity serverPlayer) {
-            // TODO: ModPacketsS2CServer disabled for 1.21 port
-            // ModPacketsS2CServer.sendBatAttachState(serverPlayer, false, AttachType.NONE.ordinal(), null, null);
-            // ModPacketsS2CServer.broadcastBatAttachState(serverPlayer, false, AttachType.NONE.ordinal(), null, null);
+            ModPacketsS2CServer.sendBatAttachState(serverPlayer, false, AttachType.NONE.ordinal(), null, null);
+            ModPacketsS2CServer.broadcastBatAttachState(serverPlayer, false, AttachType.NONE.ordinal(), null, null);
         }
 
         // 修改动作 最好在服务器端执行 虽然客户端也能执行 但是客户端还是会发送包到服务器进行处理

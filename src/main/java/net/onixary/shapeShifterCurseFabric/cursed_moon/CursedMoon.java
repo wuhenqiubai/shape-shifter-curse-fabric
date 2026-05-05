@@ -6,7 +6,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.world.World;
 import net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric;
-// ModPacketsS2CServer disabled for 1.21 port
+import net.onixary.shapeShifterCurseFabric.networking.ModPacketsS2CServer;
 import net.onixary.shapeShifterCurseFabric.player_form.RegPlayerForms;
 import net.onixary.shapeShifterCurseFabric.player_form.ability.FormAbilityManager;
 import net.onixary.shapeShifterCurseFabric.player_form.ability.PlayerFormComponent;
@@ -148,7 +148,7 @@ public class CursedMoon {
         // 立即向所有在线玩家同步状态
         boolean currentIsNight = isNight(world);
         for (ServerPlayerEntity player : world.getServer().getPlayerManager().getPlayerList()) {
-            // ModPacketsS2CServer.sendCursedMoonData disabled: player, newTime, getDay(world), true, currentIsNight
+            ModPacketsS2CServer.sendCursedMoonData(player, newTime, getDay(world), true, currentIsNight);
         }
     }
 

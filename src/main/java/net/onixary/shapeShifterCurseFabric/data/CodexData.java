@@ -4,7 +4,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.text.Text;
-// CursedMoon disabled for 1.21 port
+import net.onixary.shapeShifterCurseFabric.cursed_moon.CursedMoon;
 import net.onixary.shapeShifterCurseFabric.player_form.PlayerFormPhase;
 import net.onixary.shapeShifterCurseFabric.player_form.ability.PlayerFormComponent;
 import net.onixary.shapeShifterCurseFabric.player_form.ability.RegPlayerFormComponent;
@@ -278,12 +278,12 @@ public class CodexData {
         boolean isCursedMoon, isNight;
         if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) {
             // 客户端使用同步的状态
-            isCursedMoon = false; /* CursedMoon disabled for 1.21 port */
-            isNight = false; /* CursedMoon disabled for 1.21 port */
+            isCursedMoon = CursedMoon.clientIsCursedMoon;
+            isNight = CursedMoon.clientIsNight;
         } else {
             // 服务端使用原始逻辑
-            isCursedMoon = false; /* CursedMoon disabled for 1.21 port */
-            isNight = false; /* CursedMoon disabled for 1.21 port */
+            isCursedMoon = CursedMoon.clientIsCursedMoon;
+            isNight = CursedMoon.clientIsNight;
         }
 
         if(isCursedMoon){
