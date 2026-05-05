@@ -168,7 +168,9 @@ public abstract class OverrideSkinFirstPersonMixin extends LivingEntityRenderer<
     } */
 
 
-    // TODO: getSkinTexture @Redirect needs verification in 1.21
+    // TODO: getSkinTexture() → getSkinTextures() 返回 SkinTextures (非 Identifier)
+    // 1.21 @Redirect: target = "Lnet/minecraft/client/network/AbstractClientPlayerEntity;getSkinTextures()Lnet/minecraft/client/texture/SkinTextures;"
+    // 需要构造 SkinTextures 对象替代 Identifier CUSTOM_SKIN
     /* @Redirect(method="renderArm", at= @At(value="INVOKE", target = "Lnet/minecraft/client/network/AbstractClientPlayerEntity;getSkinTexture()Lnet/minecraft/util/Identifier;"))
     private Identifier shape_shifter_curse$getSkinTexture(AbstractClientPlayerEntity player) {
         if (!RegPlayerFormComponent.PLAYER_FORM.get(player).getCurrentForm().equals(RegPlayerForms.ORIGINAL_BEFORE_ENABLE))  // 仅当玩家激活Mod后才进行修改
