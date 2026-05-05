@@ -15,7 +15,7 @@ import java.util.List;
 public class AuxiliaryPickaxe extends PickaxeItem {
 
     public AuxiliaryPickaxe(ToolMaterial material, int attackDamage, float attackSpeed, Settings settings) {
-        super(material, attackDamage, attackSpeed, settings);
+        super(material, settings);
     }
 
     @Override

@@ -18,7 +18,7 @@ import java.util.List;
 public class AuxiliarySword extends SwordItem {
 
     public AuxiliarySword(ToolMaterial material, int attackDamage, float attackSpeed, Settings settings) {
-        super(material, attackDamage, attackSpeed, settings);
+        super(material, settings);
     }
 
     @Override
