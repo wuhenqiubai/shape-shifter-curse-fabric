@@ -100,9 +100,8 @@ public class AnubisWolfMinionEntity extends WolfEntity implements IMinion<Anubis
         return this;
     }
 
-    // isUndead() removed from LivingEntity in 1.21 - Yarn name isInvertedHealAndHarm() may not be the correct mapped name
-
-    // canBreatheInWater is final in LivingEntity 1.21, cannot override
+    // isUndead() removed in 1.21 → use entity_type tag #minecraft:undead
+    // canBreatheInWater() is final in LivingEntity 1.21 → use entity_type tag #minecraft:can_breathe_under_water
 
     @Override
     public boolean canHaveStatusEffect(StatusEffectInstance effect) {
