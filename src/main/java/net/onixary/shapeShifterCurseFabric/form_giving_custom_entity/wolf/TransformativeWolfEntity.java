@@ -8,6 +8,8 @@ import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.mob.AbstractSkeletonEntity;
 import net.minecraft.entity.mob.MobEntity;
+import net.minecraft.entity.passive.LlamaEntity;
+import net.minecraft.entity.passive.TurtleEntity;
 import net.minecraft.entity.passive.WolfEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.loot.LootTable;
@@ -49,20 +51,17 @@ public class TransformativeWolfEntity extends WolfEntity implements ITMob {
         this.goalSelector.add(1, new SwimGoal(this));
         this.goalSelector.add(1, new EscapeDangerGoal(this, 1.5));
         this.goalSelector.add(2, new SitGoal(this));
-        // TODO: AvoidLlamaGoal still exists as WolfEntity.AvoidLlamaGoal in 1.21 Mojang, verify Yarn inner class name
-        // this.goalSelector.add(3, new WolfEntity.AvoidLlamaGoal<>(this, LlamaEntity.class, 24.0F, 1.5, 1.5));
+        this.goalSelector.add(3, new WolfEntity.AvoidLlamaGoal<>(this, LlamaEntity.class, 24.0F, 1.5, 1.5));
         this.goalSelector.add(4, new PounceAtTargetGoal(this, 0.4F));
         this.goalSelector.add(5, new MeleeAttackGoal(this, 1.0, true));
         this.goalSelector.add(6, new AnimalMateGoal(this, 1.0));
         this.goalSelector.add(7, new WanderAroundFarGoal(this, 1.0));
-        // TODO: WolfBegGoal is standalone in 1.21 Mojang (net.minecraft.entity.ai.goal), verify Yarn name
-        // this.goalSelector.add(8, new WolfBegGoal(this, 8.0F));
+        this.goalSelector.add(8, new WolfBegGoal(this, 8.0F));
         this.goalSelector.add(10, new LookAtEntityGoal(this, PlayerEntity.class, 8.0F));
         this.goalSelector.add(10, new LookAroundGoal(this));
         this.targetSelector.add(1, new ActiveTargetGoal<>(this, PlayerEntity.class, true));
         this.targetSelector.add(2, (new RevengeGoal(this, new Class[0])).setGroupRevenge(new Class[0]));
-        // TODO: UntamedActiveTargetGoal standalone in 1.21 Mojang (net.minecraft.entity.ai.goal), verify Yarn name; 4th param now @Nullable Predicate
-        // this.targetSelector.add(3, new UntamedActiveTargetGoal<>(this, TurtleEntity.class, false, null));
+        this.targetSelector.add(3, new UntamedActiveTargetGoal<>(this, TurtleEntity.class, false, null));
         this.targetSelector.add(4, new ActiveTargetGoal(this, AbstractSkeletonEntity.class, false));
         this.targetSelector.add(5, new UniversalAngerGoal(this, true));
     }
