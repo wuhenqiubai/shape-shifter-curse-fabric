@@ -13,6 +13,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.network.RegistryByteBuf;
+import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
 
@@ -225,7 +226,7 @@ public class OriginLayer implements Comparable<OriginLayer> {
         return Integer.compare(order, o.order);
     }
 
-    public void write(PacketByteBuf buffer) {
+    public void write(RegistryByteBuf buffer) {
         buffer.writeString(identifier.toString());
         buffer.writeInt(order);
         buffer.writeBoolean(enabled);
@@ -253,7 +254,7 @@ public class OriginLayer implements Comparable<OriginLayer> {
     }
 
     @Environment(EnvType.CLIENT)
-    public static OriginLayer read(PacketByteBuf buffer) {
+    public static OriginLayer read(RegistryByteBuf buffer) {
         OriginLayer layer = new OriginLayer();
         layer.identifier = Identifier.tryParse(buffer.readString());
         layer.order = buffer.readInt();

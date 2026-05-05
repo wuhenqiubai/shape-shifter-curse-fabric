@@ -19,6 +19,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.network.PacketByteBuf;
+import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
@@ -210,7 +211,7 @@ public class Origin {
         return this.order;
     }
 
-    public void write(PacketByteBuf buffer) {
+    public void write(RegistryByteBuf buffer) {
         SerializableData.Instance data = DATA.new Instance();
         data.set("icon", displayItem);
         data.set("impact", impact);
@@ -256,7 +257,7 @@ public class Origin {
     }
 
     @Environment(EnvType.CLIENT)
-    public static Origin read(PacketByteBuf buffer) {
+    public static Origin read(RegistryByteBuf buffer) {
         Identifier identifier = Identifier.tryParse(buffer.readString(32767));
         return createFromData(identifier, DATA.read(buffer));
     }

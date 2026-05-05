@@ -1,7 +1,7 @@
 package net.onixary.shapeShifterCurseFabric.integration.origins.registry;
 
 import net.onixary.shapeShifterCurseFabric.integration.origins.Origins;
-import net.onixary.shapeShifterCurseFabric.integration.origins.content.OrbOfOriginItem;
+// OrbOfOriginItem disabled for 1.21 port
 import net.minecraft.item.Item;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.RegistryKey;

@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 public class TransformativeEntitySpawning {
     public static void addEntitySpawns() {
         // T_OCELOT
-        SpawnRestriction.register(
+        // TODO: SpawnRestriction removed in 1.21; /* SpawnRestriction.register(
                 ShapeShifterCurseFabric.T_OCELOT,
                 SpawnRestriction.Location.ON_GROUND,
                 Heightmap.Type.MOTION_BLOCKING,
@@ -42,7 +42,7 @@ public class TransformativeEntitySpawning {
                 3
         );
         // T_AXOLOTL
-        SpawnRestriction.register(
+        // TODO: SpawnRestriction removed in 1.21; /* SpawnRestriction.register(
                 ShapeShifterCurseFabric.T_AXOLOTL,
                 SpawnRestriction.Location.IN_WATER,
                 Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
@@ -57,7 +57,7 @@ public class TransformativeEntitySpawning {
                 6
         );
         // T_BAT
-        SpawnRestriction.register(
+        // TODO: SpawnRestriction removed in 1.21; /* SpawnRestriction.register(
                 ShapeShifterCurseFabric.T_BAT,
                 SpawnRestriction.Location.ON_GROUND,
                 Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
@@ -72,7 +72,7 @@ public class TransformativeEntitySpawning {
                 3
         );
         // T_WOLF
-        SpawnRestriction.register(
+        // TODO: SpawnRestriction removed in 1.21; /* SpawnRestriction.register(
                 ShapeShifterCurseFabric.T_WOLF,
                 SpawnRestriction.Location.ON_GROUND,
                 Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,

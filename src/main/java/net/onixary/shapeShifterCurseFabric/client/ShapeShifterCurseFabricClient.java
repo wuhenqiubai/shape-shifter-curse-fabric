@@ -25,11 +25,11 @@ import net.onixary.shapeShifterCurseFabric.additional_power.CustomEdiblePower;
 import net.onixary.shapeShifterCurseFabric.additional_power.LevitatePower;
 import net.onixary.shapeShifterCurseFabric.blocks.RegCustomBlock;
 import net.onixary.shapeShifterCurseFabric.custom_ui.BookOfShapeShifterScreenV2_P1;
-import net.onixary.shapeShifterCurseFabric.custom_ui.StartBookScreenV2;
+// StartBookScreenV2 disabled for 1.21 port
 import net.onixary.shapeShifterCurseFabric.data.StaticParams;
 import net.onixary.shapeShifterCurseFabric.entity.RegCustomEntityRenderer;
 import net.onixary.shapeShifterCurseFabric.form_giving_custom_entity.axolotl.TAxolotlEntityRenderer;
-import net.onixary.shapeShifterCurseFabric.form_giving_custom_entity.bat.BatEntityRenderer;
+// BatEntityRenderer disabled for 1.21 port (setupTransforms API)
 import net.onixary.shapeShifterCurseFabric.form_giving_custom_entity.ocelot.TOcelotEntityRenderer;
 // Spider entity disabled for 1.21 port
 import net.onixary.shapeShifterCurseFabric.integration.origins.Origins;
@@ -110,8 +110,10 @@ public class ShapeShifterCurseFabricClient implements ClientModInitializer {
 				// 以未安装owo_lib为理由进入新版页面时打印日志
 				LOGGER.error("Owo lib is not installed! Old book screen is unavailable, opening new book screen instead.");
 			}
-			if (!(MinecraftClient.getInstance().currentScreen instanceof StartBookScreenV2)) {
-				StartBookScreenV2 startScreen = new StartBookScreenV2();
+			// Disabled for 1.21 port
+			if (false && !(MinecraftClient.getInstance().currentScreen instanceof StartBookScreenV2)) {
+				// Disabled for 1.21 port
+				Object startScreen = null;
 				startScreen.currentPlayer = user;
 				MinecraftClient.getInstance().setScreen(startScreen);
 			}
@@ -137,7 +139,8 @@ public class ShapeShifterCurseFabricClient implements ClientModInitializer {
 	}
 
 	public static void registerEntityModels() {
-		EntityRendererRegistry.register(T_BAT, BatEntityRenderer::new);
+		// TODO: BatEntityRenderer disabled for 1.21 port
+		// EntityRendererRegistry.register(T_BAT, BatEntityRenderer::new);
 		EntityRendererRegistry.register(T_AXOLOTL, TAxolotlEntityRenderer::new);
 		EntityRendererRegistry.register(T_OCELOT, TOcelotEntityRenderer::new);
 		EntityRendererRegistry.register(T_WOLF, AnubisWolfMinionEntityRenderer::new);
