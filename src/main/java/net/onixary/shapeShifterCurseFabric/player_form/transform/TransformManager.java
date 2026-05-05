@@ -17,6 +17,7 @@ import net.onixary.shapeShifterCurseFabric.client.ShapeShifterCurseFabricClient;
 import net.onixary.shapeShifterCurseFabric.cursed_moon.CursedMoon;
 import net.onixary.shapeShifterCurseFabric.data.StaticParams;
 import net.onixary.shapeShifterCurseFabric.networking.ModPackets;
+import net.onixary.shapeShifterCurseFabric.networking.BytePayload;
 import net.onixary.shapeShifterCurseFabric.networking.ModPacketsS2CServer;
 import net.onixary.shapeShifterCurseFabric.player_form.FormRandomSelector;
 import net.onixary.shapeShifterCurseFabric.player_form.PlayerFormBase;
@@ -355,7 +356,7 @@ public class TransformManager {
         PacketByteBuf buf = PacketByteBufs.create();
         buf.writeFloat(1.0f - (data.beginTransformEffectTicks / (float)StaticParams.TRANSFORM_FX_DURATION_IN));
         buf.writeInt(data.beginTransformEffectTicks);
-        ServerPlayNetworking.send((ServerPlayerEntity) data.curPlayer, ModPackets.UPDATE_OVERLAY_EFFECT, buf);
+        ServerPlayNetworking.send((ServerPlayerEntity) data.curPlayer, new BytePayload(BytePayload.id(ModPackets.UPDATE_OVERLAY_EFFECT), buf));
     }
 
     // 新增：客户端特定的overlay淡出更新逻辑
@@ -370,7 +371,7 @@ public class TransformManager {
         PacketByteBuf buf = PacketByteBufs.create();
         buf.writeFloat(data.endTransformEffectTicks / (float)StaticParams.TRANSFORM_FX_DURATION_OUT);
         buf.writeInt(data.endTransformEffectTicks);
-        ServerPlayNetworking.send((ServerPlayerEntity) data.curPlayer, ModPackets.UPDATE_OVERLAY_FADE_EFFECT, buf);
+        ServerPlayNetworking.send((ServerPlayerEntity) data.curPlayer, new BytePayload(BytePayload.id(ModPackets.UPDATE_OVERLAY_FADE_EFFECT), buf));
     }
 
     // 新增：发送客户端变身完成效果
@@ -383,7 +384,7 @@ public class TransformManager {
         }
         // 服务端通过网络包通知客户端
         PacketByteBuf buf = PacketByteBufs.create();
-        ServerPlayNetworking.send((ServerPlayerEntity) data.curPlayer, ModPackets.TRANSFORM_COMPLETE_EFFECT, buf);
+        ServerPlayNetworking.send((ServerPlayerEntity) data.curPlayer, new BytePayload(BytePayload.id(ModPackets.TRANSFORM_COMPLETE_EFFECT), buf));
     }
 
     // 新增：客户端执行变身完成效果
@@ -488,7 +489,7 @@ public class TransformManager {
         if (!player.getWorld().isClient && player instanceof ServerPlayerEntity) {
             // 创建一个空的数据包，因为我们只需要一个触发信号
             PacketByteBuf buf = PacketByteBufs.create();
-            ServerPlayNetworking.send((ServerPlayerEntity) player, ModPackets.TRANSFORM_EFFECT_ID, buf);
+            ServerPlayNetworking.send((ServerPlayerEntity) player, new BytePayload(BytePayload.id(ModPackets.TRANSFORM_EFFECT_ID), buf));
         }
     }
 
@@ -540,7 +541,7 @@ public class TransformManager {
         } else if (data.curPlayer instanceof ServerPlayerEntity) {
             // 服务端通过网络包通知客户端
             PacketByteBuf buf = PacketByteBufs.create();
-            ServerPlayNetworking.send((ServerPlayerEntity) data.curPlayer, ModPackets.RESET_FIRST_PERSON, buf);
+            ServerPlayNetworking.send((ServerPlayerEntity) data.curPlayer, new BytePayload(BytePayload.id(ModPackets.RESET_FIRST_PERSON), buf));
         }
     }
 

@@ -9,6 +9,7 @@ import net.minecraft.util.math.MathHelper;
 import net.onixary.shapeShifterCurseFabric.cursed_moon.CursedMoon;
 import net.onixary.shapeShifterCurseFabric.data.StaticParams;
 import net.onixary.shapeShifterCurseFabric.networking.ModPackets;
+import net.onixary.shapeShifterCurseFabric.networking.BytePayload;
 import net.onixary.shapeShifterCurseFabric.player_form.PlayerFormBase;
 import net.onixary.shapeShifterCurseFabric.player_form.PlayerFormPhase;
 import net.onixary.shapeShifterCurseFabric.player_form.ability.PlayerFormComponent;
@@ -73,7 +74,7 @@ public class InstinctTicker {
         // If the instinct value is between 80 and 99.99, send a packet to the server
         if (comp.instinctValue >= 80.0f && comp.instinctValue < 99.99f && !player.getWorld().isClient && player instanceof ServerPlayerEntity) {
             PacketByteBuf buf = PacketByteBufs.create();
-            ServerPlayNetworking.send((ServerPlayerEntity) player, ModPackets.INSTINCT_THRESHOLD_EFFECT_ID, buf);
+            ServerPlayNetworking.send((ServerPlayerEntity) player, new BytePayload(BytePayload.id(ModPackets.INSTINCT_THRESHOLD_EFFECT_ID), buf));
         }
         //ShapeShifterCurseFabric.LOGGER.info("currentInstinctFromComp: " + comp.instinctValue);
         // 判断当前状态
