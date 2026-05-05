@@ -3,9 +3,10 @@ package net.onixary.shapeShifterCurseFabric.minion.mobs;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.ai.pathing.PathNodeType;
-import net.minecraft.entity.attribute.*;
+import net.minecraft.entity.attribute.DefaultAttributeContainer;
+import net.minecraft.entity.attribute.EntityAttributeInstance;
+import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.mob.AbstractSkeletonEntity;
@@ -284,10 +285,10 @@ public class AnubisWolfMinionEntity extends WolfEntity implements IMinion<Anubis
         super.onDeath(source);
     }
 
-    // @Override disabled: method_48926 removed in 1.21
-    /* public World method_48926() {
+    @Override
+    public World getWorld() {
         return super.getWorld();
-    } */
+    }
 
     class WolfMinionEscapeDangerGoal extends EscapeDangerGoal {
         public WolfMinionEscapeDangerGoal(double speed) {
