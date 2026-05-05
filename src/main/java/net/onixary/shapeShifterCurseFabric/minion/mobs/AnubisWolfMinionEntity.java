@@ -288,8 +288,10 @@ public class AnubisWolfMinionEntity extends WolfEntity implements IMinion<Anubis
             super(AnubisWolfMinionEntity.this, speed);
         }
 
+        @Override
         protected boolean isInDanger() {
-            return this.mob.shouldEscapePowderSnow() || this.mob.isOnFire();
+            // shouldEscapePowderSnow removed in 1.21; powder snow panic handled by DamageTypeTags.PANIC_CAUSES
+            return this.mob.isOnFire();
         }
     }
 }
