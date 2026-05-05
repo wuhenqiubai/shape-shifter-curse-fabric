@@ -2,11 +2,7 @@ package net.onixary.shapeShifterCurseFabric.form_giving_custom_entity.wolf;
 
 import io.github.apace100.apoli.component.PowerHolderComponent;
 import net.minecraft.block.Blocks;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityData;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.SpawnReason;
+import net.minecraft.entity.*;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributes;
@@ -14,21 +10,25 @@ import net.minecraft.entity.mob.AbstractSkeletonEntity;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.passive.WolfEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.loot.LootTable;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.LocalDifficulty;
 import net.minecraft.world.ServerWorldAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
-import org.jetbrains.annotations.Nullable;
 import net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric;
 import net.onixary.shapeShifterCurseFabric.additional_power.TWolfFriendlyPower;
 import net.onixary.shapeShifterCurseFabric.data.StaticParams;
 import net.onixary.shapeShifterCurseFabric.form_giving_custom_entity.ITMob;
 import net.onixary.shapeShifterCurseFabric.status_effects.BaseTransformativeStatusEffect;
 import net.onixary.shapeShifterCurseFabric.status_effects.TStatusApplier;
+import org.jetbrains.annotations.Nullable;
 
 import static net.onixary.shapeShifterCurseFabric.status_effects.RegTStatusEffect.TO_ANUBIS_WOLF_0_EFFECT;
 
@@ -155,8 +155,18 @@ public class TransformativeWolfEntity extends WolfEntity implements ITMob {
     }
 
     // getLootTableId removed in 1.21; default getLootTable() from LivingEntity is sufficient
+    protected RegistryKey<LootTable> getLootTableKey() {
+        return RegistryKey.of(
+                RegistryKeys.LOOT_TABLE,
+                Identifier.of(ShapeShifterCurseFabric.MOD_ID, "entities/t_wolf")
+        );
+    }
 
     // TODO: setTamed removed in 1.21 WolfEntity rewrite. TamableAnimal has setTame(boolean,boolean) but may not be overrideable
+    @Override
+    public void setTamed(boolean tamed, boolean updateAttributes) {
+        return;
+    }
 
     @Override
     public float getStatusChance() {
