@@ -34,8 +34,8 @@ public class BookOfShapeShifterScreen extends BaseOwoScreen<FlowLayout> {
     private boolean showingPage1 = true;
     private OverlayContainer<FlowLayout> fullscreenContainer;
 
-    private static final Identifier page1_texID = new Identifier(MOD_ID,"textures/gui/codex_page_1.png");
-    private static final Identifier page2_texID = new Identifier(MOD_ID,"textures/gui/codex_page_2.png");
+    private static final Identifier page1_texID = Identifier.of(MOD_ID, "textures/gui/codex_page_1.png");
+    private static final Identifier page2_texID = Identifier.of(MOD_ID, "textures/gui/codex_page_2.png");
 
 
     @Override

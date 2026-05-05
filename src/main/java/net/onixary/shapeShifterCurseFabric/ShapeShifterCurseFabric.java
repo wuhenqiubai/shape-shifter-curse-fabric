@@ -132,7 +132,7 @@ public class ShapeShifterCurseFabric implements ModInitializer {
 
     public static final EntityType<TransformativeWolfEntity> T_WOLF = Registry.register(
             Registries.ENTITY_TYPE,
-            new Identifier(ShapeShifterCurseFabric.MOD_ID, "t_wolf"),
+            Identifier.of(ShapeShifterCurseFabric.MOD_ID, "t_wolf"),
             FabricEntityTypeBuilder.create(SpawnGroup.CREATURE, TransformativeWolfEntity::new)
                 .dimensions(EntityDimensions.fixed(0.6f, 0.85f))
                 .build()
@@ -145,7 +145,7 @@ public class ShapeShifterCurseFabric implements ModInitializer {
 
 
     public static Identifier identifier(String path) {
-        return new Identifier(MOD_ID, path);
+        return Identifier.of(MOD_ID, path);
     }
 
 
@@ -180,10 +180,10 @@ public class ShapeShifterCurseFabric implements ModInitializer {
         // 注册动画（需要在服务端也执行以支持变换动画的同步）
         registerAnimations();
 
-        AdditionalEntityConditions.register();
-        AdditionalItemCondition.register();
-        AdditionalPowers.register();
-        AdditionalEntityActions.register();
+        // Disabled for 1.21 port: AdditionalEntityConditions.register();
+        // Disabled for 1.21 port: AdditionalItemCondition.register();
+        // Disabled for 1.21 port: AdditionalPowers.register();
+        // Disabled for 1.21 port: AdditionalEntityActions.register();
 
         // 注册召唤物属性
         MinionRegister.register();
