@@ -9,7 +9,7 @@ import net.minecraft.client.render.entity.LivingEntityRenderer;
 import net.minecraft.client.render.entity.PlayerEntityRenderer;
 import net.minecraft.client.render.entity.model.PlayerEntityModel;
 import net.minecraft.client.render.item.ItemRenderer;
-import net.onixary.shapeShifterCurseFabric.features.ExtraItemFeatureRenderer;
+// ExtraItemFeatureRenderer disabled for 1.21 port (CustomFeralItemRenderer API changes)
 import net.onixary.shapeShifterCurseFabric.features.MouthItemFeature;
 import net.onixary.shapeShifterCurseFabric.render.tech.ThirdPersonExtraHandItemRender;
 import org.spongepowered.asm.mixin.Mixin;
@@ -34,6 +34,7 @@ public abstract class AdjustItemHoldPlayerRendererMixin extends LivingEntityRend
         this.addFeature(new MouthItemFeature<>(this, this.dispatcher.getHeldItemRenderer()));
         this.addFeature(new ThirdPersonExtraHandItemRender<>(this, this.dispatcher.getHeldItemRenderer()));
         ItemRenderer itemRenderer = ((IEntityRenderDispatcherAccessor) this.dispatcher).getItemRenderer();
-        this.addFeature(new ExtraItemFeatureRenderer<>(this, this.dispatcher, itemRenderer));
+        // TODO: ExtraItemFeatureRenderer disabled for 1.21 port
+        // this.addFeature(new ExtraItemFeatureRenderer<>(this, this.dispatcher, itemRenderer));
     }
 }
