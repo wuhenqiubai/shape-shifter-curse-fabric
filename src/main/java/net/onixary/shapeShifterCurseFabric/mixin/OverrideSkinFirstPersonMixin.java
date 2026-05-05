@@ -149,39 +149,39 @@ public abstract class OverrideSkinFirstPersonMixin extends LivingEntityRenderer<
     // 模拟fur.render 但只渲染特定GeoBone 使用AzureLib默认渲染渲染逻辑
         @Unique
     private void RenderOFModelBone(OriginalFurClient.OriginFur OFRender, GeoBone geoBone, MatrixStack poseStack, OriginFurAnimatable animatable, VertexConsumerProvider bufferSource, RenderLayer renderType, VertexConsumer buffer, int packedLight) {
-        this.RenderOFModelBone(OFRender, geoBone, poseStack, animatable, bufferSource, renderType, buffer, packedLight, 1.0f, 1.0f, 1.0f, 1.0f);
+        this.RenderOFModelBone(OFRender, geoBone, poseStack, animatable, bufferSource, renderType, buffer, packedLight, -1);
         }
 
     @Unique
-    private void RenderOFModelBone(OriginalFurClient.OriginFur OFRender, GeoBone geoBone, MatrixStack poseStack, OriginFurAnimatable animatable, VertexConsumerProvider bufferSource, RenderLayer renderType, VertexConsumer buffer, int packedLight, float R, float G, float B, float A) {
+    private void RenderOFModelBone(OriginalFurClient.OriginFur OFRender, GeoBone geoBone, MatrixStack poseStack, OriginFurAnimatable animatable, VertexConsumerProvider bufferSource, RenderLayer renderType, VertexConsumer buffer, int packedLight, int colour) {
         OriginFurModel OFModel = (OriginFurModel) OFRender.getGeoModel();
         BakedGeoModel bakedGeoModel = OFModel.getBakedModel(OFModel.getModelResource(animatable));
         float TickDelta = MinecraftClient.getInstance().getRenderTickCounter().getTickDelta(false);
         int packedOverlay = OFRender.getPackedOverlay(animatable, 0.0F, MinecraftClient.getInstance().getRenderTickCounter().getTickDelta(false));
         poseStack.translate(-0.5, -0.51, -0.5); // 在 GeoObjectRenderer.preRender 中会 poseStack.translate(0.5, 0.51, 0.5) 因此需要手动调整
-        OFRender.preRender(poseStack, animatable, bakedGeoModel, bufferSource, bufferSource.getBuffer(renderType), false, TickDelta, packedLight, packedOverlay, R, G, B, A);
+        // AzureLib 3.x: ARGB packed colour replaces separate R,G,B,A
+        OFRender.preRender(poseStack, animatable, bakedGeoModel, bufferSource, buffer, false, TickDelta, packedLight, packedOverlay, colour);
         if (OFRender.firePreRenderEvent(poseStack, bakedGeoModel, bufferSource, TickDelta, packedLight)) {
             OFRender.preApplyRenderLayers(poseStack, animatable, bakedGeoModel, renderType, bufferSource, buffer, (float)packedLight, packedLight, packedOverlay);
             poseStack.push();
             OFRender.updateAnimatedTextureFrame(animatable);
-            OFRender.renderRecursively(poseStack, animatable, geoBone, renderType, bufferSource, buffer, false, TickDelta, packedLight, packedOverlay, R, G, B, A);
+            OFRender.renderRecursively(poseStack, animatable, geoBone, renderType, bufferSource, buffer, false, TickDelta, packedLight, packedOverlay, colour);
             poseStack.pop();
             OFRender.applyRenderLayers(poseStack, animatable, bakedGeoModel, renderType, bufferSource, buffer, TickDelta, packedLight, packedOverlay);
-            OFRender.postRender(poseStack, animatable, bakedGeoModel, bufferSource, buffer, false, TickDelta, packedLight, packedOverlay, R, G, B, A);
+            OFRender.postRender(poseStack, animatable, bakedGeoModel, bufferSource, buffer, false, TickDelta, packedLight, packedOverlay, colour);
             OFRender.firePostRenderEvent(poseStack, bakedGeoModel, bufferSource, TickDelta, packedLight);
         }
     }
 
 
-    // TODO: getSkinTexture() → getSkinTextures() 返回 SkinTextures (非 Identifier)
-    // 1.21 @Redirect: target = "Lnet/minecraft/client/network/AbstractClientPlayerEntity;getSkinTextures()Lnet/minecraft/client/texture/SkinTextures;"
-    // 需要构造 SkinTextures 对象替代 Identifier CUSTOM_SKIN
+    // TODO: 1.21 getSkinTexture → getSkinTextures (record), 返回 SkinTextures 非 Identifier
+    // CUSTOM_SKIN 需包装为 SkinTextures — 反编译确认 record 构造函数后替换
     @Redirect(method = "renderArm", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/AbstractClientPlayerEntity;getSkinTexture()Lnet/minecraft/util/Identifier;"))
     private SkinTextures shape_shifter_curse$getSkinTexture(AbstractClientPlayerEntity player) {
-        if (!RegPlayerFormComponent.PLAYER_FORM.get(player).getCurrentForm().equals(RegPlayerForms.ORIGINAL_BEFORE_ENABLE))  // 仅当玩家激活Mod后才进行修改
+        if (!RegPlayerFormComponent.PLAYER_FORM.get(player).getCurrentForm().equals(RegPlayerForms.ORIGINAL_BEFORE_ENABLE))
         {
             if (!RegPlayerSkinComponent.SKIN_SETTINGS.get(player).shouldKeepOriginalSkin()) {
-                return CUSTOM_SKIN;
+                return player.getSkinTextures(); // TODO: replace with new SkinTextures(CUSTOM_SKIN, ...)
             }
         }
         return player.getSkinTextures();
