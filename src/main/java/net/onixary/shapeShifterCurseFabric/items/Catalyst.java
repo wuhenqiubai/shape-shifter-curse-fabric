@@ -1,5 +1,6 @@
 package net.onixary.shapeShifterCurseFabric.items;
 
+import net.minecraft.component.type.FoodComponent;
 import net.minecraft.item.Item;
 import net.minecraft.item.Item.TooltipContext;
 import net.minecraft.item.tooltip.TooltipType;
