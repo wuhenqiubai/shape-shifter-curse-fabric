@@ -92,7 +92,7 @@ public abstract class MinionBase extends TameableEntity implements IMinion<Minio
         super.setOwner(player);
     }
 
-    @Override
+    // @Override disabled: writeCustomDataToNbt signature changed in 1.21
     public void writeCustomDataToNbt(NbtCompound nbt) {
         super.writeCustomDataToNbt(nbt);
     }

@@ -22,10 +22,12 @@ public class CustomTrinket extends AccessoryItem implements TrinketUtils.CustomP
     }
 
     private @NotNull Identifier getAccessoryID(ItemStack stack) {
-        NbtCompound nbt = stack.getNbt();
-        if (nbt == null) {
+        // getNbt() removed in 1.21; use component-based access
+        var customData = stack.get(net.minecraft.component.DataComponentTypes.CUSTOM_DATA);
+        if (customData == null) {
             return DEFAULT_IDENTIFIER;
         }
+        NbtCompound nbt = customData.copyNbt();
         if (nbt.contains("custom_accessory_id")) {
             Identifier identifier = Identifier.tryParse(nbt.getString("custom_accessory_id"));
             if (identifier != null) {
@@ -37,10 +39,11 @@ public class CustomTrinket extends AccessoryItem implements TrinketUtils.CustomP
 
     @Override
     public boolean canEquip(ItemStack stack, LivingEntity entity, AccessoryItem.SlotData slot) {
-        NbtCompound nbt = stack.getNbt();
-        if (nbt == null) {
+        var customData = stack.get(net.minecraft.component.DataComponentTypes.CUSTOM_DATA);
+        if (customData == null) {
             return false;
         }
+        NbtCompound nbt = customData.copyNbt();
         if (nbt.contains("custom_accessory_slots")) {
             NbtList slots = nbt.getList("custom_accessory_slots", 8);
             Identifier slotFinalName = slot.slot();

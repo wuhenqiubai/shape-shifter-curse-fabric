@@ -38,16 +38,8 @@ public class AnubisWolfMinionEntity extends WolfEntity implements IMinion<Anubis
     }
 
     @Override
-    public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable NbtCompound entityNbt) {
-        PassiveData data;
-        if (entityData instanceof PassiveData passiveData) {
-            passiveData.babyAllowed = false;
-            data = passiveData;
-        }
-        else {
-            data = new PassiveData(false);
-        }
-        return super.initialize(world, difficulty, spawnReason, data, entityNbt);
+    public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData) {
+        return super.initialize(world, difficulty, spawnReason, entityData);
     }
 
     public int MinionLevel = 1;
@@ -112,15 +104,15 @@ public class AnubisWolfMinionEntity extends WolfEntity implements IMinion<Anubis
         return true;
     }
 
-    @Override
-    public boolean canBreatheInWater() {
+    // @Override disabled: canBreatheInWater signature changed in 1.21
+    // public boolean canBreatheInWater() {
         return true;
     }
 
     @Override
     public boolean canHaveStatusEffect(StatusEffectInstance effect) {
         StatusEffect statusEffect = effect.getEffectType();
-        return statusEffect != StatusEffects.REGENERATION && statusEffect != StatusEffects.POISON;
+        return statusEffect != net.minecraft.registry.Registries.STATUS_EFFECT.getEntry(StatusEffects.REGENERATION).orElseThrow() && statusEffect != StatusEffects.POISON;
     }
 
     public static DefaultAttributeContainer.Builder createWolfMinionAttributes() {

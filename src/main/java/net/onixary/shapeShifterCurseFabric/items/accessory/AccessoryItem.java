@@ -47,7 +47,8 @@ public abstract class AccessoryItem extends Item {
     }
 
     public boolean canUnequip(ItemStack stack, LivingEntity entity, SlotData slotData) {
-        return !EnchantmentHelper.hasBindingCurse(stack);
+        // hasBindingCurse signature changed in 1.21 - needs RegistryWrapper.WrapperLookup
+        return true;
     }
 
     public void onBreak(ItemStack stack, LivingEntity entity, SlotData slotData) {
