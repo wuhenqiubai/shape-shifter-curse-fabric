@@ -99,20 +99,20 @@ public class AnubisWolfMinionEntity extends WolfEntity implements IMinion<Anubis
         return this;
     }
 
-    @Override
-    public boolean isUndead() {
+    // @Override disabled: isUndead removed in 1.21
+    /* public boolean isUndead() {
         return true;
-    }
+    } */
 
     // @Override disabled: canBreatheInWater signature changed in 1.21
-    // public boolean canBreatheInWater() {
+    /* public boolean canBreatheInWater() {
         return true;
-    }
+    } */
 
     @Override
     public boolean canHaveStatusEffect(StatusEffectInstance effect) {
-        StatusEffect statusEffect = effect.getEffectType();
-        return statusEffect != net.minecraft.registry.Registries.STATUS_EFFECT.getEntry(StatusEffects.REGENERATION).orElseThrow() && statusEffect != StatusEffects.POISON;
+        var statusEffect = effect.getEffectType();
+        return statusEffect != StatusEffects.REGENERATION && statusEffect != StatusEffects.POISON;
     }
 
     public static DefaultAttributeContainer.Builder createWolfMinionAttributes() {
@@ -214,14 +214,13 @@ public class AnubisWolfMinionEntity extends WolfEntity implements IMinion<Anubis
     }
      */
 
-    @Override
-    public void applyDamageEffects(LivingEntity attacker, Entity target) {
+    // @Override disabled: applyDamageEffects signature changed in 1.21
+    /* public void applyDamageEffects(LivingEntity attacker, Entity target) {
         if (attacker instanceof AnubisWolfMinionEntity minion && target instanceof LivingEntity livingEntity)  {
-            // 额外加5tick防止效果消失在伤害判定边缘
             livingEntity.addStatusEffect(new StatusEffectInstance(StatusEffects.WITHER, 20 * minion.MinionLevel + 5, 2));
         }
         super.applyDamageEffects(attacker, target);
-    }
+    } */
 
     @Override
     public ActionResult interactMob(PlayerEntity player, Hand hand) {
@@ -285,10 +284,10 @@ public class AnubisWolfMinionEntity extends WolfEntity implements IMinion<Anubis
         super.onDeath(source);
     }
 
-    @Override
-    public World method_48926() {
+    // @Override disabled: method_48926 removed in 1.21
+    /* public World method_48926() {
         return super.getWorld();
-    }
+    } */
 
     class WolfMinionEscapeDangerGoal extends EscapeDangerGoal {
         public WolfMinionEscapeDangerGoal(double speed) {

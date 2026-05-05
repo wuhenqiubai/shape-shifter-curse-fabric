@@ -32,7 +32,7 @@ public class PlayerMinionComponent implements Component, AutoSyncedComponent {
             }
             NbtCompound minionsCooldownNbt = nbtCompound.getCompound("minionsCooldown");
             for (String key : minionsCooldownNbt.getKeys()) {
-                this.minionsCooldown.put(new Identifier(key), minionsCooldownNbt.getLong(key));
+                this.minionsCooldown.put(Identifier.of(key), minionsCooldownNbt.getLong(key));
             }
         } catch (IllegalArgumentException e) {
             this.minions = new ConcurrentHashMap<>();

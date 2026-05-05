@@ -52,10 +52,10 @@ public abstract class MinionBase extends TameableEntity implements IMinion<Minio
         return this;
     }
 
-    @Override
-    public World method_48926() {
+    // @Override disabled: method_48926 removed in 1.21
+    /* public World method_48926() {
         return super.getWorld();
-    }
+    } */
 
     public double getMinionDisappearRange() {
         return 1024.0d;  // 32格外自动消失 如果不需要这个功能可以填Double.MAX_VALUE 如果没有让召唤物强制传送功能必须要设置一个合理的值 否则召唤物可能会卸载
