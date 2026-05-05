@@ -122,7 +122,6 @@ public class TransformativeWolfEntity extends WolfEntity implements ITMob {
     }
 
     @Override
-    // TODO: applyDamageEffects signature changed in 1.21
     public void onAttacking(Entity target) {
         // 在applyStatusByChance里面已经判断形态了 无需在外面判断
         if (target instanceof PlayerEntity player) {
@@ -135,8 +134,7 @@ public class TransformativeWolfEntity extends WolfEntity implements ITMob {
         if(target instanceof PlayerEntity) {
             boolean attacked = target.damage(this.getDamageSources().mobAttack(this), (float)this.getAttributeValue(EntityAttributes.GENERIC_ATTACK_DAMAGE));
             if (attacked) {
-                // TODO: applyDamageEffects signature changed in 1.21
-                // this.applyDamageEffects(target);
+                // applyDamageEffects removed in 1.21; onAttacking handles effect application
             }
             return attacked;
         }

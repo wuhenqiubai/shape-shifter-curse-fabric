@@ -208,13 +208,13 @@ public class AnubisWolfMinionEntity extends WolfEntity implements IMinion<Anubis
     }
      */
 
-    // @Override disabled: applyDamageEffects signature changed in 1.21
-    /* public void applyDamageEffects(LivingEntity attacker, Entity target) {
-        if (attacker instanceof AnubisWolfMinionEntity minion && target instanceof LivingEntity livingEntity)  {
-            livingEntity.addStatusEffect(new StatusEffectInstance(StatusEffects.WITHER, 20 * minion.MinionLevel + 5, 2));
+    @Override
+    public void onAttacking(Entity target) {
+        // replaces applyDamageEffects() removed in 1.21
+        if (target instanceof LivingEntity livingEntity) {
+            livingEntity.addStatusEffect(new StatusEffectInstance(StatusEffects.WITHER, 20 * MinionLevel + 5, 2));
         }
-        super.applyDamageEffects(attacker, target);
-    } */
+    }
 
     @Override
     public ActionResult interactMob(PlayerEntity player, Hand hand) {

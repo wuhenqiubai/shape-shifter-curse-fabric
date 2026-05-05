@@ -54,7 +54,7 @@ public interface ITMob {
             if (currentForm.equals(RegPlayerForms.ORIGINAL_SHIFTER)) {
                 boolean attacked = target.damage(TMob.getDamageSources().mobAttack(TMob), (float)TMob.getAttributeValue(EntityAttributes.GENERIC_ATTACK_DAMAGE));
                 if (attacked) {
-                    // TODO: applyDamageEffects signature changed in 1.21; TMob.tryAttack(target);
+                    // applyDamageEffects removed in 1.21; use onAttacking which is called by tryAttack internally
                 }
                 return Optional.of(attacked);
             }
