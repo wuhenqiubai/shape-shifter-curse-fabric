@@ -105,10 +105,7 @@ public class AnubisWolfMinionEntity extends WolfEntity implements IMinion<Anubis
         return true;
     } */
 
-    // @Override disabled: canBreatheInWater signature changed in 1.21
-    /* public boolean canBreatheInWater() {
-        return true;
-    } */
+    // TODO: canBreatheInWater → canBreatheUnderwater() in 1.21? Signature uncertain
 
     @Override
     public boolean canHaveStatusEffect(StatusEffectInstance effect) {

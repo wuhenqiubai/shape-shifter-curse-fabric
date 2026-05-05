@@ -3,6 +3,7 @@ package net.onixary.shapeShifterCurseFabric.form_giving_custom_entity.wolf;
 import io.github.apace100.apoli.component.PowerHolderComponent;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityData;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SpawnReason;
@@ -17,8 +18,11 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.random.Random;
+import net.minecraft.world.LocalDifficulty;
+import net.minecraft.world.ServerWorldAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
+import org.jetbrains.annotations.Nullable;
 import net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric;
 import net.onixary.shapeShifterCurseFabric.additional_power.TWolfFriendlyPower;
 import net.onixary.shapeShifterCurseFabric.data.StaticParams;
@@ -33,21 +37,10 @@ public class TransformativeWolfEntity extends WolfEntity implements ITMob {
         super(entityType, world);
     }
 
-    // TODO: WolfEntity.initialize() signature changed in 1.21 (wolf variants)
-    /*
     @Override
-    public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable NbtCompound entityNbt) {
-        PassiveData data;
-        if (entityData instanceof PassiveData passiveData) {
-            passiveData.babyAllowed = false;
-            data = passiveData;
-        }
-        else {
-            data = new PassiveData(false);
-        }
-        return super.initialize(world, difficulty, spawnReason, data, entityNbt);
+    public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData) {
+        return super.initialize(world, difficulty, spawnReason, entityData);
     }
-    */
 
     private float cooldown = 0;
 
@@ -161,11 +154,9 @@ public class TransformativeWolfEntity extends WolfEntity implements ITMob {
         return;
     }
 
-    // TODO: getLootTableId removed in 1.21, use getLootTable()
-    /* @Override protected Identifier getLootTableId() { return ... } */
+    // getLootTableId removed in 1.21; default getLootTable() from LivingEntity is sufficient
 
-    // TODO: setTamed may not be overrideable in 1.21
-    /* @Override public void setTamed(boolean tamed) { return; } */
+    // TODO: setTamed removed in 1.21 WolfEntity rewrite. TamableAnimal has setTame(boolean,boolean) but may not be overrideable
 
     @Override
     public float getStatusChance() {
