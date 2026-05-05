@@ -51,12 +51,13 @@ public class FeedEffect extends StatusEffect {
     }
 
     @Override
-    public void applyUpdateEffect(LivingEntity entity, int amplifier) {
+    public boolean applyUpdateEffect(LivingEntity entity, int amplifier) {
         if (entity instanceof PlayerEntity player) {
             player.getHungerManager().add(8, 0.6f);
             if (ManaRegistries.FAMILIAR_FOX_MANA.equals(ManaUtils.getPlayerManaTypeID(player))) {
                 ManaUtils.gainPlayerMana(player, 38d);
             }
         }
+        return true;
     }
 }

@@ -11,17 +11,18 @@ public class ImmobilityEffect extends StatusEffect {
     }
 
     @Override
-    public void applyUpdateEffect(LivingEntity entity, int amplifier) {
+    public boolean applyUpdateEffect(LivingEntity entity, int amplifier) {
         if (entity instanceof PlayerEntity){
             double speedY = entity.getVelocity().y;
             entity.setVelocity(0, speedY, 0);
             entity.velocityModified = true;
         }
+        return true;
     }
 
     @Override
     public boolean canApplyUpdateEffect(int duration, int amplifier) {
-        return true; // Apply effect every tick
+        return true;
     }
 
 

@@ -7,6 +7,7 @@ import net.minecraft.entity.effect.StatusEffectCategory;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.Registry;
+import net.minecraft.registry.RegistryKeys;
 import net.minecraft.util.Identifier;
 import net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric;
 import net.onixary.shapeShifterCurseFabric.status_effects.other_effects.EntangledEffect;
@@ -24,13 +25,13 @@ public class RegOtherStatusEffects {
     // 裹茧1级效果不手动减速，使用减速效果
     public static final StatusEffect ENTANGLED_EFFECT = register("entangled_effect", new EntangledEffect(StatusEffectCategory.HARMFUL, 0x9F9F9F));
     public static final StatusEffect ENTANGLED_FULL_EFFECT  = register("entangled_full_effect", new SimpleStatusEffect(StatusEffectCategory.HARMFUL, 0xFFFFFF)
-            .addAttributeModifier(EntityAttributes.GENERIC_MOVEMENT_SPEED, "ef0f1c0e-3d99-45e8-9283-0d48d07751fe", -1.0F, EntityAttributeModifier.Operation.MULTIPLY_BASE)
-            .addAttributeModifier(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE, "e2f8008f-4b87-4f19-96c0-a10acce2f960", 100.0F, EntityAttributeModifier.Operation.ADDITION)
-            .addAttributeModifier(EntityAttributes.GENERIC_ATTACK_SPEED, "e2f8008f-4b87-4f19-96c0-a10acce2f960", -0.8F, EntityAttributeModifier.Operation.MULTIPLY_BASE)
+            .addAttributeModifier(EntityAttributes.GENERIC_MOVEMENT_SPEED, Identifier.of(ShapeShifterCurseFabric.MOD_ID, "entangled_full_speed"), -1.0F, EntityAttributeModifier.Operation.ADD_MULTIPLIED_BASE)
+            .addAttributeModifier(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE, Identifier.of(ShapeShifterCurseFabric.MOD_ID, "entangled_full_knockback"), 100.0F, EntityAttributeModifier.Operation.ADD_VALUE)
+            .addAttributeModifier(EntityAttributes.GENERIC_ATTACK_SPEED, Identifier.of(ShapeShifterCurseFabric.MOD_ID, "entangled_full_attack_speed"), -0.8F, EntityAttributeModifier.Operation.ADD_MULTIPLIED_BASE)
     );
 
     public static <T extends StatusEffect> T register(String path, T effect) {
-        return Registry.register(Registries.STATUS_EFFECT, RegistryKey.of(Registries.STATUS_EFFECT.getKey(), Identifier.of(ShapeShifterCurseFabric.MOD_ID, path)), effect);
+        return Registry.register(Registries.STATUS_EFFECT, RegistryKey.of(RegistryKeys.STATUS_EFFECT, Identifier.of(ShapeShifterCurseFabric.MOD_ID, path)), effect);
     }
 
     public static void initialize() {}

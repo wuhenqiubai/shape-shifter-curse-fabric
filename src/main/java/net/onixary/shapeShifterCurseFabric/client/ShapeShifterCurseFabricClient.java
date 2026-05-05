@@ -111,7 +111,7 @@ public class ShapeShifterCurseFabricClient implements ClientModInitializer {
 				LOGGER.error("Owo lib is not installed! Old book screen is unavailable, opening new book screen instead.");
 			}
 			// Disabled for 1.21 port
-			if (false && !(MinecraftClient.getInstance().currentScreen instanceof StartBookScreenV2)) {
+			if (false /* Disabled for 1.21 port */) {
 				// Disabled for 1.21 port
 				Object startScreen = null;
 				// startScreen.currentPlayer = user;
