@@ -216,18 +216,18 @@ public class PlayerEntityRendererMixin {
                         if (!isInvisible) {
                             var p = m_Model.getHiddenParts();
                             var model = (PlayerEntityModel<?>) this.getModel();
-                            model.hat.visible = !p.contains(OriginFurModel.VMP.hat) && abstractClientPlayerEntity.isPartVisible(PlayerModelPart.HAT);
+                            model.hat.visible = !p.contains(OriginFurModel.VMP.hat);
                             model.head.visible = !p.contains(OriginFurModel.VMP.head);
                             model.body.visible = !p.contains(OriginFurModel.VMP.body);
-                            model.jacket.visible = !p.contains(OriginFurModel.VMP.jacket) && abstractClientPlayerEntity.isPartVisible(PlayerModelPart.JACKET);
+                            model.jacket.visible = !p.contains(OriginFurModel.VMP.jacket);
                             model.leftArm.visible = !p.contains(OriginFurModel.VMP.leftArm);
-                            model.leftSleeve.visible = !p.contains(OriginFurModel.VMP.leftSleeve) && abstractClientPlayerEntity.isPartVisible(PlayerModelPart.LEFT_SLEEVE);
+                            model.leftSleeve.visible = !p.contains(OriginFurModel.VMP.leftSleeve);
                             model.rightArm.visible = !p.contains(OriginFurModel.VMP.rightArm);
-                            model.rightSleeve.visible = !p.contains(OriginFurModel.VMP.rightSleeve) && abstractClientPlayerEntity.isPartVisible(PlayerModelPart.RIGHT_SLEEVE);
+                            model.rightSleeve.visible = !p.contains(OriginFurModel.VMP.rightSleeve);
                             model.leftLeg.visible = !p.contains(OriginFurModel.VMP.leftLeg);
-                            model.leftPants.visible = !p.contains(OriginFurModel.VMP.leftPants) && abstractClientPlayerEntity.isPartVisible(PlayerModelPart.LEFT_PANTS_LEG);
+                            model.leftPants.visible = !p.contains(OriginFurModel.VMP.leftPants);
                             model.rightLeg.visible = !p.contains(OriginFurModel.VMP.rightLeg);
-                            model.rightPants.visible = !p.contains(OriginFurModel.VMP.rightPants) && abstractClientPlayerEntity.isPartVisible(PlayerModelPart.RIGHT_PANTS_LEG);
+                            model.rightPants.visible = !p.contains(OriginFurModel.VMP.rightPants);
                             if (this.BetterCombatInstalled && IsFirstPersonView && IsClientNowPlayedPlayer && ClientUtils.ShouldEnableBetterCombatFix()) {
                                 model.hat.visible = false;
                                 model.head.visible = false;
@@ -277,12 +277,12 @@ public class PlayerEntityRendererMixin {
                             } else {
                                 l = RenderLayer.getEntityCutout(overlayTexture);
                             }
-                            this.model.render(matrixStack, vertexConsumerProvider.getBuffer(l), i, p, 1, 1, 1, bl2 ? 0.15F : 1.0F);
+                            this.model.render(matrixStack, vertexConsumerProvider.getBuffer(l), i, p, bl2 ? 0x26FFFFFF : -1);
                         }
                         if (emissiveTexture != null) {
 
                             RenderLayer l = RenderLayer.getEntityTranslucentEmissive(emissiveTexture);
-                            this.model.render(matrixStack, vertexConsumerProvider.getBuffer(l), i, p, 1, 1, 1, bl2 ? 0.15F : 1.0F);
+                            this.model.render(matrixStack, vertexConsumerProvider.getBuffer(l), i, p, bl2 ? 0x26FFFFFF : -1);
                         }
                         var m = (PlayerEntityModel<?>) this.getModel();
                         m.hat.hidden = false;

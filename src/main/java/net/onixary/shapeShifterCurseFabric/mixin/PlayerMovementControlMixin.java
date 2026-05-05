@@ -8,6 +8,7 @@ import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.math.Vec3d;
 import net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric;
 import net.onixary.shapeShifterCurseFabric.additional_power.*;
+import net.onixary.shapeShifterCurseFabric.networking.BytePayload;
 import net.onixary.shapeShifterCurseFabric.networking.ModPackets;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -85,7 +86,7 @@ public class PlayerMovementControlMixin {
             // 处理跳跃取消吸附
             if (player.getWorld().isClient()) {
                 PacketByteBuf buf = PacketByteBufs.create();
-                ClientPlayNetworking.send(ModPackets.JUMP_DETACH_REQUEST_ID, buf);
+                ClientPlayNetworking.send(new BytePayload(BytePayload.id(ModPackets.JUMP_DETACH_REQUEST_ID), buf));
             }
             ci.cancel();
         }
@@ -97,7 +98,7 @@ public class PlayerMovementControlMixin {
         if (player.getWorld().isClient()) {
             PacketByteBuf buf = PacketByteBufs.create();
             buf.writeUuid(player.getUuid());
-            ClientPlayNetworking.send(ModPackets.JUMP_EVENT_ID, buf);
+            ClientPlayNetworking.send(new BytePayload(BytePayload.id(ModPackets.JUMP_EVENT_ID), buf));
         }
     }
 
@@ -121,7 +122,7 @@ public class PlayerMovementControlMixin {
 
             if (player.getWorld().isClient()) {
                 PacketByteBuf buf = PacketByteBufs.create();
-                ClientPlayNetworking.send(ModPackets.JUMP_DETACH_REQUEST_ID, buf);
+                ClientPlayNetworking.send(new BytePayload(BytePayload.id(ModPackets.JUMP_DETACH_REQUEST_ID), buf));
             }
 
             // 重置鞘翅相关标志
@@ -155,7 +156,7 @@ public class PlayerMovementControlMixin {
             if (player.getWorld().isClient()) {
                 PacketByteBuf buf = PacketByteBufs.create();
                 buf.writeUuid(player.getUuid());
-                ClientPlayNetworking.send(ModPackets.SPRINTING_TO_SNEAKING_EVENT_ID, buf);
+                ClientPlayNetworking.send(new BytePayload(BytePayload.id(ModPackets.SPRINTING_TO_SNEAKING_EVENT_ID), buf));
             }
         }
     }

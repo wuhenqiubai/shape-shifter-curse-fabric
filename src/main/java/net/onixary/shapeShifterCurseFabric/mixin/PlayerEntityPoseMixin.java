@@ -33,7 +33,7 @@ public abstract class PlayerEntityPoseMixin extends LivingEntity implements Name
         PlayerFormBase curForm = RegPlayerFormComponent.PLAYER_FORM.get(player).getCurrentForm();
         boolean isFeral = curForm.getBodyType() == PlayerFormBodyType.FERAL;
         if(isFeral){
-            if (this.wouldPoseNotCollide(EntityPose.SWIMMING)) {
+            if (this.wouldNotSuffocateInPose(EntityPose.SWIMMING)) {
                 EntityPose entityPose;
                 if (this.isFallFlying()) {
                     entityPose = EntityPose.FALL_FLYING;
@@ -50,8 +50,8 @@ public abstract class PlayerEntityPoseMixin extends LivingEntity implements Name
                 }
 
                 EntityPose entityPose2;
-                if (!this.isSpectator() && !this.hasVehicle() && !this.wouldPoseNotCollide(entityPose)) {
-                    if (this.wouldPoseNotCollide(EntityPose.CROUCHING)) {
+                if (!this.isSpectator() && !this.hasVehicle() && !this.wouldNotSuffocateInPose(entityPose)) {
+                    if (this.wouldNotSuffocateInPose(EntityPose.CROUCHING)) {
                         entityPose2 = EntityPose.CROUCHING;
                     } else {
                         entityPose2 = EntityPose.STANDING;
