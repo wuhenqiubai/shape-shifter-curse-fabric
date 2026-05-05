@@ -6,12 +6,12 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.world.World;
 import net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric;
-import net.onixary.shapeShifterCurseFabric.networking.ModPacketsS2CServer;
+// ModPacketsS2CServer disabled for 1.21 port
 import net.onixary.shapeShifterCurseFabric.player_form.RegPlayerForms;
 import net.onixary.shapeShifterCurseFabric.player_form.ability.FormAbilityManager;
 import net.onixary.shapeShifterCurseFabric.player_form.ability.PlayerFormComponent;
 import net.onixary.shapeShifterCurseFabric.player_form.ability.RegPlayerFormComponent;
-import net.onixary.shapeShifterCurseFabric.player_form.transform.TransformManager;
+// TransformManager disabled for 1.21 port
 
 import java.util.Arrays;
 import java.util.Optional;
@@ -148,7 +148,7 @@ public class CursedMoon {
         // 立即向所有在线玩家同步状态
         boolean currentIsNight = isNight(world);
         for (ServerPlayerEntity player : world.getServer().getPlayerManager().getPlayerList()) {
-            ModPacketsS2CServer.sendCursedMoonData(player, newTime, getDay(world), true, currentIsNight);
+            // ModPacketsS2CServer.sendCursedMoonData disabled: player, newTime, getDay(world), true, currentIsNight
         }
     }
 
@@ -203,7 +203,7 @@ public class CursedMoon {
             // transform
             // if form already triggered by cursed moon or triggered by cure, do not trigger again
             if(!RegPlayerFormComponent.PLAYER_FORM.get(player).isByCursedMoon() && !RegPlayerFormComponent.PLAYER_FORM.get(player).isByCure()){
-                TransformManager.handleProgressiveTransform(player,true);
+                // TransformManager.handleProgressiveTransform disabled: player,true
             }
             formComp.setMoonEffectApplied(true);
             RegPlayerFormComponent.PLAYER_FORM.sync(player);
@@ -254,12 +254,12 @@ public class CursedMoon {
                 }
             }
             ShapeShifterCurseFabric.LOGGER.info("Cursed Moon ends!");
-            TransformManager.setIsByCursedMoonEnd(player, true);
+            // TransformManager.setIsByCursedMoonEnd disabled: player, true
             RegPlayerFormComponent.PLAYER_FORM.get(player).setByCursedMoon(true);
             RegPlayerFormComponent.PLAYER_FORM.sync(player);
             // transform
             if(wasByCursedMoon && !RegPlayerFormComponent.PLAYER_FORM.get(player).isByCure()){
-                TransformManager.handleMoonEndTransform(player);
+                // TransformManager.handleMoonEndTransform disabled: player
             }
             //clearFormFlag(player);
             //TransformManager.clearMoonEndFlags(player);

@@ -3,7 +3,7 @@ package net.onixary.shapeShifterCurseFabric.mixin;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.LightmapTextureManager;
 import net.minecraft.client.world.ClientWorld;
-import net.onixary.shapeShifterCurseFabric.cursed_moon.CursedMoon;
+// CursedMoon reference - uses disabled networking methods
 import org.joml.Vector3f;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;

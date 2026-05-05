@@ -102,25 +102,25 @@ public class ShapeShifterCurseFabric implements ModInitializer {
     public static float feralItemEulerX = 0.0F;
 
     // Reg custom advancement criterion
-    public static final OnEnableMod ON_ENABLE_MOD = Criteria.register(new OnEnableMod());
-    public static final OnOpenBookOfShapeShifter ON_OPEN_BOOK_OF_SHAPE_SHIFTER = Criteria.register(new OnOpenBookOfShapeShifter());
-    public static final OnEndCursedMoon ON_END_CURSED_MOON = Criteria.register(new OnEndCursedMoon());
-    public static final OnEndCursedMoonCured ON_END_CURSED_MOON_CURED = Criteria.register(new OnEndCursedMoonCured());
-    public static final OnEndCursedMoonCuredForm2 ON_END_CURSED_MOON_CURED_FORM_2 = Criteria.register(new OnEndCursedMoonCuredForm2());
-    public static final OnGetTransformEffect ON_GET_TRANSFORM_EFFECT = Criteria.register(new OnGetTransformEffect());
-    public static final OnSleepWhenHaveTransformEffect ON_SLEEP_WHEN_HAVE_TRANSFORM_EFFECT = Criteria.register(new OnSleepWhenHaveTransformEffect());
-    public static final OnTransform0 ON_TRANSFORM_0 = Criteria.register(new OnTransform0());
-    public static final OnTransform1 ON_TRANSFORM_1 = Criteria.register(new OnTransform1());
-    public static final OnTransform2 ON_TRANSFORM_2 = Criteria.register(new OnTransform2());
-    public static final OnTransformByCatalyst ON_TRANSFORM_BY_CATALYST = Criteria.register(new OnTransformByCatalyst());
-    public static final OnTransformByCure ON_TRANSFORM_BY_CURE = Criteria.register(new OnTransformByCure());
-    public static final OnUseGoldenApple ON_USE_GOLDEN_APPLE = Criteria.register(new OnUseGoldenApple());
-    public static final OnTransformByCureFinal ON_TRANSFORM_BY_CURE_FINAL = Criteria.register(new OnTransformByCureFinal());
-    public static final OnTransformEffectFade ON_TRANSFORM_EFFECT_FADE = Criteria.register(new OnTransformEffectFade());
-    public static final OnTriggerCursedMoon ON_TRIGGER_CURSED_MOON = Criteria.register(new OnTriggerCursedMoon());
-    public static final OnTriggerCursedMoonForm2 ON_TRIGGER_CURSED_MOON_FORM_2 = Criteria.register(new OnTriggerCursedMoonForm2());
-    public static final OnFirstJoinWithMod ON_FIRST_JOIN_WITH_MOD = Criteria.register(new OnFirstJoinWithMod());
-    public static final OnEndCursedMoonBuggedForm2 ON_END_CURSED_MOON_BUGGED_FORM_2 = Criteria.register(new OnEndCursedMoonBuggedForm2());
+    public static final OnEnableMod ON_ENABLE_MOD = Criteria.register("shape-shifter-curse:on_enable_mod", new OnEnableMod());
+    public static final OnOpenBookOfShapeShifter ON_OPEN_BOOK_OF_SHAPE_SHIFTER = Criteria.register("shape-shifter-curse:on_open_book_of_shape_shifter", new OnOpenBookOfShapeShifter());
+    public static final OnEndCursedMoon ON_END_CURSED_MOON = Criteria.register("shape-shifter-curse:on_end_cursed_moon", new OnEndCursedMoon());
+    public static final OnEndCursedMoonCured ON_END_CURSED_MOON_CURED = Criteria.register("shape-shifter-curse:on_end_cursed_moon_cured", new OnEndCursedMoonCured());
+    public static final OnEndCursedMoonCuredForm2 ON_END_CURSED_MOON_CURED_FORM_2 = Criteria.register("shape-shifter-curse:on_end_cursed_moon_cured_form_2", new OnEndCursedMoonCuredForm2());
+    public static final OnGetTransformEffect ON_GET_TRANSFORM_EFFECT = Criteria.register("shape-shifter-curse:on_get_transform_effect", new OnGetTransformEffect());
+    public static final OnSleepWhenHaveTransformEffect ON_SLEEP_WHEN_HAVE_TRANSFORM_EFFECT = Criteria.register("shape-shifter-curse:on_sleep_when_have_transform_effect", new OnSleepWhenHaveTransformEffect());
+    public static final OnTransform0 ON_TRANSFORM_0 = Criteria.register("shape-shifter-curse:on_transform_0", new OnTransform0());
+    public static final OnTransform1 ON_TRANSFORM_1 = Criteria.register("shape-shifter-curse:on_transform_1", new OnTransform1());
+    public static final OnTransform2 ON_TRANSFORM_2 = Criteria.register("shape-shifter-curse:on_transform_2", new OnTransform2());
+    public static final OnTransformByCatalyst ON_TRANSFORM_BY_CATALYST = Criteria.register("shape-shifter-curse:on_transform_by_catalyst", new OnTransformByCatalyst());
+    public static final OnTransformByCure ON_TRANSFORM_BY_CURE = Criteria.register("shape-shifter-curse:on_transform_by_cure", new OnTransformByCure());
+    public static final OnUseGoldenApple ON_USE_GOLDEN_APPLE = Criteria.register("shape-shifter-curse:on_use_golden_apple", new OnUseGoldenApple());
+    public static final OnTransformByCureFinal ON_TRANSFORM_BY_CURE_FINAL = Criteria.register("shape-shifter-curse:on_transform_by_cure_final", new OnTransformByCureFinal());
+    public static final OnTransformEffectFade ON_TRANSFORM_EFFECT_FADE = Criteria.register("shape-shifter-curse:on_transform_effect_fade", new OnTransformEffectFade());
+    public static final OnTriggerCursedMoon ON_TRIGGER_CURSED_MOON = Criteria.register("shape-shifter-curse:on_trigger_cursed_moon", new OnTriggerCursedMoon());
+    public static final OnTriggerCursedMoonForm2 ON_TRIGGER_CURSED_MOON_FORM_2 = Criteria.register("shape-shifter-curse:on_trigger_cursed_moon_form_2", new OnTriggerCursedMoonForm2());
+    public static final OnFirstJoinWithMod ON_FIRST_JOIN_WITH_MOD = Criteria.register("shape-shifter-curse:on_first_join_with_mod", new OnFirstJoinWithMod());
+    public static final OnEndCursedMoonBuggedForm2 ON_END_CURSED_MOON_BUGGED_FORM_2 = Criteria.register("shape-shifter-curse:on_end_cursed_moon_bugged_form_2", new OnEndCursedMoonBuggedForm2());
 
     // Reg custom entities
     // Bat

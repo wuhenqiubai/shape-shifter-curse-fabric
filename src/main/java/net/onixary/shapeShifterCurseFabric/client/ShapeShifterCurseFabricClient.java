@@ -31,7 +31,7 @@ import net.onixary.shapeShifterCurseFabric.entity.RegCustomEntityRenderer;
 import net.onixary.shapeShifterCurseFabric.form_giving_custom_entity.axolotl.TAxolotlEntityRenderer;
 import net.onixary.shapeShifterCurseFabric.form_giving_custom_entity.bat.BatEntityRenderer;
 import net.onixary.shapeShifterCurseFabric.form_giving_custom_entity.ocelot.TOcelotEntityRenderer;
-import net.onixary.shapeShifterCurseFabric.form_giving_custom_entity.spider.TSpiderEntityRenderer;
+// Spider entity disabled for 1.21 port
 import net.onixary.shapeShifterCurseFabric.integration.origins.Origins;
 import net.onixary.shapeShifterCurseFabric.items.RegCustomItem;
 import net.onixary.shapeShifterCurseFabric.items.armors.MorphscaleArmorRenderer;
@@ -40,7 +40,7 @@ import net.onixary.shapeShifterCurseFabric.mana.ManaRegistriesClient;
 import net.onixary.shapeShifterCurseFabric.mana.ManaUtils;
 import net.onixary.shapeShifterCurseFabric.minion.MinionRegisterClient;
 import net.onixary.shapeShifterCurseFabric.minion.mobs.AnubisWolfMinionEntityRenderer;
-import net.onixary.shapeShifterCurseFabric.networking.ModPacketsS2C;
+// ModPacketsS2C disabled for 1.21 port
 import net.onixary.shapeShifterCurseFabric.player_animation.RegPlayerAnimation;
 import net.onixary.shapeShifterCurseFabric.render.render_layer.FurGradientRenderLayer;
 import net.onixary.shapeShifterCurseFabric.util.ClientTicker;
@@ -287,7 +287,7 @@ public class ShapeShifterCurseFabricClient implements ClientModInitializer {
 	public void onInitializeClient() {
 		RegPlayerAnimation.register();
 		registerEntityModels();
-		ModPacketsS2C.register();
+		// ModPacketsS2C.register disabled for 1.21 port
 
 		registerShaderResource();
 		FurGradientRenderLayer.onInitializeClient();

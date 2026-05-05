@@ -10,7 +10,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 import net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric;
 import net.onixary.shapeShifterCurseFabric.cursed_moon.CursedMoon;
-import net.onixary.shapeShifterCurseFabric.networking.ModPacketsS2CServer;
+// ModPacketsS2CServer disabled for 1.21 port
 import net.onixary.shapeShifterCurseFabric.player_form.RegPlayerForms;
 import net.onixary.shapeShifterCurseFabric.player_form.ability.FormAbilityManager;
 import net.onixary.shapeShifterCurseFabric.player_form.ability.PlayerFormComponent;
@@ -152,7 +152,7 @@ public abstract class CursedMoonWorldMixin implements WorldAccess, AutoCloseable
             boolean isNight = CursedMoon.isNight(world);
 
             for (ServerPlayerEntity player : world.getPlayers()) {
-                ModPacketsS2CServer.sendCursedMoonData(player, worldTime, currentDay, isCursed, isNight);
+                // ModPacketsS2CServer.sendCursedMoonData disabled
             }
         }
     }
@@ -171,7 +171,7 @@ public abstract class CursedMoonWorldMixin implements WorldAccess, AutoCloseable
             if (world.getTime() % 20 == 0) {
                 boolean currentIsCursedMoon = CursedMoon.isCursedMoon(world); // 使用带参数的版本
                 boolean currentIsNight = CursedMoon.isNight(world);
-                ModPacketsS2CServer.sendCursedMoonData(player, CursedMoon.day_time, CursedMoon.day, currentIsCursedMoon, currentIsNight);
+                // ModPacketsS2CServer.sendCursedMoonData disabled
             }
 
             if(CursedMoon.isCursedMoon(world)){ // 使用带参数的版本
