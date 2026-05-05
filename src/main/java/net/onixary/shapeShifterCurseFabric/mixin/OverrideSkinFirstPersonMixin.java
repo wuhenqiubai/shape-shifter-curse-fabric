@@ -72,7 +72,8 @@ public abstract class OverrideSkinFirstPersonMixin extends LivingEntityRenderer<
         }
     }
 
-    @Inject(method = "renderArm", at = @At("RETURN"))
+    // TODO: AzureLib 3.x API migration needed (preRender/renderRecursively/postRender)
+    /* @Inject(method = "renderArm", at = @At("RETURN"))
     private void shape_shifter_curse$RenderArm_RETURN(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, AbstractClientPlayerEntity player, ModelPart arm, ModelPart sleeve, CallbackInfo ci) {
         // 渲染变身模型
         if (RegPlayerFormComponent.PLAYER_FORM.get(player).getCurrentForm().equals(RegPlayerForms.ORIGINAL_BEFORE_ENABLE)) {return;}  // 仅当玩家激活Mod后才进行修改
@@ -111,25 +112,66 @@ public abstract class OverrideSkinFirstPersonMixin extends LivingEntityRenderer<
             OFModel.setRotationForBone(GeoBoneName, ((IMojModelPart) (Object) arm).originfurs$getRotation());
             OFModel.invertRotForPart(GeoBoneName, false, true, true);
             RenderLayer renderLayerNormal = RenderLayer.getEntityTranslucent(OFModel.getTextureResource(OFAnimatable));
-            // TODO: RenderOFModelBone disabled - AzureLib 3.0.25 API migration needed
-            // this.RenderOFModelBone(fur, geoBone, matrices, OFAnimatable, vertexConsumers, renderLayerNormal, vertexConsumers.getBuffer(renderLayerNormal), light);
-            // RenderLayer renderLayerFullBright = RenderLayer.getEntityTranslucent(OFModel.getFullbrightTextureResource(OFAnimatable));
-            // this.RenderOFModelBone(fur, geoBone, matrices, OFAnimatable, vertexConsumers, renderLayerFullBright, vertexConsumers.getBuffer(renderLayerFullBright), Integer.MAX_VALUE - 1);
+            this.RenderOFModelBone(fur, geoBone, matrices, OFAnimatable, vertexConsumers, renderLayerNormal, vertexConsumers.getBuffer(renderLayerNormal), light);
+            // fur.renderBone(GeoBoneName, matrices, vertexConsumers, renderLayerNormal, null, light);
+            RenderLayer renderLayerFullBright = RenderLayer.getEntityTranslucent(OFModel.getFullbrightTextureResource(OFAnimatable));
+            this.RenderOFModelBone(fur, geoBone, matrices, OFAnimatable, vertexConsumers, renderLayerFullBright, vertexConsumers.getBuffer(renderLayerFullBright), Integer.MAX_VALUE - 1);
+            // fur.renderBone(GeoBoneName, matrices, vertexConsumers, renderLayerFullBright, null, Integer.MAX_VALUE - 1);
             matrices.pop();
-            // TODO: Render Overlay - OverlayTexture.packUv/ModelPart.render API changed in 1.21 + AzureLib
+            // Render Overlay 藏得够深的 要不是发现悦灵手臂无法显示我都不会发现
+            // 从 PlayerEntityRendererMixin.renderOverlayTexture 提取的代码并进行修改
+            Identifier OverlayTextureID = OFModel.getOverlayTexture(acc.originalFur$isSlim());
+            if (OverlayTextureID != null) {
+                // 玩家看自己绝对是非隐身
+                // boolean bl = this.isVisible(player);
+                // boolean bl2 = !bl && !player.isInvisibleTo(MinecraftClient.getInstance().player);
+                RenderLayer OverlayLayer = null;
+                if (OriginalFurClient.isRenderingInWorld && FabricLoader.getInstance().isModLoaded("iris")) {
+                    OverlayLayer = RenderLayer.getEntityCutoutNoCullZOffset(OverlayTextureID);
+                } else {
+                    OverlayLayer = RenderLayer.getEntityCutout(OverlayTextureID);
+                }
+                // TODO: OverlayTexture + ModelPart.render API changed in 1.21, needs verification
+                // int OverlayInt = OverlayTexture.getUv(...); arm.render(matrices, ...);
+            }
         }
-    }
-    // fur.renderBone - AzureLib 3.0.25 preRender/renderRecursively/postRender API changed, needs rewrite
-    /* TODO: AzureLib 3.0.25 GeoObjectRenderer API migration needed
-    @Unique
-    private void RenderOFModelBone(...) { ... }
-    */
+    } */
+    // fur.renderBone - AzureLib 3.x API migration needed (preRender/renderRecursively/postRender changed from 2.x)
+
+    /* TODO: AzureLib 3.x migration
+    // 模拟fur.render 但只渲染特定GeoBone 使用AzureLib默认渲染渲染逻辑
+
+    // 模拟fur.render 但只渲染特定GeoBone 使用AzureLib默认渲染渲染逻辑
+        @Unique
+    private void RenderOFModelBone(OriginalFurClient.OriginFur OFRender, GeoBone geoBone, MatrixStack poseStack, OriginFurAnimatable animatable, VertexConsumerProvider bufferSource, RenderLayer renderType, VertexConsumer buffer, int packedLight) {
+        this.RenderOFModelBone(OFRender, geoBone, poseStack, animatable, bufferSource, renderType, buffer, packedLight, 1.0f, 1.0f, 1.0f, 1.0f);
+    } */
+
+        /* @Unique
+    private void RenderOFModelBone(OriginalFurClient.OriginFur OFRender, GeoBone geoBone, MatrixStack poseStack, OriginFurAnimatable animatable, VertexConsumerProvider bufferSource, RenderLayer renderType, VertexConsumer buffer, int packedLight, float R, float G, float B, float A) {
+        OriginFurModel OFModel = (OriginFurModel) OFRender.getGeoModel();
+        BakedGeoModel bakedGeoModel = OFModel.getBakedModel(OFModel.getModelResource(animatable));
+        float TickDelta = MinecraftClient.getInstance().getTickDelta();
+        int packedOverlay = OFRender.getPackedOverlay(animatable, 0.0F, MinecraftClient.getInstance().getTickDelta());
+        poseStack.translate(-0.5, -0.51, -0.5); // 在 GeoObjectRenderer.preRender 中会 poseStack.translate(0.5, 0.51, 0.5) 因此需要手动调整
+        OFRender.preRender(poseStack, animatable, bakedGeoModel, bufferSource, bufferSource.getBuffer(renderType), false, TickDelta, packedLight, packedOverlay, R, G, B, A);
+        if (OFRender.firePreRenderEvent(poseStack, bakedGeoModel, bufferSource, TickDelta, packedLight)) {
+            OFRender.preApplyRenderLayers(poseStack, animatable, bakedGeoModel, renderType, bufferSource, buffer, (float)packedLight, packedLight, packedOverlay);
+            poseStack.push();
+            OFRender.updateAnimatedTextureFrame(animatable);
+            OFRender.renderRecursively(poseStack, animatable, geoBone, renderType, bufferSource, buffer, false, TickDelta, packedLight, packedOverlay, R, G, B, A);
+            poseStack.pop();
+            OFRender.applyRenderLayers(poseStack, animatable, bakedGeoModel, renderType, bufferSource, buffer, TickDelta, packedLight, packedOverlay);
+            OFRender.postRender(poseStack, animatable, bakedGeoModel, bufferSource, buffer, false, TickDelta, packedLight, packedOverlay, R, G, B, A);
+            OFRender.firePostRenderEvent(poseStack, bakedGeoModel, bufferSource, TickDelta, packedLight);
+        }
+    } */
 
 
-    // TODO: getSkinTexture may have been renamed in 1.21
+    // TODO: getSkinTexture @Redirect needs verification in 1.21
     /* @Redirect(method="renderArm", at= @At(value="INVOKE", target = "Lnet/minecraft/client/network/AbstractClientPlayerEntity;getSkinTexture()Lnet/minecraft/util/Identifier;"))
     private Identifier shape_shifter_curse$getSkinTexture(AbstractClientPlayerEntity player) {
-        if (!RegPlayerFormComponent.PLAYER_FORM.get(player).getCurrentForm().equals(RegPlayerForms.ORIGINAL_BEFORE_ENABLE))
+        if (!RegPlayerFormComponent.PLAYER_FORM.get(player).getCurrentForm().equals(RegPlayerForms.ORIGINAL_BEFORE_ENABLE))  // 仅当玩家激活Mod后才进行修改
         {
             if (!RegPlayerSkinComponent.SKIN_SETTINGS.get(player).shouldKeepOriginalSkin()) {
                 return CUSTOM_SKIN;
