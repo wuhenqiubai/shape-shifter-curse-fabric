@@ -86,12 +86,15 @@ public class RegCustomItem {
     public static final Item WEB_PROJECTILE = register("web_projectile", new Item(new Item.Settings()));
     public static final Item SILK_DEW = register("silk_dew", new SilkDew(new Item.Settings()));
 
+    /* Disabled for 1.21 port: PotionContentsComponent needs RegistryEntry<Potion>
     public static ItemStack buildPotion(Item PotionItem, Potion potion) {
         ItemStack potionStack = new ItemStack(PotionItem);
         potionStack.set(DataComponentTypes.POTION_CONTENTS, new PotionContentsComponent(potion));
         return potionStack;
     }
+    */
 
+    /* Disabled for 1.21 port
     public static Collection<ItemStack> buildAllPotions(Potion... potions) {
         List<ItemStack> potionStacks = new ArrayList<>();
         for (Potion potion : potions) {
@@ -108,7 +111,9 @@ public class RegCustomItem {
         }
         return potionStacks;
     }
+    */
 
+    /* Disabled for 1.21 port: ItemGroup.builder API changed
     public static final ItemGroup SSC_GROUP = ItemGroup.builder()
             .icon(() -> new ItemStack(ICON_CURSED_MOON))
             .displayName(Text.translatable("itemGroup.shape_shifter_curse.sscitems"))
@@ -177,7 +182,7 @@ public class RegCustomItem {
                     entries.add(PATRON_FORM_ITEM);
                 }
             })
-            .build();
+            .build(); */
 
     public static <T extends Item> T register(String path, T item) {
         return Registry.register(Registries.ITEM, RegistryKey.of(Registries.ITEM.getKey(), Identifier.of(ShapeShifterCurseFabric.MOD_ID, path)), item);

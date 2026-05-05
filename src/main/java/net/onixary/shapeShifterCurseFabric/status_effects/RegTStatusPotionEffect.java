@@ -3,6 +3,7 @@ package net.onixary.shapeShifterCurseFabric.status_effects;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
 import net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric;
@@ -35,7 +36,7 @@ public class RegTStatusPotionEffect {
      */
 
     public static <T extends StatusEffect> T register(String path, T effect) {
-        return Registry.register(Registries.STATUS_EFFECT, RegistryKey.of(Registries.STATUS_EFFECT.getKey(), Identifier.of(ShapeShifterCurseFabric.MOD_ID, path)), effect);
+        return Registry.register(Registries.STATUS_EFFECT, RegistryKey.of(RegistryKeys.STATUS_EFFECT, Identifier.of(ShapeShifterCurseFabric.MOD_ID, path)), effect);
     }
 
     public static void initialize() {}
