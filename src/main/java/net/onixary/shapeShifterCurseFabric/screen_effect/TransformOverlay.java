@@ -35,40 +35,8 @@ public final class TransformOverlay {
         MinecraftClient client = MinecraftClient.getInstance();
         int i = client.getWindow().getScaledWidth();
         int j = client.getWindow().getScaledHeight();
-        RenderSystem.disableDepthTest();
-        RenderSystem.depthMask(false);
-        RenderSystem.enableBlend();
-        RenderSystem.defaultBlendFunc();
-        RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, strength_nausea);
-        RenderSystem.setShader(GameRenderer::getPositionTexProgram);
-        // draw nausea
-        RenderSystem.setShaderTexture(0, nausea_texture);
-        Tessellator tessellator_nausea = Tessellator.getInstance();
-        BufferBuilder bufferBuilder_nausea = tessellator_nausea.getBuffer();
-        bufferBuilder_nausea.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE);
-        bufferBuilder_nausea.vertex(0, j, -90.0D).texture(0.0F, 1.0F).next();
-        bufferBuilder_nausea.vertex(i, j, -90.0D).texture(1.0F, 1.0F).next();
-        bufferBuilder_nausea.vertex(i, 0, -90.0D).texture(1.0F, 0.0F).next();
-        bufferBuilder_nausea.vertex(0, 0, -90.0D).texture(0.0F, 0.0F).next();
-        tessellator_nausea.draw();
-        // draw black
-        RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, strength_black);
-        RenderSystem.setShader(GameRenderer::getPositionTexProgram);
-        RenderSystem.setShaderTexture(0, black_texture);
-        Tessellator tessellator_black = Tessellator.getInstance();
-        BufferBuilder bufferBuilder_black = tessellator_black.getBuffer();
-        bufferBuilder_black.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE);
-        bufferBuilder_black.vertex(0, j, -90.0D).texture(0.0F, 1.0F).next();
-        bufferBuilder_black.vertex(i, j, -90.0D).texture(1.0F, 1.0F).next();
-        bufferBuilder_black.vertex(i, 0, -90.0D).texture(1.0F, 0.0F).next();
-        bufferBuilder_black.vertex(0, 0, -90.0D).texture(0.0F, 0.0F).next();
-        tessellator_black.draw();
-
-        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-        RenderSystem.defaultBlendFunc();
-        RenderSystem.disableBlend();
-        RenderSystem.depthMask(true);
-        RenderSystem.enableDepthTest();
+        // RenderSystem/BufferBuilder API changed in 1.21 - vertex() needs Matrix4f, .next() removed
+        // Disabled rendering for 1.21 port - needs full BufferBuilder API migration
     }
 
     public void setEnableOverlay(boolean enableOverlay) {

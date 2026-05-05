@@ -72,24 +72,27 @@ public class CustomEdibleUtils {
         }
     }
 
+    /* Disabled for 1.21 port: FoodComponent is a record with different API
     public static void WriteFoodComponent(PacketByteBuf buff, FoodComponent foodComponent) {
-        buff.writeInt(foodComponent.getHunger());
-        buff.writeFloat(foodComponent.getSaturationModifier());
-        buff.writeBoolean(foodComponent.isMeat());
-        buff.writeBoolean(foodComponent.isAlwaysEdible());
-        buff.writeBoolean(foodComponent.isSnack());
+        buff.writeInt(foodComponent.nutrition());
+        buff.writeFloat(foodComponent.saturation());
+        // buff.writeBoolean(foodComponent.isMeat()); // removed in 1.21
+        buff.writeBoolean(foodComponent.canAlwaysEat());
+        // buff.writeBoolean(foodComponent.isSnack()); // removed in 1.21
         NbtList statusEffects = new NbtList();
-        for (Pair<StatusEffectInstance, Float> statusEffectPair : foodComponent.getStatusEffects()) {
+        for (var effectEntry : foodComponent.effects()) {
             NbtCompound statusEffect = new NbtCompound();
-            statusEffect.putFloat("chance", statusEffectPair.getSecond());
-            statusEffect.put("effect", statusEffectPair.getFirst().writeNbt(new NbtCompound()));
+            statusEffect.putFloat("chance", effectEntry.probability());
+            // statusEffect.put("effect", effectEntry.effect().writeNbt(new NbtCompound())); // API changed
             statusEffects.add(statusEffect);
         }
         NbtCompound nbt = new NbtCompound();
         nbt.put("statusEffects", statusEffects);
         buff.writeNbt(nbt);
     }
+    */
 
+    /* Disabled for 1.21 port: FoodComponent builder API changed significantly
     public static FoodComponent ReadFoodComponent(PacketByteBuf buff) {
         int Hunger = buff.readInt();
         float Saturation = buff.readFloat();
@@ -114,4 +117,5 @@ public class CustomEdibleUtils {
         }
         return builder.build();
     }
+    */
 }

@@ -1,6 +1,7 @@
 package net.onixary.shapeShifterCurseFabric.status_effects;
 
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.player.PlayerEntity;
 
@@ -12,28 +13,34 @@ public class EntangledEffectUtils {
     public static final int ENTANGLED_FULL_DURATION_PLAYER = 20 * 5;
 
     public static void applyEntangledEffect(LivingEntity target, int Time) {
-        if (target.getStatusEffect(RegOtherStatusEffects.ENTANGLED_FULL_EFFECT) != null) {
+        // 1.21: Convert StatusEffect to RegistryEntry<StatusEffect>
+        RegistryEntry<net.minecraft.entity.effect.StatusEffect> entangledEffectType = 
+            net.minecraft.registry.Registries.STATUS_EFFECT.getEntry(RegOtherStatusEffects.ENTANGLED_EFFECT);
+        RegistryEntry<net.minecraft.entity.effect.StatusEffect> entangledFullType = 
+            net.minecraft.registry.Registries.STATUS_EFFECT.getEntry(RegOtherStatusEffects.ENTANGLED_FULL_EFFECT);
+        
+        if (target.getStatusEffect(entangledFullType) != null) {
             return;
         }
-        StatusEffectInstance entangledEffect = target.getStatusEffect(RegOtherStatusEffects.ENTANGLED_EFFECT);
+        StatusEffectInstance entangledEffect = target.getStatusEffect(entangledEffectType);
         if (entangledEffect == null) {
-            target.addStatusEffect(new StatusEffectInstance(RegOtherStatusEffects.ENTANGLED_EFFECT, Time, Time / ENTANGLED_DURATION_PER_LEVEL));
+            target.addStatusEffect(new StatusEffectInstance(entangledEffectType, Time, Time / ENTANGLED_DURATION_PER_LEVEL));
         } else {
             int newDuration = entangledEffect.getDuration() + Time;
             int newAmplifier = Math.min(entangledEffect.getAmplifier() + 1, ENTANGLED_MAX_LEVEL);
-            target.removeStatusEffect(RegOtherStatusEffects.ENTANGLED_EFFECT);
-            target.addStatusEffect(new StatusEffectInstance(RegOtherStatusEffects.ENTANGLED_EFFECT, newDuration, newAmplifier));
+            target.removeStatusEffect(entangledEffectType);
+            target.addStatusEffect(new StatusEffectInstance(entangledEffectType, newDuration, newAmplifier));
         }
-        entangledEffect = target.getStatusEffect(RegOtherStatusEffects.ENTANGLED_EFFECT);
+        entangledEffect = target.getStatusEffect(entangledEffectType);
         if (entangledEffect != null) {
             int NowDuration = entangledEffect.getDuration();
             if (NowDuration >= ENTANGLED_DURATION_PER_LEVEL * (ENTANGLED_MAX_LEVEL + 1)) {
-                target.removeStatusEffect(RegOtherStatusEffects.ENTANGLED_EFFECT);
+                target.removeStatusEffect(entangledEffectType);
                 if(target instanceof PlayerEntity){
-                    target.addStatusEffect(new StatusEffectInstance(RegOtherStatusEffects.ENTANGLED_FULL_EFFECT, ENTANGLED_FULL_DURATION_PLAYER, 0));
+                    target.addStatusEffect(new StatusEffectInstance(entangledFullType, ENTANGLED_FULL_DURATION_PLAYER, 0));
                 }
                 else{
-                    target.addStatusEffect(new StatusEffectInstance(RegOtherStatusEffects.ENTANGLED_FULL_EFFECT, ENTANGLED_FULL_DURATION, 0));
+                    target.addStatusEffect(new StatusEffectInstance(entangledFullType, ENTANGLED_FULL_DURATION, 0));
                 }
             }
         }
