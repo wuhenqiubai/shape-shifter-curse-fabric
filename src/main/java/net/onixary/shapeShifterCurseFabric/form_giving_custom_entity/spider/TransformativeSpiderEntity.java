@@ -84,7 +84,7 @@ public class TransformativeSpiderEntity extends SpiderEntity implements ITMob {
     }
 
     @Override
-    public EntityDimensions getDimensions(EntityPose pose) {
+    public EntityDimensions getBaseDimensions(EntityPose pose) {
         return EntityDimensions.fixed(0.7f, 0.45f);
     }
 }

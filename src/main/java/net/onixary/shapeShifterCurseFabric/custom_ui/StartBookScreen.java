@@ -7,6 +7,7 @@ import io.wispforest.owo.ui.container.Containers;
 import io.wispforest.owo.ui.container.FlowLayout;
 import io.wispforest.owo.ui.core.*;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.onixary.shapeShifterCurseFabric.networking.BytePayload;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.PacketByteBuf;
@@ -24,7 +25,7 @@ public class StartBookScreen extends BaseOwoScreen<FlowLayout> {
     // 出于翻译与动态文本的考量，不使用XML来构建
     public PlayerEntity currentPlayer;
 
-    private static final Identifier StartBook_TexID = new Identifier(MOD_ID,"textures/gui/start_book.png");
+    private static final Identifier StartBook_TexID = Identifier.of(MOD_ID, "textures/gui/start_book.png");
 
     @Override
     protected @NotNull OwoUIAdapter<FlowLayout> createAdapter() {
@@ -56,7 +57,7 @@ public class StartBookScreen extends BaseOwoScreen<FlowLayout> {
                                             PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
                                             // buf.writeUuid(currentPlayer.getUuid());
                                             // 发送到服务端
-                                            ClientPlayNetworking.send(ModPackets.VALIDATE_START_BOOK_BUTTON, buf);
+                                            ClientPlayNetworking.send(new BytePayload(BytePayload.id(ModPackets.VALIDATE_START_BOOK_BUTTON), buf));
 
                                             // disable book screen
                                             if(MinecraftClient.getInstance().currentScreen instanceof StartBookScreen){

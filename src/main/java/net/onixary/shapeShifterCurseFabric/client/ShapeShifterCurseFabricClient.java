@@ -141,7 +141,7 @@ public class ShapeShifterCurseFabricClient implements ClientModInitializer {
 		EntityRendererRegistry.register(T_AXOLOTL, TAxolotlEntityRenderer::new);
 		EntityRendererRegistry.register(T_OCELOT, TOcelotEntityRenderer::new);
 		EntityRendererRegistry.register(T_WOLF, AnubisWolfMinionEntityRenderer::new);
-		EntityRendererRegistry.register(T_SPIDER, TSpiderEntityRenderer::new);
+		// EntityRendererRegistry.register(T_SPIDER, TSpiderEntityRenderer::new); // TSpiderEntityRenderer .bak
 
 		MinionRegisterClient.registerClient();
 	}

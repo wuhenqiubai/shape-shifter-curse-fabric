@@ -39,7 +39,7 @@ import static net.onixary.shapeShifterCurseFabric.minion.MinionRegisterClient.WO
 
 @Environment(EnvType.CLIENT)
 public class AnubisWolfMinionEntityRenderer extends MobEntityRenderer<WolfEntity, AnubisWolfMinionEntityModel<WolfEntity>> {
-    private static final Identifier ANUBIS_WOLF_MINION_TEXTURE = new Identifier(MOD_ID,"textures/entity/mob/anubis_wolf_minion.png");
+    private static final Identifier ANUBIS_WOLF_MINION_TEXTURE = Identifier.of(MOD_ID, "textures/entity/mob/anubis_wolf_minion.png");
 
     public AnubisWolfMinionEntityRenderer(EntityRendererFactory.Context context) {
         super(context, new AnubisWolfMinionEntityModel<>(context.getPart(WOLF_MINION_LAYER)), 0.5F);

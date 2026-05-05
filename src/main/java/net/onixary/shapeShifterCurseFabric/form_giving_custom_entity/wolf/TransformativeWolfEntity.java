@@ -42,6 +42,8 @@ public class TransformativeWolfEntity extends WolfEntity implements ITMob {
         super(entityType, world);
     }
 
+    // TODO: WolfEntity.initialize() signature changed in 1.21 (wolf variants)
+    /*
     @Override
     public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable NbtCompound entityNbt) {
         PassiveData data;
@@ -54,25 +56,30 @@ public class TransformativeWolfEntity extends WolfEntity implements ITMob {
         }
         return super.initialize(world, difficulty, spawnReason, data, entityNbt);
     }
+    */
 
     private float cooldown = 0;
 
     @Override
     protected void initGoals() {
         this.goalSelector.add(1, new SwimGoal(this));
-        this.goalSelector.add(1, new WolfEscapeDangerGoal(1.5));
+        // TODO: WolfEscapeDangerGoal removed in 1.21
+        // this.goalSelector.add(1, new WolfEscapeDangerGoal(1.5));
         this.goalSelector.add(2, new SitGoal(this));
-        this.goalSelector.add(3, new AvoidLlamaGoal(this, LlamaEntity.class, 24.0F, 1.5, 1.5));
+        // TODO: AvoidLlamaGoal removed in 1.21
+        // this.goalSelector.add(3, new AvoidLlamaGoal(this, LlamaEntity.class, 24.0F, 1.5, 1.5));
         this.goalSelector.add(4, new PounceAtTargetGoal(this, 0.4F));
         this.goalSelector.add(5, new MeleeAttackGoal(this, 1.0, true));
         this.goalSelector.add(6, new AnimalMateGoal(this, 1.0));
         this.goalSelector.add(7, new WanderAroundFarGoal(this, 1.0));
-        this.goalSelector.add(8, new WolfBegGoal(this, 8.0F));
+        // TODO: WolfBegGoal removed in 1.21
+        // this.goalSelector.add(8, new WolfBegGoal(this, 8.0F));
         this.goalSelector.add(10, new LookAtEntityGoal(this, PlayerEntity.class, 8.0F));
         this.goalSelector.add(10, new LookAroundGoal(this));
         this.targetSelector.add(1, new ActiveTargetGoal<>(this, PlayerEntity.class, true));
         this.targetSelector.add(2, (new RevengeGoal(this, new Class[0])).setGroupRevenge(new Class[0]));
-        this.targetSelector.add(3, new UntamedActiveTargetGoal(this, TurtleEntity.class, false, TurtleEntity.BABY_TURTLE_ON_LAND_FILTER));
+        // TODO: UntamedActiveTargetGoal removed in 1.21
+        // this.targetSelector.add(3, new UntamedActiveTargetGoal(this, TurtleEntity.class, false, TurtleEntity.BABY_TURTLE_ON_LAND_FILTER));
         this.targetSelector.add(4, new ActiveTargetGoal(this, AbstractSkeletonEntity.class, false));
         this.targetSelector.add(5, new UniversalAngerGoal(this, true));
     }
@@ -131,7 +138,8 @@ public class TransformativeWolfEntity extends WolfEntity implements ITMob {
     }
 
     @Override
-    public void applyDamageEffects(LivingEntity attacker, Entity target) {
+    // TODO: applyDamageEffects signature changed in 1.21
+    public void onAttacking(Entity target) {
         // 在applyStatusByChance里面已经判断形态了 无需在外面判断
         if (target instanceof PlayerEntity player) {
             TStatusApplier.applyStatusByChance(this.getStatusChance(), player, this.getStatusEffect());
@@ -143,7 +151,8 @@ public class TransformativeWolfEntity extends WolfEntity implements ITMob {
         if(target instanceof PlayerEntity) {
             boolean attacked = target.damage(this.getDamageSources().mobAttack(this), (float)this.getAttributeValue(EntityAttributes.GENERIC_ATTACK_DAMAGE));
             if (attacked) {
-                this.applyDamageEffects(this, target);
+                // TODO: applyDamageEffects signature changed in 1.21
+                // this.applyDamageEffects(target);
             }
             return attacked;
         }
@@ -161,15 +170,11 @@ public class TransformativeWolfEntity extends WolfEntity implements ITMob {
         return;
     }
 
-    @Override
-    protected Identifier getLootTableId() {
-        return new Identifier(ShapeShifterCurseFabric.MOD_ID, "entities/t_wolf");
-    }
+    // TODO: getLootTableId removed in 1.21, use getLootTable()
+    /* @Override protected Identifier getLootTableId() { return ... } */
 
-    @Override
-    public void setTamed(boolean tamed) {
-        return;
-    }
+    // TODO: setTamed may not be overrideable in 1.21
+    /* @Override public void setTamed(boolean tamed) { return; } */
 
     @Override
     public float getStatusChance() {
@@ -198,8 +203,6 @@ public class TransformativeWolfEntity extends WolfEntity implements ITMob {
         return this.cooldown > 0;
     }
 
-    @Override
-    public EntityView method_48926() {
-        return super.getWorld();
-    }
+    // TODO: method_48926 removed in 1.21
+    /* @Override public EntityView method_48926() { return super.getWorld(); } */
 }
