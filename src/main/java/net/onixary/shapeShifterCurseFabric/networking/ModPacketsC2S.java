@@ -30,17 +30,27 @@ import net.onixary.shapeShifterCurseFabric.util.PatronUtils;
 import java.util.UUID;
 
 import static net.onixary.shapeShifterCurseFabric.networking.ModPackets.*;
+import net.onixary.shapeShifterCurseFabric.networking.BytePayload;
 
 // 应仅在服务器端注册
 // This class should only be registered on the server side
 public class ModPacketsC2S {
 
+    @FunctionalInterface
+    private interface LegacyC2SReceiver {
+        void receive(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler handler, PacketByteBuf buf, PacketSender sender);
+    }
+
+    private static void reg(Identifier id, LegacyC2SReceiver receiver) {
+        BytePayload.registerC2S(id);
+        ServerPlayNetworking.registerGlobalReceiver(BytePayload.id(id), (payload, context) -> {
+            context.server().execute(() -> receiver.receive(context.server(), context.player(), null, payload.data(), null));
+        });
+    }
+
     public static void register() {
-        ServerPlayNetworking.registerGlobalReceiver(
-                ModPackets.VALIDATE_START_BOOK_BUTTON,
-                net.onixary.shapeShifterCurseFabric.networking.ModPacketsC2S::onPressStartBookButton);
-        ServerPlayNetworking.registerGlobalReceiver(
-                Identifier.of(ShapeShifterCurseFabric.MOD_ID, "update_skin_setting"),
+        reg(ModPackets.VALIDATE_START_BOOK_BUTTON, net.onixary.shapeShifterCurseFabric.networking.ModPacketsC2S::onPressStartBookButton);
+        reg(Identifier.of(ShapeShifterCurseFabric.MOD_ID, "update_skin_setting"),
                 (server, player, handler, buf, responseSender) -> {
                     boolean keepOriginalSkin = buf.readBoolean();
                     server.execute(() -> {
@@ -52,7 +62,7 @@ public class ModPacketsC2S {
                 }
         );
 
-        ServerPlayNetworking.registerGlobalReceiver(JUMP_DETACH_REQUEST_ID, (server, player, handler, buf, responseSender) -> {
+        reg(JUMP_DETACH_REQUEST_ID, (server, player, handler, buf, responseSender) -> {
             server.execute(() -> {
                 BatBlockAttachPower attachPower = PowerHolderComponent.getPowers(player, BatBlockAttachPower.class)
                         .stream()
@@ -67,7 +77,7 @@ public class ModPacketsC2S {
         });
 
         // jump_event condition handle
-        ServerPlayNetworking.registerGlobalReceiver(JUMP_EVENT_ID, (server, player, handler, buf, responseSender) -> {
+        reg(JUMP_EVENT_ID, (server, player, handler, buf, responseSender) -> {
             UUID playerUuid = buf.readUuid();
 
             server.execute(() -> {
@@ -82,7 +92,7 @@ public class ModPacketsC2S {
         });
 
         // SPRINTING_TO_SNEAKING_EVENT condition handle
-        ServerPlayNetworking.registerGlobalReceiver(SPRINTING_TO_SNEAKING_EVENT_ID, (server, player, handler, buf, responseSender) -> {
+        reg(SPRINTING_TO_SNEAKING_EVENT_ID, (server, player, handler, buf, responseSender) -> {
             UUID playerUuid = buf.readUuid();
 
             server.execute(() -> {
@@ -94,29 +104,19 @@ public class ModPacketsC2S {
             });
         });
 
-        ServerPlayNetworking.registerGlobalReceiver(
-                UPDATE_CUSTOM_SETTING,
-                net.onixary.shapeShifterCurseFabric.networking.ModPacketsC2S::onUpdatePlayerCustomConfig
+        reg(UPDATE_CUSTOM_SETTING, net.onixary.shapeShifterCurseFabric.networking.ModPacketsC2S::onUpdatePlayerCustomConfig
         );
 
-        ServerPlayNetworking.registerGlobalReceiver(
-                SET_PATRON_FORM,
-                net.onixary.shapeShifterCurseFabric.networking.ModPacketsC2S::receiveSetPatronForm
+        reg(SET_PATRON_FORM, net.onixary.shapeShifterCurseFabric.networking.ModPacketsC2S::receiveSetPatronForm
         );
 
-        ServerPlayNetworking.registerGlobalReceiver(
-                SET_FORM,
-                net.onixary.shapeShifterCurseFabric.networking.ModPacketsC2S::receiveSetForm
+        reg(SET_FORM, net.onixary.shapeShifterCurseFabric.networking.ModPacketsC2S::receiveSetForm
         );
 
-        ServerPlayNetworking.registerGlobalReceiver(
-                UPDATE_POWER_ANIM_DATA_TO_SERVER,
-                ModPacketsC2S::onUpdatePowerAnimationData
+        reg(UPDATE_POWER_ANIM_DATA_TO_SERVER, ModPacketsC2S::onUpdatePowerAnimationData
         );
 
-        ServerPlayNetworking.registerGlobalReceiver(
-                REQUEST_POWER_ANIM_DATA,
-                ModPacketsC2S::onRequestPowerAnimationData
+        reg(REQUEST_POWER_ANIM_DATA, ModPacketsC2S::onRequestPowerAnimationData
         );
     }
 
@@ -141,7 +141,7 @@ public class ModPacketsC2S {
         PacketByteBuf buf = PacketByteBufs.create();
         // 不需要额外数据，只是一个解除吸附的信号
 
-        ServerPlayNetworking.send(player, JUMP_DETACH_REQUEST_ID, buf);
+        ServerPlayNetworking.send(player, new BytePayload(BytePayload.id(JUMP_DETACH_REQUEST_ID), buf));
     }
 
     private static void onUpdatePlayerCustomConfig(MinecraftServer minecraftServer, ServerPlayerEntity playerEntity, ServerPlayNetworkHandler serverPlayNetworkHandler, PacketByteBuf packetByteBuf, PacketSender packetSender) {

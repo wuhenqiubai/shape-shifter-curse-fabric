@@ -46,6 +46,7 @@ import java.util.List;
 import java.util.UUID;
 
 import static net.onixary.shapeShifterCurseFabric.networking.ModPackets.*;
+import net.onixary.shapeShifterCurseFabric.networking.BytePayload;
 
 // 应仅在客户端注册
 // This class should only be registered on the client side
@@ -53,28 +54,40 @@ import static net.onixary.shapeShifterCurseFabric.networking.ModPackets.*;
 // This is a pure client-side class, all receive methods are called only here
 public class ModPacketsS2C {
 
+    // Helper: register a BytePayload-based receiver wrapping old-style (client, handler, buf, sender) callback
+    @FunctionalInterface
+    private interface LegacyReceiver {
+        void receive(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender sender);
+    }
+
+    private static void reg(Identifier id, LegacyReceiver receiver) {
+        BytePayload.registerS2C(id);
+        ClientPlayNetworking.registerGlobalReceiver(BytePayload.id(id), (payload, context) -> {
+            context.client().execute(() -> receiver.receive(context.client(), null, payload.data(), null));
+        });
+    }
+
     public static void register() {
-        ClientPlayNetworking.registerGlobalReceiver(ModPackets.TRANSFORM_EFFECT_ID, ModPacketsS2C::receiveTransformEffect);
-        ClientPlayNetworking.registerGlobalReceiver(ModPackets.INSTINCT_THRESHOLD_EFFECT_ID, ModPacketsS2C::receiveInstinctThresholdEffect);
-        ClientPlayNetworking.registerGlobalReceiver(ModPackets.SYNC_CURSED_MOON_DATA, ModPacketsS2C::receiveCursedMoonData);
-        ClientPlayNetworking.registerGlobalReceiver(ModPackets.SYNC_FORM_CHANGE, ModPacketsS2C::receiveFormChange);
-        ClientPlayNetworking.registerGlobalReceiver(ModPackets.SYNC_TRANSFORM_STATE, ModPacketsS2C::receiveTransformState);
-        ClientPlayNetworking.registerGlobalReceiver(ModPackets.SYNC_BAT_ATTACH_STATE, ModPacketsS2C::receiveBatAttachState);
-        // ClientPlayNetworking.registerGlobalReceiver(ModPackets.SYNC_EFFECT_ATTACHMENT, ModPacketsS2C::handleSyncEffectAttachment);
-        ClientPlayNetworking.registerGlobalReceiver(ModPackets.UPDATE_OVERLAY_EFFECT, ModPacketsS2C::receiveUpdateOverlayEffect);
-        ClientPlayNetworking.registerGlobalReceiver(ModPackets.UPDATE_OVERLAY_FADE_EFFECT, ModPacketsS2C::receiveUpdateOverlayFadeEffect);
-        ClientPlayNetworking.registerGlobalReceiver(ModPackets.TRANSFORM_COMPLETE_EFFECT, ModPacketsS2C::receiveTransformCompleteEffect);
-        ClientPlayNetworking.registerGlobalReceiver(ModPackets.RESET_FIRST_PERSON, ModPacketsS2C::receiveResetFirstPerson);
-        ClientPlayNetworking.registerGlobalReceiver(ModPackets.SYNC_OTHER_PLAYER_BAT_ATTACH_STATE, ModPacketsS2C::receiveOtherPlayerBatAttachState);
-        ClientPlayNetworking.registerGlobalReceiver(ModPackets.SYNC_FORCE_SNEAK_STATE, ModPacketsS2C::receiveForceSneakState);
-        ClientPlayNetworking.registerGlobalReceiver(ModPackets.UPDATE_DYNAMIC_FORM, ModPacketsS2C::handleUpdateDynamicForm);
-        ClientPlayNetworking.registerGlobalReceiver(ModPackets.REMOVE_DYNAMIC_FORM_EXCEPT, ModPacketsS2C::handleRemoveDynamicExcept);
-        ClientPlayNetworking.registerGlobalReceiver(ModPackets.LOGIN_PACKET, ModPacketsS2C::onPlayerConnectServer);
-        ClientPlayNetworking.registerGlobalReceiver(ModPackets.ACTIVE_VIRTUAL_TOTEM, ModPacketsS2C::receiveActiveVirtualTotem);
-        ClientPlayNetworking.registerGlobalReceiver(ModPackets.UPDATE_POWER_ANIM_DATA_TO_CLIENT, ModPacketsS2C::receivePowerAnimationData);
-        ClientPlayNetworking.registerGlobalReceiver(ModPackets.UPDATE_PATRON_LEVEL, ModPacketsS2C::receiveUpdatePatronLevel);
-        ClientPlayNetworking.registerGlobalReceiver(ModPackets.OPEN_PATRON_FORM_SELECT_MENU, ModPacketsS2C::receiveOpenPatronFormSelectMenu);
-        ClientPlayNetworking.registerGlobalReceiver(ModPackets.OPEN_FORM_SELECT_MENU, ModPacketsS2C::receiveOpenFormSelectMenu);
+        reg(TRANSFORM_EFFECT_ID, ModPacketsS2C::receiveTransformEffect);
+        reg(INSTINCT_THRESHOLD_EFFECT_ID, ModPacketsS2C::receiveInstinctThresholdEffect);
+        reg(SYNC_CURSED_MOON_DATA, ModPacketsS2C::receiveCursedMoonData);
+        reg(SYNC_FORM_CHANGE, ModPacketsS2C::receiveFormChange);
+        reg(SYNC_TRANSFORM_STATE, ModPacketsS2C::receiveTransformState);
+        reg(SYNC_BAT_ATTACH_STATE, ModPacketsS2C::receiveBatAttachState);
+        reg(UPDATE_OVERLAY_EFFECT, ModPacketsS2C::receiveUpdateOverlayEffect);
+        reg(UPDATE_OVERLAY_FADE_EFFECT, ModPacketsS2C::receiveUpdateOverlayFadeEffect);
+        reg(TRANSFORM_COMPLETE_EFFECT, ModPacketsS2C::receiveTransformCompleteEffect);
+        reg(RESET_FIRST_PERSON, ModPacketsS2C::receiveResetFirstPerson);
+        reg(SYNC_OTHER_PLAYER_BAT_ATTACH_STATE, ModPacketsS2C::receiveOtherPlayerBatAttachState);
+        reg(SYNC_FORCE_SNEAK_STATE, ModPacketsS2C::receiveForceSneakState);
+        reg(UPDATE_DYNAMIC_FORM, ModPacketsS2C::handleUpdateDynamicForm);
+        reg(REMOVE_DYNAMIC_FORM_EXCEPT, ModPacketsS2C::handleRemoveDynamicExcept);
+        reg(LOGIN_PACKET, ModPacketsS2C::onPlayerConnectServer);
+        reg(ACTIVE_VIRTUAL_TOTEM, ModPacketsS2C::receiveActiveVirtualTotem);
+        reg(UPDATE_POWER_ANIM_DATA_TO_CLIENT, ModPacketsS2C::receivePowerAnimationData);
+        reg(UPDATE_PATRON_LEVEL, ModPacketsS2C::receiveUpdatePatronLevel);
+        reg(OPEN_PATRON_FORM_SELECT_MENU, ModPacketsS2C::receiveOpenPatronFormSelectMenu);
+        reg(OPEN_FORM_SELECT_MENU, ModPacketsS2C::receiveOpenFormSelectMenu);
     }
 
     /* 重构后不需要了 仅用于参考旧实现逻辑
@@ -321,7 +334,7 @@ public class ModPacketsS2C {
         buf.writeBoolean(ShapeShifterCurseFabric.playerCustomConfig.accent1GreyReverse);
         buf.writeBoolean(ShapeShifterCurseFabric.playerCustomConfig.accent2GreyReverse);
         buf.writeBoolean(ShapeShifterCurseFabric.playerCustomConfig.enable_form_random_sound);
-        ClientPlayNetworking.send(UPDATE_CUSTOM_SETTING, buf);
+        ClientPlayNetworking.send(new BytePayload(BytePayload.id(UPDATE_CUSTOM_SETTING), buf));
     }
 
     public static void sendUpdateCustomSetting() {
@@ -382,13 +395,13 @@ public class ModPacketsS2C {
         }
         buf.writeInt(animationCount);
         buf.writeInt(animationLength);
-        ClientPlayNetworking.send(UPDATE_POWER_ANIM_DATA_TO_SERVER, buf);
+        ClientPlayNetworking.send(new BytePayload(BytePayload.id(UPDATE_POWER_ANIM_DATA_TO_SERVER), buf));
     }
 
     public static void sendRequestPlayerAnimationData(UUID targetPlayerUUID) {
         PacketByteBuf buf = PacketByteBufs.create();
         buf.writeUuid(targetPlayerUUID);
-        ClientPlayNetworking.send(REQUEST_POWER_ANIM_DATA, buf);
+        ClientPlayNetworking.send(new BytePayload(BytePayload.id(REQUEST_POWER_ANIM_DATA), buf));
     }
 
     public static void receiveUpdatePatronLevel(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender responseSender) {
@@ -423,13 +436,13 @@ public class ModPacketsS2C {
     public static void sendSetPatronForm(Identifier formID) {
         PacketByteBuf buf = PacketByteBufs.create();
         buf.writeIdentifier(formID);
-        ClientPlayNetworking.send(SET_PATRON_FORM, buf);
+        ClientPlayNetworking.send(new BytePayload(BytePayload.id(SET_PATRON_FORM), buf));
     }
 
     public static void sendSetForm(Identifier formID, UUID target) {
         PacketByteBuf buf = PacketByteBufs.create();
         buf.writeUuid(target);
         buf.writeIdentifier(formID);
-        ClientPlayNetworking.send(SET_FORM, buf);
+        ClientPlayNetworking.send(new BytePayload(BytePayload.id(SET_FORM), buf));
     }
 }

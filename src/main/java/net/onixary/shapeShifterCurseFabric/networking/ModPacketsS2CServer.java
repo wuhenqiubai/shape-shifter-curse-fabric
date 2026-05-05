@@ -38,14 +38,14 @@ public class ModPacketsS2CServer {
         buf.writeInt(day);
         buf.writeBoolean(isCursedMoon);
         buf.writeBoolean(isNight);
-        ServerPlayNetworking.send(player, ModPackets.SYNC_CURSED_MOON_DATA, buf);
+        ServerPlayNetworking.send(player, new BytePayload(BytePayload.id(ModPackets.SYNC_CURSED_MOON_DATA), buf));
     }
 
     // 发送形态变化同步包
     public static void sendFormChange(ServerPlayerEntity player, String newFormName) {
         PacketByteBuf buf = PacketByteBufs.create();
         buf.writeString(newFormName);
-        ServerPlayNetworking.send(player, ModPackets.SYNC_FORM_CHANGE, buf);
+        ServerPlayNetworking.send(player, new BytePayload(BytePayload.id(ModPackets.SYNC_FORM_CHANGE), buf));
         ShapeShifterCurseFabric.LOGGER.info("Sent form change to client: " + newFormName);
     }
 
@@ -54,7 +54,7 @@ public class ModPacketsS2CServer {
         PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
         buf.writeNbt(attachment.toNbt());
         //ShapeShifterCurseFabric.LOGGER.info("Attachment sent, nbt: " + attachment.toNbt());
-        ServerPlayNetworking.send(player, ModPackets.SYNC_EFFECT_ATTACHMENT, buf);
+        ServerPlayNetworking.send(player, new BytePayload(BytePayload.id(ModPackets.SYNC_EFFECT_ATTACHMENT), buf));
     }
      */
 
@@ -66,10 +66,10 @@ public class ModPacketsS2CServer {
         buf.writeBoolean(isTransforming);
         buf.writeString(fromForm != null ? fromForm : "");
         buf.writeString(toForm != null ? toForm : "");
-//        ServerPlayNetworking.send(player, ModPackets.SYNC_TRANSFORM_STATE, buf);
+//        ServerPlayNetworking.send(player, new BytePayload(BytePayload.id(ModPackets.SYNC_TRANSFORM_STATE), buf))
         // 广播给所有玩家 用于同步动作
         for (ServerPlayerEntity p : player.getServerWorld().getPlayers()) {
-            ServerPlayNetworking.send(p, ModPackets.SYNC_TRANSFORM_STATE, buf);
+            ServerPlayNetworking.send(p, new BytePayload(BytePayload.id(ModPackets.SYNC_TRANSFORM_STATE), buf));
         }
         ShapeShifterCurseFabric.LOGGER.info("Sent transform state to client: isTransforming=" + isTransforming);
     }
@@ -95,7 +95,7 @@ public class ModPacketsS2CServer {
             buf.writeBoolean(false);
         }
 
-        ServerPlayNetworking.send(player, ModPackets.SYNC_BAT_ATTACH_STATE, buf);
+        ServerPlayNetworking.send(player, new BytePayload(BytePayload.id(ModPackets.SYNC_BAT_ATTACH_STATE), buf));
     }
 
     // 广播给附近其他玩家的蝙蝠吸附状态
@@ -135,14 +135,14 @@ public class ModPacketsS2CServer {
             buf.writeBoolean(false);
         }
 
-        ServerPlayNetworking.send(receiver, ModPackets.SYNC_OTHER_PLAYER_BAT_ATTACH_STATE, buf);
+        ServerPlayNetworking.send(receiver, new BytePayload(BytePayload.id(ModPackets.SYNC_OTHER_PLAYER_BAT_ATTACH_STATE), buf));
     }
 
     // 发送强制潜行状态同步包
     public static void sendForceSneakState(ServerPlayerEntity player, boolean shouldForceSneak) {
         PacketByteBuf buf = PacketByteBufs.create();
         buf.writeBoolean(shouldForceSneak);
-        ServerPlayNetworking.send(player, ModPackets.SYNC_FORCE_SNEAK_STATE, buf);
+        ServerPlayNetworking.send(player, new BytePayload(BytePayload.id(ModPackets.SYNC_FORCE_SNEAK_STATE), buf));
     }
 
     private static void sendRemoveDynamicFormExcept(ServerPlayerEntity player) {
@@ -151,7 +151,7 @@ public class ModPacketsS2CServer {
         for (Identifier formId : RegPlayerForms.dynamicPlayerForms) {
             buf.writeString(formId.toString());
         }
-        ServerPlayNetworking.send(player, ModPackets.REMOVE_DYNAMIC_FORM_EXCEPT, buf);
+        ServerPlayNetworking.send(player, new BytePayload(BytePayload.id(ModPackets.REMOVE_DYNAMIC_FORM_EXCEPT), buf));
     }
 
     // 发送动态Form同步包 旧的最大32K 本来以为挺多的，结果发现单个就快4K
@@ -162,7 +162,7 @@ public class ModPacketsS2CServer {
             buf.writeString(formName);
             buf.writeString(forms.get(formName).toString());
         }
-        ServerPlayNetworking.send(player, ModPackets.UPDATE_DYNAMIC_FORM, buf);
+        ServerPlayNetworking.send(player, new BytePayload(BytePayload.id(ModPackets.UPDATE_DYNAMIC_FORM), buf));
     }
 
     // 现在理论 单包32K Form数量无限
@@ -183,7 +183,7 @@ public class ModPacketsS2CServer {
     // 我暂时没找到玩家进入服务去时的Hook，所以暂时由服务器询问来代替
     public static void sendPlayerLogin(ServerPlayerEntity player) {
         PacketByteBuf buf = PacketByteBufs.create();
-        ServerPlayNetworking.send(player, ModPackets.LOGIN_PACKET, buf);
+        ServerPlayNetworking.send(player, new BytePayload(BytePayload.id(ModPackets.LOGIN_PACKET), buf));
     }
 
     // 仅在获取到 Patron 数据后调用 玩家登录由 updateDynamicForm 负责
@@ -223,20 +223,20 @@ public class ModPacketsS2CServer {
                 buf.writeUuid(entry.getKey());
                 buf.writeInt(entry.getValue());
             }
-            ServerPlayNetworking.send(player, ModPackets.UPDATE_PATRON_LEVEL, buf);
+            ServerPlayNetworking.send(player, new BytePayload(BytePayload.id(ModPackets.UPDATE_PATRON_LEVEL), buf));
         }
     }
 
     public static void OpenPatronFormSelectMenu(ServerPlayerEntity player) {
         PacketByteBuf buf = PacketByteBufs.create();
-        ServerPlayNetworking.send(player, ModPackets.OPEN_PATRON_FORM_SELECT_MENU, buf);
+        ServerPlayNetworking.send(player, new BytePayload(BytePayload.id(ModPackets.OPEN_PATRON_FORM_SELECT_MENU), buf));
     }
 
     public static void OpenFormSelectMenu(ServerPlayerEntity player, PlayerEntity target) {
         PacketByteBuf buf = PacketByteBufs.create();
         buf.writeString(target.getEntityName());
         buf.writeUuid(target.getUuid());
-        ServerPlayNetworking.send(player, ModPackets.OPEN_FORM_SELECT_MENU, buf);
+        ServerPlayNetworking.send(player, new BytePayload(BytePayload.id(ModPackets.OPEN_FORM_SELECT_MENU), buf));
     }
 
     // Disabled: VirtualTotemPower disabled for 1.21 port
@@ -255,7 +255,7 @@ public class ModPacketsS2CServer {
         }
         buf.writeInt(animationCount);
         buf.writeInt(animationLength);
-        ServerPlayNetworking.send(player, UPDATE_POWER_ANIM_DATA_TO_CLIENT, buf);
+        ServerPlayNetworking.send(player, new BytePayload(BytePayload.id(UPDATE_POWER_ANIM_DATA_TO_CLIENT), buf));
     }
 
     public static void sendPowerAnimationDataToNearPlayer(ServerPlayerEntity player, @Nullable Identifier animationId, int animationCount, int animationLength) {
