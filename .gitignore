@@ -125,3 +125,4 @@ build_*.txt
 /.factorypath
 /.project
 /compile_errors.txt
+/Decompiler/
