@@ -1,7 +1,6 @@
 package net.onixary.shapeShifterCurseFabric.networking;
 
 import com.google.gson.JsonObject;
-import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.entity.player.PlayerEntity;
@@ -12,21 +11,21 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric;
-// VirtualTotemPower disabled for 1.21 port
+import net.onixary.shapeShifterCurseFabric.additional_power.VirtualTotemPower;
 import net.onixary.shapeShifterCurseFabric.player_form.PlayerFormBase;
 import net.onixary.shapeShifterCurseFabric.player_form.PlayerFormDynamic;
 import net.onixary.shapeShifterCurseFabric.player_form.RegPlayerForms;
-import org.jetbrains.annotations.Nullable;
 import net.onixary.shapeShifterCurseFabric.util.PatronUtils;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
-import java.util.UUID;
-
-import static net.onixary.shapeShifterCurseFabric.networking.ModPackets.UPDATE_POWER_ANIM_DATA_TO_CLIENT;
-import static net.onixary.shapeShifterCurseFabric.networking.ModPackets.UPDATE_POWER_ANIM_DATA_TO_SERVER;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+
+import static net.onixary.shapeShifterCurseFabric.networking.ModPackets.UPDATE_POWER_ANIM_DATA_TO_CLIENT;
+
+// VirtualTotemPower disabled for 1.21 port
 
 // 纯服务端类，所有send方法都只在这里调用
 // This is a pure server-side class, all send methods are called only here
@@ -239,10 +238,16 @@ public class ModPacketsS2CServer {
         ServerPlayNetworking.send(player, new BytePayload(BytePayload.id(ModPackets.OPEN_FORM_SELECT_MENU), buf));
     }
 
-    // Disabled: VirtualTotemPower disabled for 1.21 port
-    // public static void sendActiveVirtualTotem(ServerPlayerEntity player, VirtualTotemPower virtualTotemPower) {
-    //     ...
-    // }
+    public static void sendActiveVirtualTotem(ServerPlayerEntity player, VirtualTotemPower virtualTotemPower) {
+        player.getServerWorld().getPlayers(near_player -> near_player.squaredDistanceTo(player) <= 64 * 64).forEach(
+                nearPlayer -> {
+                    PacketByteBuf buf = virtualTotemPower.create_packet_byte_buf();
+                    if (buf != null) {
+                        ServerPlayNetworking.send(nearPlayer, ModPackets.ACTIVE_VIRTUAL_TOTEM, buf);
+                    }
+                }
+        );
+    }
 
     public static void sendPowerAnimationDataToClient(ServerPlayerEntity player, UUID PlayerUUID, @Nullable Identifier animationId, int animationCount, int animationLength) {
         PacketByteBuf buf = PacketByteBufs.create();
