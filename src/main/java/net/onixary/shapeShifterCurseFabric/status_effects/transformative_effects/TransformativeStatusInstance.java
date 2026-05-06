@@ -3,6 +3,8 @@ package net.onixary.shapeShifterCurseFabric.status_effects.transformative_effect
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric;
 import net.onixary.shapeShifterCurseFabric.status_effects.BaseTransformativeStatusEffect;
@@ -12,12 +14,11 @@ import org.jetbrains.annotations.Nullable;
 public class TransformativeStatusInstance extends StatusEffectInstance {
 
     public TransformativeStatusInstance(BaseTransformativeStatusEffect effect, int duration) {
-        super(effect, duration, 0, false, false, true);  // 默认不显示粒子效果
+        super(Registries.STATUS_EFFECT.getEntry(effect), duration, 0, false, false, true);
     }
 
     @Override
     public boolean update(LivingEntity entity, Runnable overwriteCallback) {
-        // 仅限因为持续时间结束而消失时触发成就
         if (entity instanceof ServerPlayerEntity player && this.getDuration() <= 1) {
             ShapeShifterCurseFabric.ON_TRANSFORM_EFFECT_FADE.trigger(player);
         }
@@ -32,7 +33,8 @@ public class TransformativeStatusInstance extends StatusEffectInstance {
     }
 
     public static @Nullable TransformativeStatusInstance formStatusEffectInstance(StatusEffectInstance instance) {
-        StatusEffect effect = instance.getEffectType();
+        RegistryEntry<StatusEffect> entry = instance.getEffectType();
+        StatusEffect effect = entry.value();
         if (effect instanceof BaseTransformativeStatusEffect baseTransformativeStatusEffect) {
             return new TransformativeStatusInstance(baseTransformativeStatusEffect, instance.getDuration());
         }

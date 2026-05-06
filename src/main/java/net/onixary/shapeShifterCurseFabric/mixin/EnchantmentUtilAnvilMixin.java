@@ -16,7 +16,7 @@ public class EnchantmentUtilAnvilMixin {
     @ModifyExpressionValue(method = "updateResult", at = @At(value = "INVOKE", target = "Lnet/minecraft/enchantment/Enchantment;isAcceptableItem(Lnet/minecraft/item/ItemStack;)Z"))
     private static boolean isAcceptableItem(boolean original, @Local(ordinal = 0) ItemStack itemStack, @Local Enchantment enchantment) {
         if (!original) {
-            return EnchantmentUtils.isItemCanEnchantment(Registries.ENCHANTMENT.getKey(enchantment).orElseThrow(), itemStack);
+            return EnchantmentUtils.isItemCanEnchantment((RegistryKey<Enchantment>) enchantment, itemStack);
         }
         return original;
     }

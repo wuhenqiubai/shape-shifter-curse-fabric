@@ -30,9 +30,10 @@ public class TransformativeStatusPotion extends StatusEffect {
     }
 
     @Override
-    public void applyUpdateEffect(LivingEntity entity, int amplifier) {
+    public boolean applyUpdateEffect(LivingEntity entity, int amplifier) {
         this.applyInstantEffect(null, null, entity, amplifier, 0);
-        entity.removeStatusEffect(this);
+        entity.removeStatusEffect(net.minecraft.registry.Registries.STATUS_EFFECT.getEntry(this));
+        return true;
     }
 
     @Override

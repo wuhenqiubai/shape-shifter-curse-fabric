@@ -4,9 +4,9 @@ import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import io.github.apace100.apoli.component.PowerHolderComponent;
 import net.minecraft.enchantment.Enchantment;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.RegistryKey;
 import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.enchantment.Enchantments;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
@@ -38,10 +38,10 @@ public class EnchantmentHelperMixin {
     }
 
     @Inject(method = "getEquipmentLevel", at = @At("RETURN"), cancellable = true)
-    private static void getEquipmentLevelMixin(Enchantment enchantment, LivingEntity entity, CallbackInfoReturnable<Integer> cir) {
-        if (enchantment == Enchantments.LOOTING) {
+    private static void getEquipmentLevelMixin(RegistryEntry<Enchantment> enchantment, LivingEntity entity, CallbackInfoReturnable<Integer> cir) {
+        if (enchantment.matchesKey(Enchantments.LOOTING)) {
             cir.setReturnValue(getLootingLevel(entity, cir.getReturnValue()));
-        } else if (enchantment == Enchantments.SOUL_SPEED) {
+        } else if (enchantment.matchesKey(Enchantments.SOUL_SPEED)) {
             cir.setReturnValue(getSoulSpeedLevel(entity, cir.getReturnValue()));
         }
     }
@@ -55,9 +55,9 @@ public class EnchantmentHelperMixin {
     }
 
     @ModifyExpressionValue(method = "getPossibleEntries", at = @At(value = "INVOKE", target = "Lnet/minecraft/enchantment/EnchantmentTarget;isAcceptableItem(Lnet/minecraft/item/Item;)Z"))
-    private static boolean isAcceptableItem(boolean original, @Local(ordinal = 0) ItemStack itemStack, @Local Enchantment enchantment) {
+    private static boolean isAcceptableItem(boolean original, @Local(ordinal = 0) ItemStack itemStack, @Local RegistryEntry<Enchantment> enchantment) {
         if (!original) {
-            return EnchantmentUtils.isItemCanEnchantment(Registries.ENCHANTMENT.getKey(enchantment).orElseThrow(), itemStack);
+            return EnchantmentUtils.isItemCanEnchantment(enchantment.getKey().orElseThrow(), itemStack);
         }
         return original;
     }
