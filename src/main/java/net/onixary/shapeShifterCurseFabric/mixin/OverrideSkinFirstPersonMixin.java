@@ -174,14 +174,14 @@ public abstract class OverrideSkinFirstPersonMixin extends LivingEntityRenderer<
     }
 
 
-    @Redirect(method = "renderArm", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/AbstractClientPlayerEntity;getSkinTexture()Lnet/minecraft/util/Identifier;"))
-    private SkinTextures shape_shifter_curse$getSkinTexture(AbstractClientPlayerEntity player) {
-        if (!RegPlayerFormComponent.PLAYER_FORM.get(player).getCurrentForm().equals(RegPlayerForms.ORIGINAL_BEFORE_ENABLE))
+    @Redirect(method = "renderArm", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/AbstractClientPlayerEntity;getSkinTextures()Lnet/minecraft/client/util/SkinTextures;"))
+    private SkinTextures shape_shifter_curse$getSkinTexture(AbstractClientPlayerEntity instance) {
+        if (!RegPlayerFormComponent.PLAYER_FORM.get(instance).getCurrentForm().equals(RegPlayerForms.ORIGINAL_BEFORE_ENABLE))
         {
-            if (!RegPlayerSkinComponent.SKIN_SETTINGS.get(player).shouldKeepOriginalSkin()) {
+            if (!RegPlayerSkinComponent.SKIN_SETTINGS.get(instance).shouldKeepOriginalSkin()) {
                 return new SkinTextures(CUSTOM_SKIN, null, null, null, SkinTextures.Model.WIDE, false);
             }
         }
-        return player.getSkinTextures();
+        return instance.getSkinTextures();
     }
 }
