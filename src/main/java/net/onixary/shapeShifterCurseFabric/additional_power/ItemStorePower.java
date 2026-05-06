@@ -17,6 +17,8 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
+import net.minecraft.nbt.NbtOps;
+import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Pair;
 import net.minecraft.world.World;
@@ -120,9 +122,10 @@ public class ItemStorePower extends Power implements ItemStorePowerRender.itemSt
     @Override
     public NbtElement toTag() {
         NbtCompound tag = new NbtCompound();
-        NbtCompound itemTag = new NbtCompound();
-        this.storedItem.writeNbt(itemTag);
-        tag.put("stored_item", itemTag);
+        RegistryWrapper.WrapperLookup registries = this.entity.getRegistryManager();
+        ItemStack.CODEC.encodeStart(registries.getOps(NbtOps.INSTANCE), this.storedItem)
+                .result()
+                .ifPresent(nbtElement -> tag.put("stored_item", nbtElement));
         tag.putInt("bobbing_animation_time", this.bobbingAnimationTime);
         return tag;
     }
@@ -130,10 +133,17 @@ public class ItemStorePower extends Power implements ItemStorePowerRender.itemSt
     @Override
     public void fromTag(NbtElement tag) {
         if (tag instanceof NbtCompound compound) {
-            NbtCompound itemStackNBT = compound.getCompound("stored_item");
-            if (!itemStackNBT.isEmpty()) {
-                this.storedItem = ItemStack.fromNbt(itemStackNBT, registryLookup);
+            // 1. 获取 RegistryLookup (同上，必须要有这个才能读 ItemStack)
+            RegistryWrapper.WrapperLookup registries = this.entity.getRegistryManager();
+
+            NbtElement itemNbt = compound.get("stored_item"); // 先拿到元素
+            if (itemNbt != null) {
+                // 2. 使用 Codec 读取
+                ItemStack.CODEC.parse(registries.getOps(NbtOps.INSTANCE), itemNbt)
+                        .result()
+                        .ifPresent(stack -> this.storedItem = stack);
             }
+
             this.bobbingAnimationTime = compound.getInt("bobbing_animation_time");
         }
     }
