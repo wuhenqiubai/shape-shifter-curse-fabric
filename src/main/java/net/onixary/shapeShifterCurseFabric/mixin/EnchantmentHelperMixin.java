@@ -4,6 +4,8 @@ import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import io.github.apace100.apoli.component.PowerHolderComponent;
 import net.minecraft.enchantment.Enchantment;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.RegistryKey;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.LivingEntity;
@@ -55,7 +57,7 @@ public class EnchantmentHelperMixin {
     @ModifyExpressionValue(method = "getPossibleEntries", at = @At(value = "INVOKE", target = "Lnet/minecraft/enchantment/EnchantmentTarget;isAcceptableItem(Lnet/minecraft/item/Item;)Z"))
     private static boolean isAcceptableItem(boolean original, @Local(ordinal = 0) ItemStack itemStack, @Local Enchantment enchantment) {
         if (!original) {
-            return EnchantmentUtils.isItemCanEnchantment(enchantment, itemStack);
+            return EnchantmentUtils.isItemCanEnchantment(Registries.ENCHANTMENT.getKey(enchantment).orElseThrow(), itemStack);
         }
         return original;
     }

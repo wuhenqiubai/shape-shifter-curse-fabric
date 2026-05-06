@@ -78,7 +78,7 @@ public abstract class LivingEntityMixin {
 
         Entity attacker = source.getAttacker();
         // 拥有 ENTANGLED_FULL_EFFECT 的生物死亡时在其位置生成蜘蛛网。当攻击者为蜘蛛形态时，概率掉落流食囊
-        if (entity.hasStatusEffect(RegOtherStatusEffects.ENTANGLED_FULL_EFFECT)) {
+        if (entity.hasStatusEffect(net.minecraft.registry.Registries.STATUS_EFFECT.getEntry(RegOtherStatusEffects.ENTANGLED_FULL_EFFECT))) {
             BlockPos pos = entity.getBlockPos();
             if (world.getBlockState(pos).isAir()) {
                 world.setBlockState(pos, Blocks.COBWEB.getDefaultState());

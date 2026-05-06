@@ -3,6 +3,8 @@ package net.onixary.shapeShifterCurseFabric.mixin;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.enchantment.Enchantment;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.RegistryKey;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.command.EnchantCommand;
 import net.onixary.shapeShifterCurseFabric.util.EnchantmentUtils;
@@ -14,7 +16,7 @@ public class EnchantmentUtilEnchantCommandMixin {
     @ModifyExpressionValue(method = "execute", at = @At(value = "INVOKE", target = "Lnet/minecraft/enchantment/Enchantment;isAcceptableItem(Lnet/minecraft/item/ItemStack;)Z"))
     private static boolean isAcceptableItem(boolean original, @Local ItemStack itemStack, @Local Enchantment enchantment) {
         if (!original) {
-            return EnchantmentUtils.isItemCanEnchantment(enchantment, itemStack);
+            return EnchantmentUtils.isItemCanEnchantment(Registries.ENCHANTMENT.getKey(enchantment).orElseThrow(), itemStack);
         }
         return original;
     }
