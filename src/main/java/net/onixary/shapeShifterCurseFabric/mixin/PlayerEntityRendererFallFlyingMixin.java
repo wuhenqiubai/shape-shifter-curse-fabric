@@ -26,7 +26,7 @@ public abstract class PlayerEntityRendererFallFlyingMixin extends LivingEntityRe
     }
 
 
-    @Inject(method = "Lnet/minecraft/client/render/entity/PlayerEntityRenderer;setupTransforms(Lnet/minecraft/client/network/AbstractClientPlayerEntity;Lnet/minecraft/client/util/math/MatrixStack;FFFF)V",
+    @Inject(method = "setupTransforms(Lnet/minecraft/client/network/AbstractClientPlayerEntity;Lnet/minecraft/client/util/math/MatrixStack;FFFF)V",
             at = @At(value = "INVOKE", target = "Lnet/minecraft/client/util/math/MatrixStack;multiply(Lorg/joml/Quaternionf;)V"),
             slice = {
                 @Slice(
