@@ -1,7 +1,7 @@
 package net.onixary.shapeShifterCurseFabric.integration.origins.registry;
 
 import net.onixary.shapeShifterCurseFabric.integration.origins.Origins;
-// OrbOfOriginItem disabled for 1.21 port
+import net.onixary.shapeShifterCurseFabric.integration.origins.content.OrbOfOriginItem;
 import net.minecraft.item.Item;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.RegistryKey;
@@ -10,9 +10,9 @@ import net.minecraft.registry.Registry;
 
 public class ModItems {
 
-    //public static final Item ORB_OF_ORIGIN = new OrbOfOriginItem();
+    public static final Item ORB_OF_ORIGIN = new OrbOfOriginItem();
 
     public static void register() {
-        //Registry.register(Registries.ITEM, RegistryKey.of(Registries.ITEM.getKey(), Identifier.of(Origins.MODID, "orb_of_origin")), ORB_OF_ORIGIN);
+        Registry.register(Registries.ITEM, RegistryKey.of(Registries.ITEM.getKey(), Identifier.of(Origins.MODID, "orb_of_origin")), ORB_OF_ORIGIN);
     }
 }

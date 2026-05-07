@@ -7,9 +7,9 @@ import net.onixary.shapeShifterCurseFabric.integration.origins.origin.OriginLaye
 import net.onixary.shapeShifterCurseFabric.integration.origins.origin.OriginLayers;
 import net.onixary.shapeShifterCurseFabric.integration.origins.origin.OriginRegistry;
 import net.onixary.shapeShifterCurseFabric.integration.origins.registry.ModComponents;
-import io.netty.buffer.Unpooled;
+import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.fabricmc.fabric.api.util.NbtType;
+import net.minecraft.component.DataComponentTypes;
 import net.minecraft.item.Item.TooltipContext;
 import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.entity.player.PlayerEntity;
@@ -23,6 +23,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.*;
 import net.minecraft.world.World;
+import net.onixary.shapeShifterCurseFabric.networking.BytePayload;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
@@ -54,9 +55,9 @@ public class OrbOfOriginItem extends Item {
             }
             component.checkAutoChoosingLayers(user, false);
             component.sync();
-            PacketByteBuf data = new PacketByteBuf(Unpooled.buffer());
+            PacketByteBuf data = PacketByteBufs.create();
             data.writeBoolean(false);
-            ServerPlayNetworking.send((ServerPlayerEntity) user, ModPackets.OPEN_ORIGIN_SCREEN, data);
+            ServerPlayNetworking.send((ServerPlayerEntity) user, new BytePayload(BytePayload.id(ModPackets.OPEN_ORIGIN_SCREEN), data));
         }
         if(!user.isCreative()) {
             stack.decrement(1);
@@ -81,23 +82,24 @@ public class OrbOfOriginItem extends Item {
 
     private Map<OriginLayer, Origin> getTargets(ItemStack stack) {
         HashMap<OriginLayer, Origin> targets = new HashMap<>();
-        if(!stack.hasNbt()) {
+        var customData = stack.get(DataComponentTypes.CUSTOM_DATA);
+        if(customData == null) {
             return targets;
         }
-        NbtCompound nbt = stack.getNbt();
-        if(!nbt.contains("Targets", NbtType.LIST)) {
+        NbtCompound nbt = customData.copyNbt();
+        if(!nbt.contains("Targets", NbtElement.LIST_TYPE)) {
             return targets;
         }
         NbtList targetList = (NbtList)nbt.get("Targets");
         for (NbtElement nbtElement : targetList) {
             if(nbtElement instanceof NbtCompound targetNbt) {
-                if(targetNbt.contains("Layer", NbtType.STRING)) {
+                if(targetNbt.contains("Layer", NbtElement.STRING_TYPE)) {
                     try {
-                        Identifier id = new Identifier(targetNbt.getString("Layer"));
+                        Identifier id = Identifier.tryParse(targetNbt.getString("Layer"));
                         OriginLayer layer = OriginLayers.getLayer(id);
                         Origin origin = Origin.EMPTY;
-                        if(targetNbt.contains("Origin", NbtType.STRING)) {
-                            Identifier originId = new Identifier(targetNbt.getString("Origin"));
+                        if(targetNbt.contains("Origin", NbtElement.STRING_TYPE)) {
+                            Identifier originId = Identifier.tryParse(targetNbt.getString("Origin"));
                             origin = OriginRegistry.get(originId);
                         }
                         if(layer.isEnabled() && (layer.contains(origin) || origin.isSpecial())) {
