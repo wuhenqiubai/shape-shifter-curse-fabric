@@ -1,13 +1,14 @@
 package net.onixary.shapeShifterCurseFabric.items;
 
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.PotionContentsComponent;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.*;
 import net.minecraft.potion.Potion;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.PotionContentsComponent;
 import net.minecraft.registry.Registries;
-import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.Registry;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
@@ -16,14 +17,14 @@ import net.onixary.shapeShifterCurseFabric.items.armors.MorphScaleArmor;
 import net.onixary.shapeShifterCurseFabric.items.armors.NetheriteMorphScaleArmor;
 import net.onixary.shapeShifterCurseFabric.items.tools.*;
 import net.onixary.shapeShifterCurseFabric.items.trinkets.*;
+import net.onixary.shapeShifterCurseFabric.util.PatronUtils;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import net.onixary.shapeShifterCurseFabric.util.PatronUtils;
 
-import static net.minecraft.item.Items.register;
-import static net.onixary.shapeShifterCurseFabric.blocks.RegCustomBlock.*;
+import static net.onixary.shapeShifterCurseFabric.blocks.RegCustomBlock.DEW_COVERED_COBWEB;
+import static net.onixary.shapeShifterCurseFabric.blocks.RegCustomBlock.MOONDUST_CRYSTAL_GRIT;
 
 public class RegCustomItem {
     private RegCustomItem(){}
@@ -86,35 +87,8 @@ public class RegCustomItem {
     public static final Item WEB_PROJECTILE = register("web_projectile", new Item(new Item.Settings()));
     public static final Item SILK_DEW = register("silk_dew", new SilkDew(new Item.Settings()));
 
-    /* Disabled for 1.21 port: PotionContentsComponent needs RegistryEntry<Potion>
-    public static ItemStack buildPotion(Item PotionItem, Potion potion) {
-        ItemStack potionStack = new ItemStack(PotionItem);
-        potionStack.set(DataComponentTypes.POTION_CONTENTS, new PotionContentsComponent(potion));
-        return potionStack;
-    }
-    */
-
-    /* Disabled for 1.21 port
-    public static Collection<ItemStack> buildAllPotions(Potion... potions) {
-        List<ItemStack> potionStacks = new ArrayList<>();
-        for (Potion potion : potions) {
-            potionStacks.add(buildPotion(Items.POTION, potion));
-        }
-        for (Potion potion : potions) {
-            potionStacks.add(buildPotion(Items.SPLASH_POTION, potion));
-        }
-        for (Potion potion : potions) {
-            potionStacks.add(buildPotion(Items.LINGERING_POTION, potion));
-        }
-        for (Potion potion : potions) {
-            potionStacks.add(buildPotion(Items.TIPPED_ARROW, potion));
-        }
-        return potionStacks;
-    }
-    */
-
-    /* Disabled for 1.21 port: ItemGroup.builder API changed
-    public static final ItemGroup SSC_GROUP = ItemGroup.builder()
+    // Disabled for 1.21 port: ItemGroup.builder API changed
+    public static final ItemGroup SSC_GROUP = new ItemGroup.Builder()
             .icon(() -> new ItemStack(ICON_CURSED_MOON))
             .displayName(Text.translatable("itemGroup.shape_shifter_curse.sscitems"))
             .entries((context, entries) -> {
@@ -182,7 +156,30 @@ public class RegCustomItem {
                     entries.add(PATRON_FORM_ITEM);
                 }
             })
-            .build(); */
+            .build();
+
+    public static Collection<ItemStack> buildAllPotions(Potion... potions) {
+        List<ItemStack> potionStacks = new ArrayList<>();
+        for (Potion potion : potions) {
+            potionStacks.add(buildPotion(Items.POTION, potion));
+        }
+        for (Potion potion : potions) {
+            potionStacks.add(buildPotion(Items.SPLASH_POTION, potion));
+        }
+        for (Potion potion : potions) {
+            potionStacks.add(buildPotion(Items.LINGERING_POTION, potion));
+        }
+        for (Potion potion : potions) {
+            potionStacks.add(buildPotion(Items.TIPPED_ARROW, potion));
+        }
+        return potionStacks;
+    }
+
+    public static ItemStack buildPotion(Item PotionItem, Potion potion) {
+        ItemStack potionStack = new ItemStack(PotionItem);
+        potionStack.set(DataComponentTypes.POTION_CONTENTS, new PotionContentsComponent((RegistryEntry<Potion>) potion));
+        return potionStack;
+    }
 
     public static <T extends Item> T register(String path, T item) {
         return Registry.register(Registries.ITEM, RegistryKey.of(Registries.ITEM.getKey(), Identifier.of(ShapeShifterCurseFabric.MOD_ID, path)), item);
