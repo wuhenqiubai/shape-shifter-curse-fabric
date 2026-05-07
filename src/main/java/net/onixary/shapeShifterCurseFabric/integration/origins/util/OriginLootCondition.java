@@ -3,18 +3,18 @@ package net.onixary.shapeShifterCurseFabric.integration.origins.util;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
-import net.onixary.shapeShifterCurseFabric.integration.origins.component.OriginComponent;
-import net.onixary.shapeShifterCurseFabric.integration.origins.origin.Origin;
-import net.onixary.shapeShifterCurseFabric.integration.origins.origin.OriginLayer;
-import net.onixary.shapeShifterCurseFabric.integration.origins.registry.ModComponents;
-import net.onixary.shapeShifterCurseFabric.integration.origins.registry.ModLoot;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.loot.condition.LootCondition;
 import net.minecraft.loot.condition.LootConditionType;
 import net.minecraft.loot.context.LootContext;
 import net.minecraft.loot.context.LootContextParameters;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
-import net.minecraft.util.JsonSerializer;
+import net.onixary.shapeShifterCurseFabric.integration.origins.component.OriginComponent;
+import net.onixary.shapeShifterCurseFabric.integration.origins.origin.Origin;
+import net.onixary.shapeShifterCurseFabric.integration.origins.origin.OriginLayer;
+import net.onixary.shapeShifterCurseFabric.integration.origins.registry.ModComponents;
+import net.onixary.shapeShifterCurseFabric.integration.origins.registry.ModLoot;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -64,7 +64,7 @@ public class OriginLootCondition implements LootCondition {
     }
 
     public static LootCondition.Builder builder(String originId) {
-        return builder(new Identifier(originId));
+        return builder(Identifier.of(originId));
     }
 
     public static LootCondition.Builder builder(Identifier origin) {
@@ -72,14 +72,14 @@ public class OriginLootCondition implements LootCondition {
     }
 
     public static LootCondition.Builder builder(String originId, String layerId) {
-        return builder(new Identifier(originId), new Identifier(layerId));
+        return builder(Identifier.of(originId), Identifier.of(layerId));
     }
 
     public static LootCondition.Builder builder(Identifier origin, Identifier layer) {
         return () -> new OriginLootCondition(origin, layer);
     }
 
-    public static class Serializer implements JsonSerializer<OriginLootCondition> {
+    public static class Serializer extends MapCodec<LootCondition> implements JsonSerializer<OriginLootCondition> {
         public void toJson(JsonObject jsonObject, OriginLootCondition originLootCondition, JsonSerializationContext jsonSerializationContext) {
             jsonObject.addProperty("origin", originLootCondition.origin.toString());
             if (originLootCondition.layer != null) {
@@ -88,9 +88,9 @@ public class OriginLootCondition implements LootCondition {
         }
 
         public OriginLootCondition fromJson(JsonObject jsonObject, JsonDeserializationContext jsonDeserializationContext) {
-            Identifier origin = new Identifier(JsonHelper.getString(jsonObject, "origin"));
+            Identifier origin = Identifier.of(JsonHelper.getString(jsonObject, "origin"));
             if (jsonObject.has("layer")) {
-                Identifier layer = new Identifier(JsonHelper.getString(jsonObject, "layer"));
+                Identifier layer = Identifier.of(JsonHelper.getString(jsonObject, "layer"));
                 return new OriginLootCondition(origin, layer);
             }
             return new OriginLootCondition(origin);
