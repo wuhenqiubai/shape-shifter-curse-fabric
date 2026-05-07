@@ -2,56 +2,49 @@ package net.onixary.shapeShifterCurseFabric.networking;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import com.terraformersmc.modmenu.util.mod.Mod;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
-import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
-import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.component.type.FoodComponent;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.network.NetworkThreadUtils;
 import net.minecraft.network.PacketByteBuf;
+import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric;
 import net.onixary.shapeShifterCurseFabric.additional_power.BatBlockAttachPower;
-// VirtualTotemPower disabled for 1.21 port
+import net.onixary.shapeShifterCurseFabric.additional_power.VirtualTotemPower;
 import net.onixary.shapeShifterCurseFabric.client.ClientPlayerStateManager;
 import net.onixary.shapeShifterCurseFabric.client.ShapeShifterCurseFabricClient;
 import net.onixary.shapeShifterCurseFabric.custom_ui.NormalFormSelectScreen;
-import net.onixary.shapeShifterCurseFabric.player_animation.v3.IPlayerAnimController;
 import net.onixary.shapeShifterCurseFabric.custom_ui.PatronFormSelectScreen;
+import net.onixary.shapeShifterCurseFabric.player_animation.v3.IPlayerAnimController;
 import net.onixary.shapeShifterCurseFabric.player_form.RegPlayerForms;
 import net.onixary.shapeShifterCurseFabric.player_form.transform.TransformManager;
-import net.onixary.shapeShifterCurseFabric.util.CustomEdibleUtils;
 import net.onixary.shapeShifterCurseFabric.util.FormTextureUtils;
-import org.jetbrains.annotations.Nullable;
 import net.onixary.shapeShifterCurseFabric.util.PatronUtils;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
 import static net.onixary.shapeShifterCurseFabric.networking.ModPackets.*;
-import net.onixary.shapeShifterCurseFabric.networking.BytePayload;
 
-// 应仅在客户端注册
-// This class should only be registered on the client side
-// 纯客户端类，所有的receive方法都只在这里调用
-// This is a pure client-side class, all receive methods are called only here
+// VirtualTotemPower disabled for 1.21 port
+
+/**
+ * 应仅在客户端注册
+ * This class should only be registered on the client side
+ * 纯客户端类，所有的receive方法都只在这里调用
+ * This is a pure client-side class, all receive methods are called only here
+ */
 public class ModPacketsS2C {
 
     // Helper: register a BytePayload-based receiver wrapping old-style (client, handler, buf, sender) callback
@@ -353,8 +346,9 @@ public class ModPacketsS2C {
             return;
         }
         Identifier virtualTotemType = buf.readIdentifier();
-        // ItemStack totemStack = buf.readItemStack(); // readItemStack removed in 1.21, use ItemStack.PACKET_CODEC
-        // VirtualTotemPower needs full 1.21 API migration
+        ItemStack totemStack = ItemStack.PACKET_CODEC.decode((RegistryByteBuf) buf);
+        // ConcurrentModificationException 需要把这个操作放到Client线程而非Network线程
+        client.execute(() -> VirtualTotemPower.process_virtual_totem_type(playerEntity, virtualTotemType, totemStack));
     }
 
     public static void receivePowerAnimationData(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender responseSender) {
