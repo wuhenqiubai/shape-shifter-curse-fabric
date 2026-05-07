@@ -11,6 +11,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.attribute.EntityAttributeInstance;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric;
 
 import java.util.LinkedList;
@@ -116,12 +117,11 @@ public class DelayAttributePower extends Power {
         }
     }
 
-    // Disabled: EntityAttribute → RegistryEntry<EntityAttribute> in 1.21 Apoli 2.12.0
-    // public DelayAttributePower addModifier(EntityAttribute attribute, EntityAttributeModifier modifier) {
-    //     AttributedEntityAttributeModifier mod = new AttributedEntityAttributeModifier(attribute, modifier);
-    //     this.modifiers.add(mod);
-    //     return this;
-    // }
+    public DelayAttributePower addModifier(RegistryEntry<EntityAttribute> attribute, EntityAttributeModifier modifier) {
+        AttributedEntityAttributeModifier mod = new AttributedEntityAttributeModifier(attribute, modifier);
+        this.modifiers.add(mod);
+        return this;
+    }
 
     public DelayAttributePower addModifier(AttributedEntityAttributeModifier modifier) {
         this.modifiers.add(modifier);
