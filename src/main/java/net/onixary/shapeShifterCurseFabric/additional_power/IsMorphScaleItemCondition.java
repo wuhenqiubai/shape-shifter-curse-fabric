@@ -2,8 +2,8 @@ package net.onixary.shapeShifterCurseFabric.additional_power;
 
 import io.github.apace100.apoli.power.factory.condition.ConditionFactory;
 import io.github.apace100.calio.data.SerializableData;
+import net.minecraft.component.DataComponentTypes;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtCompound;
 import net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric;
 import net.onixary.shapeShifterCurseFabric.util.ModTags;
 
@@ -14,9 +14,9 @@ public class IsMorphScaleItemCondition {
         if (itemStack.isIn(ModTags.MorphScaleItem_Tag)) {
             return true;
         }
-        NbtCompound itemNBT = itemStack.getNbt();
-        if (itemNBT != null) {
-            if (itemNBT.getBoolean(IsMorphScaleArmorTagName)) {
+        var customData = itemStack.get(DataComponentTypes.CUSTOM_DATA);
+        if (customData != null) {
+            if (customData.copyNbt().getBoolean(IsMorphScaleArmorTagName)) {
                 return true;
             }
         }
