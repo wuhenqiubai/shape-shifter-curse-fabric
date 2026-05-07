@@ -26,7 +26,7 @@ public abstract class PlayerEntityRendererFallFlyingMixin extends LivingEntityRe
     }
 
 
-    @Inject(method = "Lnet/minecraft/client/render/entity/PlayerEntityRenderer;setupTransforms(Lnet/minecraft/client/network/AbstractClientPlayerEntity;Lnet/minecraft/client/util/math/MatrixStack;FFF)V",
+    @Inject(method = "Lnet/minecraft/client/render/entity/PlayerEntityRenderer;setupTransforms(Lnet/minecraft/client/network/AbstractClientPlayerEntity;Lnet/minecraft/client/util/math/MatrixStack;FFFF)V",
             at = @At(value = "INVOKE", target = "Lnet/minecraft/client/util/math/MatrixStack;multiply(Lorg/joml/Quaternionf;)V"),
             slice = {
                 @Slice(
@@ -36,7 +36,7 @@ public abstract class PlayerEntityRendererFallFlyingMixin extends LivingEntityRe
             },
             cancellable = true
     )
-    public void setupTransformsInject(AbstractClientPlayerEntity abstractClientPlayerEntity, MatrixStack matrixStack, float f, float g, float h, CallbackInfo ci) {
+    public void setupTransformsInject(AbstractClientPlayerEntity abstractClientPlayerEntity, MatrixStack matrixStack, float f, float g, float h, float scale, CallbackInfo ci) {
         // 如果 vivecraft 对此Inject仍不兼容 把下面代码解除注释
         /*
         if (FabricLoader.getInstance().isModLoaded("vivecraft")) {
