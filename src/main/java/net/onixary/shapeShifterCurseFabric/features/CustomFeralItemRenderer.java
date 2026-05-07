@@ -18,6 +18,8 @@ import net.minecraft.client.render.item.ItemRenderer;
 import net.minecraft.client.render.model.json.ModelTransformationMode;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.MapIdComponent;
 import net.minecraft.item.CrossbowItem;
 import net.minecraft.item.FilledMapItem;
 import net.minecraft.item.ItemStack;
@@ -32,8 +34,8 @@ import org.joml.Matrix4f;
 
 @Environment(EnvType.CLIENT)
 public class CustomFeralItemRenderer {
-	private static final RenderLayer MAP_BACKGROUND = RenderLayer.getText(new Identifier("textures/map/map_background.png"));
-	private static final RenderLayer MAP_BACKGROUND_CHECKERBOARD = RenderLayer.getText(new Identifier("textures/map/map_background_checkerboard.png"));
+	private static final RenderLayer MAP_BACKGROUND = RenderLayer.getText(Identifier.of("textures/map/map_background.png"));
+	private static final RenderLayer MAP_BACKGROUND_CHECKERBOARD = RenderLayer.getText(Identifier.of("textures/map/map_background_checkerboard.png"));
 	private static final float field_32735 = -0.4F;
 	private static final float field_32736 = 0.2F;
 	private static final float field_32737 = -0.2F;
@@ -153,7 +155,7 @@ public class CustomFeralItemRenderer {
 	}
 
 	private void renderArm(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, Arm arm) {
-		RenderSystem.setShaderTexture(0, this.client.player.getSkinTexture());
+		RenderSystem.setShaderTexture(0, this.client.player.getSkinTextures().texture());
 		PlayerEntityRenderer playerEntityRenderer = (PlayerEntityRenderer)this.entityRenderDispatcher.<AbstractClientPlayerEntity>getRenderer(this.client.player);
 		matrices.push();
 		float f = arm == Arm.RIGHT ? 1.0F : -1.0F;
@@ -226,16 +228,16 @@ public class CustomFeralItemRenderer {
 		matrices.scale(0.38F, 0.38F, 0.38F);
 		matrices.translate(-0.5F, -0.5F, 0.0F);
 		matrices.scale(0.0078125F, 0.0078125F, 0.0078125F);
-		Integer integer = FilledMapItem.getMapId(stack);
-		MapState mapState = FilledMapItem.getMapState(integer, this.client.world);
+		MapIdComponent mapId = stack.get(DataComponentTypes.MAP_ID);
+		MapState mapState = FilledMapItem.getMapState(stack, this.client.world);
 		VertexConsumer vertexConsumer = vertexConsumers.getBuffer(mapState == null ? MAP_BACKGROUND : MAP_BACKGROUND_CHECKERBOARD);
 		Matrix4f matrix4f = matrices.peek().getPositionMatrix();
-		vertexConsumer.vertex(matrix4f, -7.0F, 135.0F, 0.0F).color(255, 255, 255, 255).texture(0.0F, 1.0F).light(swingProgress).next();
-		vertexConsumer.vertex(matrix4f, 135.0F, 135.0F, 0.0F).color(255, 255, 255, 255).texture(1.0F, 1.0F).light(swingProgress).next();
-		vertexConsumer.vertex(matrix4f, 135.0F, -7.0F, 0.0F).color(255, 255, 255, 255).texture(1.0F, 0.0F).light(swingProgress).next();
-		vertexConsumer.vertex(matrix4f, -7.0F, -7.0F, 0.0F).color(255, 255, 255, 255).texture(0.0F, 0.0F).light(swingProgress).next();
+		vertexConsumer.vertex(matrix4f, -7.0F, 135.0F, 0.0F).color(255, 255, 255, 255).texture(0.0F, 1.0F).light(swingProgress);
+		vertexConsumer.vertex(matrix4f, 135.0F, 135.0F, 0.0F).color(255, 255, 255, 255).texture(1.0F, 1.0F).light(swingProgress);
+		vertexConsumer.vertex(matrix4f, 135.0F, -7.0F, 0.0F).color(255, 255, 255, 255).texture(1.0F, 0.0F).light(swingProgress);
+		vertexConsumer.vertex(matrix4f, -7.0F, -7.0F, 0.0F).color(255, 255, 255, 255).texture(0.0F, 0.0F).light(swingProgress);
 		if (mapState != null) {
-			this.client.gameRenderer.getMapRenderer().draw(matrices, vertexConsumers, integer, mapState, false, swingProgress);
+			this.client.gameRenderer.getMapRenderer().draw(matrices, vertexConsumers, mapId, mapState, false, swingProgress);
 		}
 	}
 
@@ -255,7 +257,7 @@ public class CustomFeralItemRenderer {
 		matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(f * l * 70.0F));
 		matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(f * k * -20.0F));
 		AbstractClientPlayerEntity abstractClientPlayerEntity = this.client.player;
-		RenderSystem.setShaderTexture(0, abstractClientPlayerEntity.getSkinTexture());
+		RenderSystem.setShaderTexture(0, abstractClientPlayerEntity.getSkinTextures().texture());
 		matrices.translate(f * -1.0F, 3.6F, 3.5F);
 		matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(f * 120.0F));
 		matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(200.0F));
@@ -272,7 +274,7 @@ public class CustomFeralItemRenderer {
 
 	private void applyEatOrDrinkTransformation(MatrixStack matrices, float tickDelta, Arm arm, ItemStack stack) {
 		float f = (float)this.client.player.getItemUseTimeLeft() - tickDelta + 1.0F;
-		float g = f / (float)stack.getMaxUseTime();
+		float g = f / (float)stack.getMaxUseTime(this.client.player);
 		if (g < 0.8F) {
 			float h = MathHelper.abs(MathHelper.cos(f / 4.0F * (float) Math.PI) * 0.1F);
 			matrices.translate(0.0F, h, 0.0F);
@@ -420,8 +422,8 @@ public class CustomFeralItemRenderer {
 					matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(-11.935F));
 					matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees((float)i * 65.3F));
 					matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees((float)i * -9.785F));
-					float f = (float)item.getMaxUseTime() - ((float)this.client.player.getItemUseTimeLeft() - tickDelta + 1.0F);
-					float g = f / (float)CrossbowItem.getPullTime(item);
+					float f = (float)item.getMaxUseTime(this.client.player) - ((float)this.client.player.getItemUseTimeLeft() - tickDelta + 1.0F);
+					float g = f / (float)CrossbowItem.getPullTime(item, this.client.player);
 					if (g > 1.0F) {
 						g = 1.0F;
 					}
@@ -480,7 +482,7 @@ public class CustomFeralItemRenderer {
 							matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(-13.935F));
 							matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees((float)l * 35.3F));
 							matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees((float)l * -9.785F));
-							float mx = (float)item.getMaxUseTime() - ((float)this.client.player.getItemUseTimeLeft() - tickDelta + 1.0F);
+							float mx = (float)item.getMaxUseTime(this.client.player) - ((float)this.client.player.getItemUseTimeLeft() - tickDelta + 1.0F);
 							float fxx = mx / 20.0F;
 							fxx = (fxx * fxx + fxx * 2.0F) / 3.0F;
 							if (fxx > 1.0F) {
@@ -504,7 +506,7 @@ public class CustomFeralItemRenderer {
 							matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(-55.0F));
 							matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees((float)l * 35.3F));
 							matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees((float)l * -9.785F));
-							float m = (float)item.getMaxUseTime() - ((float)this.client.player.getItemUseTimeLeft() - tickDelta + 1.0F);
+							float m = (float)item.getMaxUseTime(this.client.player) - ((float)this.client.player.getItemUseTimeLeft() - tickDelta + 1.0F);
 							float fx = m / 10.0F;
 							if (fx > 1.0F) {
 								fx = 1.0F;
