@@ -33,8 +33,7 @@ public class ModifyEntityLootPower extends Power {
         }
         if (randomSource.nextFloat() < this.chance) {
             if (targetItem != null) {
-                ItemStack finalItemStack = new ItemStack(targetItem, itemStack.getCount());
-                finalItemStack.setNbt(itemStack.getNbt());
+                ItemStack finalItemStack = itemStack.copyComponentsToNewStack(targetItem, itemStack.getCount());
                 return finalItemStack;
             } else if (targetItemStack != null) {
                 return targetItemStack.copy();
