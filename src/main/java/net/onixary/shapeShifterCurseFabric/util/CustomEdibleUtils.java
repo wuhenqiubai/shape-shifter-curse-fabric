@@ -4,9 +4,6 @@ import io.github.apace100.apoli.component.PowerHolderComponent;
 import net.minecraft.component.type.FoodComponent;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtList;
-import net.minecraft.network.PacketByteBuf;
 import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
 import net.onixary.shapeShifterCurseFabric.additional_power.CustomEdiblePower;
@@ -70,49 +67,4 @@ public class CustomEdibleUtils {
         }
     }
 
-    // Disabled for 1.21 port: FoodComponent is a record with different API
-    public static void WriteFoodComponent(PacketByteBuf buff, FoodComponent foodComponent) {
-        buff.writeInt(foodComponent.nutrition());
-        buff.writeFloat(foodComponent.saturation());
-        // buff.writeBoolean(foodComponent.isMeat()); // removed in 1.21
-        buff.writeBoolean(foodComponent.canAlwaysEat());
-        // buff.writeBoolean(foodComponent.isSnack()); // removed in 1.21
-        NbtList statusEffects = new NbtList();
-        for (var effectEntry : foodComponent.effects()) {
-            NbtCompound statusEffect = new NbtCompound();
-            statusEffect.putFloat("chance", effectEntry.probability());
-            statusEffect.put("effect", effectEntry.effect().writeNbt());
-            statusEffects.add(statusEffect);
-        }
-        NbtCompound nbt = new NbtCompound();
-        nbt.put("statusEffects", statusEffects);
-        buff.writeNbt(nbt);
-    }
-
-    /* Disabled for 1.21 port: FoodComponent builder API changed significantly
-    public static FoodComponent ReadFoodComponent(PacketByteBuf buff) {
-        int Hunger = buff.readInt();
-        float Saturation = buff.readFloat();
-        boolean Meat = buff.readBoolean();
-        boolean AlwaysEdible = buff.readBoolean();
-        boolean Snack = buff.readBoolean();
-        NbtCompound nbt = buff.readNbt();
-        NbtList statusEffects = nbt.getList("statusEffects", 10);
-        List<Pair<StatusEffectInstance, Float>> effects = statusEffects.stream().map(
-                nbt1 -> {
-                    NbtCompound statusEffect = (NbtCompound) nbt1;
-                    return Pair.of(StatusEffectInstance.fromNbt(statusEffect.getCompound("effect")), statusEffect.getFloat("chance"));
-                }
-        ).toList();
-        FoodComponent.Builder builder = new FoodComponent.Builder();
-        builder.nutrition(Hunger).saturationModifier(Saturation);
-        if (Meat) builder.meat();
-        if (AlwaysEdible) builder.alwaysEdible();
-        if (Snack) builder.snack();
-        for (Pair<StatusEffectInstance, Float> effect : effects) {
-            builder.statusEffect(effect.getFirst(), effect.getSecond());
-        }
-        return builder.build();
-    }
-    */
 }
