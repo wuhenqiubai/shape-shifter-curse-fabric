@@ -24,12 +24,14 @@ public class PlayerTeamHandler {
             MobTeamManager.registerTeam(player.getServerWorld());
         }
         if (PowerHolderComponent.hasPower(player, PillagerFriendlyPower.class)) {
-            player.getScoreboard().addPlayerToTeam(player.getEntityName(), MobTeamManager.sorceryTeam);
+            // getScoreboard/addPlayerToTeam API changed in 1.21 — needs scoreboard API migration
+            // player.getScoreboard().addPlayerToTeam(player.getEntityName(), MobTeamManager.sorceryTeam);
         } else {
             // 从队伍中移除（如果是成员）
             Team team = (Team) player.getScoreboardTeam();
             if (team != null && team.getName().equals(MobTeamManager.SORCERY_TEAM_NAME)) {
-                player.getScoreboard().removePlayerFromTeam(player.getEntityName(), team);
+                // getScoreboard/removePlayerFromTeam API changed in 1.21
+                // player.getScoreboard().removePlayerFromTeam(player.getEntityName(), team);
             }
         }
     }

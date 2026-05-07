@@ -297,10 +297,12 @@ public class PlayerFormDynamic extends PlayerFormBase{
         try {
             Identifier PowerID = Identifier.tryParse(powerData.get("type").getAsString());
             PowerFactory<Power> pf = null;
-            if (NamespaceAlias.hasAlias(PowerID)) {
-                pf = ApoliRegistries.POWER_FACTORY.get(NamespaceAlias.resolveAlias(PowerID));
-            }
-            else {
+            // NamespaceAlias removed in Apoli 2.12.0
+            // if (NamespaceAlias.hasAlias(PowerID)) {
+            //     pf = ApoliRegistries.POWER_FACTORY.get(NamespaceAlias.resolveAlias(PowerID));
+            // }
+            // else
+            {
                 pf = ApoliRegistries.POWER_FACTORY.get(PowerID);
             }
             if (pf == null) {
