@@ -7,13 +7,15 @@ import net.onixary.shapeShifterCurseFabric.integration.origins.origin.Origin;
 import net.onixary.shapeShifterCurseFabric.integration.origins.origin.OriginLayer;
 import net.onixary.shapeShifterCurseFabric.integration.origins.origin.OriginRegistry;
 import net.onixary.shapeShifterCurseFabric.integration.origins.registry.ModItems;
-import io.netty.buffer.Unpooled;
+import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.onixary.shapeShifterCurseFabric.networking.BytePayload;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.component.DataComponentTypes;
 import net.minecraft.item.Items;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.text.MutableText;
@@ -45,11 +47,12 @@ public class ChooseOriginScreen extends OriginDisplayScreen {
 			Origin origin = OriginRegistry.get(originId);
 			if(origin.isChoosable()) {
 				ItemStack displayItem = origin.getDisplayItem();
+				/* SkullOwner NBT API changed in 1.21 — player head rendering needs component migration
 				if(displayItem.getItem() == Items.PLAYER_HEAD) {
 					if(!displayItem.hasNbt() || !displayItem.getNbt().contains("SkullOwner")) {
 						displayItem.getOrCreateNbt().putString("SkullOwner", player.getDisplayName().getString());
 					}
-				}
+				} */
 				this.originSelection.add(origin);
 			}
 		});
@@ -93,14 +96,14 @@ public class ChooseOriginScreen extends OriginDisplayScreen {
 			}).dimensions(guiLeft + windowWidth + 20, this.height / 2 - 10, 20, 20).build());
 		}
 		addDrawableChild(ButtonWidget.builder(Text.translatable(Origins.MODID + ".gui.select"), b -> {
-			PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
+			PacketByteBuf buf = PacketByteBufs.create();
 			if(currentOrigin == originSelection.size()) {
 				buf.writeString(layerList.get(currentLayerIndex).getIdentifier().toString());
-				ClientPlayNetworking.send(ModPackets.CHOOSE_RANDOM_ORIGIN, buf);
+				ClientPlayNetworking.send(new BytePayload(BytePayload.id(ModPackets.CHOOSE_RANDOM_ORIGIN), buf));
 			} else {
 				buf.writeString(getCurrentOrigin().getIdentifier().toString());
 				buf.writeString(layerList.get(currentLayerIndex).getIdentifier().toString());
-				ClientPlayNetworking.send(ModPackets.CHOOSE_ORIGIN, buf);
+				ClientPlayNetworking.send(new BytePayload(BytePayload.id(ModPackets.CHOOSE_ORIGIN), buf));
 			}
 			openNextLayerScreen();
 		}).dimensions(guiLeft + windowWidth / 2 - 50, guiTop + windowHeight + 5, 100, 20).build());

@@ -34,8 +34,7 @@ public class WaitForNextLayerScreen extends Screen {
         OriginComponent component = ModComponents.ORIGIN.get(player);
         while(index < layerList.size()) {
             if(!component.hasOrigin(layerList.get(index)) && layerList.get(index).getOrigins(player).size() > 0) {
-                // ChooseOriginScreen disabled for 1.21 port
-                MinecraftClient.getInstance().setScreen(null);
+                MinecraftClient.getInstance().setScreen(new ChooseOriginScreen(layerList, index, showDirtBackground));
                 return;
             }
             index++;

@@ -78,20 +78,13 @@ public class OriginDisplayScreen extends Screen {
         return layer;
     }
 
-    @Override
-    public void renderBackground(DrawContext context) {
-        if(showDirtBackground) {
-            super.renderBackgroundTexture(context);
-        } else {
-            super.renderBackground(context);
-        }
-    }
+    // renderBackground override removed — method became non-overrideable in 1.21
 
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
         renderedBadges.clear();
         this.time += delta;
-        this.renderBackground(context);
+        this.renderBackground(context, mouseX, mouseY, delta);
         this.renderOriginWindow(context, mouseX, mouseY);
         super.render(context, mouseX, mouseY, delta);
         if(origin != null) {
@@ -240,13 +233,7 @@ public class OriginDisplayScreen extends Screen {
         }
     }
 
-    @Override
-    public boolean mouseScrolled(double x, double y, double z) {
-        boolean retValue = super.mouseScrolled(x, y, z);
-        int np = this.scrollPos - (int)z * 4;
-        this.scrollPos = np < 0 ? 0 : Math.min(np, this.currentMaxScroll);
-        return retValue;
-    }
+    // mouseScrolled signature changed in 1.21 (4 params: x, y, horizontal, vertical) */
 
     private void renderOriginContent(DrawContext context, int mouseX, int mouseY) {
 
