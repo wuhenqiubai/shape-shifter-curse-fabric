@@ -6,6 +6,7 @@ import io.github.apace100.calio.data.SerializableData;
 import io.github.apace100.calio.data.SerializableDataTypes;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.registry.Registries;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.util.Identifier;
 import net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric;
 import org.jetbrains.annotations.Nullable;
@@ -32,7 +33,7 @@ public class OptionalEffectImmunityPower {
                     if (data.isPresent("effect")) {
                         StatusEffect effect = getStatusEffect(data.get("effect"));
                         if (effect != null) {
-                            power.addEffect(effect);
+                            power.addEffect((RegistryEntry<StatusEffect>) effect);
                         }
                     }
                     if (data.isPresent("effects")) {
@@ -40,7 +41,7 @@ public class OptionalEffectImmunityPower {
                         for (Identifier effectID : effectIDs) {
                             StatusEffect effect = getStatusEffect(effectID);
                             if (effect != null) {
-                                power.addEffect(effect);
+                                power.addEffect((RegistryEntry<StatusEffect>) effect);
                             }
                         }
                     }
