@@ -53,7 +53,8 @@ public class CustomEdiblePlayerAMixin {
             if (fc == null) {
                 return original;
             }
-            return fc.isSnack() ? 16 : 32;
+            // isSnack() removed in 1.21 — useStandardEatingSpeed default is 32 ticks
+            return 32;
         }
         return original;
     }
@@ -65,7 +66,8 @@ public class CustomEdiblePlayerAMixin {
             if (fc == null) {
                 return original;
             }
-            return fc.isSnack() ? 16 : 32;
+            // isSnack() removed in 1.21 — useStandardEatingSpeed default is 32 ticks
+            return 32;
         }
         return original;
     }
@@ -77,7 +79,8 @@ public class CustomEdiblePlayerAMixin {
             if (fc == null) {
                 return original;
             }
-            return fc.isSnack() ? 16 : 32;
+            // isSnack() removed in 1.21 — useStandardEatingSpeed default is 32 ticks
+            return 32;
         }
         return original;
     }

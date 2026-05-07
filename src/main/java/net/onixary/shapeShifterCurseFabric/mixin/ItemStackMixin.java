@@ -67,8 +67,10 @@ public abstract class ItemStackMixin {
     private void shape_shifter_curse$getTooltip(PlayerEntity player, TooltipContext context, CallbackInfoReturnable<List<Text>> cir) {
         ItemStack realThis = (ItemStack) (Object) this;
         List<Text> tooltip = cir.getReturnValue();
-        if (realThis.hasNbt()) {
-            if (realThis.getNbt().contains("MorphScaleItem") && realThis.getNbt().getBoolean("MorphScaleItem")) {
+        var nbt = realThis.get(net.minecraft.component.DataComponentTypes.CUSTOM_DATA);
+        if (nbt != null) {
+            var compound = nbt.copyNbt();
+            if (compound.contains("MorphScaleItem") && compound.getBoolean("MorphScaleItem")) {
                 tooltip.add(Text.translatable("tooltip.shape_shifter_curse.morphscale_item").formatted(Formatting.GRAY));
             }
         }

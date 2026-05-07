@@ -32,13 +32,13 @@ public abstract class CustomEdiblePlayerBMixin extends LivingEntity {
             if (foodComponent == null) {
                 return;
             }
-            playerEntity.getHungerManager().add(foodComponent.getHunger(), foodComponent.getSaturationModifier());
+            playerEntity.getHungerManager().eat(foodComponent);
             playerEntity.incrementStat(Stats.USED.getOrCreateStat(stack.getItem()));
             world.playSound((PlayerEntity)null, this.getX(), this.getY(), this.getZ(), SoundEvents.ENTITY_PLAYER_BURP, SoundCategory.PLAYERS, 0.5F, world.random.nextFloat() * 0.1F + 0.9F);
             if (playerEntity instanceof ServerPlayerEntity spe) {
                 Criteria.CONSUME_ITEM.trigger(spe, stack);
             }
-            cir.setReturnValue(super.eatFood(world, stack));
+            cir.setReturnValue(super.eatFood(world, stack, foodComponent));
         }
     }
 }
