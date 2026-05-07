@@ -87,8 +87,7 @@ public class RegCustomItem {
     public static final Item WEB_PROJECTILE = register("web_projectile", new Item(new Item.Settings()));
     public static final Item SILK_DEW = register("silk_dew", new SilkDew(new Item.Settings()));
 
-    // Disabled for 1.21 port: ItemGroup.builder API changed
-    public static final ItemGroup SSC_GROUP = new ItemGroup.Builder()
+    public static final ItemGroup SSC_GROUP = new ItemGroup.Builder(ItemGroup.Row.TOP, 0)
             .icon(() -> new ItemStack(ICON_CURSED_MOON))
             .displayName(Text.translatable("itemGroup.shape_shifter_curse.sscitems"))
             .entries((context, entries) -> {
