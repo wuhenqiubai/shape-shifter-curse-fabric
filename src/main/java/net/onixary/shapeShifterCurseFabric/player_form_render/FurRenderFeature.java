@@ -79,8 +79,8 @@ public class FurRenderFeature <T extends LivingEntity, M extends BipedEntityMode
             this.rotation = new Vec3d(rot.getX(), rot.getY(), rot.getZ());
         }
         public ModelTransformation(IAnimation anim, String bone_name) {
-            Vec3f pos = anim.get3DTransform(bone_name, TransformType.POSITION, MinecraftClient.getInstance().getTickDelta(), new Vec3f(0,0,0));
-            Vec3f rot = anim.get3DTransform(bone_name, TransformType.ROTATION, MinecraftClient.getInstance().getTickDelta(), new Vec3f(0,0,0));
+            Vec3f pos = anim.get3DTransform(bone_name, TransformType.POSITION, MinecraftClient.getInstance().getRenderTickCounter().getTickDelta(false), new Vec3f(0,0,0));
+            Vec3f rot = anim.get3DTransform(bone_name, TransformType.ROTATION, MinecraftClient.getInstance().getRenderTickCounter().getTickDelta(false), new Vec3f(0,0,0));
             this.position = new Vec3d(pos.getX(), pos.getY(), pos.getZ());
             this.rotation = new Vec3d(rot.getX(), rot.getY(), rot.getZ());
         }

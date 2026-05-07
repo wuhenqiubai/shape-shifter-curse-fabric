@@ -2,6 +2,7 @@ package net.onixary.shapeShifterCurseFabric.player_form_render;
 
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.onixary.shapeShifterCurseFabric.networking.BytePayload;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.NotNull;
@@ -18,9 +19,12 @@ public class OriginalFur implements ModInitializer {
     };
     @Override
     public void onInitialize() {
-        ServerPlayNetworking.registerGlobalReceiver(C2S_REQ_ORIGIN_UUID, (server, player, handler, buf, responseSender) -> {
+        BytePayload.registerC2S(C2S_REQ_ORIGIN_UUID);
+        ServerPlayNetworking.registerGlobalReceiver(BytePayload.id(C2S_REQ_ORIGIN_UUID), (payload, context) -> {
+            var buf = payload.data();
             RequestOriginPacket packet = new RequestOriginPacket();
             packet.read(buf);
+            var server = context.player().getServer();
             var rqPlayer = server.getPlayerManager().getPlayer(packet.requestedPlayerUUID);
             if (rqPlayer != null){
                 ArrayList<Identifier> ids = new ArrayList<>();

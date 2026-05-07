@@ -496,8 +496,9 @@ public class alib {
         return ((crc << 32) | adl) + crc << 8;
     }
     public static boolean stackCustomModelDataEquals(@NotNull ItemStack stack, int data) {
-        if (!stack.getOrCreateNbt().contains("CustomModelData")) {return false;}
-        return stack.getOrCreateNbt().getInt("CustomModelData") == data;
+        var nbt = stack.getOrDefault(net.minecraft.component.DataComponentTypes.CUSTOM_DATA, net.minecraft.component.type.NbtComponent.DEFAULT).copyNbt();
+        if (!nbt.contains("CustomModelData")) {return false;}
+        return nbt.getInt("CustomModelData") == data;
     }
     public static long getHash64(String s) {
         return getHash64(s.getBytes(StandardCharsets.UTF_8));

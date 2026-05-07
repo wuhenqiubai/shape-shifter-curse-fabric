@@ -69,13 +69,13 @@ public class OriginalFurClient implements ClientModInitializer {
             if (b == null) {return;}
             if (buffer == null) {buffer = bufferSource.getBuffer(renderType);}
             var cubes = b.getCubes();
-            int packedOverlay = this.getPackedOverlay(animatable, 0.0F, MinecraftClient.getInstance().getTickDelta());
+            int packedOverlay = this.getPackedOverlay(animatable, 0.0F, MinecraftClient.getInstance().getRenderTickCounter().getTickDelta(false));
             for (var child_bones : b.getChildBones()) {
                 cubes.addAll(child_bones.getCubes());
             }
             @Nullable VertexConsumer finalBuffer = buffer;
             cubes.forEach(geoCube -> {
-                renderRecursively(poseStack, this.animatable, b, renderType, bufferSource, finalBuffer, false, MinecraftClient.getInstance().getTickDelta(), packedLight, packedOverlay, 1, 1, 1, 1);
+                renderRecursively(poseStack, this.animatable, b, renderType, bufferSource, finalBuffer, false, MinecraftClient.getInstance().getRenderTickCounter().getTickDelta(false), packedLight, packedOverlay, -1);
             });
             poseStack.pop();
         }
