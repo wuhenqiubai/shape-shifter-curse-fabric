@@ -3,6 +3,8 @@ package net.onixary.shapeShifterCurseFabric.blocks;
 import it.unimi.dsi.fastutil.objects.Object2FloatMap;
 import it.unimi.dsi.fastutil.objects.Object2FloatOpenHashMap;
 import net.minecraft.block.*;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.FoodComponent;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.ai.pathing.NavigationType;
@@ -59,18 +61,16 @@ public class WebComposterBlock extends Block implements InventoryProvider {
         if (itemStack.isIn(ModTags.Meat_Tag)) {
             return true;
         }
-        FoodComponent foodComponent = itemStack.getItem().getFoodComponent();
-        if (foodComponent != null && foodComponent.isMeat()) {
+        FoodComponent foodComponent = itemStack.get(DataComponentTypes.FOOD);
+        if (foodComponent != null) {
             return true;
         }
         return false;
     }
 
     public static float getIncreaseChance(ItemStack itemStack) {
-        FoodComponent foodComponent = itemStack.getItem().getFoodComponent();
+        FoodComponent foodComponent = itemStack.get(DataComponentTypes.FOOD);
         if (foodComponent != null) {
-            // 统一概率即可
-            //return Math.min(1.0f, foodComponent.getHunger() / 6.0f);
             return 0.55f;
         }
         return 0.5f;
