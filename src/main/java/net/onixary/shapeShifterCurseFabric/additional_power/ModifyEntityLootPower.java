@@ -10,12 +10,8 @@ import io.github.apace100.calio.data.SerializableDataTypes;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.registry.Registries;
 import net.minecraft.util.math.random.Random;
 import net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric;
-
-import java.util.List;
 
 public class ModifyEntityLootPower extends Power {
     private final ConditionFactory<ItemStack>.Instance FromItemCondition;
