@@ -34,13 +34,14 @@ public class DiggingBareHandCondition {
         }
 
         if(playerEntity.getInventory().getMainHandStack().isEmpty()){
-            return true;
+            return true;  // bare hand
         }
-        else if(playerEntity.getInventory().getMainHandStack().getItem() instanceof ToolItem toolItem){
-            return true /* getMiningLevel removed in 1.21, TODO */;
+        else if(playerEntity.getInventory().getMainHandStack().getItem() instanceof ToolItem){
+            // getMiningLevel removed in 1.21; any tool in hand means not barehand
+            return false;
         }
 
-        return true;
+        return true;  // non-tool item in hand, counts as bare hand
 
     }
 

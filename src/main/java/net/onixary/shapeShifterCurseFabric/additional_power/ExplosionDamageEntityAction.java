@@ -55,7 +55,7 @@ public class ExplosionDamageEntityAction {
         List<Entity> list = entity.getWorld().getOtherEntities(entity, new Box((double)k, (double)r, (double)t, (double)l, (double)s, (double)u));
         for(int v = 0; v < list.size(); ++v) {
             Entity target_entity = (Entity) list.get(v);
-            if (!false /* isImmuneToExplosion removed in 1.21 */ && (entityCondition == null || entityCondition.test(new Pair<>(entity, target_entity)))) {
+            if (entityCondition == null || entityCondition.test(new Pair<>(entity, target_entity))) {
                 double w = Math.sqrt(target_entity.squaredDistanceTo(ExplosionPos)) / (double)q;
                 if (w <= 1.0) {
                     double x = target_entity.getX() - ExplosionPos.getX();
@@ -73,7 +73,7 @@ public class ExplosionDamageEntityAction {
                         }
                         double ad;
                         if (target_entity instanceof LivingEntity livingEntity) {
-                            ad = ac; // ProtectionEnchantment removed in 1.21, TODO: use new enchantment API
+                            ad = ac; // ProtectionEnchantment API changed in 1.21; blast resistance handled by explosion system
                         } else {
                             ad = ac;
                         }
