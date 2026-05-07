@@ -1,10 +1,8 @@
 package net.onixary.shapeShifterCurseFabric.util;
 
-import com.mojang.datafixers.util.Pair;
 import io.github.apace100.apoli.component.PowerHolderComponent;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.component.type.FoodComponent;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
@@ -72,7 +70,7 @@ public class CustomEdibleUtils {
         }
     }
 
-    /* Disabled for 1.21 port: FoodComponent is a record with different API
+    // Disabled for 1.21 port: FoodComponent is a record with different API
     public static void WriteFoodComponent(PacketByteBuf buff, FoodComponent foodComponent) {
         buff.writeInt(foodComponent.nutrition());
         buff.writeFloat(foodComponent.saturation());
@@ -83,14 +81,13 @@ public class CustomEdibleUtils {
         for (var effectEntry : foodComponent.effects()) {
             NbtCompound statusEffect = new NbtCompound();
             statusEffect.putFloat("chance", effectEntry.probability());
-            // statusEffect.put("effect", effectEntry.effect().writeNbt(new NbtCompound())); // API changed
+            statusEffect.put("effect", effectEntry.effect().writeNbt());
             statusEffects.add(statusEffect);
         }
         NbtCompound nbt = new NbtCompound();
         nbt.put("statusEffects", statusEffects);
         buff.writeNbt(nbt);
     }
-    */
 
     /* Disabled for 1.21 port: FoodComponent builder API changed significantly
     public static FoodComponent ReadFoodComponent(PacketByteBuf buff) {
