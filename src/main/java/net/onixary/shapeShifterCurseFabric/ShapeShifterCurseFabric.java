@@ -32,6 +32,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Vec3d;
 import net.onixary.shapeShifterCurseFabric.additional_power.*;
 import net.onixary.shapeShifterCurseFabric.advancement.*;
+import net.onixary.shapeShifterCurseFabric.blocks.RegCustomBlock;
 import net.onixary.shapeShifterCurseFabric.command.CustomFormArgumentType;
 import net.onixary.shapeShifterCurseFabric.command.FormArgumentType;
 import net.onixary.shapeShifterCurseFabric.command.ShapeShifterCurseCommand;
@@ -39,15 +40,12 @@ import net.onixary.shapeShifterCurseFabric.config.ClientConfig;
 import net.onixary.shapeShifterCurseFabric.config.CommonConfig;
 import net.onixary.shapeShifterCurseFabric.config.PlayerCustomConfig;
 import net.onixary.shapeShifterCurseFabric.entity.RegCustomEntity;
-// RegTransformativeEntity disabled for 1.21 port
 import net.onixary.shapeShifterCurseFabric.form_giving_custom_entity.RegTransformativeEntitySpawnEgg;
-// TransformativeEntitySpawning disabled for 1.21 port (SpawnRestriction API)
 import net.onixary.shapeShifterCurseFabric.form_giving_custom_entity.axolotl.TransformativeAxolotlEntity;
 import net.onixary.shapeShifterCurseFabric.form_giving_custom_entity.bat.TransformativeBatEntity;
 import net.onixary.shapeShifterCurseFabric.form_giving_custom_entity.ocelot.TransformativeOcelotEntity;
 import net.onixary.shapeShifterCurseFabric.form_giving_custom_entity.spider.TransformativeSpiderEntity;
 import net.onixary.shapeShifterCurseFabric.form_giving_custom_entity.wolf.TransformativeWolfEntity;
-import net.onixary.shapeShifterCurseFabric.blocks.RegCustomBlock;
 import net.onixary.shapeShifterCurseFabric.items.RegCustomItem;
 import net.onixary.shapeShifterCurseFabric.items.RegCustomPotions;
 import net.onixary.shapeShifterCurseFabric.mana.ManaRegistries;
@@ -62,18 +60,13 @@ import net.onixary.shapeShifterCurseFabric.player_form.ability.FormAbilityManage
 import net.onixary.shapeShifterCurseFabric.player_form.ability.RegPlayerFormComponent;
 import net.onixary.shapeShifterCurseFabric.player_form.instinct.InstinctTicker;
 import net.onixary.shapeShifterCurseFabric.player_form.transform.TransformManager;
-// import net.onixary.shapeShifterCurseFabric.recipes.BrewingRecipeReloadListener; // disabled: BrewingRecipeUtils is .bak
 import net.onixary.shapeShifterCurseFabric.recipes.RecipeSerializerRegister;
 import net.onixary.shapeShifterCurseFabric.screen_effect.TransformOverlay;
 import net.onixary.shapeShifterCurseFabric.status_effects.RegOtherStatusEffects;
 import net.onixary.shapeShifterCurseFabric.status_effects.RegTStatusEffect;
 import net.onixary.shapeShifterCurseFabric.status_effects.RegTStatusPotionEffect;
 import net.onixary.shapeShifterCurseFabric.status_effects.attachment.EffectManager;
-import net.onixary.shapeShifterCurseFabric.util.PatronUtils;
-import net.onixary.shapeShifterCurseFabric.util.AttackEntityDataTracker;
-import net.onixary.shapeShifterCurseFabric.util.PlayerEventHandler;
-import net.onixary.shapeShifterCurseFabric.util.TickManager;
-import net.onixary.shapeShifterCurseFabric.util.TrinketDataPackReloadListener;
+import net.onixary.shapeShifterCurseFabric.util.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -83,6 +76,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 
+// RegTransformativeEntity disabled for 1.21 port
+// TransformativeEntitySpawning disabled for 1.21 port (SpawnRestriction API)
+// import net.onixary.shapeShifterCurseFabric.recipes.BrewingRecipeReloadListener; // disabled: BrewingRecipeUtils is .bak
 
 
 public class ShapeShifterCurseFabric implements ModInitializer {
@@ -196,7 +192,7 @@ public class ShapeShifterCurseFabric implements ModInitializer {
         RegTStatusEffect.initialize();
         RegTStatusPotionEffect.initialize();
         PlayerEventHandler.register();
-        // // Disabled for 1.21 port // Disabled for 1.21 port (Origin/OriginLayer .bak)
+        // Disabled for 1.21 port  Disabled for 1.21 port (Origin/OriginLayer .bak)
         RegOtherStatusEffects.initialize();
         // TransformativeEntitySpawning.addEntitySpawns(); // Disabled for 1.21 port
         BatAttachEventHandler.register();
@@ -204,10 +200,10 @@ public class ShapeShifterCurseFabric implements ModInitializer {
         // 注册动画（需要在服务端也执行以支持变换动画的同步）
         registerAnimations();
 
-        // Disabled for 1.21 port: AdditionalEntityConditions.register();
-        // Disabled for 1.21 port: AdditionalItemCondition.register();
-        // Disabled for 1.21 port: AdditionalPowers.register();
-        // Disabled for 1.21 port: AdditionalEntityActions.register();
+        AdditionalEntityConditions.register();
+        AdditionalItemCondition.register();
+        AdditionalPowers.register();
+        AdditionalEntityActions.register();
 
         // 注册召唤物属性
         MinionRegister.register();

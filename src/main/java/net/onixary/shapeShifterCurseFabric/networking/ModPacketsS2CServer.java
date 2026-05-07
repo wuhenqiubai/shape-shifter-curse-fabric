@@ -233,7 +233,7 @@ public class ModPacketsS2CServer {
 
     public static void OpenFormSelectMenu(ServerPlayerEntity player, PlayerEntity target) {
         PacketByteBuf buf = PacketByteBufs.create();
-        buf.writeString(target.getEntityName());
+	    buf.writeString(String.valueOf(target.getName()));
         buf.writeUuid(target.getUuid());
         ServerPlayNetworking.send(player, new BytePayload(BytePayload.id(ModPackets.OPEN_FORM_SELECT_MENU), buf));
     }
