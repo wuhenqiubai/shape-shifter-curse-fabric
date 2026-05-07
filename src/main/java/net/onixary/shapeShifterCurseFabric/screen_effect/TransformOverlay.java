@@ -7,6 +7,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.*;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
+import org.joml.Matrix4f;
 
 import static net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric.MOD_ID;
 
@@ -27,7 +28,6 @@ public final class TransformOverlay {
 
     @Environment(EnvType.CLIENT)
     public void render()  {
-        //double d = MathHelper.lerp(strength, 2.0D, 1.0D);
         if(!enableOverlay){
             return;
         }
@@ -35,8 +35,36 @@ public final class TransformOverlay {
         MinecraftClient client = MinecraftClient.getInstance();
         int i = client.getWindow().getScaledWidth();
         int j = client.getWindow().getScaledHeight();
-        // RenderSystem/BufferBuilder API changed in 1.21 - vertex() needs Matrix4f, .next() removed
-        // Disabled rendering for 1.21 port - needs full BufferBuilder API migration
+        Matrix4f matrix4f = new Matrix4f().identity();
+        RenderSystem.disableDepthTest();
+        RenderSystem.depthMask(false);
+        RenderSystem.enableBlend();
+        RenderSystem.defaultBlendFunc();
+        RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, strength_nausea);
+        RenderSystem.setShader(GameRenderer::getPositionTexProgram);
+        RenderSystem.setShaderTexture(0, nausea_texture);
+        Tessellator tessellator_nausea = Tessellator.getInstance();
+        BufferBuilder bufferBuilder_nausea = tessellator_nausea.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE);
+        bufferBuilder_nausea.vertex(matrix4f, 0, j, -90.0F).texture(0.0F, 1.0F);
+        bufferBuilder_nausea.vertex(matrix4f, i, j, -90.0F).texture(1.0F, 1.0F);
+        bufferBuilder_nausea.vertex(matrix4f, i, 0, -90.0F).texture(1.0F, 0.0F);
+        bufferBuilder_nausea.vertex(matrix4f, 0, 0, -90.0F).texture(0.0F, 0.0F);
+        BufferRenderer.drawWithGlobalProgram(bufferBuilder_nausea.end());
+        RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, strength_black);
+        RenderSystem.setShader(GameRenderer::getPositionTexProgram);
+        RenderSystem.setShaderTexture(0, black_texture);
+        Tessellator tessellator_black = Tessellator.getInstance();
+        BufferBuilder bufferBuilder_black = tessellator_black.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE);
+        bufferBuilder_black.vertex(matrix4f, 0, j, -90.0F).texture(0.0F, 1.0F);
+        bufferBuilder_black.vertex(matrix4f, i, j, -90.0F).texture(1.0F, 1.0F);
+        bufferBuilder_black.vertex(matrix4f, i, 0, -90.0F).texture(1.0F, 0.0F);
+        bufferBuilder_black.vertex(matrix4f, 0, 0, -90.0F).texture(0.0F, 0.0F);
+        BufferRenderer.drawWithGlobalProgram(bufferBuilder_black.end());
+        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+        RenderSystem.defaultBlendFunc();
+        RenderSystem.disableBlend();
+        RenderSystem.depthMask(true);
+        RenderSystem.enableDepthTest();
     }
 
     public void setEnableOverlay(boolean enableOverlay) {
