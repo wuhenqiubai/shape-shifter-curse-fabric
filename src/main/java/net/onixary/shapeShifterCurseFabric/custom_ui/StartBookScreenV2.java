@@ -1,7 +1,7 @@
 package net.onixary.shapeShifterCurseFabric.custom_ui;
 
-import io.netty.buffer.Unpooled;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
@@ -12,6 +12,7 @@ import net.minecraft.network.PacketByteBuf;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric;
+import net.onixary.shapeShifterCurseFabric.networking.BytePayload;
 import net.onixary.shapeShifterCurseFabric.networking.ModPackets;
 
 import java.util.OptionalInt;
@@ -54,10 +55,8 @@ public class StartBookScreenV2 extends Screen {
         this.addDrawableChild(ButtonWidget.builder(
                 Text.translatable("screen.shape-shifter-curse.book_of_shape_shifter.start_button_text"),
                 button -> {
-                    PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
-                    // buf.writeUuid(currentPlayer.getUuid());
-                    // 发送到服务端
-                    ClientPlayNetworking.send(ModPackets.VALIDATE_START_BOOK_BUTTON, buf);
+                    PacketByteBuf buf = PacketByteBufs.create();
+                    ClientPlayNetworking.send(new BytePayload(BytePayload.id(ModPackets.VALIDATE_START_BOOK_BUTTON), buf));
                     if(MinecraftClient.getInstance().currentScreen instanceof StartBookScreenV2){
                         MinecraftClient.getInstance().setScreen(null);
                     }

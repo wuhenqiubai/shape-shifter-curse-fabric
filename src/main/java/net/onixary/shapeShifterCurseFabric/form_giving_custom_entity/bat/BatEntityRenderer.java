@@ -28,13 +28,14 @@ public class BatEntityRenderer extends MobEntityRenderer<BatEntity, net.minecraf
         matrixStack.scale(0.35F, 0.35F, 0.35F);
     }
 
-    protected void setupTransforms(BatEntity batEntity, MatrixStack matrixStack, float f, float g, float h) {
+    @Override
+    protected void setupTransforms(BatEntity batEntity, MatrixStack matrixStack, float f, float g, float h, float scale) {
         if (batEntity.isRoosting()) {
             matrixStack.translate(0.0F, -0.1F, 0.0F);
         } else {
             matrixStack.translate(0.0F, MathHelper.cos(f * 0.3F) * 0.1F, 0.0F);
         }
 
-        super.setupTransforms(batEntity, matrixStack, f, g, h);
+        super.setupTransforms(batEntity, matrixStack, f, g, h, scale);
     }
 }

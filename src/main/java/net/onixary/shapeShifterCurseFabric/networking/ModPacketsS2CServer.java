@@ -243,7 +243,7 @@ public class ModPacketsS2CServer {
                 nearPlayer -> {
                     PacketByteBuf buf = virtualTotemPower.create_packet_byte_buf();
                     if (buf != null) {
-                        ServerPlayNetworking.send(nearPlayer, ModPackets.ACTIVE_VIRTUAL_TOTEM, buf);
+                        ServerPlayNetworking.send(nearPlayer, new BytePayload(BytePayload.id(ModPackets.ACTIVE_VIRTUAL_TOTEM), buf));
                     }
                 }
         );

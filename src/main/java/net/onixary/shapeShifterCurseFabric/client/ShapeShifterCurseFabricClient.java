@@ -21,17 +21,17 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric;
 import net.onixary.shapeShifterCurseFabric.additional_power.CustomEdiblePower;
-// ItemStorePower disabled for 1.21 port
+import net.onixary.shapeShifterCurseFabric.additional_power.ItemStorePower;
 import net.onixary.shapeShifterCurseFabric.additional_power.LevitatePower;
 import net.onixary.shapeShifterCurseFabric.blocks.RegCustomBlock;
 import net.onixary.shapeShifterCurseFabric.custom_ui.BookOfShapeShifterScreenV2_P1;
-// StartBookScreenV2 disabled for 1.21 port
+import net.onixary.shapeShifterCurseFabric.custom_ui.StartBookScreenV2;
 import net.onixary.shapeShifterCurseFabric.data.StaticParams;
 import net.onixary.shapeShifterCurseFabric.entity.RegCustomEntityRenderer;
 import net.onixary.shapeShifterCurseFabric.form_giving_custom_entity.axolotl.TAxolotlEntityRenderer;
-// BatEntityRenderer disabled for 1.21 port (setupTransforms API)
+import net.onixary.shapeShifterCurseFabric.form_giving_custom_entity.bat.BatEntityRenderer;
 import net.onixary.shapeShifterCurseFabric.form_giving_custom_entity.ocelot.TOcelotEntityRenderer;
-// Spider entity disabled for 1.21 port
+import net.onixary.shapeShifterCurseFabric.form_giving_custom_entity.spider.TSpiderEntityRenderer;
 import net.onixary.shapeShifterCurseFabric.integration.origins.Origins;
 import net.onixary.shapeShifterCurseFabric.items.RegCustomItem;
 import net.onixary.shapeShifterCurseFabric.items.armors.MorphscaleArmorRenderer;
@@ -40,7 +40,7 @@ import net.onixary.shapeShifterCurseFabric.mana.ManaRegistriesClient;
 import net.onixary.shapeShifterCurseFabric.mana.ManaUtils;
 import net.onixary.shapeShifterCurseFabric.minion.MinionRegisterClient;
 import net.onixary.shapeShifterCurseFabric.minion.mobs.AnubisWolfMinionEntityRenderer;
-// ModPacketsS2C disabled for 1.21 port
+import net.onixary.shapeShifterCurseFabric.networking.ModPacketsS2C;
 import net.onixary.shapeShifterCurseFabric.player_animation.RegPlayerAnimation;
 import net.onixary.shapeShifterCurseFabric.render.render_layer.FurGradientRenderLayer;
 import net.onixary.shapeShifterCurseFabric.util.ClientTicker;
@@ -113,8 +113,8 @@ public class ShapeShifterCurseFabricClient implements ClientModInitializer {
 			// Disabled for 1.21 port
 			if (false /* Disabled for 1.21 port */) {
 				// Disabled for 1.21 port
-				Object startScreen = null;
-				// startScreen.currentPlayer = user;
+				StartBookScreenV2 startScreen = new StartBookScreenV2();
+				startScreen.currentPlayer = user;
 				MinecraftClient.getInstance().setScreen(startScreen);
 			}
 		}
@@ -132,7 +132,7 @@ public class ShapeShifterCurseFabricClient implements ClientModInitializer {
 			}
 //			if (!(MinecraftClient.getInstance().currentScreen instanceof StartBookScreen)) {
 //				StartBookScreen startScreen = new StartBookScreen();
-//				// startScreen.currentPlayer = user;
+//				startScreen.currentPlayer = user;
 //				MinecraftClient.getInstance().setScreen(startScreen);
 //			}
 		}
@@ -144,7 +144,7 @@ public class ShapeShifterCurseFabricClient implements ClientModInitializer {
 		EntityRendererRegistry.register(T_AXOLOTL, TAxolotlEntityRenderer::new);
 		EntityRendererRegistry.register(T_OCELOT, TOcelotEntityRenderer::new);
 		EntityRendererRegistry.register(T_WOLF, AnubisWolfMinionEntityRenderer::new);
-		// EntityRendererRegistry.register(T_SPIDER, TSpiderEntityRenderer::new); // TSpiderEntityRenderer .bak
+		EntityRendererRegistry.register(T_SPIDER, TSpiderEntityRenderer::new);
 
 		MinionRegisterClient.registerClient();
 	}
@@ -176,7 +176,7 @@ public class ShapeShifterCurseFabricClient implements ClientModInitializer {
 		if (!MinecraftClient.getInstance().isPaused()) {
 			ManaUtils.manaTick(minecraftClient.player);
 		}
-		// ItemStorePower disabled for 1.21 port
+		// ItemStorePower restored — clientTick needs PowerHolderComponent.getPowers usage
 	}
 
 	public static void emitTransformParticle(int duration) {
@@ -290,7 +290,7 @@ public class ShapeShifterCurseFabricClient implements ClientModInitializer {
 	public void onInitializeClient() {
 		RegPlayerAnimation.register();
 		registerEntityModels();
-		// ModPacketsS2C.register disabled for 1.21 port
+		ModPacketsS2C.register();
 
 		registerShaderResource();
 		FurGradientRenderLayer.onInitializeClient();

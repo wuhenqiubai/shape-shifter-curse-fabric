@@ -353,9 +353,8 @@ public class ModPacketsS2C {
             return;
         }
         Identifier virtualTotemType = buf.readIdentifier();
-        ItemStack totemStack = buf.readItemStack();
-        // ConcurrentModificationException 需要把这个操作放到Client线程而非Network线程
-        // VirtualTotemPower disabled for 1.21 port
+        // ItemStack totemStack = buf.readItemStack(); // readItemStack removed in 1.21, use ItemStack.PACKET_CODEC
+        // VirtualTotemPower needs full 1.21 API migration
     }
 
     public static void receivePowerAnimationData(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender responseSender) {
