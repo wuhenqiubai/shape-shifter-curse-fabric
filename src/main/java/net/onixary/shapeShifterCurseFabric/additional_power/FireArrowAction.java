@@ -19,7 +19,7 @@ public class FireArrowAction {
     public static void spawnFireArrow(LivingEntity owner, float Damage, float Speed, float Spread, int FireTime, boolean NoGravity, boolean Critical, boolean hasOwner, Consumer<Entity> projectileAction) {
         ArrowItem arrowItem = (ArrowItem)(Items.ARROW);
         ItemStack itemStack = new ItemStack(arrowItem);
-        PersistentProjectileEntity persistentProjectileEntity = arrowItem.createArrow(owner.getWorld(), itemStack, hasOwner ? owner : null);
+        PersistentProjectileEntity persistentProjectileEntity = arrowItem.createArrow(owner.getWorld(), itemStack, owner, ItemStack.EMPTY);
         if (FireTime > 0) {
             persistentProjectileEntity.setOnFireFor(FireTime);
         }
