@@ -4,7 +4,7 @@ import net.onixary.shapeShifterCurseFabric.form_giving_custom_entity.axolotl.Tra
 import net.onixary.shapeShifterCurseFabric.form_giving_custom_entity.bat.TransformativeBatEntity;
 import net.onixary.shapeShifterCurseFabric.form_giving_custom_entity.ocelot.TransformativeOcelotEntity;
 import net.onixary.shapeShifterCurseFabric.form_giving_custom_entity.spider.TransformativeSpiderEntity;
-// TransformativeWolfEntity disabled for 1.21 port
+import net.onixary.shapeShifterCurseFabric.form_giving_custom_entity.wolf.TransformativeWolfEntity;
 import net.onixary.shapeShifterCurseFabric.util.EntityAttributeRegister;
 
 import static net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric.*;
@@ -20,7 +20,7 @@ public class RegTransformativeEntity {
         // ocelot
         EntityAttributeRegister.register(T_OCELOT, TransformativeOcelotEntity::createAttributes);
 
-        // EntityAttributeRegister.register(T_WOLF, TransformativeWolfEntity::createAttributes); // disabled: Wolf API broken in 1.21
+        EntityAttributeRegister.register(T_WOLF, TransformativeWolfEntity::createAttributes);
 
         EntityAttributeRegister.register(T_SPIDER, TransformativeSpiderEntity::createAttributes);
 

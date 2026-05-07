@@ -11,12 +11,10 @@ import net.onixary.shapeShifterCurseFabric.player_form.RegPlayerForms;
 import net.onixary.shapeShifterCurseFabric.player_form.ability.FormAbilityManager;
 import net.onixary.shapeShifterCurseFabric.player_form.ability.PlayerFormComponent;
 import net.onixary.shapeShifterCurseFabric.player_form.ability.RegPlayerFormComponent;
-// TransformManager disabled for 1.21 port
+import net.onixary.shapeShifterCurseFabric.player_form.transform.TransformManager;
 
 import java.util.Arrays;
 import java.util.Optional;
-
-import static net.onixary.shapeShifterCurseFabric.data.StaticParams.CURSED_MOON_PROBABILITY_MAX;
 
 
 // Logic from Magic Moon mod
@@ -203,7 +201,7 @@ public class CursedMoon {
             // transform
             // if form already triggered by cursed moon or triggered by cure, do not trigger again
             if(!RegPlayerFormComponent.PLAYER_FORM.get(player).isByCursedMoon() && !RegPlayerFormComponent.PLAYER_FORM.get(player).isByCure()){
-                // TransformManager.handleProgressiveTransform disabled: player,true
+                TransformManager.handleProgressiveTransform(player, true);
             }
             formComp.setMoonEffectApplied(true);
             RegPlayerFormComponent.PLAYER_FORM.sync(player);
@@ -254,12 +252,12 @@ public class CursedMoon {
                 }
             }
             ShapeShifterCurseFabric.LOGGER.info("Cursed Moon ends!");
-            // TransformManager.setIsByCursedMoonEnd disabled: player, true
+            TransformManager.setIsByCursedMoonEnd(player, true);
             RegPlayerFormComponent.PLAYER_FORM.get(player).setByCursedMoon(true);
             RegPlayerFormComponent.PLAYER_FORM.sync(player);
             // transform
             if(wasByCursedMoon && !RegPlayerFormComponent.PLAYER_FORM.get(player).isByCure()){
-                // TransformManager.handleMoonEndTransform disabled: player
+                TransformManager.handleMoonEndTransform(player);
             }
             //clearFormFlag(player);
             //TransformManager.clearMoonEndFlags(player);

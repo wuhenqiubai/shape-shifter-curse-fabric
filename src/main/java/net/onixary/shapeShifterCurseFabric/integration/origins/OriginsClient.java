@@ -2,12 +2,6 @@ package net.onixary.shapeShifterCurseFabric.integration.origins;
 
 import io.github.apace100.apoli.ApoliClient;
 import io.github.apace100.apoli.integration.PowerClearCallback;
-import net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric;
-// ModPacketsS2C (origins) disabled for 1.21 port
-import net.onixary.shapeShifterCurseFabric.integration.origins.registry.ModBlocks;
-import net.onixary.shapeShifterCurseFabric.integration.origins.registry.ModEntities;
-// ViewOriginScreen disabled for 1.21 port
-import net.onixary.shapeShifterCurseFabric.integration.origins.util.PowerKeyManager;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -15,11 +9,15 @@ import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.entity.FlyingItemEntityRenderer;
 import net.minecraft.client.util.InputUtil;
+import net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric;
+import net.onixary.shapeShifterCurseFabric.integration.origins.registry.ModBlocks;
+import net.onixary.shapeShifterCurseFabric.integration.origins.registry.ModEntities;
+import net.onixary.shapeShifterCurseFabric.integration.origins.util.PowerKeyManager;
+import net.onixary.shapeShifterCurseFabric.networking.ModPacketsS2C;
 import org.lwjgl.glfw.GLFW;
 
 public class OriginsClient implements ClientModInitializer {
@@ -37,7 +35,7 @@ public class OriginsClient implements ClientModInitializer {
 
         EntityRendererRegistry.register(ModEntities.ENDERIAN_PEARL, FlyingItemEntityRenderer::new);
 
-        // Disabled for 1.21 port: ModPacketsS2C.register();
+        ModPacketsS2C.register();
         
         // 将分类放在幻形者诅咒下
         usePrimaryActivePowerKeybind = new KeyBinding("key.origins.primary_active", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_G, "category." + ShapeShifterCurseFabric.MOD_ID);
