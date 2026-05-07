@@ -1,15 +1,12 @@
 package net.onixary.shapeShifterCurseFabric.integration.origins.util;
 
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonSerializationContext;
 import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.loot.condition.LootCondition;
 import net.minecraft.loot.condition.LootConditionType;
 import net.minecraft.loot.context.LootContext;
 import net.minecraft.loot.context.LootContextParameters;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.JsonHelper;
 import net.onixary.shapeShifterCurseFabric.integration.origins.component.OriginComponent;
 import net.onixary.shapeShifterCurseFabric.integration.origins.origin.Origin;
 import net.onixary.shapeShifterCurseFabric.integration.origins.origin.OriginLayer;
@@ -20,80 +17,52 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+@SuppressWarnings("OptionalUsedAsFieldOrParameterType")
 public class OriginLootCondition implements LootCondition {
+
+    public static final MapCodec<OriginLootCondition> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+        Identifier.CODEC.fieldOf("origin").forGetter(OriginLootCondition::getOrigin),
+        Identifier.CODEC.optionalFieldOf("layer").forGetter(OriginLootCondition::getLayer)
+    ).apply(instance, OriginLootCondition::new));
+
+    public static final LootConditionType TYPE = new LootConditionType(CODEC);
+
     private final Identifier origin;
-    private final Identifier layer;
+    private final Optional<Identifier> layer;
 
-    private OriginLootCondition(Identifier origin) {
-        this.origin = origin;
-        this.layer = null;
-    }
-
-    private OriginLootCondition(Identifier origin, Identifier layer) {
+    private OriginLootCondition(Identifier origin, Optional<Identifier> layer) {
         this.origin = origin;
         this.layer = layer;
     }
 
+    @Override
     public LootConditionType getType() {
-        return ModLoot.ORIGIN_LOOT_CONDITION;
+        return TYPE;
     }
 
+    @Override
     public boolean test(LootContext lootContext) {
-        Optional<OriginComponent> optional = ModComponents.ORIGIN.maybeGet(lootContext.get(LootContextParameters.THIS_ENTITY));
-        if(optional.isPresent()) {
-            OriginComponent component = optional.get();
-            HashMap<OriginLayer, Origin> map = component.getOrigins();
-            boolean matches = false;
-            for (Map.Entry<OriginLayer, Origin> entry: map.entrySet()) {
-                if (layer != null) {
-                    if (entry.getKey().getIdentifier().equals(layer) && entry.getValue().getIdentifier().equals(origin)) {
-                        matches = true;
-                        break;
-                    }
-                }
-                else {
-                    if (entry.getValue().getIdentifier().equals(origin)) {
-                        matches = true;
-                        break;
-                    }
-                }
+        OriginComponent component = ModComponents.ORIGIN.maybeGet(lootContext.get(LootContextParameters.THIS_ENTITY))
+            .orElse(null);
+        if (component == null) {
+            return false;
+        }
+        for (Map.Entry<OriginLayer, Origin> entry : component.getOrigins().entrySet()) {
+            Identifier layerId = entry.getKey().getIdentifier();
+            Identifier originId = entry.getValue().getIdentifier();
+            if (layer.map(layerId::equals).orElse(true) && originId.equals(origin)) {
+                return true;
             }
-            return matches;
         }
         return false;
     }
 
-    public static LootCondition.Builder builder(String originId) {
-        return builder(Identifier.of(originId));
+    public Identifier getOrigin() {
+        return origin;
     }
 
-    public static LootCondition.Builder builder(Identifier origin) {
-        return () -> new OriginLootCondition(origin);
+    public Optional<Identifier> getLayer() {
+        return layer;
     }
 
-    public static LootCondition.Builder builder(String originId, String layerId) {
-        return builder(Identifier.of(originId), Identifier.of(layerId));
-    }
-
-    public static LootCondition.Builder builder(Identifier origin, Identifier layer) {
-        return () -> new OriginLootCondition(origin, layer);
-    }
-
-    public static class Serializer extends MapCodec<LootCondition> implements JsonSerializer<OriginLootCondition> {
-        public void toJson(JsonObject jsonObject, OriginLootCondition originLootCondition, JsonSerializationContext jsonSerializationContext) {
-            jsonObject.addProperty("origin", originLootCondition.origin.toString());
-            if (originLootCondition.layer != null) {
-                jsonObject.addProperty("layer", originLootCondition.layer.toString());
-            }
-        }
-
-        public OriginLootCondition fromJson(JsonObject jsonObject, JsonDeserializationContext jsonDeserializationContext) {
-            Identifier origin = Identifier.of(JsonHelper.getString(jsonObject, "origin"));
-            if (jsonObject.has("layer")) {
-                Identifier layer = Identifier.of(JsonHelper.getString(jsonObject, "layer"));
-                return new OriginLootCondition(origin, layer);
-            }
-            return new OriginLootCondition(origin);
-        }
-    }
 }
