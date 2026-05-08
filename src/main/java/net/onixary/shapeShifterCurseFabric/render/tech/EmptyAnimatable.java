@@ -29,6 +29,6 @@ public class EmptyAnimatable implements GeoAnimatable {
 
     @Override
     public double getTick(Object object) {
-        return MinecraftClient.getInstance().getTickDelta();
+        return MinecraftClient.getInstance().getRenderTickCounter().getTickDelta(false);
     }
 }

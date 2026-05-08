@@ -95,7 +95,7 @@ public abstract class LivingEntityMixin {
         if (attacker instanceof ServerPlayerEntity) {
             if(entity instanceof WitchEntity || entity instanceof EvokerEntity) {
                 if (Math.random() < StaticParams.FAMILIAR_CURSE_POTION_DROP_PROBABILITY){
-                    ItemStack customPotion = new ItemStack(Items.SPLASH_POTION).set(DataComponentTypes.POTION_CONTENTS, new PotionContentsComponent(RegCustomPotions.FAMILIAR_FOX_FORM_POTION));
+                    ItemStack customPotion = new ItemStack(Items.SPLASH_POTION).set(DataComponentTypes.POTION_CONTENTS, new PotionContentsComponent(net.minecraft.registry.Registries.POTION.getEntry(RegCustomPotions.FAMILIAR_FOX_FORM_POTION)));
                     entity.getWorld().spawnEntity(
                             new ItemEntity(
                                     entity.getWorld(),

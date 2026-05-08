@@ -268,8 +268,8 @@ public class EffectManager {
             ShapeShifterCurseFabric.LOGGER.error("Attempted to reload effect with null player");
             return;
         }
-        Map<RegistryEntry<StatusEffect>, StatusEffectInstance> effects = player.getActiveStatusEffects();
-        for (Map.Entry<StatusEffect, StatusEffectInstance> entry : effects.entrySet()) {
+        var effects = player.getActiveStatusEffects();
+        for (var entry : effects.entrySet()) {
             if (entry.getValue() instanceof TransformativeStatusInstance) {
                 continue;
             }

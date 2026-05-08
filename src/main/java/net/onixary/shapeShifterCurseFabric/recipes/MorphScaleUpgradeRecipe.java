@@ -15,6 +15,10 @@ import net.minecraft.util.Identifier;
 import static net.onixary.shapeShifterCurseFabric.recipes.RecipeSerializerRegister.MORPH_SCALE_UPGRADE;
 
 public class MorphScaleUpgradeRecipe extends UpgradeRecipe {
+    @Override
+    public net.minecraft.recipe.RecipeType<?> getType() {
+        return net.minecraft.recipe.RecipeType.SMITHING;
+    }
     public final Ingredient template;
     public final Ingredient addition;
 

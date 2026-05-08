@@ -62,7 +62,6 @@ public abstract class UpgradeRecipe implements Recipe<SmithingRecipeInput> {
         return this.upgradeResult.apply(itemStack.copy());
     }
 
-    @Override
     public Identifier getId() {
         return this.id;
     }

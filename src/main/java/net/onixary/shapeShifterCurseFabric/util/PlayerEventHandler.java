@@ -250,7 +250,8 @@ public class PlayerEventHandler {
             || entity.getType() == EntityType.RAVAGER)
             {
                 if (sorceryTeam != null) {
-                    scoreboard.addPlayerToTeam(entity.getEntityName(), sorceryTeam);
+                    // scoreboard.addPlayerToTeam API changed in 1.21
+                // scoreboard.addPlayerToTeam(entity.getEntityName(), sorceryTeam);
                 }
             }
         }

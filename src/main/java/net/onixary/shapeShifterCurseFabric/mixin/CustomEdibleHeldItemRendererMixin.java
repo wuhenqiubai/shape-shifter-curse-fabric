@@ -35,6 +35,7 @@ public class CustomEdibleHeldItemRendererMixin {
         if (fc == null) {
             return original;
         }
-        return fc.isSnack() ? 16 : 32;
+        // isSnack removed in 1.21, default to 32 ticks
+        return 32;
     }
 }

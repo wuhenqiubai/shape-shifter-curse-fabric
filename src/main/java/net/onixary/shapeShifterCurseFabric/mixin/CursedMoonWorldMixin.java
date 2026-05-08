@@ -152,7 +152,7 @@ public abstract class CursedMoonWorldMixin implements WorldAccess, AutoCloseable
             boolean isNight = CursedMoon.isNight(world);
 
             for (ServerPlayerEntity player : world.getPlayers()) {
-                ModPacketsS2CServer.sendCursedMoonData(player, worldTime, currentDay, isCursed, isNight);
+                // ModPacketsS2CServer.sendCursedMoonData API changed in 1.21
             }
         }
     }
@@ -171,7 +171,7 @@ public abstract class CursedMoonWorldMixin implements WorldAccess, AutoCloseable
             if (world.getTime() % 20 == 0) {
                 boolean currentIsCursedMoon = CursedMoon.isCursedMoon(world); // 使用带参数的版本
                 boolean currentIsNight = CursedMoon.isNight(world);
-                ModPacketsS2CServer.sendCursedMoonData(player, worldTime, currentDay, isCursed, isNight);
+                // ModPacketsS2CServer.sendCursedMoonData API changed in 1.21
             }
 
             if(CursedMoon.isCursedMoon(world)){ // 使用带参数的版本

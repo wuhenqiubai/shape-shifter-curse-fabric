@@ -41,7 +41,8 @@ public class PlayerFormComponent implements AutoSyncedComponent {
     }
 
     public PlayerFormComponent clear() {
-        this.readFromNbt(new NbtCompound());
+        // CCA 6.x: readFromNbt needs RegistryWrapper.WrapperLookup — TODO: pass from entity context
+        this.readFromNbt(new NbtCompound(), null);
         return this;
     }
 
