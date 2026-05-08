@@ -46,15 +46,10 @@ public class EnchantmentHelperMixin {
         }
     }
 
-    @Inject(method = "hasSoulSpeed", at = @At("RETURN"), cancellable = true)
-    private static void hasSoulSpeedMixin(LivingEntity entity, CallbackInfoReturnable<Boolean> cir) {
-        if (cir.getReturnValue()) {
-            return;
-        }
-        cir.setReturnValue(!PowerHolderComponent.getPowers(entity, SoulSpeedPower.class).isEmpty());
-    }
+    // hasSoulSpeed removed in 1.21 — soul speed is now data-driven via applyLocationBasedEffects.
+    // getEquipmentLevel mixin already handles SoulSpeedPower contribution.
 
-    @ModifyExpressionValue(method = "getPossibleEntries", at = @At(value = "INVOKE", target = "Lnet/minecraft/enchantment/EnchantmentTarget;isAcceptableItem(Lnet/minecraft/item/Item;)Z"))
+    @ModifyExpressionValue(method = "getPossibleEntries", at = @At(value = "INVOKE", target = "Lnet/minecraft/enchantment/Enchantment;isAcceptableItem(Lnet/minecraft/item/ItemStack;)Z"))
     private static boolean isAcceptableItem(boolean original, @Local(ordinal = 0) ItemStack itemStack, @Local RegistryEntry<Enchantment> enchantment) {
         if (!original) {
             return EnchantmentUtils.isItemCanEnchantment(enchantment.getKey().orElseThrow(), itemStack);
