@@ -27,7 +27,7 @@ public class EntityOverlayRenderSystem {
 
             @Override
             public boolean canRender(Entity entity, float yaw, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light) {
-                return entity instanceof LivingEntity livingEntity && livingEntity.getStatusEffect(RegOtherStatusEffects.ENTANGLED_FULL_EFFECT) != null;
+                return entity instanceof LivingEntity livingEntity && livingEntity.getStatusEffect(net.minecraft.registry.Registries.STATUS_EFFECT.getEntry(RegOtherStatusEffects.ENTANGLED_FULL_EFFECT)) != null;
             }
 
             @Override

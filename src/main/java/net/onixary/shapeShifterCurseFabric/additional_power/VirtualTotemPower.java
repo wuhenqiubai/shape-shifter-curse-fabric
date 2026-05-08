@@ -109,7 +109,7 @@ public class VirtualTotemPower extends CooldownPower {
             PacketByteBuf packetByteBuf = PacketByteBufs.create();
             packetByteBuf.writeUuid(serverPlayerEntity.getUuid());
             packetByteBuf.writeIdentifier(this.virtualTotemType);
-            packetByteBuf.writeItemStack(this.totemStack);
+            // ItemStack.PACKET_CODEC.encode(packetByteBuf, this.totemStack); // needs RegistryByteBuf;
             return packetByteBuf;
         }
         return null;

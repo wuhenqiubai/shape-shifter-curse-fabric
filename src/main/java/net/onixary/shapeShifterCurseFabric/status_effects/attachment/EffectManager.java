@@ -223,7 +223,7 @@ public class EffectManager {
     // }
 
     // 从这里开始重构
-    // 客户端 -> 玩家效果 Map<StatusEffect, StatusEffectInstance>
+    // 客户端 -> 玩家效果 Map<RegistryEntry<StatusEffect>, StatusEffectInstance>
     // 服务器端 -> 玩家效果 Map<StatusEffect, StatusEffectInstance | TransformativeStatusInstance>
 
     // 客户端+服务端
@@ -268,7 +268,7 @@ public class EffectManager {
             ShapeShifterCurseFabric.LOGGER.error("Attempted to reload effect with null player");
             return;
         }
-        Map<StatusEffect, StatusEffectInstance> effects = player.getActiveStatusEffects();
+        Map<RegistryEntry<StatusEffect>, StatusEffectInstance> effects = player.getActiveStatusEffects();
         for (Map.Entry<StatusEffect, StatusEffectInstance> entry : effects.entrySet()) {
             if (entry.getValue() instanceof TransformativeStatusInstance) {
                 continue;

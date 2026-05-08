@@ -15,8 +15,8 @@ public class AzureLib_AzProvider<T> {
     @Inject(method = "provideAnimator", at = @At("HEAD"))
     public void provideAnimator(T animatable, CallbackInfoReturnable<AzAnimator<T>> cir) {
         // 真正的Bug位置为 ItemStackMixin_AzItemAnimatorCache.getAnimatorOrNull 但是我不会给Mixin里面注入
-        if (animatable instanceof ItemStack itemStack && !itemStack.getOrCreateNbt().contains("az_id")) {
-            itemStack.getOrCreateNbt().putUuid("az_id", UUID.randomUUID());
+        if (animatable instanceof ItemStack itemStack && !itemStack.getOrDefault(net.minecraft.component.DataComponentTypes.CUSTOM_DATA, net.minecraft.component.type.NbtComponent.DEFAULT).copyNbt().contains("az_id")) {
+            itemStack.getOrDefault(net.minecraft.component.DataComponentTypes.CUSTOM_DATA, net.minecraft.component.type.NbtComponent.DEFAULT).copyNbt().putUuid("az_id", UUID.randomUUID());
         }
     }
 }

@@ -24,7 +24,7 @@ public class PotionEntityMixin {
         if (entity instanceof PlayerEntity player) {
             PotionEntity realThis = ((PotionEntity) (Object) this);
             ItemStack stack = realThis.getStack();
-            Identifier CTPFormID = CTPUtils.getCTPFormIDFromNBT(stack.getNbt());
+            Identifier CTPFormID = CTPUtils.getCTPFormIDFromNBT(stack.get(net.minecraft.component.DataComponentTypes.CUSTOM_DATA).copyNbt());
             if (CTPFormID != null) {
                 CTPUtils.setTransformativePotionForm(player, CTPFormID);
             }
@@ -34,7 +34,7 @@ public class PotionEntityMixin {
 
     @Inject(method = "applyLingeringPotion", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/AreaEffectCloudEntity;setPotion(Lnet/minecraft/potion/Potion;)V"))
     public void applyLingeringPotion(ItemStack stack, Potion potion, CallbackInfo ci, @Local AreaEffectCloudEntity areaEffectCloudEntity) {
-        Identifier CTPFormID = CTPUtils.getCTPFormIDFromNBT(stack.getNbt());
+        Identifier CTPFormID = CTPUtils.getCTPFormIDFromNBT(stack.get(net.minecraft.component.DataComponentTypes.CUSTOM_DATA).copyNbt());
         if (CTPFormID != null && areaEffectCloudEntity instanceof CTPUtils.CTPFormIDHolder) {
             ((CTPUtils.CTPFormIDHolder) areaEffectCloudEntity).setCTPFormID(CTPFormID);
         }

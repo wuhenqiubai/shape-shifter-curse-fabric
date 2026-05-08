@@ -89,8 +89,6 @@ public class TransformativeSpiderEntity extends SpiderEntity implements ITMob {
         return EntityDimensions.fixed(0.7f, 0.45f);
     }
 
-    @Override
-    protected Identifier getLootTableId() {
-        return Identifier.of(ShapeShifterCurseFabric.MOD_ID, "entities/t_spider");
-    }
+    // getLootTableId removed in 1.21
+    
 }

@@ -22,7 +22,7 @@ public record BytePayload(Id<BytePayload> id, PacketByteBuf data) implements Cus
     }
 
     public static final PacketCodec<PacketByteBuf, BytePayload> CODEC = PacketCodec.of(
-        (buf, payload) -> buf.writeBytes(payload.data.copy()),
+        (payload, buf) -> buf.writeBytes(payload.data.copy()),
         buf -> new BytePayload(id(Identifier.of("unused", "dynamic")), new PacketByteBuf(buf.copy()))
     );
 
