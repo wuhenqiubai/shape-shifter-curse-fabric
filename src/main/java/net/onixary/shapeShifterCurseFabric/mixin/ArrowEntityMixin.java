@@ -22,8 +22,8 @@ public class ArrowEntityMixin {
     @Unique
     private Identifier CTPFormID = null;
 
-    @Inject(method = "initFromStack", at = @At("HEAD"))
-    public void initFromStack(ItemStack stack, CallbackInfo ci) {
+    @Inject(method = "setStack", at = @At("HEAD"))
+    public void setStack(ItemStack stack, CallbackInfo ci) {
         Identifier CTPFormID = CTPUtils.getCTPFormIDFromNBT(stack.get(net.minecraft.component.DataComponentTypes.CUSTOM_DATA).copyNbt());
         if (CTPFormID != null) {
             IsCTPArrow = true;
@@ -38,8 +38,8 @@ public class ArrowEntityMixin {
         }
     }
 
-    @Inject(method = "asItemStack", at = @At("RETURN"))
-    public void asItemStack(CallbackInfoReturnable<ItemStack> cir) {
+    @Inject(method = "getDefaultItemStack", at = @At("RETURN"))
+    public void getDefaultItemStack(CallbackInfoReturnable<ItemStack> cir) {
         ItemStack stack = cir.getReturnValue();
         if (IsCTPArrow && stack.getItem().equals(Items.TIPPED_ARROW)) {
             CTPUtils.setCTPFormIDToNBT(stack.get(net.minecraft.component.DataComponentTypes.CUSTOM_DATA).copyNbt(), CTPFormID);

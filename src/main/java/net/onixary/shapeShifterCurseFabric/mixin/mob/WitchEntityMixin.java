@@ -6,13 +6,10 @@ import net.minecraft.entity.mob.WitchEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.thrown.PotionEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.PotionContentsComponent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.onixary.shapeShifterCurseFabric.additional_power.WitchFriendlyPower;
-import net.onixary.shapeShifterCurseFabric.items.RegCustomPotions;
 import net.onixary.shapeShifterCurseFabric.player_form.PlayerFormBase;
 import net.onixary.shapeShifterCurseFabric.player_form.RegPlayerForms;
 import net.onixary.shapeShifterCurseFabric.player_form.ability.RegPlayerFormComponent;
@@ -26,7 +23,7 @@ public abstract class WitchEntityMixin {
 
     private static final float POTION_REPLACE_CHANCE = 0.6f;
 
-    @Inject(method = "attack", at = @At("HEAD"), cancellable = true)
+	@Inject(method = "shootAt", at = @At("HEAD"), cancellable = true)
     private void injectCustomPotionAttack(LivingEntity target, float pullProgress, CallbackInfo ci) {
         WitchEntity witch = (WitchEntity) (Object) this;
         World world = witch.getWorld();

@@ -3,11 +3,11 @@ package net.onixary.shapeShifterCurseFabric.integration.origins.mixin;
 import io.netty.buffer.Unpooled;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.minecraft.network.ClientConnection;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.network.RegistryByteBuf;
-import net.minecraft.network.ClientConnection;
-import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.server.PlayerManager;
+import net.minecraft.server.network.ConnectedClientData;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
 import net.onixary.shapeShifterCurseFabric.integration.origins.badge.BadgeManager;
@@ -33,8 +33,8 @@ public abstract class LoginMixin {
 
     @Shadow public abstract List<ServerPlayerEntity> getPlayerList();
 
-    @Inject(at = @At("TAIL"), method = "onPlayerConnect(Lnet/minecraft/network/ClientConnection;Lnet/minecraft/server/network/ServerPlayerEntity;)V")
-    private void openOriginsGui(ClientConnection connection, ServerPlayerEntity player, CallbackInfo info) {
+    @Inject(at = @At("TAIL"), method = "onPlayerConnect")
+    private void openOriginsGui(ClientConnection connection, ServerPlayerEntity player, ConnectedClientData clientData, CallbackInfo ci) {
         OriginComponent component = ModComponents.ORIGIN.get(player);
         net.minecraft.registry.DynamicRegistryManager registryLookup = player.getWorld().getRegistryManager();
 

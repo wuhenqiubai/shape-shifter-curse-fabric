@@ -1,12 +1,12 @@
 package net.onixary.shapeShifterCurseFabric.integration.origins.mixin;
 
-import net.onixary.shapeShifterCurseFabric.integration.origins.OriginsClient;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.multiplayer.ConnectScreen;
 import net.minecraft.client.network.ServerAddress;
 import net.minecraft.client.network.ServerInfo;
+import net.onixary.shapeShifterCurseFabric.integration.origins.OriginsClient;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -16,7 +16,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(ConnectScreen.class)
 public class ServerCheckMixin {
 
-    @Inject(method = "connect(Lnet/minecraft/client/MinecraftClient;Lnet/minecraft/client/network/ServerAddress;Lnet/minecraft/client/network/ServerInfo;)V", at = @At("HEAD"))
+    @Inject(method = "connect*", at = @At("HEAD"))
     private void resetServerOriginsState(MinecraftClient client, ServerAddress address, ServerInfo info, CallbackInfo ci) {
         OriginsClient.isServerRunningOrigins = false;
     }

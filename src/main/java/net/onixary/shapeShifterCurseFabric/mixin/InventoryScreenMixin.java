@@ -16,7 +16,7 @@ public class InventoryScreenMixin {
     @Unique
     private static float prevBodyYaw;
 
-    @Inject(method = "drawEntity(Lnet/minecraft/client/gui/DrawContext;IIIFFLnet/minecraft/entity/LivingEntity;)V", at = @At("HEAD"))
+    @Inject(method = "drawEntity", at = @At("HEAD"))
     private static void drawEntityHead(DrawContext context, int x, int y, int size, float mouseX, float mouseY, LivingEntity entity, CallbackInfo ci) {
         ClientUtils.isOpenInventoryScreen = true;
         prevBodyYaw = entity.prevBodyYaw;
@@ -25,20 +25,20 @@ public class InventoryScreenMixin {
         return;
     }
 
-    @Inject(method = "drawEntity(Lnet/minecraft/client/gui/DrawContext;IIIFFLnet/minecraft/entity/LivingEntity;)V", at = @At("RETURN"))
+    @Inject(method = "drawEntity", at = @At("RETURN"))
     private static void drawEntityTail(DrawContext context, int x, int y, int size, float mouseX, float mouseY, LivingEntity entity, CallbackInfo ci) {
         ClientUtils.isOpenInventoryScreen = false;
         entity.prevBodyYaw = prevBodyYaw;
         return;
     }
 
-    @Inject(method = "drawEntity(Lnet/minecraft/client/gui/DrawContext;IIILorg/joml/Quaternionf;Lorg/joml/Quaternionf;Lnet/minecraft/entity/LivingEntity;)V", at = @At("HEAD"))
+    @Inject(method = "drawEntity", at = @At("HEAD"))
     private static void drawEntityHead2(DrawContext context, int x, int y, int size, Quaternionf rotation, Quaternionf headRotation, LivingEntity entity, CallbackInfo ci) {
         ClientUtils.isOpenInventoryScreen = true;
         return;
     }
 
-    @Inject(method = "drawEntity(Lnet/minecraft/client/gui/DrawContext;IIILorg/joml/Quaternionf;Lorg/joml/Quaternionf;Lnet/minecraft/entity/LivingEntity;)V", at = @At("RETURN"))
+    @Inject(method = "drawEntity", at = @At("RETURN"))
     private static void drawEntityTail2(DrawContext context, int x, int y, int size, Quaternionf rotation, Quaternionf headRotation, LivingEntity entity, CallbackInfo ci) {
         ClientUtils.isOpenInventoryScreen = false;
         return;
