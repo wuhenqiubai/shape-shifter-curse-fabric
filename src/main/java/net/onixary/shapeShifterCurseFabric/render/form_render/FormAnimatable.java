@@ -36,6 +36,6 @@ public class FormAnimatable implements GeoAnimatable {
 
     @Override
     public double getTick(Object o) {
-        return MinecraftClient.getInstance().getTickDelta();
+        return MinecraftClient.getInstance().getRenderTickCounter().getTickDelta(false);
     }
 }
