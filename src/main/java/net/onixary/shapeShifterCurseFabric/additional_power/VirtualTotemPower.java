@@ -17,6 +17,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.network.PacketByteBuf;
+import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundEvents;
@@ -109,7 +110,7 @@ public class VirtualTotemPower extends CooldownPower {
             PacketByteBuf packetByteBuf = PacketByteBufs.create();
             packetByteBuf.writeUuid(serverPlayerEntity.getUuid());
             packetByteBuf.writeIdentifier(this.virtualTotemType);
-            // ItemStack.PACKET_CODEC.encode(packetByteBuf, this.totemStack); // needs RegistryByteBuf;
+            ItemStack.PACKET_CODEC.encode((RegistryByteBuf) packetByteBuf, this.totemStack);
             return packetByteBuf;
         }
         return null;

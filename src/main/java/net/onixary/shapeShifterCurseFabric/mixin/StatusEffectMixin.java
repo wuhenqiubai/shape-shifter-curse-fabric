@@ -6,6 +6,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.registry.tag.EntityTypeTags;
 import net.onixary.shapeShifterCurseFabric.additional_power.ModifyInstantDamagePower;
 import net.onixary.shapeShifterCurseFabric.additional_power.ModifyInstantHealthPower;
 import org.jetbrains.annotations.Nullable;
@@ -14,6 +15,7 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.List;
 
@@ -29,7 +31,7 @@ public class StatusEffectMixin {
             if (PowerList.isEmpty()) {
                 return false;
             }
-            if (false /* entity.isUndead() removed in 1.21 */) {
+            if (entity != null && entity.getType().isIn(EntityTypeTags.UNDEAD)) {
                 EffectValue = -6;
             }
             FinalValue = (float) (EffectValue << amplifier);
@@ -80,10 +82,10 @@ public class StatusEffectMixin {
     }
 
     @Inject(method = "applyUpdateEffect", at = @At("HEAD"), cancellable = true)
-    private void applyUpdateEffect(LivingEntity entity, int amplifier, CallbackInfo ci) {
+    private void applyUpdateEffect(LivingEntity entity, int amplifier, CallbackInfoReturnable<Boolean> cir) {
         StatusEffect realThis = (StatusEffect)(Object)this;
         if (applyEffect(realThis, entity, null, null, amplifier, 0.0, false)) {
-            ci.cancel();
+            cir.cancel();
         }
     }
 

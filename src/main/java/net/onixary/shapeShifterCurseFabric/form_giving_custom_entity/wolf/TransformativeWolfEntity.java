@@ -150,7 +150,11 @@ public class TransformativeWolfEntity extends WolfEntity implements ITMob {
         return;
     }
 
-    // getLootTableId removed in 1.21; default getLootTable() from LivingEntity is sufficient
+    @Override
+    protected RegistryKey<LootTable> getLootTableId() {
+        return RegistryKey.of(RegistryKeys.LOOT_TABLE, Identifier.of(ShapeShifterCurseFabric.MOD_ID, "entities/t_wolf"));
+    }
+
     protected RegistryKey<LootTable> getLootTableKey() {
         return RegistryKey.of(
                 RegistryKeys.LOOT_TABLE,

@@ -1,14 +1,13 @@
 package net.onixary.shapeShifterCurseFabric.form_giving_custom_entity.spider;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityDimensions;
-import net.minecraft.entity.EntityPose;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.SpawnReason;
+import net.minecraft.entity.*;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.mob.SpiderEntity;
+import net.minecraft.loot.LootTable;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.random.Random;
@@ -89,6 +88,12 @@ public class TransformativeSpiderEntity extends SpiderEntity implements ITMob {
         return EntityDimensions.fixed(0.7f, 0.45f);
     }
 
-    // getLootTableId removed in 1.21
+
+    @Override
+    protected RegistryKey<LootTable> getLootTableId() {
+        Identifier id = Identifier.of(ShapeShifterCurseFabric.MOD_ID, "entities/t_spider");
+        return RegistryKey.of(RegistryKeys.LOOT_TABLE, id);
+    }
+
     
 }
