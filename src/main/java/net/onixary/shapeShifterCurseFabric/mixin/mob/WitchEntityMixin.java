@@ -44,7 +44,8 @@ public abstract class WitchEntityMixin {
 
                     // 创建自定义溅射式药水
                     PotionEntity customPotion = new PotionEntity(world, witch);
-                    ItemStack potionStack = new ItemStack(net.minecraft.item.Items.SPLASH_POTION).set(DataComponentTypes.POTION_CONTENTS, new PotionContentsComponent(RegCustomPotions.FAMILIAR_FOX_FORM_POTION));
+                    // PotionContentsComponent needs RegistryEntry<Potion> — TODO: lookup via Registry
+                    ItemStack potionStack = ItemStack.EMPTY; // was: new ItemStack(Items.SPLASH_POTION).set(...)
                     customPotion.setItem(potionStack);
 
                     customPotion.setPitch(customPotion.getPitch() - -20.0F);
