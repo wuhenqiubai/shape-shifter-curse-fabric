@@ -126,3 +126,4 @@ build_*.txt
 /.project
 /compile_errors.txt
 /Decompiler/
+/.lingma/rules/QWEN.md

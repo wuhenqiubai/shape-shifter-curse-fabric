@@ -61,7 +61,9 @@ import net.onixary.shapeShifterCurseFabric.player_form.ability.FormAbilityManage
 import net.onixary.shapeShifterCurseFabric.player_form.ability.RegPlayerFormComponent;
 import net.onixary.shapeShifterCurseFabric.player_form.instinct.InstinctTicker;
 import net.onixary.shapeShifterCurseFabric.player_form.transform.TransformManager;
+import net.onixary.shapeShifterCurseFabric.recipes.BrewingRecipeReloadListener; // disabled: BrewingRecipeUtils is .bak
 import net.onixary.shapeShifterCurseFabric.recipes.RecipeSerializerRegister;
+import net.onixary.shapeShifterCurseFabric.screen_effect.TransformFX;
 import net.onixary.shapeShifterCurseFabric.screen_effect.TransformOverlay;
 import net.onixary.shapeShifterCurseFabric.status_effects.RegOtherStatusEffects;
 import net.onixary.shapeShifterCurseFabric.status_effects.RegTStatusEffect;
@@ -76,10 +78,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
-
-// RegTransformativeEntity disabled for 1.21 port
-// TransformativeEntitySpawning disabled for 1.21 port (SpawnRestriction API)
-// import net.onixary.shapeShifterCurseFabric.recipes.BrewingRecipeReloadListener; // disabled: BrewingRecipeUtils is .bak
 
 
 public class ShapeShifterCurseFabric implements ModInitializer {
@@ -186,14 +184,12 @@ public class ShapeShifterCurseFabric implements ModInitializer {
 
     @Override
     public void onInitialize() {
-        // PlayerDataStorage.initialize(); // 移除这行，因为这里还没有服务器实例
         RegCustomItem.initialize();
         RegCustomBlock.initialize();
         RegTransformativeEntitySpawnEgg.initialize();
         RegTStatusEffect.initialize();
         RegTStatusPotionEffect.initialize();
         PlayerEventHandler.register();
-        // Disabled for 1.21 port  Disabled for 1.21 port (Origin/OriginLayer .bak)
         RegOtherStatusEffects.initialize();
         TransformativeEntitySpawning.addEntitySpawns();
         BatAttachEventHandler.register();
@@ -222,7 +218,7 @@ public class ShapeShifterCurseFabric implements ModInitializer {
         // network package
         ModPacketsC2S.register();
 
-        //TransformFX.INSTANCE.registerCallbacks();
+	    TransformFX.INSTANCE.registerCallbacks();
         TransformOverlay.INSTANCE.init();
         save_timer = 0;
 
@@ -246,7 +242,7 @@ public class ShapeShifterCurseFabric implements ModInitializer {
         // 获取动态Form(DataPack)
         ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(new FormDataPackReloadListener());
         ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(new TrinketDataPackReloadListener());
-        // ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(new BrewingRecipeReloadListener()); // disabled: BrewingRecipeUtils is .bak
+	    ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(new BrewingRecipeReloadListener()); // disabled: BrewingRecipeUtils is .bak
         ServerLifecycleEvents.END_DATA_PACK_RELOAD.register((server, resourceManager, success) -> server.getPlayerManager().getPlayerList().forEach((player) -> {
             ModPacketsS2CServer.updateDynamicForm(player);
             if (!player.getComponent(RegPlayerFormComponent.PLAYER_FORM).isCurrentFormExist()) {
