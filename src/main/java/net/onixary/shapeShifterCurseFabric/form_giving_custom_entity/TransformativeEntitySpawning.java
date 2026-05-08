@@ -4,6 +4,7 @@ import net.fabricmc.fabric.api.biome.v1.BiomeModifications;
 import net.fabricmc.fabric.api.biome.v1.BiomeSelectors;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.minecraft.entity.SpawnGroup;
+import net.minecraft.entity.SpawnLocationTypes;
 import net.minecraft.entity.SpawnRestriction;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.tag.BiomeTags;
@@ -18,7 +19,7 @@ import net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric;
 import net.onixary.shapeShifterCurseFabric.form_giving_custom_entity.axolotl.TransformativeAxolotlEntity;
 import net.onixary.shapeShifterCurseFabric.form_giving_custom_entity.bat.TransformativeBatEntity;
 import net.onixary.shapeShifterCurseFabric.form_giving_custom_entity.ocelot.TransformativeOcelotEntity;
-// TransformativeWolfEntity disabled for 1.21 port
+import net.onixary.shapeShifterCurseFabric.form_giving_custom_entity.wolf.TransformativeWolfEntity;
 
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -26,9 +27,9 @@ import java.util.stream.Collectors;
 public class TransformativeEntitySpawning {
     public static void addEntitySpawns() {
         // T_OCELOT
-        // TODO: SpawnRestriction removed in 1.21; /* SpawnRestriction.register(
+        SpawnRestriction.register(
                 ShapeShifterCurseFabric.T_OCELOT,
-                SpawnRestriction.Location.ON_GROUND,
+                SpawnLocationTypes.ON_GROUND,
                 Heightmap.Type.MOTION_BLOCKING,
                 TransformativeOcelotEntity::canCustomSpawn
         );
@@ -42,9 +43,9 @@ public class TransformativeEntitySpawning {
                 3
         );
         // T_AXOLOTL
-        // TODO: SpawnRestriction removed in 1.21; /* SpawnRestriction.register(
+        SpawnRestriction.register(
                 ShapeShifterCurseFabric.T_AXOLOTL,
-                SpawnRestriction.Location.IN_WATER,
+                SpawnLocationTypes.IN_WATER,
                 Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
                 TransformativeAxolotlEntity::canCustomSpawn
         );
@@ -57,9 +58,9 @@ public class TransformativeEntitySpawning {
                 6
         );
         // T_BAT
-        // TODO: SpawnRestriction removed in 1.21; /* SpawnRestriction.register(
+        SpawnRestriction.register(
                 ShapeShifterCurseFabric.T_BAT,
-                SpawnRestriction.Location.ON_GROUND,
+                SpawnLocationTypes.ON_GROUND,
                 Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
                 TransformativeBatEntity::canCustomSpawn
         );
@@ -72,9 +73,9 @@ public class TransformativeEntitySpawning {
                 3
         );
         // T_WOLF
-        // TODO: SpawnRestriction removed in 1.21; /* SpawnRestriction.register(
+        SpawnRestriction.register(
                 ShapeShifterCurseFabric.T_WOLF,
-                SpawnRestriction.Location.ON_GROUND,
+                SpawnLocationTypes.ON_GROUND,
                 Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
                 TransformativeWolfEntity::canCustomSpawn
         );

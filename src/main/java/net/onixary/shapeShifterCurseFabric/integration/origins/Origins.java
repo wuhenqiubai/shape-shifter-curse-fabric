@@ -8,19 +8,6 @@ import io.github.apace100.apoli.power.PowerType;
 import io.github.apace100.apoli.power.PowerTypes;
 import io.github.apace100.calio.resource.OrderedResourceListenerInitializer;
 import io.github.apace100.calio.resource.OrderedResourceListenerManager;
-import net.onixary.shapeShifterCurseFabric.integration.origins.badge.BadgeManager;
-//import net.onixary.shapeShifterCurseFabric.integration.origins.command.OriginCommand;
-import net.onixary.shapeShifterCurseFabric.integration.origins.networking.ModPacketsC2S;
-import net.onixary.shapeShifterCurseFabric.integration.origins.origin.Origin;
-import net.onixary.shapeShifterCurseFabric.integration.origins.origin.OriginLayers;
-import net.onixary.shapeShifterCurseFabric.integration.origins.origin.OriginManager;
-import net.onixary.shapeShifterCurseFabric.integration.origins.power.OriginsEntityConditions;
-import net.onixary.shapeShifterCurseFabric.integration.origins.power.OriginsPowerTypes;
-//import io.github.apace100.origins.registry.*;
-import net.onixary.shapeShifterCurseFabric.integration.origins.registry.*;
-import net.onixary.shapeShifterCurseFabric.integration.origins.util.ChoseOriginCriterion;
-import net.onixary.shapeShifterCurseFabric.integration.origins.util.OriginsConfigSerializer;
-import net.onixary.shapeShifterCurseFabric.integration.origins.util.OriginsJsonConfigSerializer;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.ConfigData;
 import me.shedaniel.autoconfig.annotation.Config;
@@ -34,10 +21,24 @@ import net.minecraft.item.ItemGroups;
 import net.minecraft.resource.ResourceType;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
+import net.onixary.shapeShifterCurseFabric.integration.origins.badge.BadgeManager;
+import net.onixary.shapeShifterCurseFabric.integration.origins.command.OriginCommand;
+import net.onixary.shapeShifterCurseFabric.integration.origins.networking.ModPacketsC2S;
+import net.onixary.shapeShifterCurseFabric.integration.origins.origin.Origin;
+import net.onixary.shapeShifterCurseFabric.integration.origins.origin.OriginLayers;
+import net.onixary.shapeShifterCurseFabric.integration.origins.origin.OriginManager;
+import net.onixary.shapeShifterCurseFabric.integration.origins.power.OriginsEntityConditions;
+import net.onixary.shapeShifterCurseFabric.integration.origins.power.OriginsPowerTypes;
+import net.onixary.shapeShifterCurseFabric.integration.origins.registry.*;
+import net.onixary.shapeShifterCurseFabric.integration.origins.util.ChoseOriginCriterion;
+import net.onixary.shapeShifterCurseFabric.integration.origins.util.OriginsConfigSerializer;
+import net.onixary.shapeShifterCurseFabric.integration.origins.util.OriginsJsonConfigSerializer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import static net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric.MOD_ID;
+
+//import io.github.apace100.origins.registry.*;
 
 public class Origins implements ModInitializer, OrderedResourceListenerInitializer {
 
@@ -88,7 +89,7 @@ public class Origins implements ModInitializer, OrderedResourceListenerInitializ
 		Origin.init();
 
 		CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
-			//OriginCommand.register(dispatcher);
+			OriginCommand.register(dispatcher);
 		});
 		ItemGroupEvents.modifyEntriesEvent(ItemGroups.TOOLS).register((content) -> {
 			//content.add(ModItems.ORB_OF_ORIGIN);

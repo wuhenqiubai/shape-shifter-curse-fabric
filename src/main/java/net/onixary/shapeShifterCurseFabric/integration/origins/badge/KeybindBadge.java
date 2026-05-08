@@ -2,12 +2,15 @@ package net.onixary.shapeShifterCurseFabric.integration.origins.badge;
 
 import io.github.apace100.apoli.power.PowerType;
 import io.github.apace100.calio.data.SerializableData;
-import net.onixary.shapeShifterCurseFabric.integration.origins.util.PowerKeyManager;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.tooltip.OrderedTextTooltipComponent;
 import net.minecraft.client.gui.tooltip.TooltipComponent;
+import net.minecraft.client.option.KeyBinding;
+import net.minecraft.text.MutableText;
+import net.minecraft.text.OrderedText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+import net.onixary.shapeShifterCurseFabric.integration.origins.util.PowerKeyManager;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -23,12 +26,24 @@ public record KeybindBadge(Identifier spriteId, String text) implements Badge {
         return true;
     }
 
+	public static void addLines(List<TooltipComponent> tooltips, Text text, TextRenderer textRenderer, int widthLimit) {
+		if (textRenderer.getWidth(text) > widthLimit) {
+			for (OrderedText orderedText : textRenderer.wrapLines(text, widthLimit)) {
+				tooltips.add(new OrderedTextTooltipComponent(orderedText));
+			}
+		} else {
+			tooltips.add(new OrderedTextTooltipComponent(text.asOrderedText()));
+		}
+	}
+
     @Override
     public List<TooltipComponent> getTooltipComponents(PowerType<?> powerType, int widthLimit, float time, TextRenderer textRenderer) {
-        String keyId = PowerKeyManager.getKeyIdentifier(powerType.getIdentifier());
-        Text keyText = Text.literal("[").append(Text.translatable(keyId)).append("]");
         List<TooltipComponent> tooltips = new LinkedList<>();
-        TooltipBadge.addLines(tooltips, Text.translatable(text, keyText), textRenderer, widthLimit);
+	    Text keyText;
+	    keyText = ((MutableText) Text.of("["))
+			    .append(KeyBinding.getLocalizedName(PowerKeyManager.getKeyIdentifier(powerType.getIdentifier())).get())
+			    .append(Text.of("]"));
+	    addLines(tooltips, Text.translatable(text, keyText), textRenderer, widthLimit);
         return tooltips;
     }
 

@@ -57,10 +57,8 @@ public class OriginsClient implements ClientModInitializer {
         ClientTickEvents.START_CLIENT_TICK.register(tick -> {
             // 用于显示当前的起源信息，不需要，将其注释掉
             /*while(viewCurrentOriginKeybind.wasPressed()) {
-                // Disabled for 1.21 port
-		if(false && !(MinecraftClient.getInstance().currentScreen instanceof ViewOriginScreen)) {
-                    // Disabled for 1.21 port
-				MinecraftClient.getInstance().setScreen(null);
+                if(!(MinecraftClient.getInstance().currentScreen instanceof ViewOriginScreen)) {
+                    MinecraftClient.getInstance().setScreen(new ViewOriginScreen());
                 }
             }*/
         });

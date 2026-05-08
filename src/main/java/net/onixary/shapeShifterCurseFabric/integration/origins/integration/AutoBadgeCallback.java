@@ -2,10 +2,10 @@ package net.onixary.shapeShifterCurseFabric.integration.origins.integration;
 
 import io.github.apace100.apoli.integration.PostPowerReloadCallback;
 import io.github.apace100.apoli.power.PowerType;
-import net.onixary.shapeShifterCurseFabric.integration.origins.badge.Badge;
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.EventFactory;
 import net.minecraft.util.Identifier;
+import net.onixary.shapeShifterCurseFabric.integration.origins.badge.Badge;
 
 import java.util.List;
 

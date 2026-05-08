@@ -3,6 +3,13 @@ package net.onixary.shapeShifterCurseFabric.integration.origins.command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import io.netty.buffer.Unpooled;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.minecraft.command.argument.EntityArgumentType;
+import net.minecraft.network.PacketByteBuf;
+import net.minecraft.server.command.ServerCommandSource;
+import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.text.Text;
 import net.onixary.shapeShifterCurseFabric.integration.origins.Origins;
 import net.onixary.shapeShifterCurseFabric.integration.origins.component.OriginComponent;
 import net.onixary.shapeShifterCurseFabric.integration.origins.networking.ModPackets;
@@ -11,13 +18,7 @@ import net.onixary.shapeShifterCurseFabric.integration.origins.origin.OriginLaye
 import net.onixary.shapeShifterCurseFabric.integration.origins.origin.OriginLayers;
 import net.onixary.shapeShifterCurseFabric.integration.origins.origin.OriginRegistry;
 import net.onixary.shapeShifterCurseFabric.integration.origins.registry.ModComponents;
-import io.netty.buffer.Unpooled;
-import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.minecraft.command.argument.EntityArgumentType;
-import net.minecraft.network.PacketByteBuf;
-import net.minecraft.server.command.ServerCommandSource;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Text;
+import net.onixary.shapeShifterCurseFabric.networking.BytePayload;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -266,9 +267,9 @@ public class OriginCommand {
 	}
 
 	/**
-	 * 	Randomize the origins of the specified entities in all of the origin layers that allows to be randomized.
+	 * 	Randomize the origins of the specified entities in all the origin layers that allows to be randomized.
 	 * 	@param commandContext the command context
-	 * 	@return the number of players that had their origins randomized in all of the origin layers that allows to be randomized
+	 *    @return the number of players that had their origins randomized in all the origin layers that allows to be randomized
 	 * 	@throws CommandSyntaxException if the entity is not found or if the entity is not an instance of {@link ServerPlayerEntity}
 	 */
 	private static int randomizeOrigins(CommandContext<ServerCommandSource> commandContext, TargetType targetType) throws CommandSyntaxException {
@@ -304,7 +305,7 @@ public class OriginCommand {
 		originComponent.sync();
 
 		buffer.writeBoolean(false);
-		ServerPlayNetworking.send(target, ModPackets.OPEN_ORIGIN_SCREEN, buffer);
+		ServerPlayNetworking.send(target, new BytePayload(BytePayload.id(ModPackets.OPEN_ORIGIN_SCREEN), buffer));
 
 	}
 

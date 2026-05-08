@@ -1,19 +1,21 @@
 package net.onixary.shapeShifterCurseFabric.integration.origins.screen;
 
 import com.google.common.collect.Lists;
-import net.onixary.shapeShifterCurseFabric.integration.origins.Origins;
-import net.onixary.shapeShifterCurseFabric.integration.origins.OriginsClient;
-import net.onixary.shapeShifterCurseFabric.integration.origins.origin.Origin;
-import net.onixary.shapeShifterCurseFabric.integration.origins.origin.OriginLayer;
-import net.onixary.shapeShifterCurseFabric.integration.origins.registry.ModComponents;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.ProfileComponent;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.text.Text;
 import net.minecraft.util.Pair;
+import net.onixary.shapeShifterCurseFabric.integration.origins.Origins;
+import net.onixary.shapeShifterCurseFabric.integration.origins.OriginsClient;
+import net.onixary.shapeShifterCurseFabric.integration.origins.origin.Origin;
+import net.onixary.shapeShifterCurseFabric.integration.origins.origin.OriginLayer;
+import net.onixary.shapeShifterCurseFabric.integration.origins.registry.ModComponents;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -34,8 +36,9 @@ public class ViewOriginScreen extends OriginDisplayScreen {
 		origins.forEach((layer, origin) -> {
 			ItemStack displayItem = origin.getDisplayItem();
 			if(displayItem.getItem() == Items.PLAYER_HEAD) {
-				if(!displayItem.hasNbt() || !displayItem.getNbt().contains("SkullOwner")) {
-					displayItem.getOrCreateNbt().putString("SkullOwner", player.getDisplayName().getString());
+				ProfileComponent profile = displayItem.get(DataComponentTypes.PROFILE);
+				if (profile == null || profile.name().isEmpty()) {
+					displayItem.set(DataComponentTypes.PROFILE, new ProfileComponent(player.getGameProfile()));
 				}
 			}
 			if((origin != Origin.EMPTY || layer.getOriginOptionCount(player) > 0) && !layer.isHidden()) {
@@ -43,7 +46,7 @@ public class ViewOriginScreen extends OriginDisplayScreen {
 			}
 		});
 		originLayers.sort(Comparator.comparing(Pair::getLeft));
-		if(this.originLayers.size() > 0) {
+		if (!this.originLayers.isEmpty()) {
 			Pair<OriginLayer, Origin> current = originLayers.get(currentLayer);
 			showOrigin(current.getRight(), current.getLeft(), false);
 		} else {
@@ -59,7 +62,7 @@ public class ViewOriginScreen extends OriginDisplayScreen {
 	@Override
 	protected void init() {
 		super.init();
-        if(originLayers.size() > 0 && OriginsClient.isServerRunningOrigins) {
+		if (!originLayers.isEmpty() && OriginsClient.isServerRunningOrigins) {
 			addDrawableChild(chooseOriginButton = ButtonWidget.builder(Text.translatable(Origins.MODID + ".gui.choose"), b -> {
 				MinecraftClient.getInstance().setScreen(new ChooseOriginScreen(Lists.newArrayList(originLayers.get(currentLayer).getLeft()), 0, false));
 			}).dimensions(guiLeft + windowWidth / 2 - 50, guiTop + windowHeight - 40, 100, 20).build());
@@ -89,7 +92,7 @@ public class ViewOriginScreen extends OriginDisplayScreen {
 	@Override
 	public void render(DrawContext context, int mouseX, int mouseY, float delta) {
 		super.render(context, mouseX, mouseY, delta);
-		if(originLayers.size() == 0) {
+		if (originLayers.isEmpty()) {
 			if(OriginsClient.isServerRunningOrigins) {
 				context.drawCenteredTextWithShadow(this.textRenderer, Text.translatable(Origins.MODID + ".gui.view_origin.empty").getString(), width / 2, guiTop + 48, 0xFFFFFF);
 			} else {

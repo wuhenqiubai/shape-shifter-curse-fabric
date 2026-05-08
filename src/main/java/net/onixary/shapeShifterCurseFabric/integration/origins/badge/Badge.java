@@ -8,6 +8,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.tooltip.TooltipComponent;
+import net.minecraft.network.PacketByteBuf;
 import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.util.Identifier;
 
@@ -31,14 +32,10 @@ public interface Badge extends DataObject<Badge> {
         return this.getBadgeFactory();
     }
 
-    static Badge receive(RegistryByteBuf buf) {
-        return BadgeManager.REGISTRY.receiveDataObject(buf);
-    }
-
-    default void send(RegistryByteBuf buf) {
+    default void writeBuf(PacketByteBuf buf) {
         DataObjectFactory<Badge> factory = this.getFactory();
         buf.writeIdentifier(this.getBadgeFactory().id());
-        factory.getData().write(buf, factory.toData(this));
+        factory.getData().write((RegistryByteBuf) buf, factory.toData(this));
     }
 
 }

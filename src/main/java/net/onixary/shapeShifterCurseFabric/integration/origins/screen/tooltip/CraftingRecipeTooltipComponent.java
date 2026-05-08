@@ -1,12 +1,12 @@
 package net.onixary.shapeShifterCurseFabric.integration.origins.screen.tooltip;
 
-import net.onixary.shapeShifterCurseFabric.integration.origins.Origins;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.tooltip.TooltipComponent;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.collection.DefaultedList;
+import net.onixary.shapeShifterCurseFabric.integration.origins.Origins;
 import net.onixary.shapeShifterCurseFabric.integration.origins.badge.CraftingRecipeBadge;
 
 /**A {@link TooltipComponent} used for {@link CraftingRecipeBadge}

@@ -9,7 +9,6 @@ import io.github.apace100.calio.registry.DataObjectRegistry;
 import io.github.apace100.calio.util.DynamicIdentifier;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.onixary.shapeShifterCurseFabric.integration.origins.Origins;
 
