@@ -30,6 +30,7 @@ import net.minecraft.util.JsonHelper;
 import net.minecraft.util.math.Vec3d;
 import net.onixary.shapeShifterCurseFabric.player_form.PlayerFormBase;
 import net.onixary.shapeShifterCurseFabric.player_form.PlayerFormBodyType;
+import net.onixary.shapeShifterCurseFabric.player_form.ability.PlayerFormComponent;
 import net.onixary.shapeShifterCurseFabric.player_form.ability.RegPlayerFormComponent;
 import net.onixary.shapeShifterCurseFabric.player_form.skin.PlayerSkinComponent;
 import net.onixary.shapeShifterCurseFabric.player_form.skin.RegPlayerSkinComponent;
@@ -478,7 +479,9 @@ public class OriginFurModel extends GeoModel<OriginFurAnimatable> {
 
         // 由于Feral形态的尾部旋转了90度，因此需要修改rotZ而不是rotY
         if (entity == null) return;
-        PlayerFormBase curForm = RegPlayerFormComponent.PLAYER_FORM.get(entity).getCurrentForm();
+        PlayerFormComponent pfComponent = RegPlayerFormComponent.PLAYER_FORM.get(entity);
+        if (pfComponent == null) return;
+        PlayerFormBase curForm = pfComponent.getCurrentForm();
         boolean isFeral = curForm.getBodyType() == PlayerFormBodyType.FERAL;
         float SWAY_RATE = 0.33333334F * 0.5F;
         float SWAY_SCALE = 0.05F;
