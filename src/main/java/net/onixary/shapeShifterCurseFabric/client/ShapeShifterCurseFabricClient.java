@@ -38,6 +38,7 @@ import net.onixary.shapeShifterCurseFabric.mana.ManaRegistriesClient;
 import net.onixary.shapeShifterCurseFabric.mana.ManaUtils;
 import net.onixary.shapeShifterCurseFabric.minion.MinionRegisterClient;
 import net.onixary.shapeShifterCurseFabric.minion.mobs.AnubisWolfMinionEntityRenderer;
+import net.onixary.shapeShifterCurseFabric.networking.ModPacketsC2S;
 import net.onixary.shapeShifterCurseFabric.networking.ModPacketsS2C;
 import net.onixary.shapeShifterCurseFabric.player_animation.RegPlayerAnimation;
 import net.onixary.shapeShifterCurseFabric.render.render_layer.FurGradientRenderLayer;
@@ -286,6 +287,7 @@ public class ShapeShifterCurseFabricClient implements ClientModInitializer {
 		RegPlayerAnimation.register();
 		registerEntityModels();
 		ModPacketsS2C.register();
+			ModPacketsC2S.register();
 
 		registerShaderResource();
 		FurGradientRenderLayer.onInitializeClient();
