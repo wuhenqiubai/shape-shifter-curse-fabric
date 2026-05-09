@@ -24,8 +24,10 @@ public record BytePayload(Id<BytePayload> id, PacketByteBuf data) implements Cus
     }
 
     public static final PacketCodec<PacketByteBuf, BytePayload> CODEC = PacketCodec.of(
-        (payload, buf) -> buf.writeBytes(payload.data.copy()),
-        buf -> new BytePayload(id(Identifier.of("unused", "dynamic")), new PacketByteBuf(buf.copy()))
+        // encoder: write only readable bytes from data buffer
+        (payload, buf) -> buf.writeBytes(payload.data.readBytes(payload.data.readableBytes())),
+        // decoder: wrap remaining bytes
+        buf -> new BytePayload(id(Identifier.of("unused", "dynamic")), new PacketByteBuf(buf.readBytes(buf.readableBytes())))
     );
 
     /** Shorthand: register S2C (idempotent) */
