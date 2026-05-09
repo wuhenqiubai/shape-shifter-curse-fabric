@@ -44,7 +44,11 @@ public class ModPacketsC2S {
     private static void reg(Identifier id, LegacyC2SReceiver receiver) {
         BytePayload.registerC2S(id);
         ServerPlayNetworking.registerGlobalReceiver(BytePayload.id(id), (payload, context) -> {
-            context.server().execute(() -> receiver.receive(context.server(), context.player(), null, payload.data(), null));
+            ShapeShifterCurseFabric.LOGGER.info("[C2S] Received packet: {}", id);
+            context.server().execute(() -> {
+                ShapeShifterCurseFabric.LOGGER.info("[C2S] Executing handler for: {}", id);
+                receiver.receive(context.server(), context.player(), null, payload.data(), null);
+            });
         });
     }
 
