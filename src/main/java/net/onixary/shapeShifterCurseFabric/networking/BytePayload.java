@@ -16,6 +16,8 @@ import java.util.concurrent.ConcurrentHashMap;
 public record BytePayload(Id<BytePayload> id, PacketByteBuf data) implements CustomPayload {
 
     private static final ConcurrentHashMap<Identifier, Id<BytePayload>> IDS = new ConcurrentHashMap<>();
+    private static final java.util.HashSet<Identifier> REGISTERED_S2C = new java.util.HashSet<>();
+    private static final java.util.HashSet<Identifier> REGISTERED_C2S = new java.util.HashSet<>();
 
     public static Id<BytePayload> id(Identifier identifier) {
         return IDS.computeIfAbsent(identifier, id -> new Id<>(id));
@@ -26,13 +28,18 @@ public record BytePayload(Id<BytePayload> id, PacketByteBuf data) implements Cus
         buf -> new BytePayload(id(Identifier.of("unused", "dynamic")), new PacketByteBuf(buf.copy()))
     );
 
-    /** Shorthand: register + send */
+    /** Shorthand: register S2C (idempotent) */
     public static void registerS2C(Identifier identifier) {
-        PayloadTypeRegistry.playS2C().register(id(identifier), CODEC);
+        if (REGISTERED_S2C.add(identifier)) {
+            PayloadTypeRegistry.playS2C().register(id(identifier), CODEC);
+        }
     }
 
+    /** Shorthand: register C2S (idempotent) */
     public static void registerC2S(Identifier identifier) {
-        PayloadTypeRegistry.playC2S().register(id(identifier), CODEC);
+        if (REGISTERED_C2S.add(identifier)) {
+            PayloadTypeRegistry.playC2S().register(id(identifier), CODEC);
+        }
     }
 
     @Override
