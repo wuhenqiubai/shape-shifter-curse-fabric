@@ -176,7 +176,7 @@ public class RegCustomItem {
 
     public static ItemStack buildPotion(Item PotionItem, Potion potion) {
         ItemStack potionStack = new ItemStack(PotionItem);
-        potionStack.set(DataComponentTypes.POTION_CONTENTS, new PotionContentsComponent((RegistryEntry<Potion>) potion));
+        potionStack.set(DataComponentTypes.POTION_CONTENTS, new PotionContentsComponent(Registries.POTION.getEntry(potion)));
         return potionStack;
     }
 
