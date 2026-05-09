@@ -64,7 +64,7 @@ public abstract class ItemStackMixin {
     }
 
     @Inject(method = "getTooltip", at = @At("TAIL"))
-    private void shape_shifter_curse$getTooltip(PlayerEntity player, TooltipContext context, CallbackInfoReturnable<List<Text>> cir) {
+    private void shape_shifter_curse$getTooltip(TooltipContext context, PlayerEntity player, TooltipType type, CallbackInfoReturnable<List<Text>> cir) {
         ItemStack realThis = (ItemStack) (Object) this;
         List<Text> tooltip = cir.getReturnValue();
         var nbt = realThis.get(net.minecraft.component.DataComponentTypes.CUSTOM_DATA);

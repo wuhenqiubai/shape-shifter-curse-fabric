@@ -32,6 +32,8 @@ public class InventoryScreenMixin {
         return;
     }
 
+    // 1.21: Quaternionf overload of drawEntity was removed
+    /*
     @Inject(method = "drawEntity", at = @At("HEAD"))
     private static void drawEntityHead2(DrawContext context, int x, int y, int size, Quaternionf rotation, Quaternionf headRotation, LivingEntity entity, CallbackInfo ci) {
         ClientUtils.isOpenInventoryScreen = true;
@@ -43,4 +45,5 @@ public class InventoryScreenMixin {
         ClientUtils.isOpenInventoryScreen = false;
         return;
     }
+    */
 }
