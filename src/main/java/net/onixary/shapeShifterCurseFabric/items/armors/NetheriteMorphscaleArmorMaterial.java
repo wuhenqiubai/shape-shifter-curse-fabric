@@ -30,10 +30,6 @@ public class NetheriteMorphscaleArmorMaterial {
         0.1F
     );
 
-    public static RegistryEntry<ArmorMaterial> ENTRY;
-
-    public static void initialize() {
-        ENTRY = Registry.registerReference(Registries.ARMOR_MATERIAL,
+    public static final RegistryEntry<ArmorMaterial> ENTRY = Registry.registerReference(Registries.ARMOR_MATERIAL,
             Identifier.of(ShapeShifterCurseFabric.MOD_ID, "netherite_morphscale"), INSTANCE);
-    }
 }

@@ -32,10 +32,6 @@ public class MorphscaleArmorMaterial {
         0.0F
     );
 
-    public static RegistryEntry<ArmorMaterial> ENTRY;
-
-    public static void initialize() {
-        ENTRY = Registry.registerReference(Registries.ARMOR_MATERIAL,
+    public static final RegistryEntry<ArmorMaterial> ENTRY = Registry.registerReference(Registries.ARMOR_MATERIAL,
             Identifier.of(ShapeShifterCurseFabric.MOD_ID, "morphscale"), INSTANCE);
-    }
 }
