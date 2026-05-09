@@ -369,9 +369,16 @@ public class ShapeShifterCurseFabric implements ModInitializer {
         }
     }
 
+    private static int playerTickDebugCounter = 0;
+
     private void onPlayerServerTick(MinecraftServer minecraftServer) {
         List<ServerPlayerEntity> players = minecraftServer.getPlayerManager().getPlayerList();
         if (players.isEmpty()) return;
+
+        if (++playerTickDebugCounter % 200 == 0) {
+            LOGGER.info("[PlayerTick] players={} firstPlayer={}", players.size(),
+                players.isEmpty() ? "none" : players.get(0).getName().getString());
+        }
 
         for(ServerPlayerEntity player : players) {
             // handle instinct tick
