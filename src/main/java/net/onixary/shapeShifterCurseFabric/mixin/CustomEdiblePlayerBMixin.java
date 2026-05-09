@@ -26,7 +26,7 @@ public abstract class CustomEdiblePlayerBMixin extends LivingEntity {
     }
 
     @Inject(method = "eatFood", at = @At(value = "HEAD"), cancellable = true)
-    private void eatFood(World world, ItemStack stack, CallbackInfoReturnable<ItemStack> cir) {
+    private void eatFood(World world, ItemStack stack, FoodComponent vanillaComponent, CallbackInfoReturnable<ItemStack> cir) {
         if ((Object)this instanceof PlayerEntity playerEntity) {
             FoodComponent foodComponent = getPowerFoodComponent(playerEntity, stack);
             if (foodComponent == null) {
