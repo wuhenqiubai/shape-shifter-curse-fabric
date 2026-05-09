@@ -1,11 +1,12 @@
 package net.onixary.shapeShifterCurseFabric.player_form.ability;
 
-import org.ladysnake.cca.api.v3.component.sync.AutoSyncedComponent;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.util.Identifier;
 import net.onixary.shapeShifterCurseFabric.player_form.PlayerFormBase;
 import net.onixary.shapeShifterCurseFabric.player_form.RegPlayerForms;
+import org.jetbrains.annotations.NotNull;
+import org.ladysnake.cca.api.v3.component.sync.AutoSyncedComponent;
 
 public class PlayerFormComponent implements AutoSyncedComponent {
     private Identifier currentForm = RegPlayerForms.ORIGINAL_BEFORE_ENABLE.FormID;
@@ -25,7 +26,7 @@ public class PlayerFormComponent implements AutoSyncedComponent {
     private Identifier customPotionFormID = RegPlayerForms.ORIGINAL_BEFORE_ENABLE.FormID;
 
     @Override
-    public void readFromNbt(NbtCompound nbtCompound, RegistryWrapper.WrapperLookup registryLookup) {
+    public void readFromNbt(NbtCompound nbtCompound, RegistryWrapper.@NotNull WrapperLookup registryLookup) {
         // 读取状态枚举
         // 先凑活用这种方法 等有空我写一个nbt/json配置解析器
         this.currentForm = nbtCompound.contains("currentForm") ? Identifier.tryParse(nbtCompound.getString("currentForm")) : RegPlayerForms.ORIGINAL_BEFORE_ENABLE.FormID;
@@ -41,13 +42,13 @@ public class PlayerFormComponent implements AutoSyncedComponent {
     }
 
     public PlayerFormComponent clear() {
-        // CCA 6.x: readFromNbt needs RegistryWrapper.WrapperLookup — TODO: pass from entity context
-        this.readFromNbt(new NbtCompound(), null);
+        NbtCompound emptyNbt = new NbtCompound();
+        this.readFromNbt(emptyNbt, null);
         return this;
     }
 
     @Override
-    public void writeToNbt(NbtCompound nbtCompound, RegistryWrapper.WrapperLookup registryLookup) {
+    public void writeToNbt(NbtCompound nbtCompound, RegistryWrapper.@NotNull WrapperLookup registryLookup) {
         nbtCompound.putString("currentForm", this.currentForm == null ? RegPlayerForms.ORIGINAL_BEFORE_ENABLE.FormID.toString() : this.currentForm.toString());
         nbtCompound.putString("previousForm", this.previousForm == null ? RegPlayerForms.ORIGINAL_BEFORE_ENABLE.FormID.toString() : this.previousForm.toString());
         nbtCompound.putBoolean("isByCursedMoon", this.isByCursedMoon);
