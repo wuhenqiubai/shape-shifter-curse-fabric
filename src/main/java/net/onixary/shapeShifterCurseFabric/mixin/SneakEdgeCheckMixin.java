@@ -21,10 +21,7 @@ public class SneakEdgeCheckMixin {
         return getOriginalOrModifiedStepHeight(playerEntity);
     }
 
-    @Redirect(method = "method_30263", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;getStepHeight()F"))
-    private float redirectGetStepHeightForEdgeCheck(PlayerEntity playerEntity) {
-        return getOriginalOrModifiedStepHeight(playerEntity);
-    }
+    // method_30263 (edge check) no longer calls getStepHeight() in 1.21 — removed
 
     @Unique
     private float getOriginalOrModifiedStepHeight(PlayerEntity playerEntity) {
