@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(GameRenderer.class)
 public class GameRendererMixin {
     @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/profiler/Profiler;pop()V", ordinal = 0))
-    private void shape_shifter_curse$renderOverlayAboveHud(float tickDelta, long startTime, boolean tick, CallbackInfo ci) {
+    private void shape_shifter_curse$renderOverlayAboveHud(net.minecraft.client.render.RenderTickCounter tickCounter, boolean tick, CallbackInfo ci) {
         TransformOverlay.INSTANCE.render();
     }
 }
