@@ -95,9 +95,12 @@ public abstract class LivingEntityMixin {
         if (attacker instanceof ServerPlayerEntity) {
             if(entity instanceof WitchEntity || entity instanceof EvokerEntity) {
                 if (Math.random() < StaticParams.FAMILIAR_CURSE_POTION_DROP_PROBABILITY){
-                    // PotionContentsComponent needs RegistryEntry<Potion> — TODO: lookup via Registry
-                    // ItemStack customPotion = new ItemStack(Items.SPLASH_POTION).set(DataComponentTypes.POTION_CONTENTS, new PotionContentsComponent(...));
-                    ItemStack customPotion = ItemStack.EMPTY;
+                    net.minecraft.registry.entry.RegistryEntry<net.minecraft.potion.Potion> familiarFoxPotion =
+                            net.minecraft.registry.Registries.POTION.getEntry(
+                                    net.minecraft.registry.RegistryKey.of(net.minecraft.registry.RegistryKeys.POTION,
+                                            net.minecraft.util.Identifier.of("shape-shifter-curse", "to_familiar_fox_0_potion")))
+                                    .orElseThrow();
+                    ItemStack customPotion = PotionContentsComponent.createStack(Items.SPLASH_POTION, familiarFoxPotion);
                     entity.getWorld().spawnEntity(
                             new ItemEntity(
                                     entity.getWorld(),

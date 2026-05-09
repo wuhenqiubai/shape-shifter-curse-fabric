@@ -4,8 +4,10 @@ import io.github.apace100.apoli.component.PowerHolderComponent;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.mob.WitchEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.component.type.PotionContentsComponent;
 import net.minecraft.entity.projectile.thrown.PotionEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -41,8 +43,12 @@ public abstract class WitchEntityMixin {
 
                     // 创建自定义溅射式药水
                     PotionEntity customPotion = new PotionEntity(world, witch);
-                    // PotionContentsComponent needs RegistryEntry<Potion> — TODO: lookup via Registry
-                    ItemStack potionStack = ItemStack.EMPTY; // was: new ItemStack(Items.SPLASH_POTION).set(...)
+                    net.minecraft.registry.entry.RegistryEntry<net.minecraft.potion.Potion> familiarFoxPotion =
+                            net.minecraft.registry.Registries.POTION.getEntry(
+                                    net.minecraft.registry.RegistryKey.of(net.minecraft.registry.RegistryKeys.POTION,
+                                            net.minecraft.util.Identifier.of("shape-shifter-curse", "to_familiar_fox_0_potion")))
+                                    .orElseThrow();
+                    ItemStack potionStack = PotionContentsComponent.createStack(Items.SPLASH_POTION, familiarFoxPotion);
                     customPotion.setItem(potionStack);
 
                     customPotion.setPitch(customPotion.getPitch() - -20.0F);
