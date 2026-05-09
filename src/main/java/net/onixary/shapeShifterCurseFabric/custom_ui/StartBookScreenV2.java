@@ -68,7 +68,7 @@ public class StartBookScreenV2 extends Screen {
     private void RenderBook(DrawContext context) {
         int BookPosX = width / 2 - BookSizeX / 2;
         int BookPosY = height / 2 - BookSizeY / 2;
-        context.drawTexture(StartBook_TexID, BookPosX, BookPosY, 0, 0, BookSizeX, BookSizeY, BookSizeX, BookSizeY);
+        context.drawTexture(StartBook_TexID, BookPosX, BookPosY, 0, 0f, 0f, BookSizeX, BookSizeY, BookSizeX, BookSizeY);
     }
 
     @Override
