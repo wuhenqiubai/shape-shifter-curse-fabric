@@ -33,7 +33,7 @@ public class EntityAttributeRegister {
             extraAttributes.put(entityType, builder);
         }
         else {
-            FabricDefaultAttributeRegistry.register(entityType, builder.get());
+            FabricDefaultAttributeRegistry.register(entityType, builder.get().build());
         }
     }
 }
