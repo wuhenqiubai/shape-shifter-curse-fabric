@@ -37,7 +37,6 @@ import java.util.UUID;
 
 import static net.onixary.shapeShifterCurseFabric.networking.ModPackets.*;
 
-// VirtualTotemPower disabled for 1.21 port
 
 /**
  * 应仅在客户端注册

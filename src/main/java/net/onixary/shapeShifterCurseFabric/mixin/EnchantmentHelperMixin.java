@@ -1,7 +1,6 @@
 package net.onixary.shapeShifterCurseFabric.mixin;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
-import com.llamalad7.mixinextras.sugar.Local;
 import io.github.apace100.apoli.component.PowerHolderComponent;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -48,10 +47,10 @@ public class EnchantmentHelperMixin {
     // hasSoulSpeed removed in 1.21 — soul speed is now data-driven via applyLocationBasedEffects.
     // getEquipmentLevel mixin already handles SoulSpeedPower contribution.
 
-    @ModifyExpressionValue(method = "getPossibleEntries", at = @At(value = "INVOKE", target = "Lnet/minecraft/enchantment/Enchantment;isAcceptableItem(Lnet/minecraft/item/ItemStack;)Z"))
-    private static boolean isAcceptableItem(boolean original, @Local(ordinal = 0) ItemStack itemStack, @Local RegistryEntry<Enchantment> enchantment) {
+    @ModifyExpressionValue(method = "getPossibleEntries", at = @At(value = "INVOKE", target = "Lnet/minecraft/enchantment/Enchantment;isPrimaryItem(Lnet/minecraft/item/ItemStack;)Z"))
+    private static boolean isPrimaryItem(boolean original, ItemStack stack, RegistryEntry<Enchantment> enchantment) {
         if (!original) {
-            return EnchantmentUtils.isItemCanEnchantment(enchantment.getKey().orElseThrow(), itemStack);
+            return EnchantmentUtils.isItemCanEnchantment(enchantment.getKey().orElseThrow(), stack);
         }
         return original;
     }

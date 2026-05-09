@@ -1,23 +1,18 @@
 package net.onixary.shapeShifterCurseFabric.render.tech;
 
-import com.google.common.collect.Lists;
 import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.apace100.apoli.component.PowerHolderComponent;
 import io.github.apace100.apoli.power.Power;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.Pair;
 import net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric;
-// ItemStorePower disabled for 1.21 port
 import net.onixary.shapeShifterCurseFabric.util.UIPositionUtils;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
-
-import net.minecraft.util.Identifier;
 
 public class ItemStorePowerRender {
     private static final Identifier WIDGETS_TEXTURE = Identifier.of("textures/gui/sprites/widget.png");

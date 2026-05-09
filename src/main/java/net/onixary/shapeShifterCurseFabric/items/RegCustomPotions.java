@@ -1,15 +1,16 @@
 package net.onixary.shapeShifterCurseFabric.items;
 
+import com.google.gson.JsonObject;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.item.Items;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.Potions;
-import net.minecraft.recipe.BrewingRecipeRegistry;
 import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
+import net.onixary.shapeShifterCurseFabric.recipes.BrewingRecipeUtils;
 
 import static net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric.MOD_ID;
 import static net.onixary.shapeShifterCurseFabric.status_effects.RegOtherStatusEffects.FEED_EFFECT;
@@ -67,8 +68,53 @@ public class RegCustomPotions {
     }
 
     public static void registerPotionsRecipes(){
-        // BrewingRecipeRegistry disabled: Recipe is final class in 1.21
-        // Brewing recipes must be defined via JSON data files
-    
+        // 使用新的动态酿造配方系统
+        // awkward + moondust_matrix = moondust_potion
+        BrewingRecipeUtils.registerPotionRecipe(createPotionRecipeJson(Potions.AWKWARD, RegCustomItem.MOONDUST_MATRIX, MOONDUST_POTION));
+        BrewingRecipeUtils.registerPotionRecipe(createPotionRecipeJson(MOONDUST_POTION, Items.POINTED_DRIPSTONE, BAT_FORM_POTION));
+        BrewingRecipeUtils.registerPotionRecipe(createPotionRecipeJson(MOONDUST_POTION, Items.BIG_DRIPLEAF, AXOLOTL_FORM_POTION));
+        BrewingRecipeUtils.registerPotionRecipe(createPotionRecipeJson(MOONDUST_POTION, Items.CHICKEN, OCELOT_FORM_POTION));
+        // familiar fox只能通过女巫发射或掉落的溅射药水给与，没有配方
+        // The familiar fox can only be obtained via splash potions thrown or drop by witches, no recipe available
+        BrewingRecipeUtils.registerPotionRecipe(createPotionRecipeJson(MOONDUST_POTION, RegCustomItem.ECTOPLASM_RAG, ANUBIS_WOLF_FORM_POTION));
+        // snow fox 需要通过净化familiar fox药水来得到
+        // snow fox can be obtained by purifying familiar fox potion
+        BrewingRecipeUtils.registerPotionRecipe(createPotionRecipeJson(FAMILIAR_FOX_FORM_POTION, Items.GOLD_NUGGET, SNOW_FOX_FORM_POTION));
+        BrewingRecipeUtils.registerPotionRecipe(createPotionRecipeJson(MOONDUST_POTION, Items.AMETHYST_SHARD, ALLEY_FORM_POTION));
+        BrewingRecipeUtils.registerPotionRecipe(createPotionRecipeJson(MOONDUST_POTION, Items.COD_BUCKET, FERAL_CAT_FORM_POTION));
+        /* 未支持数据包时代的占位形态 现在可以使用数据添加形态了
+        // custom empty forms
+        BrewingRecipeUtils.registerPotionRecipe(createPotionRecipeJson("potion", MOONDUST_POTION, Items.RED_DYE, ALPHA_FORM_POTION));
+        BrewingRecipeUtils.registerPotionRecipe(createPotionRecipeJson("potion", MOONDUST_POTION, Items.YELLOW_DYE, BETA_FORM_POTION));
+        BrewingRecipeUtils.registerPotionRecipe(createPotionRecipeJson("potion", MOONDUST_POTION, Items.BLUE_DYE, GAMMA_FORM_POTION));
+        BrewingRecipeUtils.registerPotionRecipe(createPotionRecipeJson("potion", MOONDUST_POTION, Items.GREEN_DYE, OMEGA_FORM_POTION));
+        BrewingRecipeUtils.registerPotionRecipe(createPotionRecipeJson("potion", MOONDUST_POTION, Items.ORANGE_DYE, PSI_FORM_POTION));
+        BrewingRecipeUtils.registerPotionRecipe(createPotionRecipeJson("potion", MOONDUST_POTION, Items.PURPLE_DYE, CHI_FORM_POTION));
+        BrewingRecipeUtils.registerPotionRecipe(createPotionRecipeJson("potion", MOONDUST_POTION, Items.WHITE_DYE, PHI_FORM_POTION));
+        */
+    }
+
+    private static JsonObject createPotionRecipeJson(Object input, Object ingredient, Object output) {
+        JsonObject json = new JsonObject();
+        json.addProperty("type", "potion");
+
+        // 处理输入药水/物品
+        if (input instanceof Potion) {
+            json.addProperty("input", Registries.POTION.getId((Potion) input).toString());
+        } else if (input instanceof net.minecraft.potion.Potion) {
+            json.addProperty("input", ((net.minecraft.potion.Potion) input).toString());
+        }
+
+        // 处理输出药水/物品
+        if (output instanceof Potion) {
+            json.addProperty("output", Registries.POTION.getId((Potion) output).toString());
+        }
+
+        // 处理材料（物品）
+        if (ingredient instanceof net.minecraft.item.Item) {
+            json.addProperty("ingredient", Registries.ITEM.getId((net.minecraft.item.Item) ingredient).toString());
+        }
+
+        return json;
     }
 }

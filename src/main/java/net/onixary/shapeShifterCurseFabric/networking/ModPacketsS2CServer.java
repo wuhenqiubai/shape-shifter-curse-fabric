@@ -25,7 +25,6 @@ import java.util.UUID;
 
 import static net.onixary.shapeShifterCurseFabric.networking.ModPackets.UPDATE_POWER_ANIM_DATA_TO_CLIENT;
 
-// VirtualTotemPower disabled for 1.21 port
 
 // 纯服务端类，所有send方法都只在这里调用
 // This is a pure server-side class, all send methods are called only here
