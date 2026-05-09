@@ -1,21 +1,6 @@
 package net.onixary.shapeShifterCurseFabric.integration.origins.networking;
 
 import io.github.apace100.calio.data.SerializableData;
-import net.onixary.shapeShifterCurseFabric.integration.origins.Origins;
-import net.onixary.shapeShifterCurseFabric.integration.origins.OriginsClient;
-import net.onixary.shapeShifterCurseFabric.integration.origins.badge.Badge;
-import net.onixary.shapeShifterCurseFabric.integration.origins.badge.BadgeManager;
-import net.onixary.shapeShifterCurseFabric.integration.origins.component.OriginComponent;
-import net.onixary.shapeShifterCurseFabric.integration.origins.integration.OriginDataLoadedCallback;
-import net.onixary.shapeShifterCurseFabric.integration.origins.origin.Origin;
-import net.onixary.shapeShifterCurseFabric.integration.origins.origin.OriginLayer;
-import net.onixary.shapeShifterCurseFabric.integration.origins.origin.OriginLayers;
-import net.onixary.shapeShifterCurseFabric.integration.origins.origin.OriginRegistry;
-import net.onixary.shapeShifterCurseFabric.integration.origins.registry.ModComponents;
-import net.onixary.shapeShifterCurseFabric.integration.origins.screen.ChooseOriginScreen;
-import net.onixary.shapeShifterCurseFabric.integration.origins.screen.WaitForNextLayerScreen;
-import io.netty.util.concurrent.Future;
-import io.netty.util.concurrent.GenericFutureListener;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.networking.v1.ClientLoginNetworking;
@@ -27,23 +12,51 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientLoginNetworkHandler;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.network.PacketByteBuf;
+import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.util.Identifier;
+import net.onixary.shapeShifterCurseFabric.integration.origins.Origins;
+import net.onixary.shapeShifterCurseFabric.integration.origins.OriginsClient;
+import net.onixary.shapeShifterCurseFabric.integration.origins.badge.Badge;
+import net.onixary.shapeShifterCurseFabric.integration.origins.badge.BadgeManager;
+import net.onixary.shapeShifterCurseFabric.integration.origins.component.OriginComponent;
+import net.onixary.shapeShifterCurseFabric.integration.origins.integration.OriginDataLoadedCallback;
+import net.onixary.shapeShifterCurseFabric.integration.origins.origin.Origin;
+import net.onixary.shapeShifterCurseFabric.integration.origins.origin.OriginLayer;
+import net.onixary.shapeShifterCurseFabric.integration.origins.origin.OriginLayers;
+import net.onixary.shapeShifterCurseFabric.integration.origins.origin.OriginRegistry;
+import net.onixary.shapeShifterCurseFabric.integration.origins.registry.ModComponents;
+import net.onixary.shapeShifterCurseFabric.integration.origins.screen.WaitForNextLayerScreen;
+import net.onixary.shapeShifterCurseFabric.networking.BytePayload;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
-import java.util.function.Consumer;
 
 public class ModPacketsS2C {
 
     @Environment(EnvType.CLIENT)
     public static void register() {
-        ClientLoginNetworking.registerGlobalReceiver(ModPackets.HANDSHAKE, ModPacketsS2C::handleHandshake);
+        ClientLoginNetworking.registerGlobalReceiver(ModPackets.HANDSHAKE, (client, handler, buf, responseConsumer) -> {
+            return handleHandshake(client, handler, buf);
+        });
         ClientPlayConnectionEvents.INIT.register(((clientPlayNetworkHandler, minecraftClient) -> {
-            ClientPlayNetworking.registerReceiver(ModPackets.OPEN_ORIGIN_SCREEN, ModPacketsS2C::openOriginScreen);
-            ClientPlayNetworking.registerReceiver(ModPackets.ORIGIN_LIST, ModPacketsS2C::receiveOriginList);
-            ClientPlayNetworking.registerReceiver(ModPackets.LAYER_LIST, ModPacketsS2C::receiveLayerList);
-            ClientPlayNetworking.registerReceiver(ModPackets.CONFIRM_ORIGIN, ModPacketsS2C::receiveOriginConfirmation);
-            ClientPlayNetworking.registerReceiver(ModPackets.BADGE_LIST, ModPacketsS2C::receiveBadgeList);
+            ClientPlayNetworking.registerReceiver(BytePayload.id(ModPackets.OPEN_ORIGIN_SCREEN), (payload, context) -> {
+                openOriginScreen(context.client(), context.player().networkHandler, payload.data(), context.responseSender());
+            });
+            ClientPlayNetworking.registerReceiver(BytePayload.id(ModPackets.ORIGIN_LIST), (payload, context) -> {
+                receiveOriginList(context.client(), context.player().networkHandler, payload.data(), context.responseSender());
+            });
+            ClientPlayNetworking.registerReceiver(BytePayload.id(ModPackets.LAYER_LIST), (payload, context) -> {
+                receiveLayerList(context.client(), context.player().networkHandler, payload.data(), context.responseSender());
+            });
+            ClientPlayNetworking.registerReceiver(BytePayload.id(ModPackets.CONFIRM_ORIGIN), (payload, context) -> {
+                receiveOriginConfirmation(context.client(), context.player().networkHandler, payload.data(), context.responseSender());
+            });
+            ClientPlayNetworking.registerReceiver(BytePayload.id(ModPackets.BADGE_LIST), (payload, context) -> {
+                receiveBadgeList(context.client(), context.player().networkHandler, payload.data(), context.responseSender());
+            });
         }));
     }
 
@@ -52,7 +65,10 @@ public class ModPacketsS2C {
         OriginLayer layer = OriginLayers.getLayer(packetByteBuf.readIdentifier());
         Origin origin = OriginRegistry.get(packetByteBuf.readIdentifier());
         minecraftClient.execute(() -> {
-            OriginComponent component = ModComponents.ORIGIN.get(minecraftClient.player);
+            OriginComponent component = null;
+            if (minecraftClient.player != null) {
+                component = ModComponents.ORIGIN.get(minecraftClient.player);
+            }
             component.setOrigin(layer, origin);
             if(minecraftClient.currentScreen instanceof WaitForNextLayerScreen) {
                 ((WaitForNextLayerScreen)minecraftClient.currentScreen).openSelection();
@@ -61,7 +77,7 @@ public class ModPacketsS2C {
     }
 
     @Environment(EnvType.CLIENT)
-    private static CompletableFuture<PacketByteBuf> handleHandshake(MinecraftClient minecraftClient, ClientLoginNetworkHandler clientLoginNetworkHandler, PacketByteBuf packetByteBuf, Consumer<GenericFutureListener<? extends Future<? super Void>>> genericFutureListenerConsumer) {
+    private static CompletableFuture<PacketByteBuf> handleHandshake(MinecraftClient minecraftClient, ClientLoginNetworkHandler clientLoginNetworkHandler, PacketByteBuf packetByteBuf) {
         PacketByteBuf buf = PacketByteBufs.create();
         buf.writeInt(Origins.SEMVER.length);
         for(int i = 0; i < Origins.SEMVER.length; i++) {
@@ -95,7 +111,7 @@ public class ModPacketsS2C {
             SerializableData.Instance[] origins = new SerializableData.Instance[ids.length];
             for(int i = 0; i < origins.length; i++) {
                 ids[i] = Identifier.tryParse(packetByteBuf.readString());
-                origins[i] = Origin.DATA.read(packetByteBuf);
+                origins[i] = Origin.DATA.read((RegistryByteBuf) packetByteBuf);
             }
             minecraftClient.execute(() -> {
                 OriginsClient.isServerRunningOrigins = true;
@@ -115,7 +131,7 @@ public class ModPacketsS2C {
             int layerCount = packetByteBuf.readInt();
             OriginLayer[] layers = new OriginLayer[layerCount];
             for(int i = 0; i < layerCount; i++) {
-                layers[i] = OriginLayer.read(packetByteBuf);
+                layers[i] = OriginLayer.read((RegistryByteBuf) packetByteBuf);
             }
             minecraftClient.execute(() -> {
                 OriginLayers.clear();
@@ -139,7 +155,7 @@ public class ModPacketsS2C {
                 List<Badge> badgeList = new LinkedList<>();
                 int badgeCount = packetByteBuf.readInt();
                 for(int j = 0; j < badgeCount; j++) {
-                    Badge badge = BadgeManager.REGISTRY.receiveDataObject(packetByteBuf);
+                    Badge badge = BadgeManager.REGISTRY.receiveDataObject((RegistryByteBuf) packetByteBuf);
                     badgeList.add(badge);
                 }
                 badges.put(powerId, badgeList);
