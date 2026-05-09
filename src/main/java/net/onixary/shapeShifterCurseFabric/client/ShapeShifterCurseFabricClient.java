@@ -287,7 +287,7 @@ public class ShapeShifterCurseFabricClient implements ClientModInitializer {
 		RegPlayerAnimation.register();
 		registerEntityModels();
 		ModPacketsS2C.register();
-			ModPacketsC2S.register();
+			ModPacketsC2S.registerClient();
 
 		registerShaderResource();
 		FurGradientRenderLayer.onInitializeClient();

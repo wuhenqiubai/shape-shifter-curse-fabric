@@ -52,6 +52,18 @@ public class ModPacketsC2S {
         });
     }
 
+    /** Client-side only: register payload CODEC for sending (no receiver) */
+    private static void regClient(Identifier id) {
+        BytePayload.registerC2S(id);
+    }
+
+    /** Called from client initializer: only registers CODEC for sending */
+    public static void registerClient() {
+        regClient(ModPackets.VALIDATE_START_BOOK_BUTTON);
+        regClient(Identifier.of(ShapeShifterCurseFabric.MOD_ID, "update_skin_setting"));
+        // Add any other C2S packet IDs the client sends here
+    }
+
     public static void register() {
         reg(ModPackets.VALIDATE_START_BOOK_BUTTON, net.onixary.shapeShifterCurseFabric.networking.ModPacketsC2S::onPressStartBookButton);
         reg(Identifier.of(ShapeShifterCurseFabric.MOD_ID, "update_skin_setting"),
