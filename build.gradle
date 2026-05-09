@@ -316,9 +316,11 @@ tasks.register('fixEmbeddedModVersions') {
                     project.delete fileTree(extractDir) { include '**/TextureManagerMixin*.class' }
                     def cfg = new File(extractDir, 'azurelib.fabric.mixins.json')
                     if (cfg.exists()) {
-                        cfg.text = cfg.text.replaceAll(/\s*"common\.internal\.mixins\.TextureManagerMixin"\s*,?\s*/, '')
-                        cfg.text = cfg.text.replaceAll(/,\s*]/, ']')
-                        cfg.text = cfg.text.replaceAll(/\[\s*,/, '[')
+                        def json = new groovy.json.JsonSlurper().parse(cfg) as Map
+                        json.mixins = json.mixins.findAll { !it.contains('TextureManagerMixin') }
+                        json.client = (json.client ?: []).findAll { !it.contains('TextureManagerMixin') }
+                        json.server = (json.server ?: []).findAll { !it.contains('TextureManagerMixin') }
+                        cfg.text = groovy.json.JsonOutput.prettyPrint(groovy.json.JsonOutput.toJson(json))
                     }
                 }
                 embedded.delete()
