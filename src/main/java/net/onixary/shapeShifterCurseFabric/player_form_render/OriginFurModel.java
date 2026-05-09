@@ -477,6 +477,7 @@ public class OriginFurModel extends GeoModel<OriginFurAnimatable> {
         // first tail part
 
         // 由于Feral形态的尾部旋转了90度，因此需要修改rotZ而不是rotY
+        if (entity == null) return;
         PlayerFormBase curForm = RegPlayerFormComponent.PLAYER_FORM.get(entity).getCurrentForm();
         boolean isFeral = curForm.getBodyType() == PlayerFormBodyType.FERAL;
         float SWAY_RATE = 0.33333334F * 0.5F;
