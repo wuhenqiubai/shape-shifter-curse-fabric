@@ -4,15 +4,15 @@
     "type": "origins:projectile"
   },
   "modifier": {
-    "operation": "add_value",
-    "amount": 0
+    "operation": "addition",
+    "value": 0
   },
   "target_action": {
     "type": "origins:execute_command",
     "command": "particle minecraft:cloud ~ ~0.5 ~ 0.2 0.2 0.2 0 10"
   },
   "self_action": {
-    "type": "origins:all_of",
+    "type": "origins:and",
     "actions": [
       {
         "type": "origins:play_sound",

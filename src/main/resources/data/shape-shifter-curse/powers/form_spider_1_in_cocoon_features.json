@@ -4,18 +4,20 @@
     "type": "origins:attribute",
     "modifier": {
       "attribute": "minecraft:generic.max_health",
-      "amount": -12.0,
-      "operation": "add_value"
+      "value": -12.0,
+      "operation": "addition"
     }
   },
+
   "armor_value_up": {
     "type": "origins:attribute",
     "modifier": {
       "attribute": "minecraft:generic.armor",
-      "amount": 20.0,
-      "operation": "add_value"
+      "value": 20.0,
+      "operation": "addition"
     }
   },
+
   "no_armors": {
     "type": "origins:restrict_armor",
     "head": {
@@ -39,6 +41,7 @@
       "compare_to": -1
     }
   },
+
   "fire_damage_up": {
     "type": "shape-shifter-curse:burn_damage_modifier",
     "modifier": 1.0

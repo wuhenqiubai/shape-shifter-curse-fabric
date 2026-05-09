@@ -1,11 +1,12 @@
 {
   "type": "origins:multiple",
+
   "reverse_hot_cold": {
     "type": "shape-shifter-curse:delay_attribute",
     "modifier": {
       "attribute": "minecraft:generic.max_health",
-      "amount": -4.0,
-      "operation": "add_value"
+      "value": -4.0,
+      "operation": "addition"
     },
     "tick_rate": 20,
     "updateHealth": true,

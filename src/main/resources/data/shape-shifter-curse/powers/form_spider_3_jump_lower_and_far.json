@@ -3,7 +3,7 @@
   "jump_far": {
     "type": "shape-shifter-curse:action_on_jump",
     "entity_action": {
-      "type": "origins:all_of",
+      "type": "origins:and",
       "actions": [
         {
           "type": "origins:add_velocity",
@@ -29,9 +29,10 @@
           "command": "particle cloud ~ ~ ~ 0.3 0.3 0.3 0.01 16 normal @a"
         }
       ]
+
     },
     "entity_condition": {
-      "type": "origins:all_of",
+      "type": "origins:and",
       "conditions": [
         {
           "type": "origins:food_level",
@@ -57,7 +58,7 @@
     "type": "origins:modify_jump",
     "modifier": {
       "operation": "multiply_base_multiplicative",
-      "amount": -0.25
+      "value": -0.25
     }
   }
 }

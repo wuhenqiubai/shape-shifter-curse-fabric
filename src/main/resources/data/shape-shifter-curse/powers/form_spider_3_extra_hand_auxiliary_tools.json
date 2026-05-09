@@ -1,12 +1,13 @@
 {
   "type": "origins:multiple",
-  "auxiliary_sword_attack_speed": {
+
+  "auxiliary_sword_attack_speed":{
     "type": "origins:conditioned_attribute",
     "modifier": {
       "attribute": "minecraft:generic.attack_speed",
-      "operation": "add_value",
-      "amount": 1.2,
-      "id": "shape-shifter-curse:increased_attack_speed"
+      "operation": "addition",
+      "value": 1.2,
+      "name": "Increased attack speed"
     },
     "tick_rate": 20,
     "condition": {
@@ -17,15 +18,16 @@
       "condition": {
         "type": "origins:ingredient",
         "ingredient": {
-          "id": "shape-shifter-curse:auxiliary_sword"
+          "item": "shape-shifter-curse:auxiliary_sword"
         }
       }
     }
   },
-  "auxiliary_sword_tool_damage": {
+
+  "auxiliary_sword_tool_damage":{
     "type": "origins:self_action_on_hit",
     "entity_action": {
-      "type": "origins:all_of",
+      "type": "origins:and",
       "actions": [
         {
           "type": "origins:equipped_item_action",
@@ -57,16 +59,18 @@
       "condition": {
         "type": "origins:ingredient",
         "ingredient": {
-          "id": "shape-shifter-curse:auxiliary_sword"
+          "item": "shape-shifter-curse:auxiliary_sword"
         }
       }
     }
   },
-  "auxiliary_axe_attack_damage": {
+
+  "auxiliary_axe_attack_damage":{
     "type": "origins:modify_damage_dealt",
     "modifier": {
-      "operation": "add_value",
-      "amount": 5.0
+      "name": "Increased attack damage",
+      "operation": "addition",
+      "value": 5.0
     },
     "damage_condition": {
       "type": "origins:amount",
@@ -81,18 +85,19 @@
       "condition": {
         "type": "origins:ingredient",
         "ingredient": {
-          "id": "shape-shifter-curse:auxiliary_axe"
+          "item": "shape-shifter-curse:auxiliary_axe"
         }
       }
     }
   },
-  "auxiliary_axe_attack_speed": {
+
+  "auxiliary_axe_attack_speed":{
     "type": "origins:conditioned_attribute",
     "modifier": {
       "attribute": "minecraft:generic.attack_speed",
-      "operation": "add_multiplied_base",
-      "amount": -0.4,
-      "id": "shape-shifter-curse:decreased_attack_speed"
+      "operation": "multiply_base",
+      "value": -0.4,
+      "name": "Decreased attack speed"
     },
     "tick_rate": 20,
     "condition": {
@@ -103,15 +108,16 @@
       "condition": {
         "type": "origins:ingredient",
         "ingredient": {
-          "id": "shape-shifter-curse:auxiliary_axe"
+          "item": "shape-shifter-curse:auxiliary_axe"
         }
       }
     }
   },
-  "auxiliary_axe_tool_damage": {
+
+  "auxiliary_axe_tool_damage":{
     "type": "origins:self_action_on_hit",
     "entity_action": {
-      "type": "origins:all_of",
+      "type": "origins:and",
       "actions": [
         {
           "type": "shape-shifter-curse:invoke_accessory",
@@ -134,16 +140,18 @@
       "condition": {
         "type": "origins:ingredient",
         "ingredient": {
-          "id": "shape-shifter-curse:auxiliary_axe"
+          "item": "shape-shifter-curse:auxiliary_axe"
         }
       }
     }
   },
-  "auxiliary_pickaxe_attack_damage": {
+
+  "auxiliary_pickaxe_attack_damage":{
     "type": "origins:modify_damage_dealt",
     "modifier": {
-      "operation": "add_value",
-      "amount": -4.0
+      "name": "Decreased attack damage",
+      "operation": "addition",
+      "value": -4.0
     },
     "condition": {
       "type": "shape-shifter-curse:check_accessory",
@@ -153,16 +161,17 @@
       "condition": {
         "type": "origins:ingredient",
         "ingredient": {
-          "id": "shape-shifter-curse:auxiliary_pickaxe"
+          "item": "shape-shifter-curse:auxiliary_pickaxe"
         }
       }
     }
   },
-  "auxiliary_pickaxe_mining_speed": {
+
+  "auxiliary_pickaxe_mining_speed":{
     "type": "origins:modify_break_speed",
     "modifier": {
-      "operation": "add_multiplied_base",
-      "amount": 0.8
+      "operation": "multiply_base",
+      "value": 0.8
     },
     "condition": {
       "type": "shape-shifter-curse:check_accessory",
@@ -172,15 +181,16 @@
       "condition": {
         "type": "origins:ingredient",
         "ingredient": {
-          "id": "shape-shifter-curse:auxiliary_pickaxe"
+          "item": "shape-shifter-curse:auxiliary_pickaxe"
         }
       }
     }
   },
-  "auxiliary_pickaxe_tool_damage": {
+
+  "auxiliary_pickaxe_tool_damage":{
     "type": "origins:self_action_on_hit",
     "entity_action": {
-      "type": "origins:all_of",
+      "type": "origins:and",
       "actions": [
         {
           "type": "shape-shifter-curse:invoke_accessory",
@@ -203,19 +213,20 @@
       "condition": {
         "type": "origins:ingredient",
         "ingredient": {
-          "id": "shape-shifter-curse:auxiliary_pickaxe"
+          "item": "shape-shifter-curse:auxiliary_pickaxe"
         }
       }
     }
   },
-  "extra_shield_blocking": {
+
+  "extra_shield_blocking":{
     "type": "shape-shifter-curse:virtual_shield",
     "active_shield_condition": {
-      "type": "origins:all_of",
+      "type": "origins:and",
       "conditions": [
         {
           "type": "shape-shifter-curse:is_item_in_cooldown",
-          "id": "minecraft:shield",
+          "item": "minecraft:shield",
           "inverted": true
         },
         {
@@ -226,18 +237,18 @@
           "condition": {
             "type": "origins:ingredient",
             "ingredient": {
-              "id": "minecraft:shield"
+              "item": "minecraft:shield"
             }
           }
         }
       ]
     },
     "normal_damage_action": {
-      "type": "origins:all_of",
+      "type": "origins:and",
       "actions": [
         {
           "type": "shape-shifter-curse:set_item_cooldown",
-          "id": "minecraft:shield",
+          "item": "minecraft:shield",
           "cooldown": 100
         },
         {
@@ -254,11 +265,11 @@
       ]
     },
     "shield_break_action": {
-      "type": "origins:all_of",
+      "type": "origins:and",
       "actions": [
         {
           "type": "shape-shifter-curse:set_item_cooldown",
-          "id": "minecraft:shield",
+          "item": "minecraft:shield",
           "cooldown": 200
         },
         {

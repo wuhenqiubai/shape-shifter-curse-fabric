@@ -10,10 +10,10 @@
   "climbing": {
     "type": "origins:climbing",
     "hold_condition": {
-      "type": "origins:all_of",
+      "type": "origins:and",
       "conditions": [
         {
-          "type": "origins:any_of",
+          "type": "origins:or",
           "conditions": [
             {
               "type": "origins:block_collision",
@@ -36,7 +36,7 @@
       ]
     },
     "condition": {
-      "type": "origins:all_of",
+      "type": "origins:and",
       "conditions": [
         {
           "type": "origins:collided_horizontally"

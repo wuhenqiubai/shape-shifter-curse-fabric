@@ -3,20 +3,20 @@
   "food_modifiers": [
     {
       "operation": "set_total",
-      "amount": 0.0
+      "value": 0.0
     }
   ],
   "saturation_modifiers": [
     {
       "operation": "set_total",
-      "amount": 0.0
+      "value": 0.0
     }
   ],
   "item_condition": {
-    "type": "origins:all_of",
+    "type": "origins:and",
     "conditions": [
       {
-        "type": "origins:any_of",
+        "type": "origins:or",
         "conditions": [
           {
             "type": "origins:ingredient",

@@ -3,7 +3,7 @@
   "entity_action": {
     "type": "origins:apply_effect",
     "effect": {
-      "id": "minecraft:darkness",
+      "effect": "minecraft:darkness",
       "duration": 100,
       "amplifier": 0,
       "show_particles": false,

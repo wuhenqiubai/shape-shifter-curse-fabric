@@ -3,11 +3,11 @@
   "underwater": {
     "type": "origins:modify_break_speed",
     "modifier": {
-      "operation": "add_multiplied_total",
-      "amount": 4
+      "operation": "multiply_total",
+      "value": 4
     },
     "condition": {
-      "type": "origins:all_of",
+      "type": "origins:and",
       "conditions": [
         {
           "type": "origins:submerged_in",
@@ -25,11 +25,11 @@
   "ungrounded": {
     "type": "origins:modify_break_speed",
     "modifier": {
-      "operation": "add_multiplied_total",
-      "amount": 4
+      "operation": "multiply_total",
+      "value": 4
     },
     "condition": {
-      "type": "origins:all_of",
+      "type": "origins:and",
       "conditions": [
         {
           "type": "origins:fluid_height",

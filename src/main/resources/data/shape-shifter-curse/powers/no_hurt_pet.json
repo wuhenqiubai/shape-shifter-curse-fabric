@@ -4,7 +4,7 @@
     "type": "origins:owner"
   },
   "modifier": {
-    "operation": "add_multiplied_total",
-    "amount": -1
+    "operation": "multiply_total",
+    "value": -1
   }
 }

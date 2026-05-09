@@ -17,7 +17,7 @@
     "shape-shifter-curse:form_instinct_use_golden_apple"
   ],
   "icon": {
-    "id": "minecraft:player_head"
+    "item": "minecraft:player_head"
   },
   "order": 0,
   "unchoosable": true,

@@ -7,8 +7,8 @@
   "chance": 0.2,
   "target_item_stack_list": [
     {
-      "id": "minecraft:sand",
-      "count": 1
+      "item": "minecraft:sand",
+      "amount": 1
     }
   ]
 }

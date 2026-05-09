@@ -2,7 +2,7 @@
   "type": "shape-shifter-curse:virtual_totem",
   "virtual_totem_type": "shape-shifter-curse:form_anubis_wolf_3_undying",
   "totem_stack": {
-    "id": "minecraft:air",
+    "item": "minecraft:air",
     "count": 1
   },
   "entity_actions": [
@@ -17,21 +17,21 @@
   "totem_health": 10,
   "totem_status_effects": [
     {
-      "id": "minecraft:wither",
+      "effect": "minecraft:wither",
       "duration": 440,
       "amplifier": 1,
       "show_particles": false,
       "show_icon": true
     },
     {
-      "id": "minecraft:fire_resistance",
+      "effect": "minecraft:fire_resistance",
       "duration": 800,
       "amplifier": 0,
       "show_particles": false,
       "show_icon": true
     },
     {
-      "id": "minecraft:weakness",
+      "effect": "minecraft:weakness",
       "duration": 2400,
       "amplifier": 0,
       "show_particles": false,

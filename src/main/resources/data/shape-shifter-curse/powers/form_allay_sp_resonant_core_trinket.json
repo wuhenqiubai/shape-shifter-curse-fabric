@@ -1,5 +1,6 @@
 {
   "type": "origins:multiple",
+
   "eat_amethyst_shard": {
     "type": "shape-shifter-curse:custom_edible",
     "item_id_list": [
@@ -9,17 +10,18 @@
     "saturation_modifier": -0.01,
     "always_edible": true
   },
+
   "eat_amethyst_shard_effect": {
     "type": "origins:action_on_item_use",
     "trigger": "finish",
     "entity_action": {
-      "type": "origins:all_of",
+      "type": "origins:and",
       "actions": [
         {
           "type": "shape-shifter-curse:explosion_damage_entity",
           "power": 3,
           "entity_condition": {
-            "type": "origins:all_of",
+            "type": "origins:and",
             "conditions": [
               {
                 "type": "origins:target_condition",
@@ -31,15 +33,16 @@
               }
             ]
           },
-          "entity_action": {
+          "entity_action":
+          {
             "type": "origins:apply_effect",
             "effect": {
-              "id": "minecraft:regeneration",
+              "effect": "minecraft:regeneration",
               "duration": 160,
               "amplifier": 1
             }
           },
-          "explosion_damage_entity": false
+          "explosion_damage_entity" : false
         },
         {
           "type": "shape-shifter-curse:spawn_particles_in_circle",
@@ -60,7 +63,7 @@
     "item_condition": {
       "type": "origins:ingredient",
       "ingredient": {
-        "id": "minecraft:amethyst_shard"
+        "item": "minecraft:amethyst_shard"
       }
     }
   }

@@ -1,29 +1,33 @@
 {
-  "type": "origins:modify_food",
-  "food_modifiers": [
-    {
-      "operation": "add_value",
-      "amount": 4.0
-    },
-    {
-      "operation": "min_base",
-      "amount": 4.0
-    },
-    {
-      "operation": "add_multiplied_base",
-      "amount": 0.25
+    "type": "origins:modify_food",
+    "food_modifiers": [
+        {
+            "name": "increase food points",
+            "operation": "addition",
+            "value": 4.0
+        },
+        {
+            "name": "increase food points",
+            "operation": "min_base",
+            "value": 4.0
+        },
+        {
+            "name": "increase food points",
+            "operation": "multiply_base",
+            "value": 0.25
+        }
+    ],
+    "saturation_modifiers": [
+        {
+            "name": "increase food points",
+            "operation": "min_total",
+            "value": 0.7
+        }
+    ],
+    "item_condition": {
+        "type": "origins:ingredient",
+        "ingredient": {
+            "tag": "origins:raw_meat"
+        }
     }
-  ],
-  "saturation_modifiers": [
-    {
-      "operation": "min_total",
-      "amount": 0.7
-    }
-  ],
-  "item_condition": {
-    "type": "origins:ingredient",
-    "ingredient": {
-      "tag": "origins:raw_meat"
-    }
-  }
 }

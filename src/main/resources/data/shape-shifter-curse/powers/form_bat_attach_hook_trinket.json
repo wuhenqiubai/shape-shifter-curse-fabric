@@ -1,5 +1,6 @@
 {
   "type": "origins:multiple",
+
   "damage_on_block_break": {
     "type": "origins:action_on_block_break",
     "entity_action": {
@@ -17,7 +18,7 @@
       "item_condition": {
         "type": "origins:ingredient",
         "ingredient": {
-          "id": "shape-shifter-curse:diamond_mining_claw"
+          "item": "shape-shifter-curse:diamond_mining_claw"
         }
       },
       "slots": [
@@ -26,6 +27,7 @@
       "inverted": true
     }
   },
+
   "damage_on_attack_entity": {
     "type": "origins:self_action_on_hit",
     "entity_action": {
@@ -43,7 +45,7 @@
       "item_condition": {
         "type": "origins:ingredient",
         "ingredient": {
-          "id": "shape-shifter-curse:diamond_mining_claw"
+          "item": "shape-shifter-curse:diamond_mining_claw"
         }
       },
       "slots": [

@@ -1,20 +1,21 @@
 {
   "type": "origins:multiple",
+
   "can_eat_non_raw_meat_food": {
     "type": "origins:modify_food",
     "food_modifier": {
       "operation": "multiply_base_multiplicative",
-      "amount": -0.3
+      "value": -0.3
     },
     "saturation_modifier": {
       "operation": "multiply_base_multiplicative",
-      "amount": -0.3
+      "value": -0.3
     },
     "item_condition": {
-      "type": "origins:all_of",
+      "type": "origins:and",
       "conditions": [
         {
-          "type": "origins:any_of",
+          "type": "origins:or",
           "conditions": [
             {
               "type": "origins:ingredient",
@@ -25,7 +26,7 @@
             {
               "type": "origins:ingredient",
               "ingredient": {
-                "id": "minecraft:rotten_flesh"
+                "item": "minecraft:rotten_flesh"
               }
             }
           ],

@@ -28,7 +28,7 @@
     "shape-shifter-curse:form_spider_3_make_web_composter"
   ],
   "icon": {
-    "id": "minecraft:player_head"
+    "item": "minecraft:player_head"
   },
   "order": 0,
   "unchoosable": true,

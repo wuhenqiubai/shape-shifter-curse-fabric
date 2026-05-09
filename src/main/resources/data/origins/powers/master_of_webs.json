@@ -27,7 +27,7 @@
   "climbing": {
     "type": "origins:climbing",
     "condition": {
-      "type": "origins:all_of",
+      "type": "origins:and",
       "conditions": [
         {
           "type": "origins:in_block_anywhere",
@@ -61,7 +61,7 @@
   "sense": {
     "type": "origins:entity_glow",
     "entity_condition": {
-      "type": "origins:all_of",
+      "type": "origins:and",
       "conditions": [
         {
           "type": "origins:in_block_anywhere",
@@ -85,14 +85,14 @@
       "type": "minecraft:crafting_shapeless",
       "ingredients": [
         {
-          "id": "minecraft:string"
+          "item": "minecraft:string"
         },
         {
-          "id": "minecraft:string"
+          "item": "minecraft:string"
         }
       ],
       "result": {
-        "id": "minecraft:cobweb"
+        "item": "minecraft:cobweb"
       }
     }
   }

@@ -9,12 +9,12 @@
     }
   },
   "bientity_condition": {
-    "type": "origins:all_of",
+    "type": "origins:and",
     "conditions": [
       {
         "type": "origins:target_condition",
         "condition": {
-          "type": "origins:all_of",
+          "type": "origins:and",
           "conditions": [
             {
               "type": "origins:health",
