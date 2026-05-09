@@ -29,7 +29,7 @@ public class CustomEdibleHeldItemRendererMixin {
         return getPowerFoodComponent(player, item) != null ? UseAction.EAT : original;
     }
 
-    @ModifyExpressionValue(method = "applyEatOrDrinkTransformation", at = @At( value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;getMaxUseTime()I"))
+    @ModifyExpressionValue(method = "applyEatOrDrinkTransformation", at = @At( value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;getMaxUseTime(Lnet/minecraft/entity/LivingEntity;)I"))
     private int applyEatOrDrinkTransformation$getMaxUseTime(int original, MatrixStack matrices, float tickDelta, Arm arm, ItemStack stack) {
         FoodComponent fc = getPowerFoodComponent(client.player, stack);
         if (fc == null) {

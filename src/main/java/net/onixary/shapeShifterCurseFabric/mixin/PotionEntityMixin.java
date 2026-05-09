@@ -20,7 +20,7 @@ import java.util.List;
 @Mixin(PotionEntity.class)
 public class PotionEntityMixin {
     @Inject(method = "applySplashPotion", at = @At("HEAD"))
-    public void applySplashPotion(List<StatusEffectInstance> statusEffects, Entity entity, CallbackInfo ci) {
+    public void applySplashPotion(Iterable<StatusEffectInstance> statusEffects, Entity entity, CallbackInfo ci) {
         if (entity instanceof PlayerEntity player) {
             PotionEntity realThis = ((PotionEntity) (Object) this);
             ItemStack stack = realThis.getStack();
@@ -32,6 +32,9 @@ public class PotionEntityMixin {
         return;
     }
 
+    // 1.21: applyLingeringPotion(PotionContentsComponent) — completely different, no setPotion call
+    // TODO: rewrite to use PotionContentsComponent
+    /*
     @Inject(method = "applyLingeringPotion", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/AreaEffectCloudEntity;setPotion(Lnet/minecraft/potion/Potion;)V"))
     public void applyLingeringPotion(ItemStack stack, Potion potion, CallbackInfo ci, @Local AreaEffectCloudEntity areaEffectCloudEntity) {
         Identifier CTPFormID = CTPUtils.getCTPFormIDFromNBT(stack.get(net.minecraft.component.DataComponentTypes.CUSTOM_DATA).copyNbt());
@@ -40,4 +43,5 @@ public class PotionEntityMixin {
         }
         return;
     }
+    */
 }

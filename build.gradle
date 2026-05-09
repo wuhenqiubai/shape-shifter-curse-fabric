@@ -215,7 +215,7 @@ dependencies {
     modApi("me.shedaniel.cloth:cloth-config-fabric:${project.clothconfig_version}") {
         exclude(group: "net.fabricmc.fabric-api")
     }
-    include modApi("com.jamieswhiteshirt:reach-entity-attributes:${project.reach_version}")
+    modApi("com.jamieswhiteshirt:reach-entity-attributes:${project.reach_version}")
     //  Modmenu
     modImplementation "com.terraformersmc:modmenu:${project.mod_menu_version}"
     // Player Anim
@@ -300,7 +300,7 @@ tasks.register('fixEmbeddedModVersions') {
         copy { from zipTree(sscJar); into tmpDir }
         def jarsDir = new File(tmpDir, 'META-INF/jars')
         jarsDir.listFiles()?.each { embedded ->
-            if (embedded.name.contains('apoli') || embedded.name.contains('calio')) {
+            if (embedded.name.contains('apoli') || embedded.name.contains('calio') || embedded.name.contains('azurelib')) {
                 def extractDir = new File(tmpDir, embedded.name + '-tmp')
                 extractDir.mkdir()
                 copy { from zipTree(embedded); into extractDir }
@@ -310,6 +310,18 @@ tasks.register('fixEmbeddedModVersions') {
                     txt = txt.replace('"minecraft": "1.21"', '"minecraft": "1.21.1"')
                     txt = txt.replace('"minecraft": "1.21.x"', '"minecraft": "1.21.1"')
                     modJson.text = txt
+                }
+                if (embedded.name.contains('azurelib')) {
+                    // Delete TextureManagerMixin - causes AnimatableTexture NPE with null IDs in 1.21.1
+                    project.delete fileTree(extractDir) { include '**/TextureManagerMixin*.class' }
+                    def cfg = new File(extractDir, 'azurelib.fabric.mixins.json')
+                    if (cfg.exists()) {
+                        def json = new groovy.json.JsonSlurper().parse(cfg) as Map
+                        json.mixins = json.mixins.findAll { !it.contains('TextureManagerMixin') }
+                        json.client = (json.client ?: []).findAll { !it.contains('TextureManagerMixin') }
+                        json.server = (json.server ?: []).findAll { !it.contains('TextureManagerMixin') }
+                        cfg.text = groovy.json.JsonOutput.prettyPrint(groovy.json.JsonOutput.toJson(json))
+                    }
                 }
                 embedded.delete()
                 ant.jar(destfile: embedded, basedir: extractDir)

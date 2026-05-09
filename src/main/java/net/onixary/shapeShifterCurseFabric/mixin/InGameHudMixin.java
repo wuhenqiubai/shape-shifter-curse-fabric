@@ -19,7 +19,8 @@ public class InGameHudMixin {
     private final InstinctBarRenderer instinctBarRenderer = new InstinctBarRenderer();
 
     @Inject(method = "render", at = @At("RETURN"))
-    private void onRenderHud(DrawContext context, float tickDelta, CallbackInfo ci) {
+    private void onRenderHud(DrawContext context, net.minecraft.client.render.RenderTickCounter tickCounter, CallbackInfo ci) {
+        float tickDelta = tickCounter.getTickDelta(false);
         // 在InGameHud.render()方法返回前，调用你的渲染逻辑
         // 这确保了它在渲染完物品栏之后执行
         IManaRender manaRenderer = null;

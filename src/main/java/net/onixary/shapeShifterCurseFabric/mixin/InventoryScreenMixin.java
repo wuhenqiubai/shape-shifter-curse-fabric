@@ -16,22 +16,24 @@ public class InventoryScreenMixin {
     @Unique
     private static float prevBodyYaw;
 
-    @Inject(method = "drawEntity", at = @At("HEAD"))
-    private static void drawEntityHead(DrawContext context, int x, int y, int size, float mouseX, float mouseY, LivingEntity entity, CallbackInfo ci) {
+    @Inject(method = "drawEntity(Lnet/minecraft/client/gui/DrawContext;IIIIIFFFLnet/minecraft/entity/LivingEntity;)V", at = @At("HEAD"))
+    private static void drawEntityHead(DrawContext context, int x, int y, int size, int mouseX, int mouseY, float f, float g, float h, LivingEntity entity, CallbackInfo ci) {
         ClientUtils.isOpenInventoryScreen = true;
         prevBodyYaw = entity.prevBodyYaw;
-        float f = (float)Math.atan((double)(mouseX / 40.0F));
-        entity.prevBodyYaw = 180.0F + f * 20.0F;
+        float angle = (float)Math.atan((double)(mouseX / 40.0F));
+        entity.prevBodyYaw = 180.0F + angle * 20.0F;
         return;
     }
 
-    @Inject(method = "drawEntity", at = @At("RETURN"))
-    private static void drawEntityTail(DrawContext context, int x, int y, int size, float mouseX, float mouseY, LivingEntity entity, CallbackInfo ci) {
+    @Inject(method = "drawEntity(Lnet/minecraft/client/gui/DrawContext;IIIIIFFFLnet/minecraft/entity/LivingEntity;)V", at = @At("RETURN"))
+    private static void drawEntityTail(DrawContext context, int x, int y, int size, int mouseX, int mouseY, float f, float g, float h, LivingEntity entity, CallbackInfo ci) {
         ClientUtils.isOpenInventoryScreen = false;
         entity.prevBodyYaw = prevBodyYaw;
         return;
     }
 
+    // 1.21: Quaternionf overload of drawEntity was removed
+    /*
     @Inject(method = "drawEntity", at = @At("HEAD"))
     private static void drawEntityHead2(DrawContext context, int x, int y, int size, Quaternionf rotation, Quaternionf headRotation, LivingEntity entity, CallbackInfo ci) {
         ClientUtils.isOpenInventoryScreen = true;
@@ -43,4 +45,5 @@ public class InventoryScreenMixin {
         ClientUtils.isOpenInventoryScreen = false;
         return;
     }
+    */
 }

@@ -18,6 +18,10 @@ public class CustomEdiblePlayerAMixin {
     @Shadow
     protected ItemStack activeItemStack;
 
+    // 1.21: ItemStack.isFood() removed. Food is now component-based (DataComponentTypes.FOOD).
+    // LivingEntity.eatFood() now takes FoodComponent directly as a parameter.
+    // TODO: Rewrite to use component API
+    /*
     @ModifyExpressionValue(method = "eatFood", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;isFood()Z"))
     private boolean eatFood$isFood(boolean original, World world, ItemStack stack) {
         if ((Object)this instanceof PlayerEntity playerEntity) {
@@ -45,8 +49,9 @@ public class CustomEdiblePlayerAMixin {
         }
         return original;
     }
+    */
 
-    @ModifyExpressionValue(method = "shouldSpawnConsumptionEffects", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;getMaxUseTime()I"))
+    @ModifyExpressionValue(method = "shouldSpawnConsumptionEffects", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;getMaxUseTime(Lnet/minecraft/entity/LivingEntity;)I"))
     private int shouldSpawnConsumptionEffects$getMaxUseTime(int original) {
         if ((Object)this instanceof PlayerEntity playerEntity) {
             FoodComponent fc = getPowerFoodComponent(playerEntity, activeItemStack);
@@ -59,7 +64,7 @@ public class CustomEdiblePlayerAMixin {
         return original;
     }
 
-    @ModifyExpressionValue(method = "onTrackedDataSet", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;getMaxUseTime()I"))
+    @ModifyExpressionValue(method = "onTrackedDataSet", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;getMaxUseTime(Lnet/minecraft/entity/LivingEntity;)I"))
     private int onTrackedDataSet$getMaxUseTime(int original) {
         if ((Object)this instanceof PlayerEntity playerEntity) {
             FoodComponent fc = getPowerFoodComponent(playerEntity, activeItemStack);
@@ -72,7 +77,7 @@ public class CustomEdiblePlayerAMixin {
         return original;
     }
 
-    @ModifyExpressionValue(method = "setCurrentHand", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;getMaxUseTime()I"))
+    @ModifyExpressionValue(method = "setCurrentHand", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;getMaxUseTime(Lnet/minecraft/entity/LivingEntity;)I"))
     private int setCurrentHand$getMaxUseTime(int original) {
         if ((Object)this instanceof PlayerEntity playerEntity) {
             FoodComponent fc = getPowerFoodComponent(playerEntity, activeItemStack);
@@ -85,6 +90,8 @@ public class CustomEdiblePlayerAMixin {
         return original;
     }
 
+    // 1.21: Item.getFoodComponent() removed — TODO: rewrite
+    /*
     @ModifyExpressionValue(method = "shouldSpawnConsumptionEffects", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/Item;getFoodComponent()Lnet/minecraft/item/FoodComponent;"))
     private FoodComponent shouldSpawnConsumptionEffects$getFoodComponent(FoodComponent original) {
         if ((Object)this instanceof PlayerEntity playerEntity) {
@@ -96,6 +103,7 @@ public class CustomEdiblePlayerAMixin {
         }
         return original;
     }
+    */
 
     @ModifyExpressionValue(method = "spawnConsumptionEffects", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;getUseAction()Lnet/minecraft/util/UseAction;"))
     private UseAction spawnConsumptionEffects$getUseAction(UseAction original, ItemStack stack, int particleCount) {

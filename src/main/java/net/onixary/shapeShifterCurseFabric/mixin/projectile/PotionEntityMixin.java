@@ -49,7 +49,7 @@ public class PotionEntityMixin {
     }
 
     @Inject(method = "applySplashPotion", at = @At("HEAD"))
-    private void onApplySplashPotion(List<StatusEffectInstance> effects, Entity entity, CallbackInfo ci) {
+    private void onApplySplashPotion(Iterable<StatusEffectInstance> effects, Entity entity, CallbackInfo ci) {
         if (entity instanceof PlayerEntity player) {
             PowerHolderComponent.getPowers(player, ActionOnSplashPotionTakeEffect.class)
                     .stream()
@@ -59,8 +59,8 @@ public class PotionEntityMixin {
     }
 
     @Inject(method = "applyLingeringPotion", at = @At("HEAD"))
-    private void onApplyLingeringPotion(ItemStack stack, Potion potion, CallbackInfo ci) {
-        List<StatusEffectInstance> effects = stack.getOrDefault(DataComponentTypes.POTION_CONTENTS, PotionContentsComponent.DEFAULT).customEffects();
+    private void onApplyLingeringPotion(PotionContentsComponent contents, CallbackInfo ci) {
+        List<StatusEffectInstance> effects = contents.customEffects();
         if (effects.isEmpty()) {
             PotionEntity self = (PotionEntity) (Object) this;
             Box box = self.getBoundingBox().expand(3.0, 2.0, 3.0);

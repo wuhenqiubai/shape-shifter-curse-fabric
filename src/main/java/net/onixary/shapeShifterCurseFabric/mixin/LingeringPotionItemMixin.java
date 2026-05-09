@@ -23,7 +23,7 @@ import java.util.List;
 @Mixin(LingeringPotionItem.class)
 public class LingeringPotionItemMixin {
     @Inject(method = "appendTooltip", at = @At("RETURN"))
-    public void appendTooltip(ItemStack stack, World world, List<Text> tooltip, TooltipContext context, CallbackInfo ci) {
+    public void appendTooltip(ItemStack stack, TooltipContext context, List<Text> tooltip, TooltipType type, CallbackInfo ci) {
         if (stack.getOrDefault(DataComponentTypes.POTION_CONTENTS, PotionContentsComponent.DEFAULT).potion().orElse(null).value() != RegCustomPotions.CUSTOM_STATUE_FORM_POTION) {
             return;
         }

@@ -1,16 +1,13 @@
 package net.onixary.shapeShifterCurseFabric.mixin;
 
-import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import io.github.apace100.apoli.component.PowerHolderComponent;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.ItemStack;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.onixary.shapeShifterCurseFabric.additional_power.LootingPower;
 import net.onixary.shapeShifterCurseFabric.additional_power.SoulSpeedPower;
-import net.onixary.shapeShifterCurseFabric.util.EnchantmentUtils;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -47,6 +44,9 @@ public class EnchantmentHelperMixin {
     // hasSoulSpeed removed in 1.21 — soul speed is now data-driven via applyLocationBasedEffects.
     // getEquipmentLevel mixin already handles SoulSpeedPower contribution.
 
+    // isPrimaryItem disabled: conflicts with ModernFix which optimizes getPossibleEntries
+    // and may not call isPrimaryItem at all. TODO: re-evaluate if needed.
+    /*
     @ModifyExpressionValue(method = "getPossibleEntries", at = @At(value = "INVOKE", target = "Lnet/minecraft/enchantment/Enchantment;isPrimaryItem(Lnet/minecraft/item/ItemStack;)Z"))
     private static boolean isPrimaryItem(boolean original, ItemStack stack, RegistryEntry<Enchantment> enchantment) {
         if (!original) {
@@ -54,4 +54,5 @@ public class EnchantmentHelperMixin {
         }
         return original;
     }
+    */
 }
