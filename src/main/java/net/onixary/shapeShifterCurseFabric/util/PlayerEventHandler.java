@@ -43,7 +43,9 @@ public class PlayerEventHandler {
             RegPlayerSkinComponent.SKIN_SETTINGS.sync(player);
 
             PlayerFormComponent playerFormComponent = RegPlayerFormComponent.PLAYER_FORM.get(player);
-            if (playerFormComponent.isFirstJoin()) {
+            if (playerFormComponent != null && playerFormComponent.isFirstJoin()) {
+                // Give the book directly instead of relying on advancement→function chain
+                player.getInventory().insertStack(new net.minecraft.item.ItemStack(net.onixary.shapeShifterCurseFabric.items.RegCustomItem.BOOK_OF_SHAPE_SHIFTER));
                 ShapeShifterCurseFabric.ON_FIRST_JOIN_WITH_MOD.trigger(player);
                 playerFormComponent.setFirstJoin(false);
             }
