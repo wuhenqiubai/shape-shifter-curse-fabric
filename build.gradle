@@ -300,7 +300,7 @@ tasks.register('fixEmbeddedModVersions') {
         copy { from zipTree(sscJar); into tmpDir }
         def jarsDir = new File(tmpDir, 'META-INF/jars')
         jarsDir.listFiles()?.each { embedded ->
-            if (embedded.name.contains('apoli') || embedded.name.contains('calio')) {
+            if (embedded.name.contains('apoli') || embedded.name.contains('calio') || embedded.name.contains('azurelib')) {
                 def extractDir = new File(tmpDir, embedded.name + '-tmp')
                 extractDir.mkdir()
                 copy { from zipTree(embedded); into extractDir }
@@ -310,6 +310,16 @@ tasks.register('fixEmbeddedModVersions') {
                     txt = txt.replace('"minecraft": "1.21"', '"minecraft": "1.21.1"')
                     txt = txt.replace('"minecraft": "1.21.x"', '"minecraft": "1.21.1"')
                     modJson.text = txt
+                }
+                if (embedded.name.contains('azurelib')) {
+                    // Delete TextureManagerMixin - causes AnimatableTexture NPE with null IDs in 1.21.1
+                    project.delete fileTree(extractDir) { include '**/TextureManagerMixin*.class' }
+                    def cfg = new File(extractDir, 'azurelib.fabric.mixins.json')
+                    if (cfg.exists()) {
+                        cfg.text = cfg.text.replaceAll(/\s*"common\.internal\.mixins\.TextureManagerMixin"\s*,?\s*/, '')
+                        cfg.text = cfg.text.replaceAll(/,\s*]/, ']')
+                        cfg.text = cfg.text.replaceAll(/\[\s*,/, '[')
+                    }
                 }
                 embedded.delete()
                 ant.jar(destfile: embedded, basedir: extractDir)
