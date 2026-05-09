@@ -23,24 +23,25 @@ public record BytePayload(Id<BytePayload> id, PacketByteBuf data) implements Cus
         return IDS.computeIfAbsent(identifier, id -> new Id<>(id));
     }
 
-    public static final PacketCodec<PacketByteBuf, BytePayload> CODEC = PacketCodec.of(
-        // encoder: write only readable bytes from data buffer
-        (payload, buf) -> buf.writeBytes(payload.data.readBytes(payload.data.readableBytes())),
-        // decoder: wrap remaining bytes
-        buf -> new BytePayload(id(Identifier.of("unused", "dynamic")), new PacketByteBuf(buf.readBytes(buf.readableBytes())))
-    );
+    /** Create a per-ID CODEC whose decoder returns the correct Id */
+    private static PacketCodec<PacketByteBuf, BytePayload> codecFor(Id<BytePayload> pid) {
+        return PacketCodec.of(
+            (payload, buf) -> buf.writeBytes(payload.data.readBytes(payload.data.readableBytes())),
+            buf -> new BytePayload(pid, new PacketByteBuf(buf.readBytes(buf.readableBytes())))
+        );
+    }
 
     /** Shorthand: register S2C (idempotent) */
     public static void registerS2C(Identifier identifier) {
         if (REGISTERED_S2C.add(identifier)) {
-            PayloadTypeRegistry.playS2C().register(id(identifier), CODEC);
+            PayloadTypeRegistry.playS2C().register(id(identifier), codecFor(id(identifier)));
         }
     }
 
     /** Shorthand: register C2S (idempotent) */
     public static void registerC2S(Identifier identifier) {
         if (REGISTERED_C2S.add(identifier)) {
-            PayloadTypeRegistry.playC2S().register(id(identifier), CODEC);
+            PayloadTypeRegistry.playC2S().register(id(identifier), codecFor(id(identifier)));
         }
     }
 
