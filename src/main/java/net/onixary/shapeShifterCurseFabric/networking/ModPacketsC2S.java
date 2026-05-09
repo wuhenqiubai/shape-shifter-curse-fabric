@@ -121,18 +121,17 @@ public class ModPacketsC2S {
     }
 
     private static void onPressStartBookButton(MinecraftServer minecraftServer, ServerPlayerEntity playerEntity, ServerPlayNetworkHandler serverPlayNetworkHandler, PacketByteBuf packetByteBuf, PacketSender packetSender) {
-        // 就凭这个网络Bug 我就可以做一个可以直接还原形态的作弊客户端 还可以给其他玩家还原 不知道为什么要往buf里写uuid
-        // UUID playerUuid = packetByteBuf.readUuid();
         minecraftServer.execute(() -> {
-            // 通过 UUID 获取玩家实例
-            // ServerPlayerEntity targetPlayer = minecraftServer.getPlayerManager().getPlayer(playerUuid);
-            ServerPlayerEntity targetPlayer = playerEntity;
-            if (targetPlayer != null && RegPlayerForms.ORIGINAL_BEFORE_ENABLE.equals(RegPlayerFormComponent.PLAYER_FORM.get(targetPlayer).getCurrentForm())) {
-                TransformManager.handleDirectTransform(targetPlayer, RegPlayerForms.ORIGINAL_SHIFTER, false);
-                // 触发自定义成就
-                ShapeShifterCurseFabric.ON_ENABLE_MOD.trigger(targetPlayer);
-                // info
-                targetPlayer.sendMessage(Text.translatable("info.shape-shifter-curse.on_enable_mod").formatted(Formatting.LIGHT_PURPLE));
+            try {
+                var component = RegPlayerFormComponent.PLAYER_FORM.get(playerEntity);
+                if (component == null) return;
+                if (RegPlayerForms.ORIGINAL_BEFORE_ENABLE.equals(component.getCurrentForm())) {
+                    TransformManager.handleDirectTransform(playerEntity, RegPlayerForms.ORIGINAL_SHIFTER, false);
+                    ShapeShifterCurseFabric.ON_ENABLE_MOD.trigger(playerEntity);
+                    playerEntity.sendMessage(Text.translatable("info.shape-shifter-curse.on_enable_mod").formatted(Formatting.LIGHT_PURPLE));
+                }
+            } catch (Exception e) {
+                ShapeShifterCurseFabric.LOGGER.error("Error handling start book button", e);
             }
         });
     }
