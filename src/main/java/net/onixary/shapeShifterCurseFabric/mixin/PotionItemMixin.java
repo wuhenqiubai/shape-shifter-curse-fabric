@@ -28,7 +28,9 @@ public class PotionItemMixin {
     @Inject(method = "finishUsing", at = @At("HEAD"))
     public void finishUsing(ItemStack stack, World world, LivingEntity user, CallbackInfoReturnable<ItemStack> cir) {
         if (user instanceof PlayerEntity player) {
-            Identifier CTPFormID = CTPUtils.getCTPFormIDFromNBT(stack.get(net.minecraft.component.DataComponentTypes.CUSTOM_DATA).copyNbt());
+            var nbt = stack.get(net.minecraft.component.DataComponentTypes.CUSTOM_DATA);
+        if (nbt == null) return;
+        Identifier CTPFormID = CTPUtils.getCTPFormIDFromNBT(nbt.copyNbt());
             if (CTPFormID != null) {
                 CTPUtils.setTransformativePotionForm(player, CTPFormID);
             }
@@ -40,7 +42,9 @@ public class PotionItemMixin {
         if (stack.getOrDefault(DataComponentTypes.POTION_CONTENTS, PotionContentsComponent.DEFAULT).potion().orElse(null).value() != RegCustomPotions.CUSTOM_STATUE_FORM_POTION) {
             return;
         }
-        Identifier CTPFormID = CTPUtils.getCTPFormIDFromNBT(stack.get(net.minecraft.component.DataComponentTypes.CUSTOM_DATA).copyNbt());
+        var nbt = stack.get(net.minecraft.component.DataComponentTypes.CUSTOM_DATA);
+        if (nbt == null) return;
+        Identifier CTPFormID = CTPUtils.getCTPFormIDFromNBT(nbt.copyNbt());
         if (CTPFormID != null) {
             Text formName = RegPlayerForms.getPlayerFormOrDefault(CTPFormID, RegPlayerForms.ORIGINAL_BEFORE_ENABLE).getFormName();
             tooltip.add(Text.translatable("tooltip.shape_shifter_curse.potion_target_form").append(formName));
