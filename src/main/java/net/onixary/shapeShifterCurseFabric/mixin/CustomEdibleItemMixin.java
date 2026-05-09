@@ -100,6 +100,10 @@ public abstract class CustomEdibleItemMixin {
     }
      */
 
+    // 1.21: Item.isFood() and Item.getFoodComponent() no longer exist.
+    // Item.use() now uses ItemStack.get(DataComponentTypes.FOOD) which is component-based.
+    // TODO: Rewrite to intercept ItemStack.get(DataComponentTypes.FOOD) in Item.use()/finishUsing()
+    /*
     @ModifyExpressionValue(method = "use", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/Item;isFood()Z"))
     private boolean use$isFood(boolean original, World world, PlayerEntity user, Hand hand) {
         return getPowerFoodComponent(user, user.getStackInHand(hand)) != null || original;
@@ -121,5 +125,6 @@ public abstract class CustomEdibleItemMixin {
         }
         return original;
     }
+    */
 }
 
