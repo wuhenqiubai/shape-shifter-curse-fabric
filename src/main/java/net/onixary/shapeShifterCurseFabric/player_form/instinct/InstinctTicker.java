@@ -6,6 +6,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.math.MathHelper;
+import net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric;
 import net.onixary.shapeShifterCurseFabric.cursed_moon.CursedMoon;
 import net.onixary.shapeShifterCurseFabric.data.StaticParams;
 import net.onixary.shapeShifterCurseFabric.networking.ModPackets;
@@ -35,6 +36,8 @@ public class InstinctTicker {
         comp.sustainedEffects.clear();
         RegPlayerInstinctComponent.PLAYER_INSTINCT_COMP.sync(player);
     }
+
+    private static int debugTickCounter = 0;
 
     public static void tick(ServerPlayerEntity player) {
         PlayerInstinctComponent comp = player.getComponent(RegPlayerInstinctComponent.PLAYER_INSTINCT_COMP);
@@ -86,6 +89,12 @@ public class InstinctTicker {
         // Check if the instinct value meets the threshold
         checkThreshold(player, comp);
         player.syncComponent(RegPlayerInstinctComponent.PLAYER_INSTINCT_COMP);
+
+        if (++debugTickCounter % 100 == 0) {
+            ShapeShifterCurseFabric.LOGGER.info("[Instinct] player={} value={} rate={} pausing={} phase={}",
+                player.getName().getString(), comp.instinctValue, comp.currentInstinctRate,
+                isPausing, FormAbilityManager.getForm(player).getPhase());
+        }
     }
 
     private static float judgeInstinctGrowRate(PlayerEntity player){
