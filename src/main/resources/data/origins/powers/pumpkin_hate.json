@@ -5,7 +5,7 @@
     "item_condition": {
       "type": "origins:ingredient",
       "ingredient": {
-        "item": "minecraft:pumpkin_pie"
+        "id": "minecraft:pumpkin_pie"
       }
     }
   },
@@ -17,7 +17,7 @@
       "item_condition": {
         "type": "origins:ingredient",
         "ingredient": {
-          "item": "minecraft:carved_pumpkin"
+          "id": "minecraft:carved_pumpkin"
         }
       }
     }

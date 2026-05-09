@@ -2,12 +2,12 @@
   "type": "origins:conditioned_attribute",
   "modifier": {
     "attribute": "minecraft:generic.movement_speed",
-    "operation": "multiply_base",
-    "value": -0.20
+    "operation": "add_multiplied_base",
+    "amount": -0.2
   },
   "tick_rate": 2,
   "condition": {
-    "type": "origins:and",
+    "type": "origins:all_of",
     "conditions": [
       {
         "type": "origins:on_block"

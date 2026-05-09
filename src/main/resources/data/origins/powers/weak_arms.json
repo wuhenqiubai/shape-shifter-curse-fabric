@@ -1,12 +1,11 @@
 {
   "type": "origins:modify_break_speed",
   "modifier": {
-    "name": "Unbreakable natural stone",
-    "value": -1,
-    "operation": "multiply_total"
+    "amount": -1,
+    "operation": "add_multiplied_total"
   },
   "block_condition": {
-    "type": "origins:and",
+    "type": "origins:all_of",
     "conditions": [
       {
         "type": "origins:in_tag",

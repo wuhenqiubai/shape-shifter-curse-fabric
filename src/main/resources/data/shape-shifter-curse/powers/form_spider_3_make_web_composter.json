@@ -3,13 +3,13 @@
   "using_item_condition": {
     "type": "origins:ingredient",
     "ingredient": {
-      "item": "minecraft:cobweb"
+      "id": "minecraft:cobweb"
     }
   },
   "on_item_condition": {
     "type": "origins:ingredient",
     "ingredient": {
-      "item": "minecraft:composter"
+      "id": "minecraft:composter"
     }
   },
   "using_item_action": {
@@ -21,11 +21,11 @@
     "amount": 1
   },
   "result": {
-    "item": "shape-shifter-curse:web_composter",
-    "amount": 1
+    "id": "shape-shifter-curse:web_composter",
+    "count": 1
   },
   "entity_action": {
-    "type": "origins:and",
+    "type": "origins:all_of",
     "actions": [
       {
         "type": "origins:play_sound",
@@ -39,7 +39,7 @@
     ]
   },
   "condition": {
-    "type": "origins:and",
+    "type": "origins:all_of",
     "conditions": [
       {
         "type": "shape-shifter-curse:has_mana",

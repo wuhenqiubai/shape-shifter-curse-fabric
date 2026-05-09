@@ -9,9 +9,8 @@
     "inverted": true
   },
   "modifier": {
-    "name": "Strong Arms stone break speed bonus",
-    "value": 0.06,
-    "operation": "addition"
+    "amount": 0.06,
+    "operation": "add_value"
   },
   "hidden": true
 }

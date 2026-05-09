@@ -3,17 +3,17 @@
   "food_modifiers": [
     {
       "operation": "set_total",
-      "value": 0.0
+      "amount": 0.0
     }
   ],
   "saturation_modifiers": [
     {
       "operation": "set_total",
-      "value": 0.0
+      "amount": 0.0
     }
   ],
   "item_condition": {
-    "type": "origins:and",
+    "type": "origins:all_of",
     "conditions": [
       {
         "type": "origins:food"
@@ -35,7 +35,7 @@
       {
         "type": "origins:ingredient",
         "ingredient": {
-          "item": "shape-shifter-curse:spider_fluid_cocoon"
+          "id": "shape-shifter-curse:spider_fluid_cocoon"
         },
         "inverted": true
       }

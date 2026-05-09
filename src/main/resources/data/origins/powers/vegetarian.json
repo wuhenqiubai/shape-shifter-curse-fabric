@@ -1,10 +1,10 @@
 {
   "type": "origins:prevent_item_use",
   "item_condition": {
-    "type": "origins:and",
+    "type": "origins:all_of",
     "conditions": [
       {
-        "type": "origins:or",
+        "type": "origins:any_of",
         "conditions": [
           {
             "type": "origins:ingredient",

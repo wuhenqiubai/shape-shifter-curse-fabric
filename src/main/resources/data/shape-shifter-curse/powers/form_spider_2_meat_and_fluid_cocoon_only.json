@@ -5,20 +5,20 @@
     "food_modifiers": [
       {
         "operation": "set_total",
-        "value": 0.0
+        "amount": 0.0
       }
     ],
     "saturation_modifiers": [
       {
         "operation": "set_total",
-        "value": 0.0
+        "amount": 0.0
       }
     ],
     "item_condition": {
-      "type": "origins:and",
+      "type": "origins:all_of",
       "conditions": [
         {
-          "type": "origins:or",
+          "type": "origins:any_of",
           "conditions": [
             {
               "type": "origins:ingredient",
@@ -29,13 +29,13 @@
             {
               "type": "origins:ingredient",
               "ingredient": {
-                "item": "minecraft:rotten_flesh"
+                "id": "minecraft:rotten_flesh"
               }
             },
             {
               "type": "origins:ingredient",
               "ingredient": {
-                "item": "shape-shifter-curse:spider_fluid_cocoon"
+                "id": "shape-shifter-curse:spider_fluid_cocoon"
               }
             }
           ],
@@ -61,23 +61,22 @@
       ]
     }
   },
-
   "meat_down": {
     "type": "origins:modify_food",
     "food_modifiers": [
       {
         "operation": "multiply_base_multiplicative",
-        "value": -0.2
+        "amount": -0.2
       }
     ],
     "saturation_modifiers": [
       {
         "operation": "multiply_base_multiplicative",
-        "value": -0.1
+        "amount": -0.1
       }
     ],
     "item_condition": {
-      "type": "origins:and",
+      "type": "origins:all_of",
       "conditions": [
         {
           "type": "origins:ingredient",

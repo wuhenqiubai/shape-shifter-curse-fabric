@@ -2,7 +2,7 @@
   "type": "shape-shifter-curse:virtual_totem",
   "virtual_totem_type": "shape-shifter-curse:default",
   "totem_stack": {
-    "item": "minecraft:totem_of_undying",
+    "id": "minecraft:totem_of_undying",
     "count": 1
   },
   "entity_actions": [
@@ -22,28 +22,28 @@
     "condition": {
       "type": "origins:ingredient",
       "ingredient": {
-        "item": "minecraft:totem_of_undying"
+        "id": "minecraft:totem_of_undying"
       }
     }
   },
   "totem_health": 1,
   "totem_status_effects": [
     {
-      "effect": "minecraft:fire_resistance",
+      "id": "minecraft:fire_resistance",
       "duration": 800,
       "amplifier": 0,
       "show_particles": true,
       "show_icon": true
     },
     {
-      "effect": "minecraft:regeneration",
+      "id": "minecraft:regeneration",
       "duration": 900,
       "amplifier": 1,
       "show_particles": true,
       "show_icon": true
     },
     {
-      "effect": "minecraft:absorption",
+      "id": "minecraft:absorption",
       "duration": 100,
       "amplifier": 1,
       "show_particles": true,

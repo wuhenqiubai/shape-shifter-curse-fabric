@@ -8,12 +8,12 @@
   "tier0_enable": true,
   "tier0_charge_time": 0,
   "tier0_tick_action": {
-    "type": "origins:and",
+    "type": "origins:all_of",
     "actions": [
       {
         "type": "origins:apply_effect",
         "effect": {
-          "effect": "minecraft:slowness",
+          "id": "minecraft:slowness",
           "duration": 10,
           "amplifier": 1,
           "show_particles": false,
@@ -22,7 +22,6 @@
       }
     ]
   },
-
   "tier1_enable": true,
   "tier1_charge_time": 20,
   "tier1_can_charge_condition": {
@@ -30,7 +29,7 @@
     "mana": 6
   },
   "tier1_use_action": {
-    "type": "origins:and",
+    "type": "origins:all_of",
     "actions": [
       {
         "type": "shape-shifter-curse:fire_web_bullet",
@@ -41,12 +40,12 @@
     ]
   },
   "tier1_tick_action": {
-    "type": "origins:and",
+    "type": "origins:all_of",
     "actions": [
       {
         "type": "origins:apply_effect",
         "effect": {
-          "effect": "minecraft:slowness",
+          "id": "minecraft:slowness",
           "duration": 10,
           "amplifier": 1,
           "show_particles": false,
@@ -60,7 +59,7 @@
     "mana": 0.25
   },
   "tier1_charge_complete_action": {
-    "type": "origins:and",
+    "type": "origins:all_of",
     "actions": [
       {
         "type": "origins:play_sound",
@@ -85,9 +84,8 @@
     "type": "shape-shifter-curse:has_mana",
     "mana": 6
   },
-
   "tier2_use_action": {
-    "type": "origins:and",
+    "type": "origins:all_of",
     "actions": [
       {
         "type": "shape-shifter-curse:fire_web_bullet",
@@ -98,12 +96,12 @@
     ]
   },
   "tier2_tick_action": {
-    "type": "origins:and",
+    "type": "origins:all_of",
     "actions": [
       {
         "type": "origins:apply_effect",
         "effect": {
-          "effect": "minecraft:slowness",
+          "id": "minecraft:slowness",
           "duration": 10,
           "amplifier": 1,
           "show_particles": false,
@@ -117,7 +115,7 @@
     "mana": 0.25
   },
   "tier2_charge_complete_action": {
-    "type": "origins:and",
+    "type": "origins:all_of",
     "actions": [
       {
         "type": "origins:play_sound",
@@ -136,7 +134,6 @@
     ]
   },
   "tier2_cooldown": 40,
-
   "tier3_enable": true,
   "tier3_charge_time": 60,
   "tier3_can_charge_condition": {
@@ -144,7 +141,7 @@
     "mana": 6
   },
   "tier3_use_action": {
-    "type": "origins:and",
+    "type": "origins:all_of",
     "actions": [
       {
         "type": "shape-shifter-curse:fire_web_bullet",
@@ -155,12 +152,12 @@
     ]
   },
   "tier3_tick_action": {
-    "type": "origins:and",
+    "type": "origins:all_of",
     "actions": [
       {
         "type": "origins:apply_effect",
         "effect": {
-          "effect": "minecraft:slowness",
+          "id": "minecraft:slowness",
           "duration": 10,
           "amplifier": 1,
           "show_particles": false,
@@ -174,7 +171,7 @@
     "mana": 0.25
   },
   "tier3_charge_complete_action": {
-    "type": "origins:and",
+    "type": "origins:all_of",
     "actions": [
       {
         "type": "origins:play_sound",

@@ -1,7 +1,7 @@
 {
   "type": "shape-shifter-curse:modify_entity_loot",
   "from_item_condition": {
-    "type": "origins:and",
+    "type": "origins:all_of",
     "conditions": [
       {
         "type": "origins:food"

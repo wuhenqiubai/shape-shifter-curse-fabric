@@ -1,12 +1,12 @@
 {
   "type": "origins:action_on_wake_up",
   "entity_action": {
-    "type": "origins:and",
+    "type": "origins:all_of",
     "actions": [
       {
         "type": "origins:give",
         "stack": {
-          "item": "minecraft:egg"
+          "id": "minecraft:egg"
         }
       },
       {

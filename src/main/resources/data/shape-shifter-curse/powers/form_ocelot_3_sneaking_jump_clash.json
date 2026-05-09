@@ -1,7 +1,7 @@
 {
   "type": "shape-shifter-curse:sneaking_jump_clash",
   "bientity_action": {
-    "type": "origins:and",
+    "type": "origins:all_of",
     "actions": [
       {
         "type": "origins:add_velocity",
@@ -10,7 +10,7 @@
       {
         "type": "origins:target_action",
         "action": {
-          "type": "origins:and",
+          "type": "origins:all_of",
           "actions": [
             {
               "type": "origins:spawn_particles",
@@ -30,7 +30,7 @@
       {
         "type": "origins:actor_action",
         "action": {
-          "type": "origins:and",
+          "type": "origins:all_of",
           "actions": [
             {
               "type": "origins:add_velocity",

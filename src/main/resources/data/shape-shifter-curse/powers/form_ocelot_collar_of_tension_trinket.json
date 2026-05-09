@@ -1,10 +1,9 @@
 {
   "type": "origins:multiple",
-
   "bare_paw_attack": {
     "type": "origins:conditioned_attribute",
     "condition": {
-      "type": "origins:or",
+      "type": "origins:any_of",
       "conditions": [
         {
           "type": "origins:inventory",
@@ -30,17 +29,16 @@
     },
     "modifier": {
       "attribute": "minecraft:generic.attack_damage",
-      "name": "Extra Attack Damage",
-      "operation": "addition",
-      "value": 9.0
+      "id": "shape-shifter-curse:extra_attack_damage",
+      "operation": "add_value",
+      "amount": 9.0
     },
     "tick_rate": 1
   },
-
   "sneaking_jump_clash": {
     "type": "shape-shifter-curse:sneaking_jump_clash",
     "bientity_action": {
-      "type": "origins:and",
+      "type": "origins:all_of",
       "actions": [
         {
           "type": "origins:add_velocity",
@@ -49,7 +47,7 @@
         {
           "type": "origins:target_action",
           "action": {
-            "type": "origins:and",
+            "type": "origins:all_of",
             "actions": [
               {
                 "type": "origins:spawn_particles",
@@ -69,7 +67,7 @@
         {
           "type": "origins:actor_action",
           "action": {
-            "type": "origins:and",
+            "type": "origins:all_of",
             "actions": [
               {
                 "type": "origins:add_velocity",

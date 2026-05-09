@@ -1,24 +1,24 @@
 {
   "type": "origins:restrict_armor",
   "chest": {
-    "type": "origins:or",
+    "type": "origins:any_of",
     "conditions": [
       {
         "type": "origins:ingredient",
         "ingredient": {
-          "item": "minecraft:leather_chestplate"
+          "id": "minecraft:leather_chestplate"
         }
       },
       {
         "type": "origins:ingredient",
         "ingredient": {
-          "item": "minecraft:chainmail_chestplate"
+          "id": "minecraft:chainmail_chestplate"
         }
       },
       {
         "type": "origins:ingredient",
         "ingredient": {
-          "item": "minecraft:elytra"
+          "id": "minecraft:elytra"
         }
       },
       {
@@ -28,18 +28,18 @@
     "inverted": true
   },
   "legs": {
-    "type": "origins:or",
+    "type": "origins:any_of",
     "conditions": [
       {
         "type": "origins:ingredient",
         "ingredient": {
-          "item": "minecraft:leather_leggings"
+          "id": "minecraft:leather_leggings"
         }
       },
       {
         "type": "origins:ingredient",
         "ingredient": {
-          "item": "minecraft:chainmail_leggings"
+          "id": "minecraft:chainmail_leggings"
         }
       },
       {
@@ -49,18 +49,18 @@
     "inverted": true
   },
   "feet": {
-    "type": "origins:or",
+    "type": "origins:any_of",
     "conditions": [
       {
         "type": "origins:ingredient",
         "ingredient": {
-          "item": "minecraft:leather_boots"
+          "id": "minecraft:leather_boots"
         }
       },
       {
         "type": "origins:ingredient",
         "ingredient": {
-          "item": "minecraft:chainmail_boots"
+          "id": "minecraft:chainmail_boots"
         }
       },
       {

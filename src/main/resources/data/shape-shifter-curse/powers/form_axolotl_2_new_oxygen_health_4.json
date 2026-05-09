@@ -1,25 +1,25 @@
 {
-    "type": "origins:conditioned_attribute",
-    "modifier": {
-        "name": "Oxygen health",
-        "attribute": "minecraft:generic.max_health",
-        "value": 0.0,
-        "operation": "addition"
-    },
-    "tick_rate": 20,
-    "condition": {
-        "type": "origins:and",
-        "conditions": [
-            {
-                "type": "origins:air",
-                "comparison": "<",
-                "compare_to": 180
-            },
-            {
-                "type": "origins:air",
-                "comparison": ">=",
-                "compare_to": 150
-            }
-        ]
-    }
+  "type": "origins:conditioned_attribute",
+  "modifier": {
+    "id": "shape-shifter-curse:oxygen_health",
+    "attribute": "minecraft:generic.max_health",
+    "amount": 0.0,
+    "operation": "add_value"
+  },
+  "tick_rate": 20,
+  "condition": {
+    "type": "origins:all_of",
+    "conditions": [
+      {
+        "type": "origins:air",
+        "comparison": "<",
+        "compare_to": 180
+      },
+      {
+        "type": "origins:air",
+        "comparison": ">=",
+        "compare_to": 150
+      }
+    ]
+  }
 }

@@ -1,12 +1,11 @@
 {
   "type": "origins:modify_damage_taken",
   "modifier": {
-    "name": "More kinetic damage taken",
-    "value": 0.5,
-    "operation": "multiply_base"
+    "amount": 0.5,
+    "operation": "add_multiplied_base"
   },
   "damage_condition": {
-    "type": "origins:or",
+    "type": "origins:any_of",
     "conditions": [
       {
         "type": "origins:name",
