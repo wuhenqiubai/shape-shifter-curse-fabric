@@ -24,20 +24,6 @@ public class OriginsPowerTypes {
     public static final PowerType<?> MASTER_OF_WEBS_NO_SLOWDOWN = new PowerTypeReference<>(Origins.identifier("master_of_webs_no_slowdown"));
     public static final PowerType<?> CONDUIT_POWER_ON_LAND = new PowerTypeReference<>(Origins.identifier("conduit_power_on_land"));
 
-    @SuppressWarnings({"rawtypes", "unchecked"})
-    private static void aliasRegistry(Registry registry, java.util.function.Function<Object, Identifier> getId) {
-        registry.forEach(entry -> {
-            Object value = entry;
-            Identifier apoliId = getId.apply(value);
-            if (apoliId != null && "apoli".equals(apoliId.getNamespace())) {
-                Identifier originsId = Origins.identifier(apoliId.getPath());
-                if (!registry.containsId(originsId)) {
-                    Registry.register(registry, originsId, value);
-                }
-            }
-        });
-    }
-
     public static void register() {
         // Register all apoli:* types as origins:* aliases
         // Needed because SSC JSONs use origins: namespace but Origins mod is not installed
@@ -55,12 +41,28 @@ public class OriginsPowerTypes {
             ApoliRegistries.BLOCK_ACTION,
             ApoliRegistries.BIENTITY_ACTION,
         }) {
-            aliasRegistry(registry, o -> switch (o) {
-                case io.github.apace100.apoli.power.factory.PowerFactory pf -> pf.getSerializerId();
-                case io.github.apace100.apoli.power.factory.condition.ConditionFactory<?> cf -> cf.getSerializerId();
-                case io.github.apace100.apoli.power.factory.action.ActionFactory<?> af -> af.getSerializerId();
-                default -> null;
-            });
+            try {
+                // Copy values first to avoid ConcurrentModificationException
+                var values = new java.util.ArrayList<>();
+                registry.forEach(values::add);
+                for (var value : values) {
+                    Identifier apoliId = switch (value) {
+                        case io.github.apace100.apoli.power.factory.PowerFactory pf -> pf.getSerializerId();
+                        case io.github.apace100.apoli.power.factory.condition.ConditionFactory<?> cf -> cf.getSerializerId();
+                        case io.github.apace100.apoli.power.factory.action.ActionFactory<?> af -> af.getSerializerId();
+                        default -> null;
+                    };
+                    if (apoliId != null && "apoli".equals(apoliId.getNamespace())) {
+                        Identifier originsId = Origins.identifier(apoliId.getPath());
+                        if (!registry.containsId(originsId)) {
+                            Registry.register(registry, originsId, value);
+                        }
+                    }
+                }
+                Origins.LOGGER.info("Aliased {} apoli->origins types in registry", values.size());
+            } catch (Exception e) {
+                Origins.LOGGER.error("Failed to alias registry", e);
+            }
         }
 
         register(new PowerFactory<>(Origins.identifier("action_on_callback"),
