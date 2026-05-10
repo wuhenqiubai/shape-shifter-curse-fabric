@@ -18,7 +18,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric;
 import net.onixary.shapeShifterCurseFabric.additional_power.BatBlockAttachPower;
-// VirtualTotemPower disabled for 1.21 port
+import net.onixary.shapeShifterCurseFabric.additional_power.VirtualTotemPower;
 import net.onixary.shapeShifterCurseFabric.client.ClientPlayerStateManager;
 import net.onixary.shapeShifterCurseFabric.client.ShapeShifterCurseFabricClient;
 import net.onixary.shapeShifterCurseFabric.custom_ui.NormalFormSelectScreen;
@@ -347,7 +347,7 @@ public class ModPacketsS2C {
         Identifier virtualTotemType = buf.readIdentifier();
         ItemStack totemStack = ItemStack.PACKET_CODEC.decode((RegistryByteBuf) buf);
         // ConcurrentModificationException 需要把这个操作放到Client线程而非Network线程
-        // VirtualTotemPower disabled for 1.21 port
+        client.execute(() -> VirtualTotemPower.process_virtual_totem_type(playerEntity, virtualTotemType, totemStack));
     }
 
     public static void receivePowerAnimationData(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender responseSender) {

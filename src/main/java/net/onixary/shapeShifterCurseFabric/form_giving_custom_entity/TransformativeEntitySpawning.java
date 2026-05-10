@@ -19,7 +19,7 @@ import net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric;
 import net.onixary.shapeShifterCurseFabric.form_giving_custom_entity.axolotl.TransformativeAxolotlEntity;
 import net.onixary.shapeShifterCurseFabric.form_giving_custom_entity.bat.TransformativeBatEntity;
 import net.onixary.shapeShifterCurseFabric.form_giving_custom_entity.ocelot.TransformativeOcelotEntity;
-// TransformativeWolfEntity disabled for 1.21 port
+import net.onixary.shapeShifterCurseFabric.form_giving_custom_entity.wolf.TransformativeWolfEntity;
 
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -72,8 +72,6 @@ public class TransformativeEntitySpawning {
                 1,
                 3
         );
-        // T_WOLF disabled for 1.21 port
-        /*
         SpawnRestriction.register(
                 ShapeShifterCurseFabric.T_WOLF,
                 SpawnLocationTypes.ON_GROUND,
@@ -88,15 +86,13 @@ public class TransformativeEntitySpawning {
                 1,
                 2
         );
-        */
 
         ServerLifecycleEvents.SERVER_STARTED.register(server -> {
             Structure structure = server.getOverworld().getRegistryManager().get(RegistryKeys.STRUCTURE).get(Identifier.of("minecraft", "desert_pyramid"));
             if (structure != null) {
                 Map<SpawnGroup, StructureSpawns> oldSpawns = structure.getStructureSpawns();
                 Map<SpawnGroup, StructureSpawns> spawns = oldSpawns.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-                // T_WOLF disabled for 1.21 port
-                // spawns.put(SpawnGroup.CREATURE, new StructureSpawns(StructureSpawns.BoundingBox.PIECE, Pool.of(new SpawnSettings.SpawnEntry(ShapeShifterCurseFabric.T_WOLF, 20, 3, 5))));
+                spawns.put(SpawnGroup.CREATURE, new StructureSpawns(StructureSpawns.BoundingBox.PIECE, Pool.of(new SpawnSettings.SpawnEntry(ShapeShifterCurseFabric.T_WOLF, 20, 3, 5))));
                 structure.config.spawnOverrides = spawns;
             }
             structure = server.getOverworld().getRegistryManager().get(RegistryKeys.STRUCTURE).get(Identifier.of("minecraft", "mineshaft"));

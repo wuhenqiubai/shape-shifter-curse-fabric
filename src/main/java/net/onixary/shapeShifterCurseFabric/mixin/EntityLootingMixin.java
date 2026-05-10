@@ -5,7 +5,7 @@ import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-// ModifyEntityLootPower disabled for 1.21 port
+import net.onixary.shapeShifterCurseFabric.additional_power.ModifyEntityLootPower;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;

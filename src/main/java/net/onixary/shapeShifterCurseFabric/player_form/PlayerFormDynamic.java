@@ -3,11 +3,11 @@ package net.onixary.shapeShifterCurseFabric.player_form;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import net.minecraft.entity.player.PlayerEntity;
-import io.github.apace100.apoli.power.Power;
 import io.github.apace100.apoli.power.PowerType;
 import io.github.apace100.apoli.power.factory.PowerFactory;
 import io.github.apace100.apoli.registry.ApoliRegistries;
+import io.github.apace100.calio.util.IdentifierAlias;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Pair;
 import net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric;
@@ -17,9 +17,9 @@ import net.onixary.shapeShifterCurseFabric.player_animation.v3.AbstractAnimState
 import net.onixary.shapeShifterCurseFabric.player_animation.v3.AnimSystem;
 import net.onixary.shapeShifterCurseFabric.player_animation.v3.AnimUtils;
 import net.onixary.shapeShifterCurseFabric.player_form_render.OriginalFurClient;
+import net.onixary.shapeShifterCurseFabric.util.PatronUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import net.onixary.shapeShifterCurseFabric.util.PatronUtils;
 
 import java.util.*;
 
@@ -296,12 +296,10 @@ public class PlayerFormDynamic extends PlayerFormBase{
         }
         try {
             Identifier PowerID = Identifier.tryParse(powerData.get("type").getAsString());
-            PowerFactory<Power> pf = null;
-            // NamespaceAlias removed in Apoli 2.12.0
-            // if (NamespaceAlias.hasAlias(PowerID)) {
-            //     pf = ApoliRegistries.POWER_FACTORY.get(NamespaceAlias.resolveAlias(PowerID));
-            // }
-            // else
+            PowerFactory pf = null;
+            if (IdentifierAlias.hasAlias(PowerID)) {
+                pf = ApoliRegistries.POWER_FACTORY.get(IdentifierAlias.resolveAlias(PowerID));
+            } else
             {
                 pf = ApoliRegistries.POWER_FACTORY.get(PowerID);
             }
@@ -309,7 +307,7 @@ public class PlayerFormDynamic extends PlayerFormBase{
                 ShapeShifterCurseFabric.LOGGER.warn("Power Factory is null! From {}", this.FormID.toString());
                 return null;
             }
-            PowerFactory<Power>.Instance pi = pf.read(powerData);
+            PowerFactory.Instance pi = pf.read(powerData);
             PowerType<?> powerType = new PowerType<>(powerID, pi);
             PowerTypeRegistryAccessor.Invoke_Update(powerID, powerType);
         } catch (Exception e) {
