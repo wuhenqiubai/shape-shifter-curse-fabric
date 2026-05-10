@@ -1,1 +1,1 @@
-{"type": "origins:modify_jump", "modifier": {"name": "Bonus jump force while sprinting", "value": 0.5, "operation": "apoli:multiply_base_additive"}, "condition": {"type": "origins:sprinting"}}
+{"type": "origins:modify_jump", "modifier": {"name": "Bonus jump force while sprinting", "value": 0.5, "operation": "add_multiplied_base"}, "condition": {"type": "origins:sprinting"}}

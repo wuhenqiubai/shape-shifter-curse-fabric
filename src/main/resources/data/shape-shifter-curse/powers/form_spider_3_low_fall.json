@@ -1,1 +1,1 @@
-{"type": "shape-shifter-curse:modfiy_fall_damage", "modifier_fall_distance": {"value": -4, "operation": "apoli:add_base_early"}}
+{"type": "shape-shifter-curse:modfiy_fall_damage", "modifier_fall_distance": {"value": -4, "operation": "add_value"}}

@@ -65,6 +65,27 @@ public class OriginsPowerTypes {
             }
         }
 
+        // Register modifier operation aliases: add_value → add_base_early, etc.
+        // Calio alpha.3 strict enum only accepts add_value/add_multiplied_base/add_multiplied_total
+        // but MODIFIER_OPERATION registry only has add_base_early/multiply_base_additive etc.
+        try {
+            var regOps = ApoliRegistries.MODIFIER_OPERATION;
+            java.util.Map.of(
+                "add_value", "add_base_early",
+                "add_multiplied_base", "multiply_base_additive",
+                "add_multiplied_total", "multiply_total_multiplicative"
+            ).forEach((alias, target) -> {
+                var aliasId = Identifier.of("apoli", alias);
+                var targetId = Identifier.of("apoli", target);
+                if (!regOps.containsId(aliasId) && regOps.containsId(targetId)) {
+                    Registry.register(regOps, aliasId, regOps.get(targetId));
+                }
+            });
+            Origins.LOGGER.info("Registered modifier operation aliases");
+        } catch (Exception e) {
+            Origins.LOGGER.error("Failed to register modifier operation aliases", e);
+        }
+
         register(new PowerFactory<>(Origins.identifier("action_on_callback"),
             new SerializableData()
                 .add("entity_action_respawned", ApoliDataTypes.ENTITY_ACTION, null)
