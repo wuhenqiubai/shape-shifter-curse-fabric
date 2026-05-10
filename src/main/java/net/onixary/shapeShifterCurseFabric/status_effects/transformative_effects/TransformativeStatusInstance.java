@@ -42,7 +42,7 @@ public class TransformativeStatusInstance extends StatusEffectInstance {
     }
 
     public @Nullable BaseTransformativeStatusEffect getTransformativeEffectType() {
-        if (super.getEffectType() instanceof BaseTransformativeStatusEffect baseTransformativeStatusEffect) {
+        if (super.getEffectType().value() instanceof BaseTransformativeStatusEffect baseTransformativeStatusEffect) {
             return baseTransformativeStatusEffect;
         }
         return null;
