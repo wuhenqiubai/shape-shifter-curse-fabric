@@ -130,10 +130,8 @@ public class TransformativeWolfEntity extends WolfEntity implements ITMob {
     @Override
     public boolean tryAttack(Entity target) {
         if(target instanceof PlayerEntity) {
+            this.onAttacking(target);
             boolean attacked = target.damage(this.getDamageSources().mobAttack(this), (float)this.getAttributeValue(EntityAttributes.GENERIC_ATTACK_DAMAGE));
-            if (attacked) {
-                // applyDamageEffects removed in 1.21; onAttacking handles effect application
-            }
             return attacked;
         }
         return super.tryAttack(target);
