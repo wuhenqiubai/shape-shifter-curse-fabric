@@ -91,7 +91,32 @@ public class TransformativeAxolotlEntity extends AxolotlEntity implements Bucket
     @Override
     public void tick() {
         super.tick();
-        this.TMob_Tick(this);
+        // Axolotl uses Brain AI in 1.21, traditional goals don't work.
+        // Manually find nearby players and apply effect.
+        if (!this.getWorld().isClient && !this.IsInCooldown()) {
+            var players = this.getWorld().getEntitiesByClass(
+                PlayerEntity.class,
+                this.getBoundingBox().expand(StaticParams.CUSTOM_MOB_DEFAULT_ATTACK_RANGE),
+                p -> true
+            );
+            for (PlayerEntity player : players) {
+                TStatusApplier.applyStatusByChance(this.getStatusChance(), player, this.getStatusEffect());
+            }
+            if (!players.isEmpty()) {
+                this.ApplyCooldown();
+            }
+        }
+        this.TickCooldown();
+        // Particles
+        if (this.getWorld().isClient) {
+            for (int i = 0; i < 1; i++) {
+                this.getWorld().addParticle(StaticParams.CUSTOM_MOB_DEFAULT_PARTICLE,
+                    this.getX() + (this.random.nextDouble() - 0.5) * 0.5,
+                    this.getY() + this.random.nextDouble() * 0.5,
+                    this.getZ() + (this.random.nextDouble() - 0.5) * 0.5,
+                    0, 0, 0);
+            }
+        }
     }
 
     @Override
