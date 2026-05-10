@@ -281,6 +281,7 @@ public class ShapeShifterCurseFabric implements ModInitializer {
 
         // Reg listeners
         ServerTickEvents.END_SERVER_TICK.register(this::onPlayerServerTick);
+        LOGGER.info("[Init] Server tick handler registered");
         EntitySleepEvents.STOP_SLEEPING.register((entity, world) -> {
             if (entity instanceof PlayerEntity) {
                 onPlayerEndSleeping(entity);
@@ -373,12 +374,12 @@ public class ShapeShifterCurseFabric implements ModInitializer {
 
     private void onPlayerServerTick(MinecraftServer minecraftServer) {
         List<ServerPlayerEntity> players = minecraftServer.getPlayerManager().getPlayerList();
-        if (players.isEmpty()) return;
 
         if (++playerTickDebugCounter % 200 == 0) {
-            LOGGER.info("[PlayerTick] players={} firstPlayer={}", players.size(),
-                players.isEmpty() ? "none" : players.get(0).getName().getString());
+            LOGGER.info("[PlayerTick] players={} isEmpty={}", players.size(), players.isEmpty());
         }
+
+        if (players.isEmpty()) return;
 
         for(ServerPlayerEntity player : players) {
             // handle instinct tick
