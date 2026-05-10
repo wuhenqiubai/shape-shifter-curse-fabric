@@ -297,8 +297,8 @@ public class PlayerFormDynamic extends PlayerFormBase{
         try {
             Identifier PowerID = Identifier.tryParse(powerData.get("type").getAsString());
             PowerFactory pf = null;
-            if (IdentifierAlias.hasAlias(PowerID)) {
-                pf = ApoliRegistries.POWER_FACTORY.get(IdentifierAlias.resolveAlias(PowerID));
+            if (IdentifierAlias.GLOBAL.hasAlias(PowerID)) {
+                pf = ApoliRegistries.POWER_FACTORY.get(IdentifierAlias.GLOBAL.resolveAlias(PowerID, ApoliRegistries.POWER_FACTORY::containsId));
             } else
             {
                 pf = ApoliRegistries.POWER_FACTORY.get(PowerID);
