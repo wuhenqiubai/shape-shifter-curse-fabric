@@ -20,7 +20,8 @@ public class RegTransformativeEntity {
         // ocelot
         EntityAttributeRegister.register(T_OCELOT, TransformativeOcelotEntity::createAttributes);
 
-        EntityAttributeRegister.register(T_WOLF, TransformativeWolfEntity::createAttributes);
+        // T_WOLF disabled for 1.21 port
+        // EntityAttributeRegister.register(T_WOLF, TransformativeWolfEntity::createAttributes);
 
         EntityAttributeRegister.register(T_SPIDER, TransformativeSpiderEntity::createAttributes);
 
