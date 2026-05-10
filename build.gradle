@@ -324,8 +324,9 @@ tasks.register('fixEmbeddedModVersions') {
                     }
                 }
                 if (embedded.name.contains('apoli')) {
-                    // Delete EquipmentMixin - restrict_armor condition context mismatch in 1.21
+                    // Delete EquipmentMixin + RestrictArmorPower - condition context mismatch in 1.21
                     project.delete fileTree(extractDir) { include '**/EquipmentMixin*.class' }
+                    project.delete fileTree(extractDir) { include '**/RestrictArmorPower*.class' }
                     def cfg = new File(extractDir, 'apoli.mixins.json')
                     if (cfg.exists()) {
                         def json = new groovy.json.JsonSlurper().parse(cfg) as Map
