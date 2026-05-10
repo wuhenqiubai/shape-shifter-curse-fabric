@@ -236,7 +236,7 @@ public class EffectManager {
         boolean hasEffect = false;
         for(hasEffect = false; iterator.hasNext(); hasEffect = true) {
             StatusEffectInstance effectInstance = iterator.next();
-            if (effectInstance instanceof TransformativeStatusInstance || effectInstance.getEffectType() instanceof BaseTransformativeStatusEffect) {
+            if (effectInstance instanceof TransformativeStatusInstance || effectInstance.getEffectType().value() instanceof BaseTransformativeStatusEffect) {
                 player.onStatusEffectRemoved(effectInstance);
                 iterator.remove();
             }
