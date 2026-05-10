@@ -24,6 +24,18 @@ public class OriginsPowerTypes {
     public static final PowerType<?> CONDUIT_POWER_ON_LAND = new PowerTypeReference<>(Origins.identifier("conduit_power_on_land"));
 
     public static void register() {
+        // Register all apoli:* power types as origins:* aliases
+        // Needed because SSC JSONs use origins: namespace but Origins mod is not installed
+        ApoliRegistries.POWER_FACTORY.forEach(pf -> {
+            Identifier apoliId = pf.getSerializerId();
+            if ("apoli".equals(apoliId.getNamespace())) {
+                Identifier originsId = Origins.identifier(apoliId.getPath());
+                if (!ApoliRegistries.POWER_FACTORY.containsId(originsId)) {
+                    Registry.register(ApoliRegistries.POWER_FACTORY, originsId, pf);
+                }
+            }
+        });
+
         register(new PowerFactory<>(Origins.identifier("action_on_callback"),
             new SerializableData()
                 .add("entity_action_respawned", ApoliDataTypes.ENTITY_ACTION, null)
