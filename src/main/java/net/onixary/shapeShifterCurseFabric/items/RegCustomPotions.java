@@ -76,7 +76,9 @@ public class RegCustomPotions {
         BrewingRecipeUtils.registerPotionRecipe(createPotionRecipeJson(MOONDUST_POTION, Items.CHICKEN, OCELOT_FORM_POTION));
         // familiar fox只能通过女巫发射或掉落的溅射药水给与，没有配方
         // The familiar fox can only be obtained via splash potions thrown or drop by witches, no recipe available
-        BrewingRecipeRegistry.registerPotionRecipe(MOONDUST_POTION, RegCustomItem.ECTOPLASM_RAG, ANUBIS_WOLF_FORM_POTION);
+        // BrewingRecipeRegistry disabled for 1.21 port, use BrewingRecipeUtils instead
+        BrewingRecipeUtils.registerPotionRecipe(createPotionRecipeJson(MOONDUST_POTION, RegCustomItem.ECTOPLASM_RAG, ANUBIS_WOLF_FORM_POTION));
+        BrewingRecipeUtils.registerPotionRecipe(createPotionRecipeJson(MOONDUST_POTION, RegCustomItem.SILK_DEW, SPIDER_FORM_POTION));
         // snow fox 需要通过净化familiar fox药水来得到
         // snow fox can be obtained by purifying familiar fox potion
         BrewingRecipeUtils.registerPotionRecipe(createPotionRecipeJson(FAMILIAR_FOX_FORM_POTION, Items.GOLD_NUGGET, SNOW_FOX_FORM_POTION));
