@@ -18,9 +18,13 @@ public class TStatusApplier {
     public static void applyStatusByChance(float chance, PlayerEntity player, BaseTransformativeStatusEffect regStatusEffect) {
         if (player instanceof ServerPlayerEntity playerEntity) {
             TransformativeStatusInstance instance = EffectManager.getTransformativeEffect(playerEntity);
-            if (instance == null || instance.getTransformativeEffectType() == null || !instance.getTransformativeEffectType().getToForm(player).equals(regStatusEffect.getToForm(player))) {  // 如果当前效果的形态与regStatusEffect不同
+            boolean hasEffect = instance != null && instance.getTransformativeEffectType() != null;
+            ShapeShifterCurseFabric.LOGGER.info("[TStatus] apply check: hasEffect={} playerForm={} chance={}",
+                hasEffect, FormAbilityManager.getForm(player).FormID, chance);
+            if (instance == null || instance.getTransformativeEffectType() == null || !instance.getTransformativeEffectType().getToForm(player).equals(regStatusEffect.getToForm(player))) {
                 if (Math.random() < chance && RegPlayerForms.ORIGINAL_SHIFTER.equals(FormAbilityManager.getForm(player))) {
                     EffectManager.overrideEffect(player, regStatusEffect);
+                    ShapeShifterCurseFabric.LOGGER.info("[TStatus] Applied effect");
                 }
             }
         }
