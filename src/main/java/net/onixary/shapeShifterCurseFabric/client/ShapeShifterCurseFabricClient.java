@@ -291,8 +291,7 @@ public class ShapeShifterCurseFabricClient implements ClientModInitializer {
 
 		registerShaderResource();
 		FurGradientRenderLayer.onInitializeClient();
-        // TODO: re-enable after AzureLib upgrade
-        // registerAzureArmorGeo();
+        registerAzureArmorGeo();
 
 		ManaRegistriesClient.register();
 		RegCustomEntityRenderer.init();
