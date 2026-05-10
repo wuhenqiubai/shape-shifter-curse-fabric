@@ -1,5 +1,1 @@
-{
-  "type": "origins:entity_group",
-  "group": "arthropod",
-  "hidden": true
-}
+{"type": "origins:in_tag", "hidden": true, "tag": "minecraft:arthropod"}

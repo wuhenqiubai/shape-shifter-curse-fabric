@@ -1,1 +1,1 @@
-{"type": "origins:attribute", "modifier": {"id": "Fragile health reduction", "attribute": "minecraft:generic.max_health", "value": -6.0, "operation": "add_base_early"}}
+{"type": "origins:attribute", "modifier": {"id": "Fragile health reduction", "attribute": "minecraft:generic.max_health", "value": -6.0, "operation": "add_value"}}

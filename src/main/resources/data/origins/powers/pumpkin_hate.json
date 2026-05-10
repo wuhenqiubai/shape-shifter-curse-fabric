@@ -1,5 +1,5 @@
 {
-  "type": "origins:multiple",
+  "type": "apoli:multiple",
   "prevent_eating": {
     "type": "origins:prevent_item_use",
     "item_condition": {
