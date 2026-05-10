@@ -1,11 +1,1 @@
-{
-  "type": "origins:modify_damage_dealt",
-  "modifier": {
-    "name": "Extra damage while fall flying",
-    "value": 1,
-    "operation": "multiply_base"
-  },
-  "condition": {
-    "type": "origins:fall_flying"
-  }
-}
+{"type": "origins:modify_damage_dealt", "modifier": {"name": "Extra damage while fall flying", "value": 1, "operation": "add_multiplied_base"}, "condition": {"type": "origins:fall_flying"}}
