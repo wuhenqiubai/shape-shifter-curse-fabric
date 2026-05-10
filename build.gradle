@@ -323,6 +323,18 @@ tasks.register('fixEmbeddedModVersions') {
                         cfg.text = groovy.json.JsonOutput.prettyPrint(groovy.json.JsonOutput.toJson(json))
                     }
                 }
+                if (embedded.name.contains('apoli')) {
+                    // Delete EquipmentMixin - restrict_armor condition context mismatch in 1.21
+                    project.delete fileTree(extractDir) { include '**/EquipmentMixin*.class' }
+                    def cfg = new File(extractDir, 'apoli.mixins.json')
+                    if (cfg.exists()) {
+                        def json = new groovy.json.JsonSlurper().parse(cfg) as Map
+                        json.mixins = json.mixins.findAll { !it.contains('EquipmentMixin') }
+                        json.client = (json.client ?: []).findAll { !it.contains('EquipmentMixin') }
+                        json.server = (json.server ?: []).findAll { !it.contains('EquipmentMixin') }
+                        cfg.text = groovy.json.JsonOutput.prettyPrint(groovy.json.JsonOutput.toJson(json))
+                    }
+                }
                 embedded.delete()
                 ant.jar(destfile: embedded, basedir: extractDir)
                 extractDir.deleteDir()
