@@ -61,7 +61,6 @@
       ]
     }
   },
-
   "meat_down": {
     "type": "origins:modify_food",
     "food_modifiers": [

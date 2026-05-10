@@ -29,7 +29,6 @@
           "command": "particle cloud ~ ~ ~ 0.3 0.3 0.3 0.01 16 normal @a"
         }
       ]
-
     },
     "entity_condition": {
       "type": "origins:and",

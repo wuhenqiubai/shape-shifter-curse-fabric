@@ -6,13 +6,17 @@
       "conditions": {
         "items": [
           {
-            "items": ["shape-shifter-curse:silk_dew"]
+            "items": [
+              "shape-shifter-curse:silk_dew"
+            ]
           }
         ]
       }
     }
   },
   "rewards": {
-    "recipes": ["shape-shifter-curse:dew_covered_cobweb"]
+    "recipes": [
+      "shape-shifter-curse:dew_covered_cobweb"
+    ]
   }
 }

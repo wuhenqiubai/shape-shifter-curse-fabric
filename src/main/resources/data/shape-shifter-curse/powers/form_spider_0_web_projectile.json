@@ -22,7 +22,6 @@
       }
     ]
   },
-
   "tier1_enable": true,
   "tier1_charge_time": 20,
   "tier1_can_charge_condition": {
@@ -87,7 +86,6 @@
     "type": "shape-shifter-curse:has_mana",
     "mana": 6
   },
-
   "tier2_use_action": {
     "type": "origins:and",
     "actions": [
@@ -140,6 +138,5 @@
     ]
   },
   "tier2_cooldown": 40,
-
   "tier3_enable": false
 }

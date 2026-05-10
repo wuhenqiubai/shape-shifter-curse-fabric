@@ -2,7 +2,6 @@
   "replace": false,
   "values": [
     "minecraft:shield",
-
     {
       "id": "endermanoverhaul:corrupted_shield",
       "required": false
@@ -33,6 +32,6 @@
     },
     {
       "id": "twilightforest:knightmetal_shield"
-	}
+    }
   ]
 }

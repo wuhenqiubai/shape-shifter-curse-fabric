@@ -1,6 +1,5 @@
 {
   "type": "origins:multiple",
-
   "can_eat_non_raw_meat_food": {
     "type": "origins:modify_food",
     "food_modifier": {

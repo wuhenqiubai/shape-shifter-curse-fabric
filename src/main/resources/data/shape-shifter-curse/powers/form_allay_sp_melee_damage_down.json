@@ -1,1 +1,27 @@
-{"type": "origins:modify_damage_dealt", "bientity_condition": {"type": "origins:actor_condition", "condition": {"type": "origins:or", "conditions": [{"type": "origins:inventory", "process_mode": "items", "item_condition": {"type": "origins:harvest_level", "comparison": ">", "compare_to": 1}, "slots": ["weapon.mainhand"]}]}}, "modifier": {"operation": "add_multiplied_total", "value": -0.33}}
+{
+  "type": "origins:modify_damage_dealt",
+  "bientity_condition": {
+    "type": "origins:actor_condition",
+    "condition": {
+      "type": "origins:or",
+      "conditions": [
+        {
+          "type": "origins:inventory",
+          "process_mode": "items",
+          "item_condition": {
+            "type": "origins:harvest_level",
+            "comparison": ">",
+            "compare_to": 1
+          },
+          "slots": [
+            "weapon.mainhand"
+          ]
+        }
+      ]
+    }
+  },
+  "modifier": {
+    "operation": "add_multiplied_total",
+    "value": -0.33
+  }
+}

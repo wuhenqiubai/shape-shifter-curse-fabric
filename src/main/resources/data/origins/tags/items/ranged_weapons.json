@@ -4,7 +4,6 @@
     "minecraft:bow",
     "minecraft:crossbow",
     "minecraft:trident",
-
     {
       "id": "archers:composite_longbow",
       "required": false

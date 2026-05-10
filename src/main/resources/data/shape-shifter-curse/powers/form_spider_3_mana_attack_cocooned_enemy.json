@@ -11,7 +11,7 @@
   },
   "damage_condition": {
     "type": "origins:projectile",
-    "inverted" : true
+    "inverted": true
   },
   "target_condition": {
     "type": "origins:status_effect",

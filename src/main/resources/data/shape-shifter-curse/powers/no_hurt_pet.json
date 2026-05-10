@@ -1,1 +1,10 @@
-{"type": "origins:modify_damage_dealt", "bientity_condition": {"type": "origins:owner"}, "modifier": {"operation": "add_multiplied_total", "value": -1}}
+{
+  "type": "origins:modify_damage_dealt",
+  "bientity_condition": {
+    "type": "origins:owner"
+  },
+  "modifier": {
+    "operation": "add_multiplied_total",
+    "value": -1
+  }
+}

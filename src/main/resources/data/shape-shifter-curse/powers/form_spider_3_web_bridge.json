@@ -22,7 +22,6 @@
       }
     ]
   },
-
   "tier1_enable": true,
   "tier1_charge_time": 20,
   "tier1_can_charge_condition": {
@@ -104,7 +103,6 @@
     ]
   },
   "tier1_cooldown": 20,
-
   "tier2_enable": true,
   "tier2_charge_time": 40,
   "tier2_can_charge_condition": {
@@ -186,7 +184,6 @@
     ]
   },
   "tier2_cooldown": 40,
-
   "tier3_enable": true,
   "tier3_charge_time": 60,
   "tier3_can_charge_condition": {
