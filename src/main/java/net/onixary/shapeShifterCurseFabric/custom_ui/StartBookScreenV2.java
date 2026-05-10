@@ -36,8 +36,8 @@ public class StartBookScreenV2 extends Screen {
 
     @Override
     public void init() {
-        int TextPosYFix = 75;
-        int ButtonPosYFix = -100;
+        int TextPosYFix = 20;
+        int ButtonPosYFix = -40;
         if (ShapeShifterCurseFabric.clientConfig.newStartBookForBiggerScreen) {
             TextPosYFix = 0;
             ButtonPosYFix = -50;
