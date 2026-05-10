@@ -283,6 +283,7 @@ public class ShapeShifterCurseFabric implements ModInitializer {
         ServerTickEvents.END_SERVER_TICK.register(this::onPlayerServerTick);
         LOGGER.info("[Init] Server tick handler registered");
         EntitySleepEvents.STOP_SLEEPING.register((entity, world) -> {
+            LOGGER.info("[Sleep] STOP_SLEEPING for {}", entity.getName().getString());
             if (entity instanceof PlayerEntity) {
                 onPlayerEndSleeping(entity);
             }
@@ -290,6 +291,8 @@ public class ShapeShifterCurseFabric implements ModInitializer {
         // allow sleep when status effect is active
         EntitySleepEvents.ALLOW_SLEEP_TIME.register((entity, world, pos) -> {
             if (entity instanceof PlayerEntity) {
+                LOGGER.info("[Sleep] ALLOW_SLEEP_TIME check for {} - hasEffect={}",
+                    entity.getName().getString(), EffectManager.hasTransformativeEffect(entity));
                 if (EffectManager.hasTransformativeEffect(entity)) {
                     return ActionResult.success(true);
                 }
