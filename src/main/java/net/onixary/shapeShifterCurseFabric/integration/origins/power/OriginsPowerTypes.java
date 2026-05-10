@@ -24,18 +24,44 @@ public class OriginsPowerTypes {
     public static final PowerType<?> MASTER_OF_WEBS_NO_SLOWDOWN = new PowerTypeReference<>(Origins.identifier("master_of_webs_no_slowdown"));
     public static final PowerType<?> CONDUIT_POWER_ON_LAND = new PowerTypeReference<>(Origins.identifier("conduit_power_on_land"));
 
-    public static void register() {
-        // Register all apoli:* power types as origins:* aliases
-        // Needed because SSC JSONs use origins: namespace but Origins mod is not installed
-        ApoliRegistries.POWER_FACTORY.forEach(pf -> {
-            Identifier apoliId = pf.getSerializerId();
-            if ("apoli".equals(apoliId.getNamespace())) {
+    @SuppressWarnings({"rawtypes", "unchecked"})
+    private static void aliasRegistry(Registry registry, java.util.function.Function<Object, Identifier> getId) {
+        registry.forEach(entry -> {
+            Object value = entry;
+            Identifier apoliId = getId.apply(value);
+            if (apoliId != null && "apoli".equals(apoliId.getNamespace())) {
                 Identifier originsId = Origins.identifier(apoliId.getPath());
-                if (!ApoliRegistries.POWER_FACTORY.containsId(originsId)) {
-                    Registry.register(ApoliRegistries.POWER_FACTORY, originsId, pf);
+                if (!registry.containsId(originsId)) {
+                    Registry.register(registry, originsId, value);
                 }
             }
         });
+    }
+
+    public static void register() {
+        // Register all apoli:* types as origins:* aliases
+        // Needed because SSC JSONs use origins: namespace but Origins mod is not installed
+        for (var registry : new Registry[]{
+            ApoliRegistries.POWER_FACTORY,
+            ApoliRegistries.ENTITY_CONDITION,
+            ApoliRegistries.BIENTITY_CONDITION,
+            ApoliRegistries.ITEM_CONDITION,
+            ApoliRegistries.BLOCK_CONDITION,
+            ApoliRegistries.DAMAGE_CONDITION,
+            ApoliRegistries.FLUID_CONDITION,
+            ApoliRegistries.BIOME_CONDITION,
+            ApoliRegistries.ENTITY_ACTION,
+            ApoliRegistries.ITEM_ACTION,
+            ApoliRegistries.BLOCK_ACTION,
+            ApoliRegistries.BIENTITY_ACTION,
+        }) {
+            aliasRegistry(registry, o -> switch (o) {
+                case io.github.apace100.apoli.power.factory.PowerFactory pf -> pf.getSerializerId();
+                case io.github.apace100.apoli.power.factory.condition.ConditionFactory<?> cf -> cf.getSerializerId();
+                case io.github.apace100.apoli.power.factory.action.ActionFactory<?> af -> af.getSerializerId();
+                default -> null;
+            });
+        }
 
         register(new PowerFactory<>(Origins.identifier("action_on_callback"),
             new SerializableData()
