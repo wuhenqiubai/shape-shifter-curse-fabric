@@ -273,7 +273,7 @@ public class EffectManager {
             if (entry.getValue() instanceof TransformativeStatusInstance) {
                 continue;
             }
-            if (entry.getKey() instanceof BaseTransformativeStatusEffect) {
+            if (entry.getKey().value() instanceof BaseTransformativeStatusEffect) {
                 TransformativeStatusInstance instance = TransformativeStatusInstance.formStatusEffectInstance(entry.getValue());
                 if (instance == null) {
                     ShapeShifterCurseFabric.LOGGER.error("Failed to convert status effect instance to TransformativeStatusInstance: {}", entry.getValue());
@@ -304,7 +304,7 @@ public class EffectManager {
             if (effectInstance instanceof TransformativeStatusInstance transformativeStatusInstance) {
                 return transformativeStatusInstance;
             }
-            if (effectInstance.getEffectType() instanceof BaseTransformativeStatusEffect) {
+            if (effectInstance.getEffectType().value() instanceof BaseTransformativeStatusEffect) {
                 return TransformativeStatusInstance.formStatusEffectInstance(effectInstance);
             }
         }
