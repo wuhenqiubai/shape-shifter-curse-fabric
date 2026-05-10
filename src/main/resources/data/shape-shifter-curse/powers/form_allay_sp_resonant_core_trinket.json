@@ -1,5 +1,5 @@
 {
-  "type": "origins:multiple",
+  "type": "apoli:multiple",
   "eat_amethyst_shard": {
     "type": "shape-shifter-curse:custom_edible",
     "item_id_list": [

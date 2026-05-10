@@ -1,5 +1,5 @@
 {
-  "type": "origins:multiple",
+  "type": "apoli:multiple",
   "damage_on_block_break": {
     "type": "origins:action_on_block_break",
     "entity_action": {

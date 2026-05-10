@@ -1,1 +1,1 @@
-{"type": "origins:conditioned_attribute", "modifier": {"attribute": "minecraft:generic.movement_speed", "operation": "multiply_total_multiplicative", "value": -0.2}, "tick_rate": 5, "condition": {"type": "origins:on_block"}}
+{"type": "origins:conditioned_attribute", "modifier": {"attribute": "minecraft:generic.movement_speed", "operation": "add_multiplied_total", "value": -0.2}, "tick_rate": 5, "condition": {"type": "origins:on_block"}}
