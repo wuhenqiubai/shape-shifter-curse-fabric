@@ -63,6 +63,10 @@ public class OriginsPowerTypes {
             } catch (Exception e) {
                 Origins.LOGGER.error("Failed to alias registry", e);
             }
+            // Debug: check if apoli:multiple was aliased
+            if (!ApoliRegistries.POWER_FACTORY.containsId(Origins.identifier("multiple"))) {
+                Origins.LOGGER.warn("origins:multiple not found in POWER_FACTORY after alias!");
+            }
         }
 
         register(new PowerFactory<>(Origins.identifier("action_on_callback"),
