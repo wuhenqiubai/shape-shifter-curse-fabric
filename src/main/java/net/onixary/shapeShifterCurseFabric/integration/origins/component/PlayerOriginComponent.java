@@ -86,7 +86,12 @@ public class PlayerOriginComponent implements OriginComponent {
         Identifier source = origin.getIdentifier();
         for(PowerType<?> powerType : origin.getPowerTypes()) {
             if(!powerComponent.hasPower(powerType, source)) {
-                powerComponent.addPower(powerType, source);
+                try {
+                    powerComponent.addPower(powerType, source);
+                } catch (Exception e) {
+                    net.onixary.shapeShifterCurseFabric.integration.origins.Origins.LOGGER
+                        .error("Failed to grant power {} from origin {}: {}", powerType.getIdentifier(), source, e.getMessage());
+                }
             }
         }
     }
