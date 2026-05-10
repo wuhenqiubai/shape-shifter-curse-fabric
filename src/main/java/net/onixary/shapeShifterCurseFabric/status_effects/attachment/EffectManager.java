@@ -317,7 +317,7 @@ public class EffectManager {
             ShapeShifterCurseFabric.LOGGER.error("Attempted to check effect with null player");
             return false;
         }
-        return player.getStatusEffects().stream().anyMatch(effect -> effect.getEffectType() instanceof BaseTransformativeStatusEffect);
+        return player.getStatusEffects().stream().anyMatch(effect -> effect.getEffectType().value() instanceof BaseTransformativeStatusEffect);
     }
 
     // 服务端
