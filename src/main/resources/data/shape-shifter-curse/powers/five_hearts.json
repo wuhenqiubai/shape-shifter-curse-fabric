@@ -1,1 +1,1 @@
-{"type": "origins:attribute", "modifier": {"id": "Nine lives health reduction", "attribute": "minecraft:generic.max_health", "value": -10.0, "operation": "add_base_early"}}
+{"type": "origins:attribute", "modifier": {"id": "Nine lives health reduction", "attribute": "minecraft:generic.max_health", "value": -10.0, "operation": "apoli:add_base_early"}}

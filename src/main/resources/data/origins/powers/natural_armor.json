@@ -1,1 +1,1 @@
-{"type": "origins:attribute", "modifier": {"id": "Natural Armor health bonus", "attribute": "minecraft:generic.armor", "value": 8.0, "operation": "add_base_early"}}
+{"type": "origins:attribute", "modifier": {"id": "Natural Armor health bonus", "attribute": "minecraft:generic.armor", "value": 8.0, "operation": "apoli:add_base_early"}}

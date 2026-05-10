@@ -1,1 +1,1 @@
-{"type": "origins:conditioned_attribute", "modifier": {"id": "Gain health when having air(moist)", "attribute": "minecraft:generic.max_health", "value": 6.0, "operation": "add_base_early"}, "tick_rate": 40, "condition": {"type": "origins:air", "comparison": ">", "compare_to": 0}}
+{"type": "origins:conditioned_attribute", "modifier": {"id": "Gain health when having air(moist)", "attribute": "minecraft:generic.max_health", "value": 6.0, "operation": "apoli:add_base_early"}, "tick_rate": 40, "condition": {"type": "origins:air", "comparison": ">", "compare_to": 0}}
