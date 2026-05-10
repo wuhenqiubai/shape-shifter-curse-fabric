@@ -23,10 +23,10 @@ public class StartBookScreenV2 extends Screen {
     private static final Identifier StartBook_TexID = Identifier.of(MOD_ID, "textures/gui/start_book.png");
     public PlayerEntity currentPlayer;
 
-    public static final int BookSizeX = 360;
-    public static final int BookSizeY = 330;
-    public static final int TextSizeX = 270;
-    public static final int TextSizeY = 300;
+    public static final int BookSizeX = 240;
+    public static final int BookSizeY = 220;
+    public static final int TextSizeX = 200;
+    public static final int TextSizeY = 200;
     public static final int ButtonSizeX = 200;
     public static final int ButtonSizeY = 30;
 
@@ -68,7 +68,7 @@ public class StartBookScreenV2 extends Screen {
     private void RenderBook(DrawContext context) {
         int BookPosX = width / 2 - BookSizeX / 2;
         int BookPosY = height / 2 - BookSizeY / 2;
-        context.drawTexture(StartBook_TexID, BookPosX, BookPosY, 0, 0f, 0f, BookSizeX, BookSizeY, BookSizeX, BookSizeY);
+        context.drawTexture(StartBook_TexID, BookPosX, BookPosY, 0f, 0f, BookSizeX, BookSizeY, BookSizeX, BookSizeY);
     }
 
     @Override

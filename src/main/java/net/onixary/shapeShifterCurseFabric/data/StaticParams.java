@@ -23,11 +23,9 @@ public class StaticParams {
     public static final float FAMILIAR_CURSE_POTION_DROP_PROBABILITY = 0.35F;
     // instinct setting
     public static final float INSTINCT_MAX = 100.0f;
-    // per tick instinct increase
-    //public static final float INSTINCT_INCREASE_RATE_0 = (INSTINCT_MAX / 2000.0f) / 20.0f;
-    //public static final float INSTINCT_INCREASE_RATE_1 = (INSTINCT_MAX / 2000.0f) / 20.0f;
-    public static final float INSTINCT_INCREASE_RATE_0 = (INSTINCT_MAX / 9000.0f) / 20.0f;
-    public static final float INSTINCT_INCREASE_RATE_1 = (INSTINCT_MAX / 9000.0f) / 20.0f;
+    // per tick instinct increase (fills 100 points in ~100 seconds at PHASE_0)
+    public static final float INSTINCT_INCREASE_RATE_0 = INSTINCT_MAX / 2000.0f;
+    public static final float INSTINCT_INCREASE_RATE_1 = INSTINCT_MAX / 1500.0f;
     // ----------------------------------------
     // FX settings
     public static final int TRANSFORM_FX_DURATION_IN = 3 * 20; // 2 seconds
