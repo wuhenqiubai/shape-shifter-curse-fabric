@@ -1,1 +1,1 @@
-{"type": "origins:attribute", "modifier": {"id": "Form ocelot0 health reduction", "attribute": "minecraft:generic.max_health", "value": -10.0, "operation": "add_value"}}
+{"type": "origins:attribute", "modifier": {"id": "Form ocelot0 health reduction", "attribute": "minecraft:generic.max_health", "value": -10.0, "operation": "add_base_early"}}

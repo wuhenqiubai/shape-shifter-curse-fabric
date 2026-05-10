@@ -1,1 +1,1 @@
-{"type": "origins:modify_break_speed", "block_condition": {"type": "origins:hardness", "comparison": ">=", "compare_to": 1}, "modifier": {"operation": "add_multiplied_base", "value": -0.45}}
+{"type": "origins:modify_break_speed", "block_condition": {"type": "origins:hardness", "comparison": ">=", "compare_to": 1}, "modifier": {"operation": "multiply_base_additive", "value": -0.45}}
