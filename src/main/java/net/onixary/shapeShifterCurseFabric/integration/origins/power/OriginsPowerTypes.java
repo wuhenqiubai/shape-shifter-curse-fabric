@@ -8,9 +8,10 @@ import io.github.apace100.apoli.power.factory.action.ActionFactory;
 import io.github.apace100.apoli.registry.ApoliRegistries;
 import io.github.apace100.calio.data.SerializableData;
 import io.github.apace100.calio.data.SerializableDataTypes;
-import net.onixary.shapeShifterCurseFabric.integration.origins.Origins;
 import net.minecraft.entity.Entity;
 import net.minecraft.registry.Registry;
+import net.minecraft.util.Identifier;
+import net.onixary.shapeShifterCurseFabric.integration.origins.Origins;
 
 @SuppressWarnings("unchecked")
 public class OriginsPowerTypes {
