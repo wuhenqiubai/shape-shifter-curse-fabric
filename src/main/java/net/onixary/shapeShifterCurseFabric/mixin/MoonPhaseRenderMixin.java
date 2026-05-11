@@ -1,5 +1,6 @@
 package net.onixary.shapeShifterCurseFabric.mixin;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.WorldRenderer;
 import net.minecraft.util.Identifier;
@@ -7,7 +8,9 @@ import net.onixary.shapeShifterCurseFabric.cursed_moon.CursedMoon;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import static net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric.MOD_ID;
 
@@ -32,5 +35,13 @@ public class MoonPhaseRenderMixin {
     @ModifyArg(method = "renderSky", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/systems/RenderSystem;setShaderTexture(ILnet/minecraft/util/Identifier;)V", ordinal = 1))
     private Identifier getMoonPhaseTexture(Identifier identifier) {
         return getMoonIdentifier();
+    }
+
+    @Inject(method = "renderSky", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/systems/RenderSystem;setShaderTexture(ILnet/minecraft/util/Identifier;)V", ordinal = 1, shift = At.Shift.AFTER))
+    private void tintMoonPurple(CallbackInfo ci) {
+        MinecraftClient client = MinecraftClient.getInstance();
+        if (client.world != null && CursedMoon.isCursedMoon(client.world)) {
+            RenderSystem.setShaderColor(1.0F, 0.24F, 0.82F, 1.0F);
+        }
     }
 }
