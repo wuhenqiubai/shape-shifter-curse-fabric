@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ItemStorePowerRender {
-    private static final Identifier WIDGETS_TEXTURE = Identifier.of("textures/gui/sprites/widget.png");
+    private static final Identifier WIDGETS_TEXTURE = Identifier.of("textures/gui/sprites/hud/hotbar_offhand_left.png");
 
     public static interface itemStorePowerRenderInterface {
         public int getSlot();
@@ -70,7 +70,7 @@ public class ItemStorePowerRender {
         int SlotYFinal = SlotBegin.getRight() + SlotY * 20;
         context.getMatrices().push();
         context.getMatrices().translate(0.0f, 0.0f, -90.0f);
-        context.drawTexture(WIDGETS_TEXTURE, SlotXFinal - 3, SlotYFinal - 4, 24, 22, 29, 24);
+        context.drawTexture(WIDGETS_TEXTURE, SlotXFinal - 2, SlotYFinal - 4, 0, 1, 22, 22, 29, 24);
         context.getMatrices().pop();
         ItemStack stack = power.getStack();
         if (stack.isEmpty()) {
