@@ -13,8 +13,10 @@
           "type": "origins:and",
           "actions": [
             {
-              "type": "origins:spawn_particles",
-              "particle": "minecraft:crit",
+              "type": "apoli:spawn_particles",
+              "particle": {
+                "type": "minecraft:crit"
+              },
               "count": 8,
               "speed": 0.0,
               "force": true,
@@ -50,8 +52,10 @@
               "pitch": 1.0
             },
             {
-              "type": "origins:spawn_particles",
-              "particle": "minecraft:sweep_attack",
+              "type": "apoli:spawn_particles",
+              "particle": {
+                "type": "minecraft:sweep_attack"
+              },
               "count": 3,
               "speed": 0.0,
               "force": true,

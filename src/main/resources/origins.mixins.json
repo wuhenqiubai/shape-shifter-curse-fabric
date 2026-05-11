@@ -6,8 +6,10 @@
   "mixins": [
     "ArgumentTypesMixin",
     "ConduitOnLandMixin",
+    "InTagConditionMixin",
     "LikeWaterMixin",
     "LoginMixin",
+    "ModifyTypeTagMixin",
     "NoCobwebSlowdownMixin",
     "OriginUpgradeMixin",
     "ScareCreepersMixin",

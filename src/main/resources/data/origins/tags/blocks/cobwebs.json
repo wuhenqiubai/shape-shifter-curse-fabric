@@ -2,6 +2,9 @@
   "replace": false,
   "values": [
     "minecraft:cobweb",
-    "origins:temporary_cobweb"
+    {
+      "id": "origins:temporary_cobweb",
+      "required": false
+    }
   ]
 }

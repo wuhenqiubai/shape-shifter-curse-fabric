@@ -24,7 +24,7 @@
               {
                 "type": "origins:target_condition",
                 "condition": {
-                  "type": "origins:in_tag",
+                  "type": "apoli:in_tag",
                   "tag": "shape-shifter-curse:water_explode_immune"
                 },
                 "inverted": true
@@ -43,7 +43,9 @@
         },
         {
           "type": "shape-shifter-curse:spawn_particles_in_circle",
-          "particle": "minecraft:glow",
+          "particle": {
+            "type": "minecraft:glow"
+          },
           "count": 1,
           "speed": 0.01,
           "force": true,

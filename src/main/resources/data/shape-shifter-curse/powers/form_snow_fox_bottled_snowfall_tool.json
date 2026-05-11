@@ -12,8 +12,10 @@
           "type": "origins:and",
           "actions": [
             {
-              "type": "origins:spawn_particles",
-              "particle": "minecraft:cloud",
+              "type": "apoli:spawn_particles",
+              "particle": {
+                "type": "minecraft:cloud"
+              },
               "count": 8,
               "speed": 0.0,
               "force": false,

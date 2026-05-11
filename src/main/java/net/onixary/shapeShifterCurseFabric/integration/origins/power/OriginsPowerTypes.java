@@ -1,6 +1,8 @@
 package net.onixary.shapeShifterCurseFabric.integration.origins.power;
 
+import io.github.apace100.apoli.Apoli;
 import io.github.apace100.apoli.data.ApoliDataTypes;
+import io.github.apace100.apoli.power.Power;
 import io.github.apace100.apoli.power.PowerType;
 import io.github.apace100.apoli.power.PowerTypeReference;
 import io.github.apace100.apoli.power.factory.PowerFactory;
@@ -9,9 +11,15 @@ import io.github.apace100.apoli.registry.ApoliRegistries;
 import io.github.apace100.calio.data.SerializableData;
 import io.github.apace100.calio.data.SerializableDataTypes;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.registry.Registry;
+import net.minecraft.registry.tag.TagKey;
 import net.minecraft.util.Identifier;
 import net.onixary.shapeShifterCurseFabric.integration.origins.Origins;
+
+import java.util.function.BiFunction;
+import java.util.function.Function;
 
 @SuppressWarnings("unchecked")
 public class OriginsPowerTypes {
@@ -88,6 +96,17 @@ public class OriginsPowerTypes {
                     (ActionFactory<Entity>.Instance)data.get("entity_action_chosen"),
                     data.getBoolean("execute_chosen_when_orb")))
             .allowCondition());
+
+	    // apoli:modify_type_tag — makes entity be considered in the specified entity type tag
+	    // Replacement for the removed apoli:entity_group power type
+	    register(new PowerFactory<>(Apoli.identifier("modify_type_tag"),
+			    new SerializableData()
+					    .add("tag", SerializableDataTypes.ENTITY_TAG),
+			    (Function<SerializableData.Instance, BiFunction<PowerType<Power>, LivingEntity, Power>>) data ->
+					    (type, entity) -> {
+						    TagKey<EntityType<?>> tag = data.get("tag");
+						    return new ModifyTypeTagPower(type, entity, tag);
+					    }).allowCondition());
     }
 
     private static void register(PowerFactory<?> serializer) {

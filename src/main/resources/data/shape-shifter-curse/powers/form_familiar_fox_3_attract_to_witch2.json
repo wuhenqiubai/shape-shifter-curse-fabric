@@ -22,8 +22,10 @@
     }
   },
   "entity_action": {
-    "type": "origins:spawn_particles",
-    "particle": "minecraft:soul_fire_flame",
+    "type": "apoli:spawn_particles",
+    "particle": {
+      "type": "minecraft:soul_fire_flame"
+    },
     "count": 1,
     "speed": 0.0,
     "force": true,

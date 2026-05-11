@@ -1,1 +1,5 @@
-{"type": "origins:in_tag", "hidden": true, "tag": "minecraft:aquatic"}
+{
+  "type": "apoli:modify_type_tag",
+  "hidden": true,
+  "tag": "minecraft:aquatic"
+}

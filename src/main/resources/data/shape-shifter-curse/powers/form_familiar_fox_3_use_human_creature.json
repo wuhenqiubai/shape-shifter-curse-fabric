@@ -52,14 +52,14 @@
       {
         "type": "origins:target_condition",
         "condition": {
-          "type": "origins:in_tag",
+          "type": "apoli:in_tag",
           "tag": "shape-shifter-curse:familiar_human_target"
         }
       },
       {
         "type": "origins:target_condition",
         "condition": {
-          "type": "origins:in_tag",
+          "type": "apoli:in_tag",
           "tag": "shape-shifter-curse:familiar_human_onlyhand_blacklist"
         },
         "inverted": true

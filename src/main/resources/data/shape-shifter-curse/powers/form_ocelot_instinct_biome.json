@@ -6,7 +6,7 @@
   "condition": {
     "type": "origins:biome",
     "condition": {
-      "type": "origins:in_tag",
+      "type": "apoli:in_tag",
       "tag": "minecraft:is_jungle"
     }
   }

@@ -115,6 +115,11 @@ public class Origins implements ModInitializer, OrderedResourceListenerInitializ
 		Identifier powerData = Apoli.identifier("powers");
 		Identifier originData = Origins.identifier("origins");
 
+		// Ensure origins namespace tags are registered before power loading
+		OriginsTagLoader tagLoader = new OriginsTagLoader();
+		manager.register(ResourceType.SERVER_DATA, tagLoader).before(powerData).complete();
+		PowerTypes.DEPENDENCIES.add(tagLoader.getFabricId());
+
 		OriginManager originLoader = new OriginManager();
 		manager.register(ResourceType.SERVER_DATA, originLoader).after(powerData).complete();
 		manager.register(ResourceType.SERVER_DATA, new OriginLayers()).after(originData).complete();

@@ -12,7 +12,7 @@
           {
             "type": "origins:block_collision",
             "block_condition": {
-              "type": "origins:in_tag",
+              "type": "apoli:in_tag",
               "tag": "origins:natural_wood"
             },
             "offset_x": 0.1,
@@ -21,7 +21,7 @@
           {
             "type": "origins:block_collision",
             "block_condition": {
-              "type": "origins:in_tag",
+              "type": "apoli:in_tag",
               "tag": "origins:natural_wood"
             },
             "offset_x": -0.1,

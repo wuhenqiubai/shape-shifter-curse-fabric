@@ -1,1 +1,9 @@
-{"type": "origins:attribute", "modifier": {"id": "Tailwind speed bonus", "attribute": "minecraft:generic.movement_speed", "value": 0.2, "operation": "add_multiplied_base"}}
+{
+  "type": "origins:attribute",
+  "modifier": {
+    "id": "tailwind_speed_bonus",
+    "attribute": "minecraft:generic.movement_speed",
+    "value": 0.2,
+    "operation": "add_multiplied_base"
+  }
+}

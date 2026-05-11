@@ -10,7 +10,7 @@
     "chance": 0.8
   },
   "damage_condition": {
-    "type": "origins:in_tag",
+    "type": "apoli:in_tag",
     "tag": "shape-shifter-curse:is_wither",
     "inverted": true
   }

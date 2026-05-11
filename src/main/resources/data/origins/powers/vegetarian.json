@@ -9,7 +9,7 @@
           {
             "type": "origins:ingredient",
             "ingredient": {
-              "tag": "origins:meat"
+              "tag": "minecraft:meat"
             }
           },
           {

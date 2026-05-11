@@ -1,6 +1,8 @@
 {
-  "type": "origins:particle",
-  "particle": "minecraft:portal",
+  "type": "apoli:particle",
+  "particle": {
+    "type": "minecraft:portal"
+  },
   "frequency": 4,
   "hidden": true
 }
