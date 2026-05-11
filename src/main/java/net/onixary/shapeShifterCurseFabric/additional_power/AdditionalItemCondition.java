@@ -7,15 +7,18 @@ import net.minecraft.component.type.AttributeModifiersComponent;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.Registry;
+import net.minecraft.util.Pair;
+import net.minecraft.world.World;
 import net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric;
 
 public class AdditionalItemCondition {
     public static void register() {
         register(IsMorphScaleItemCondition.getFactory());
-        register(new ConditionFactory<>(
+        register(new ConditionFactory<Pair<World, ItemStack>>(
                 ShapeShifterCurseFabric.identifier("is_weapon"),
                 new SerializableData(),
-                (data, itemStack) -> {
+                (data, worldAndStack) -> {
+                    ItemStack itemStack = worldAndStack.getRight();
                     AttributeModifiersComponent modifiers = itemStack.getItem().getAttributeModifiers();
                     for (var entry : modifiers.modifiers()) {
                         if (entry.attribute() == EntityAttributes.GENERIC_ATTACK_DAMAGE
@@ -29,7 +32,7 @@ public class AdditionalItemCondition {
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})
-    private static void register(ConditionFactory<ItemStack> conditionFactory) {
+    private static void register(ConditionFactory<Pair<World, ItemStack>> conditionFactory) {
         Registry.register(ApoliRegistries.ITEM_CONDITION, conditionFactory.getSerializerId(), (ConditionFactory) conditionFactory);
     }
 }

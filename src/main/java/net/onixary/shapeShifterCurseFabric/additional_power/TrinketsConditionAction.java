@@ -84,51 +84,54 @@ public class TrinketsConditionAction {
         return false;
     }
 
-    public static boolean CheckEquipped(Entity entity, String AccessoryMod, String GroupString, String SlotString, int Slot, Predicate<ItemStack> conditon, boolean rDefault) {
-        if (entity instanceof LivingEntity livingEntity) {
-            switch (calcAutoMod(AccessoryMod)) {
-                case "trinkets":
-                    if (!AccessoryUtils.LOADED_Trinkets) {
-                        return rDefault;
-                    }
-                    Optional<TrinketComponent> component = TrinketsApi.getTrinketComponent(livingEntity);
-                    if (component.isEmpty()) {
-                        return rDefault;
-                    }
-                    Map<String, TrinketInventory> groupInv = component.get().getInventory().get(GroupString);
-                    if (groupInv == null) {
-                        return rDefault;
-                    }
-                    TrinketInventory inv = groupInv.get(SlotString);
-                    if (inv == null) {
-                        return rDefault;
-                    }
-                    ItemStack stack = inv.getStack(Slot);
-                    if (conditon == null) {
-                        return rDefault;
-                    }
-                    return conditon.test(stack);
-                case "curios":
-                    if (!AccessoryUtils.LOADED_Curios) {
-                        return rDefault;
-                    }
-                    List<ItemStack> itemStackList = CurioUtils.getEntitySlot(livingEntity, SlotString);
-                    if (itemStackList == null) {
-                        return rDefault;
-                    }
-                    if (Slot >= itemStackList.size()) {
-                        return rDefault;
-                    }
-                    ItemStack itemStack = itemStackList.get(Slot);
-                    if (conditon == null) {
-                        return rDefault;
-                    }
-                    return conditon.test(itemStack);
-                case "none":
-                    return rDefault;
-                default:
-                    ShapeShifterCurseFabric.LOGGER.error("[check_accessory_slot] accessory_mod is not valid");
-            }
+	public static boolean CheckEquipped(Entity entity, String AccessoryMod, String GroupString, String SlotString, int Slot, Predicate<Pair<World, ItemStack>> conditon, boolean rDefault) {
+		if (!(entity instanceof LivingEntity le)) {
+			return rDefault;
+		}
+		LivingEntity livingEntity = le;
+		World world = livingEntity.getWorld();
+		switch (calcAutoMod(AccessoryMod)) {
+			case "trinkets":
+				if (!AccessoryUtils.LOADED_Trinkets) {
+					return rDefault;
+				}
+				Optional<TrinketComponent> component = TrinketsApi.getTrinketComponent(livingEntity);
+				if (component.isEmpty()) {
+					return rDefault;
+				}
+				Map<String, TrinketInventory> groupInv = component.get().getInventory().get(GroupString);
+				if (groupInv == null) {
+					return rDefault;
+				}
+				TrinketInventory inv = groupInv.get(SlotString);
+				if (inv == null) {
+					return rDefault;
+				}
+				ItemStack stack = inv.getStack(Slot);
+				if (conditon == null) {
+					return rDefault;
+				}
+				return conditon.test(new Pair<>(world, stack));
+			case "curios":
+				if (!AccessoryUtils.LOADED_Curios) {
+					return rDefault;
+				}
+				List<ItemStack> itemStackList = CurioUtils.getEntitySlot(livingEntity, SlotString);
+				if (itemStackList == null) {
+					return rDefault;
+				}
+				if (Slot >= itemStackList.size()) {
+					return rDefault;
+				}
+				ItemStack itemStack = itemStackList.get(Slot);
+				if (conditon == null) {
+					return rDefault;
+				}
+				return conditon.test(new Pair<>(world, itemStack));
+			case "none":
+				return rDefault;
+			default:
+				ShapeShifterCurseFabric.LOGGER.error("[check_accessory_slot] accessory_mod is not valid");
         }
         return rDefault;
     }

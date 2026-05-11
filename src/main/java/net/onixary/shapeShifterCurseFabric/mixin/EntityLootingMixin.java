@@ -23,7 +23,7 @@ public abstract class EntityLootingMixin {
         if (Attacker instanceof PlayerEntity player) {
             AtomicReference<ItemStack> FinalStack = new AtomicReference<>(stack);
             PowerHolderComponent.getPowers(player, ModifyEntityLootPower.class).forEach(
-                    power -> FinalStack.set(power.ApplyModifyDrop(FinalStack.get(), RealThis.getRandom()))
+                    power -> FinalStack.set(power.ApplyModifyDrop(FinalStack.get(), RealThis.getRandom(), player.getWorld()))
             );
             return RealThis.dropStack(FinalStack.get());
         }

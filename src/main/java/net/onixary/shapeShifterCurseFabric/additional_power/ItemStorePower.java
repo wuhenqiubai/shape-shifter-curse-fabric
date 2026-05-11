@@ -178,9 +178,9 @@ public class ItemStorePower extends Power implements ItemStorePowerRender.itemSt
                 (data, entity) -> {
                     ItemStorePower itemStorePower = findPower(entity, data.get("id"));
                     if (itemStorePower == null) return data.getBoolean("default");
-                    ConditionFactory<ItemStack>.Instance condition = data.get("item_condition");
+                    ConditionFactory<Pair<World, ItemStack>>.Instance condition = data.get("item_condition");
                     if (condition == null) return data.getBoolean("default");
-                    return condition.test(itemStorePower.storedItem);
+                    return condition.test(new Pair<>(entity.getWorld(), itemStorePower.storedItem));
                 }
         ));
     }
