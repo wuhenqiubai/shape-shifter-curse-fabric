@@ -20,6 +20,7 @@ public class ScaleScrollTextWidget extends MultilineTextWidget implements Widget
     private int realHeight;
     private int MaxWidth;
     private int MaxRows;
+	public int iconOffsetX = 0; // 滚动图标在文字区域右侧的额外偏移（正=更右，负=更左）
 
     private boolean textDone = false;
 
@@ -104,17 +105,7 @@ public class ScaleScrollTextWidget extends MultilineTextWidget implements Widget
             this.currentTexts = this.texts.subList(this.scroll, this.scroll + this.MaxRows);
         }
     }
-
-    private void calculateText() {
-        try {
-            this.texts = this.getTextRenderer().wrapLines(this.getMessage(), this.getWidth());
-            this.textsLineCount = this.texts.size();
-            this.calculateCurrentText();
-            this.textDone = true;
-        } catch (Exception e) {
-            ShapeShifterCurseFabric.LOGGER.error("Error while calculating text", e);
-        }
-    }
+	private int wrapWidth = 0; // 0 = 使用 realWidth
 
     public ScaleScrollTextWidget shadow(boolean shadow) {
         this.shadow = shadow;
@@ -161,6 +152,18 @@ public class ScaleScrollTextWidget extends MultilineTextWidget implements Widget
 
     public int modMaxWidth = 0;
 
+    private void calculateText() {
+        try {
+	        int wrapW = this.wrapWidth > 0 ? this.wrapWidth : this.realWidth;
+	        this.texts = this.getTextRenderer().wrapLines(this.getMessage(), wrapW);
+            this.textsLineCount = this.texts.size();
+            this.calculateCurrentText();
+            this.textDone = true;
+        } catch (Exception e) {
+            ShapeShifterCurseFabric.LOGGER.error("Error while calculating text", e);
+        }
+    }
+
     public void modMaxWidth(int value) {
         this.modMaxWidth = value;
         super.setMaxWidth(this.MaxWidth + this.modMaxWidth);
@@ -173,6 +176,15 @@ public class ScaleScrollTextWidget extends MultilineTextWidget implements Widget
         super.setMaxWidth(this.MaxWidth + this.modMaxWidth);
         return this;
     }
+
+	public ScaleScrollTextWidget setTextWrapWidth(int wrapWidth) {
+		this.wrapWidth = wrapWidth;
+		int adjustedWidth = Math.round(wrapWidth * (1 / this.Scale));
+		this.MaxWidth = adjustedWidth;
+		super.setMaxWidth(adjustedWidth + this.modMaxWidth);
+		if (this.textDone) this.reloadText();
+		return this;
+	}
 
     @Override
     public MultilineTextWidget setMaxRows(int maxRows) {

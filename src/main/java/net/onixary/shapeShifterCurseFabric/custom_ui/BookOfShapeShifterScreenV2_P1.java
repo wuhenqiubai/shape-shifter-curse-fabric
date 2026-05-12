@@ -50,7 +50,8 @@ public class BookOfShapeShifterScreenV2_P1 extends Screen implements WidgetEXUti
         // D -> (9, 9), (19, 95)
         // Size -> (108, 48) Pos -> (17, 92)
         this.addDrawableChild(BuildDetailScreenButton(19, 95, 9, 9, CodexData.getContentText(CodexData.ContentType.TITLE, currentPlayer)));
-        ScaleScrollTextWidget TitleLabel = (ScaleScrollTextWidget) new ScaleScrollTextWidget(BookPosX + 17 * BookScale, BookPosY + 105 * BookScale, 108 * BookScale, 5 * BookScale, Scale, CodexData.getContentText(CodexData.ContentType.TITLE, currentPlayer), scaleTextRenderer).shadow(false).setTextColor(DefaultTextColor);
+	    ScaleScrollTextWidget TitleLabel = (ScaleScrollTextWidget) new ScaleScrollTextWidget(BookPosX + 17 * BookScale, BookPosY + 105 * BookScale, 108 * BookScale, 3 * BookScale, Scale, CodexData.getContentText(CodexData.ContentType.TITLE, currentPlayer), scaleTextRenderer).shadow(false).setTextColor(DefaultTextColor);
+	    TitleLabel.setTextWrapWidth(200);
         TitleLabel.setEnableScrollableIconRender(true);
         this.addWidget(TitleLabel);
         this.addDrawableChild(TitleLabel);
@@ -60,6 +61,7 @@ public class BookOfShapeShifterScreenV2_P1 extends Screen implements WidgetEXUti
         this.addDrawableChild(BuildDetailScreenButton(116, 143, 9, 9, CodexData.getPlayerStatusText(currentPlayer)));
         this.addDrawableChild(new TextWidget(BookPosX + 17 * BookScale, BookPosY + 143 * BookScale, 107 * BookScale, 8 * BookScale, CodexData.headerStatus, textRenderer).setTextColor(HeaderTextColor));
         ScaleScrollTextWidget StatusLabel = (ScaleScrollTextWidget) new ScaleScrollTextWidget(BookPosX + 17 * BookScale, BookPosY + 153 * BookScale, 107 * BookScale, 6 * BookScale, Scale, CodexData.getPlayerStatusText(currentPlayer), scaleTextRenderer).shadow(false).setTextColor(DefaultTextColor);
+	    StatusLabel.setTextWrapWidth(200);
         StatusLabel.setEnableScrollableIconRender(true);
         this.addWidget(StatusLabel);
         this.addDrawableChild(StatusLabel);
@@ -69,6 +71,7 @@ public class BookOfShapeShifterScreenV2_P1 extends Screen implements WidgetEXUti
         this.addDrawableChild(BuildDetailScreenButton(311, 13, 9, 9, CodexData.getContentText(CodexData.ContentType.APPEARANCE, currentPlayer)));
         this.addDrawableChild(new TextWidget(BookPosX + 142 * BookScale, BookPosY + 11 * BookScale, 176 * BookScale, 8 * BookScale, CodexData.headerAppearance, textRenderer).setTextColor(HeaderTextColor));
         ScaleScrollTextWidget AppearanceLabel = (ScaleScrollTextWidget) new ScaleScrollTextWidget(BookPosX + 142 * BookScale, BookPosY + 26 * BookScale, 176 * BookScale, 20 * BookScale, Scale, CodexData.getContentText(CodexData.ContentType.APPEARANCE, currentPlayer), scaleTextRenderer).shadow(false).setTextColor(DefaultTextColor);
+	    AppearanceLabel.setTextWrapWidth(340);
         AppearanceLabel.setEnableScrollableIconRender(true);
         this.addWidget(AppearanceLabel);
         this.addDrawableChild(AppearanceLabel);
@@ -149,6 +152,11 @@ public class BookOfShapeShifterScreenV2_P1 extends Screen implements WidgetEXUti
         }).size(FixedSizeX, FixedSizeY).position(FixedPosX, FixedPosY).build();
     }
 
+	@Override
+	public void renderBackground(DrawContext context, int mouseX, int mouseY, float delta) {
+		// No blur — book texture serves as the background
+	}
+
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
         int BookScale = 1;
@@ -162,12 +170,12 @@ public class BookOfShapeShifterScreenV2_P1 extends Screen implements WidgetEXUti
         int BookPosX = width / 2 - FinalBookSizeX / 2;
         int BookPosY = height / 2 - FinalBookSizeY / 2;
         this.RenderBook(context);
+	    super.render(context, mouseX, mouseY, delta);
         // 实体渲染原点为实体中心脚下
         // Size -> (70, 66) Pos -> (35, 15)
         int PlayerX = BookPosX + 70 * BookScale;
-        int PlayerY = BookPosY + 75 * BookScale;
+	    int PlayerY = BookPosY + 45 * BookScale;
         this.RenderEntity(context, PlayerX, PlayerY, 30 * BookScale, PlayerX - mouseX, PlayerY - 37 * BookScale - mouseY, currentPlayer);
-        super.render(context, mouseX, mouseY, delta);
     }
 
     @Override
