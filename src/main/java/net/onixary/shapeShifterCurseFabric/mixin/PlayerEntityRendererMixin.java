@@ -1,15 +1,11 @@
 package net.onixary.shapeShifterCurseFabric.mixin;
 
 
-import net.minecraft.client.network.ClientPlayerEntity;
-// PlayerModelPart removed in 1.21
-import net.onixary.shapeShifterCurseFabric.integration.origins.component.PlayerOriginComponent;
-import net.onixary.shapeShifterCurseFabric.integration.origins.origin.OriginLayers;
-import net.onixary.shapeShifterCurseFabric.integration.origins.registry.ModComponents;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.model.ModelPart;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
+import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.render.OverlayTexture;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexConsumerProvider;
@@ -24,6 +20,9 @@ import net.minecraft.client.render.entity.model.PlayerEntityModel;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.Identifier;
+import net.onixary.shapeShifterCurseFabric.integration.origins.component.PlayerOriginComponent;
+import net.onixary.shapeShifterCurseFabric.integration.origins.origin.OriginLayers;
+import net.onixary.shapeShifterCurseFabric.integration.origins.registry.ModComponents;
 import net.onixary.shapeShifterCurseFabric.player_form_render.*;
 import net.onixary.shapeShifterCurseFabric.util.ClientUtils;
 import org.spongepowered.asm.mixin.*;
@@ -33,6 +32,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
+
+// PlayerModelPart removed in 1.21
 
 @Pseudo
 @Mixin(value = PlayerEntityRenderer.class, priority = 99999)
@@ -152,12 +153,10 @@ public class PlayerEntityRendererMixin {
         protected abstract boolean isVisible(T entity);
 
         @Unique
-        private int getOverlayMixin(LivingEntity entity, float whiteOverlayProgress) {
-            return OverlayTexture.packUv(OverlayTexture.getU(whiteOverlayProgress), OverlayTexture.getV(entity.hurtTime > 0 || entity.deathTime > 0));
+        private int getOverlayMixin(LivingEntity entity, float tickDelta) {
+            float animProgress = entity.hurtTime > 0 ? (float) entity.hurtTime - tickDelta : 0;
+            return OverlayTexture.packUv(OverlayTexture.getU(animProgress), OverlayTexture.getV(entity.hurtTime > 0 || entity.deathTime > 0));
         }
-
-        @Shadow
-        protected abstract float getAnimationCounter(T entity, float tickDelta);
 
         @Shadow
         protected abstract boolean addFeature(FeatureRenderer<T, M> feature);
@@ -253,7 +252,7 @@ public class PlayerEntityRendererMixin {
         private void renderOverlayTexture(T livingEntity, float f, float g, MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i, CallbackInfo ci) {
             if (!isInvisible && livingEntity instanceof AbstractClientPlayerEntity aCPE) {
                 PlayerOriginComponent c = (PlayerOriginComponent) ModComponents.ORIGIN.get(aCPE);
-                int p = getOverlayMixin(livingEntity, this.getAnimationCounter(livingEntity, g));
+                int p = getOverlayMixin(livingEntity, g);
                 for (var layer : OriginLayers.getLayers()) {
                     if (aCPE.isSpectator()) {
                         return;
@@ -273,7 +272,7 @@ public class PlayerEntityRendererMixin {
                         if (overlayTexture != null) {
                             RenderLayer l = null;
                             if (OriginalFurClient.isRenderingInWorld && FabricLoader.getInstance().isModLoaded("iris")) {
-                                l = RenderLayer.getEntityCutoutNoCullZOffset(overlayTexture);
+                                l = RenderLayer.getEntityCutout(overlayTexture);
                             } else {
                                 l = RenderLayer.getEntityCutout(overlayTexture);
                             }

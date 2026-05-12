@@ -5,14 +5,12 @@ import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ingame.InventoryScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.gui.widget.MultilineTextWidget;
 import net.minecraft.client.gui.widget.TextWidget;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric;
-import net.onixary.shapeShifterCurseFabric.custom_ui.ui_part.ScaleMultilineTextWidget;
 import net.onixary.shapeShifterCurseFabric.custom_ui.ui_part.ScaleScrollTextWidget;
 import net.onixary.shapeShifterCurseFabric.custom_ui.ui_part.ScaleTextRenderer;
 import net.onixary.shapeShifterCurseFabric.custom_ui.ui_part.WidgetEXUtils;
@@ -25,7 +23,7 @@ import java.util.List;
 import static net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric.MOD_ID;
 
 public class BookOfShapeShifterScreenV2_P1 extends Screen implements WidgetEXUtils.IWidgetEX {
-    private static final Identifier page_texID = new Identifier(MOD_ID,"textures/gui/codex_page_1.png");
+    private static final Identifier page_texID = Identifier.of(MOD_ID, "textures/gui/codex_page_1.png");
     public PlayerEntity currentPlayer;
     public static final int BookSizeX = 350;
     public static final int BookSizeY = 220;
@@ -102,7 +100,13 @@ public class BookOfShapeShifterScreenV2_P1 extends Screen implements WidgetEXUti
         entity.setPitch(-g * 20.0F);
         entity.headYaw = entity.getYaw();
         entity.prevHeadYaw = entity.getYaw();
-        InventoryScreen.drawEntity(context, x, y, size, quaternionf, quaternionf2, entity);
+
+        int x1 = x - size / 2;
+        int y1 = y - size / 2;
+        int x2 = x + size / 2;
+        int y2 = y + size / 2;
+        InventoryScreen.drawEntity(context, x1, y1, x2, y2, size, 0.0625f, mouseX, mouseY, entity);
+
         entity.bodyYaw = h;
         entity.prevBodyYaw = m;
         entity.setYaw(i);
@@ -202,8 +206,8 @@ public class BookOfShapeShifterScreenV2_P1 extends Screen implements WidgetEXUti
     }
 
     @Override
-    public boolean mouseScrolled(double mouseX, double mouseY, double mouseZ) {
-        this.onScrollWidget(mouseX, mouseY, mouseZ);
-        return super.mouseScrolled(mouseX, mouseY, mouseZ);
+    public boolean mouseScrolled(double mouseX, double mouseY, double horizontalAmount, double verticalAmount) {
+        this.onScrollWidget(mouseX, mouseY, verticalAmount);
+        return super.mouseScrolled(mouseX, mouseY, horizontalAmount, verticalAmount);
     }
 }

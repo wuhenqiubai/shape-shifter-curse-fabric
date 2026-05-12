@@ -1,37 +1,24 @@
 package net.onixary.shapeShifterCurseFabric.render.form_render.mixin;
 
 import io.github.apace100.apoli.component.PowerHolderComponent;
-import mod.azure.azurelib.cache.object.BakedGeoModel;
-import mod.azure.azurelib.cache.object.GeoBone;
-import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.model.ModelPart;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
-import net.minecraft.client.render.OverlayTexture;
-import net.minecraft.client.render.RenderLayer;
-import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.EntityRendererFactory;
 import net.minecraft.client.render.entity.LivingEntityRenderer;
 import net.minecraft.client.render.entity.PlayerEntityRenderer;
-import net.minecraft.client.render.entity.PlayerModelPart;
 import net.minecraft.client.render.entity.model.PlayerEntityModel;
+import net.minecraft.client.util.SkinTextures;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
 import net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric;
 import net.onixary.shapeShifterCurseFabric.additional_power.NoRenderArmPower;
-import net.onixary.shapeShifterCurseFabric.integration.origins.origin.Origin;
 import net.onixary.shapeShifterCurseFabric.player_form.RegPlayerForms;
 import net.onixary.shapeShifterCurseFabric.player_form.ability.RegPlayerFormComponent;
 import net.onixary.shapeShifterCurseFabric.player_form.skin.RegPlayerSkinComponent;
-import net.onixary.shapeShifterCurseFabric.player_form_render.*;
 import net.onixary.shapeShifterCurseFabric.render.form_render.FormRenderFeature;
-import org.joml.Quaternionf;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -39,8 +26,6 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-
-import java.util.Optional;
 
 @Mixin(PlayerEntityRenderer.class)
 public abstract class PlayerEntityRendererMixin extends LivingEntityRenderer<AbstractClientPlayerEntity, PlayerEntityModel<AbstractClientPlayerEntity>> {
@@ -56,7 +41,7 @@ public abstract class PlayerEntityRendererMixin extends LivingEntityRenderer<Abs
 
     // 第一人称 渲染
     @Unique
-    private static final Identifier CUSTOM_SKIN = new Identifier(ShapeShifterCurseFabric.MOD_ID, "textures/entity/base_player/ssc_base_skin.png");
+    private static final Identifier CUSTOM_SKIN = Identifier.of(ShapeShifterCurseFabric.MOD_ID, "textures/entity/base_player/ssc_base_skin.png");
 
     @Inject(method = "renderArm", at = @At("HEAD"), cancellable = true)
     private void shape_shifter_curse$RenderArm_HEAD(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, AbstractClientPlayerEntity player, ModelPart arm, ModelPart sleeve, CallbackInfo ci) {
@@ -84,15 +69,14 @@ public abstract class PlayerEntityRendererMixin extends LivingEntityRenderer<Abs
         FormRenderFeature.rFPM_PartB(realThis, matrices, vertexConsumers, light, player, arm, sleeve);
     }
 
-    @Redirect(method="renderArm", at= @At(value="INVOKE", target = "Lnet/minecraft/client/network/AbstractClientPlayerEntity;getSkinTexture()Lnet/minecraft/util/Identifier;"))
-    private Identifier shape_shifter_curse$getSkinTexture(AbstractClientPlayerEntity player) {
-        if (!RegPlayerFormComponent.PLAYER_FORM.get(player).getCurrentForm().equals(RegPlayerForms.ORIGINAL_BEFORE_ENABLE))  // 仅当玩家激活Mod后才进行修改
-        {
+    @Redirect(method = "renderArm", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/AbstractClientPlayerEntity;getSkinTextures()Lnet/minecraft/client/util/SkinTextures;"))
+    private SkinTextures shape_shifter_curse$getSkinTextures(AbstractClientPlayerEntity player) {
+        if (!RegPlayerFormComponent.PLAYER_FORM.get(player).getCurrentForm().equals(RegPlayerForms.ORIGINAL_BEFORE_ENABLE)) {
             if (!RegPlayerSkinComponent.SKIN_SETTINGS.get(player).shouldKeepOriginalSkin()) {
-                return CUSTOM_SKIN;
+                return new SkinTextures(CUSTOM_SKIN, null, null, null, SkinTextures.Model.WIDE, false);
             }
         }
-        return player.getSkinTexture();
+        return player.getSkinTextures();
     }
 
 

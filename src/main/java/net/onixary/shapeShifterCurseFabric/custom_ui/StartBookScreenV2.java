@@ -6,7 +6,6 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.gui.widget.MultilineTextWidget;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.text.Text;
@@ -14,16 +13,16 @@ import net.minecraft.util.Identifier;
 import net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric;
 import net.onixary.shapeShifterCurseFabric.custom_ui.ui_part.ScaleScrollTextWidget;
 import net.onixary.shapeShifterCurseFabric.custom_ui.ui_part.WidgetEXUtils;
+import net.onixary.shapeShifterCurseFabric.networking.BytePayload;
 import net.onixary.shapeShifterCurseFabric.networking.ModPackets;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.OptionalInt;
 
 import static net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric.MOD_ID;
 
 public class StartBookScreenV2 extends Screen implements WidgetEXUtils.IWidgetEX {
-    private static final Identifier StartBook_TexID = new Identifier(MOD_ID,"textures/gui/start_book.png");
+    private static final Identifier StartBook_TexID = Identifier.of(MOD_ID, "textures/gui/start_book.png");
     public PlayerEntity currentPlayer;
 
     public static final int BookSizeX = 360;
@@ -62,7 +61,7 @@ public class StartBookScreenV2 extends Screen implements WidgetEXUtils.IWidgetEX
                     PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
                     // buf.writeUuid(currentPlayer.getUuid());
                     // 发送到服务端
-                    ClientPlayNetworking.send(ModPackets.VALIDATE_START_BOOK_BUTTON, buf);
+                    ClientPlayNetworking.send(new BytePayload(BytePayload.id(ModPackets.VALIDATE_START_BOOK_BUTTON), buf));
                     if(MinecraftClient.getInstance().currentScreen instanceof StartBookScreenV2){
                         MinecraftClient.getInstance().setScreen(null);
                     }
@@ -120,8 +119,8 @@ public class StartBookScreenV2 extends Screen implements WidgetEXUtils.IWidgetEX
     }
 
     @Override
-    public boolean mouseScrolled(double mouseX, double mouseY, double mouseZ) {
-        this.onScrollWidget(mouseX, mouseY, mouseZ);
-        return super.mouseScrolled(mouseX, mouseY, mouseZ);
+    public boolean mouseScrolled(double mouseX, double mouseY, double horizontalAmount, double verticalAmount) {
+        this.onScrollWidget(mouseX, mouseY, verticalAmount);
+        return super.mouseScrolled(mouseX, mouseY, horizontalAmount, verticalAmount);
     }
 }

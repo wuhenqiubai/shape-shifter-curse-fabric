@@ -3,9 +3,7 @@ package net.onixary.shapeShifterCurseFabric.custom_ui;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.gui.widget.MultilineTextWidget;
 import net.minecraft.text.Text;
-import net.onixary.shapeShifterCurseFabric.custom_ui.ui_part.ScaleMultilineTextWidget;
 import net.onixary.shapeShifterCurseFabric.custom_ui.ui_part.ScaleScrollTextWidget;
 import net.onixary.shapeShifterCurseFabric.custom_ui.ui_part.WidgetEXUtils;
 
@@ -87,8 +85,8 @@ public class DetailScreen extends Screen implements WidgetEXUtils.IWidgetEX {
     }
 
     @Override
-    public boolean mouseScrolled(double mouseX, double mouseY, double mouseZ) {
-        this.onScrollWidget(mouseX, mouseY, mouseZ);
-        return super.mouseScrolled(mouseX, mouseY, mouseZ);
+    public boolean mouseScrolled(double mouseX, double mouseY, double horizontalAmount, double verticalAmount) {
+        this.onScrollWidget(mouseX, mouseY, verticalAmount);
+        return super.mouseScrolled(mouseX, mouseY, horizontalAmount, verticalAmount);
     }
 }

@@ -66,8 +66,8 @@ public class ItemStorePowerRender {
         Pair<Integer, Integer> SlotBegin = UIPositionUtils.getCorrectPosition(ShapeShifterCurseFabric.clientConfig.itemStorePowerPosType, ShapeShifterCurseFabric.clientConfig.itemStorePowerPosOffsetX - (NowCol * 20), ShapeShifterCurseFabric.clientConfig.itemStorePowerPosOffsetY - (NowRow * 20));
         int SlotX = power.getSlot() % SlotPerRow;
         int SlotY = power.getSlot() / SlotPerRow;
-        int SlotXFinal = SlotBegin.getLeft() + SlotX * 20;
-        int SlotYFinal = SlotBegin.getRight() + SlotY * 20;
+        int SlotXFinal = SlotBegin.getLeft() + SlotX;
+        int SlotYFinal = SlotBegin.getRight() + SlotY;
         context.getMatrices().push();
         context.getMatrices().translate(0.0f, 0.0f, -90.0f);
         context.drawTexture(WIDGETS_TEXTURE, SlotXFinal - 2, SlotYFinal - 4, 0, 1, 22, 22, 29, 24);

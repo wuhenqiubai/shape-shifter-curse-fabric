@@ -22,7 +22,7 @@ import java.util.List;
 import static net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric.MOD_ID;
 
 public class BookOfShapeShifterScreenV2_P2 extends Screen implements WidgetEXUtils.IWidgetEX {
-    private static final Identifier page_texID = new Identifier(MOD_ID,"textures/gui/codex_page_2.png");
+    private static final Identifier page_texID = Identifier.of(MOD_ID, "textures/gui/codex_page_2.png");
     public PlayerEntity currentPlayer;
     public static final int BookSizeX = 350;
     public static final int BookSizeY = 220;
@@ -164,8 +164,8 @@ public class BookOfShapeShifterScreenV2_P2 extends Screen implements WidgetEXUti
     }
 
     @Override
-    public boolean mouseScrolled(double mouseX, double mouseY, double mouseZ) {
-        this.onScrollWidget(mouseX, mouseY, mouseZ);
-        return super.mouseScrolled(mouseX, mouseY, mouseZ);
+    public boolean mouseScrolled(double mouseX, double mouseY, double horizontalAmount, double verticalAmount) {
+        this.onScrollWidget(mouseX, mouseY, verticalAmount);
+        return super.mouseScrolled(mouseX, mouseY, horizontalAmount, verticalAmount);
     }
 }
