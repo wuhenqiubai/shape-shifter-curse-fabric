@@ -6,8 +6,11 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.minecraft.entity.SpawnGroup;
 import net.minecraft.entity.SpawnLocationTypes;
 import net.minecraft.entity.SpawnRestriction;
+import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.tag.BiomeTags;
+import net.minecraft.registry.tag.TagKey;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.collection.Pool;
 import net.minecraft.world.Heightmap;
@@ -72,6 +75,7 @@ public class TransformativeEntitySpawning {
                 1,
                 3
         );
+        // T_WOLF
         SpawnRestriction.register(
                 ShapeShifterCurseFabric.T_WOLF,
                 SpawnLocationTypes.ON_GROUND,
@@ -95,19 +99,14 @@ public class TransformativeEntitySpawning {
                 spawns.put(SpawnGroup.CREATURE, new StructureSpawns(StructureSpawns.BoundingBox.PIECE, Pool.of(new SpawnSettings.SpawnEntry(ShapeShifterCurseFabric.T_WOLF, 20, 3, 5))));
                 structure.config.spawnOverrides = spawns;
             }
-            structure = server.getOverworld().getRegistryManager().get(RegistryKeys.STRUCTURE).get(Identifier.of("minecraft", "mineshaft"));
-            if (structure != null) {
-                Map<SpawnGroup, StructureSpawns> oldSpawns = structure.getStructureSpawns();
-                Map<SpawnGroup, StructureSpawns> spawns = oldSpawns.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-                spawns.put(SpawnGroup.MONSTER, new StructureSpawns(StructureSpawns.BoundingBox.PIECE, Pool.of(new SpawnSettings.SpawnEntry(ShapeShifterCurseFabric.T_SPIDER, 5, 1, 2))));
-                structure.config.spawnOverrides = spawns;
-            }
-            structure = server.getOverworld().getRegistryManager().get(RegistryKeys.STRUCTURE).get(Identifier.of("minecraft", "mineshaft_mesa"));
-            if (structure != null) {
-                Map<SpawnGroup, StructureSpawns> oldSpawns = structure.getStructureSpawns();
-                Map<SpawnGroup, StructureSpawns> spawns = oldSpawns.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-                spawns.put(SpawnGroup.MONSTER, new StructureSpawns(StructureSpawns.BoundingBox.PIECE, Pool.of(new SpawnSettings.SpawnEntry(ShapeShifterCurseFabric.T_SPIDER, 5, 1, 2))));
-                structure.config.spawnOverrides = spawns;
+            for (RegistryEntry<Structure> structureEntry : server.getOverworld().getRegistryManager().get(RegistryKeys.STRUCTURE).iterateEntries(TagKey.of(RegistryKeys.STRUCTURE, new Identifier("minecraft", "mineshaft")))) {
+                structure = structureEntry.value();
+                if (structure != null) {
+                    Map<SpawnGroup, StructureSpawns> oldSpawns = structure.getStructureSpawns();
+                    Map<SpawnGroup, StructureSpawns> spawns = oldSpawns.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+                    spawns.put(SpawnGroup.MONSTER, new StructureSpawns(StructureSpawns.BoundingBox.PIECE, Pool.of(new SpawnSettings.SpawnEntry(ShapeShifterCurseFabric.T_SPIDER, 5, 1, 2))));
+                    structure.config.spawnOverrides = spawns;
+                }
             }
         });
     }
