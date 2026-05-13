@@ -128,22 +128,24 @@ public class WebBullet extends ThrownItemEntity {
     }
 
     private boolean isExtraHandVenomSpindleEquipped(PlayerEntity player) {
-        // Optional<TrinketComponent> component = TrinketsApi.getTrinketComponent(player);
-        // if (component.isEmpty()) {
-        //     return false;
-        // }
-        // Map<String, TrinketInventory> groupInv = component.get().getInventory().get("hand");
-        // if (groupInv == null) {
-        //     return false;
-        // }
-        // TrinketInventory inv = groupInv.get("extra_hand");
-        // if (inv == null) {
-        //     return false;
-        // }
-        // return inv.getStack(0).isOf(RegCustomItem.VENOM_SPINDLE);
+        /*
+         Optional<TrinketComponent> component = TrinketsApi.getTrinketComponent(player);
+         if (component.isEmpty()) {
+             return false;
+         }
+         Map<String, TrinketInventory> groupInv = component.get().getInventory().get("hand");
+         if (groupInv == null) {
+             return false;
+         }
+         TrinketInventory inv = groupInv.get("extra_hand");
+         if (inv == null) {
+             return false;
+         }
+         return inv.getStack(0).isOf(RegCustomItem.VENOM_SPINDLE);
+        */
         return TrinketsConditionAction.CheckEquipped(
                 player, "auto", "hand", "extra_hand", 0,
-		        worldAndStack -> worldAndStack.getRight().isOf(RegCustomItem.VENOM_SPINDLE),
+                stack -> stack.isOf(RegCustomItem.VENOM_SPINDLE),
                 false
         );
     }

@@ -6,7 +6,6 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.minecraft.entity.SpawnGroup;
 import net.minecraft.entity.SpawnLocationTypes;
 import net.minecraft.entity.SpawnRestriction;
-import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.tag.BiomeTags;
@@ -99,7 +98,7 @@ public class TransformativeEntitySpawning {
                 spawns.put(SpawnGroup.CREATURE, new StructureSpawns(StructureSpawns.BoundingBox.PIECE, Pool.of(new SpawnSettings.SpawnEntry(ShapeShifterCurseFabric.T_WOLF, 20, 3, 5))));
                 structure.config.spawnOverrides = spawns;
             }
-            for (RegistryEntry<Structure> structureEntry : server.getOverworld().getRegistryManager().get(RegistryKeys.STRUCTURE).iterateEntries(TagKey.of(RegistryKeys.STRUCTURE, new Identifier("minecraft", "mineshaft")))) {
+            for (RegistryEntry<Structure> structureEntry : server.getOverworld().getRegistryManager().get(RegistryKeys.STRUCTURE).iterateEntries(TagKey.of(RegistryKeys.STRUCTURE, Identifier.of("minecraft", "mineshaft")))) {
                 structure = structureEntry.value();
                 if (structure != null) {
                     Map<SpawnGroup, StructureSpawns> oldSpawns = structure.getStructureSpawns();

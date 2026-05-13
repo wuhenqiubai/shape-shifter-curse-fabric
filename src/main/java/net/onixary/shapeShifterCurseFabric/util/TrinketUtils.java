@@ -3,10 +3,6 @@ package net.onixary.shapeShifterCurseFabric.util;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import dev.emi.trinkets.api.SlotReference;
-import dev.emi.trinkets.api.SlotType;
-import dev.emi.trinkets.api.TrinketComponent;
-import dev.emi.trinkets.api.TrinketsApi;
 import io.github.apace100.apoli.component.PowerHolderComponent;
 import io.github.apace100.apoli.power.PowerType;
 import io.github.apace100.apoli.power.PowerTypeRegistry;
@@ -17,11 +13,14 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.Pair;
 import net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric;
 import net.onixary.shapeShifterCurseFabric.items.accessory.AccessoryItem;
-import net.onixary.shapeShifterCurseFabric.util.Accessory.AccessoryUtils;
 import net.onixary.shapeShifterCurseFabric.player_form.ability.RegPlayerFormComponent;
+import net.onixary.shapeShifterCurseFabric.util.Accessory.AccessoryUtils;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class TrinketUtils {
     public interface CustomPowerTrinketInterface {
@@ -269,9 +268,9 @@ public class TrinketUtils {
                     for (ItemStack stack : stacks) {
                         AccessoryItem.SlotData data = null;
                         if (slotPair.getLeft() == null) {
-                            data = new AccessoryItem.SlotData(new Identifier(ioName, slotPair.getRight()), Index);
+                            data = new AccessoryItem.SlotData(Identifier.of(ioName, slotPair.getRight()), Index);
                         } else {
-                            data = new AccessoryItem.SlotData(new Identifier(ioName, "%s/%s".formatted(slotPair.getLeft(), slotPair.getRight())), Index);
+                            data = new AccessoryItem.SlotData(Identifier.of(ioName, "%s/%s".formatted(slotPair.getLeft(), slotPair.getRight())), Index);
                         }
                         allAccessory.add(new Pair<>(data, stack));
                         Index++;
