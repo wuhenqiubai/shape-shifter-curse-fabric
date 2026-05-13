@@ -2,6 +2,7 @@ package net.onixary.shapeShifterCurseFabric;
 
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.serializer.Toml4jConfigSerializer;
+import net.fabricmc.api.EnvType;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.ArgumentTypeRegistry;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
@@ -54,6 +55,7 @@ import net.onixary.shapeShifterCurseFabric.mana.ManaRegistries;
 import net.onixary.shapeShifterCurseFabric.mana.ManaUtils;
 import net.onixary.shapeShifterCurseFabric.minion.MinionRegister;
 import net.onixary.shapeShifterCurseFabric.networking.ModPacketsC2S;
+import net.onixary.shapeShifterCurseFabric.networking.ModPacketsInit;
 import net.onixary.shapeShifterCurseFabric.networking.ModPacketsS2CServer;
 import net.onixary.shapeShifterCurseFabric.player_animation.form_animation.AnimationTransform;
 import net.onixary.shapeShifterCurseFabric.player_form.FormDataPackReloadListener;
@@ -219,9 +221,12 @@ public class ShapeShifterCurseFabric implements ModInitializer {
 
         // network package
         ModPacketsC2S.register();
+	    ModPacketsInit.registerS2CPayloads();
 
-	    TransformFX.INSTANCE.registerCallbacks();
-        TransformOverlay.INSTANCE.init();
+	    if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) {
+		    TransformFX.INSTANCE.registerCallbacks();
+		    TransformOverlay.INSTANCE.init();
+	    }
         save_timer = 0;
 
         // Reg potions
