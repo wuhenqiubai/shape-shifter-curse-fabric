@@ -41,7 +41,6 @@ import net.onixary.shapeShifterCurseFabric.minion.mobs.AnubisWolfMinionEntityRen
 import net.onixary.shapeShifterCurseFabric.networking.ModPacketsC2S;
 import net.onixary.shapeShifterCurseFabric.networking.ModPacketsS2C;
 import net.onixary.shapeShifterCurseFabric.player_animation.RegPlayerAnimation;
-import net.onixary.shapeShifterCurseFabric.render.form_render.FormRenderUtils;
 import net.onixary.shapeShifterCurseFabric.render.render_layer.FurGradientRenderLayer;
 import net.onixary.shapeShifterCurseFabric.util.ClientTicker;
 import net.onixary.shapeShifterCurseFabric.util.PatronUtils;
@@ -141,7 +140,7 @@ public class ShapeShifterCurseFabricClient implements ClientModInitializer {
 		EntityRendererRegistry.register(T_AXOLOTL, TAxolotlEntityRenderer::new);
 		EntityRendererRegistry.register(T_OCELOT, TOcelotEntityRenderer::new);
 		EntityRendererRegistry.register(T_WOLF, AnubisWolfMinionEntityRenderer::new);
-		// EntityRendererRegistry.register(T_SPIDER, TSpiderEntityRenderer::new); // TSpiderEntityRenderer .bak
+		EntityRendererRegistry.register(T_SPIDER, TSpiderEntityRenderer::new);
 
 		MinionRegisterClient.registerClient();
 	}
