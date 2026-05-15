@@ -12,10 +12,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Optional;
-import java.util.UUID;
 
 // Trinket的Api实现代码 需要Trinket加载 未加载时崩溃 所以需要在MixinConfigPlugin里声明一下
 

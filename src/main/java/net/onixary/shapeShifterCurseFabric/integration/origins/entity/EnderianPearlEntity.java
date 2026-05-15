@@ -1,6 +1,5 @@
 package net.onixary.shapeShifterCurseFabric.integration.origins.entity;
 
-import net.onixary.shapeShifterCurseFabric.integration.origins.registry.ModEntities;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.entity.Entity;
@@ -12,9 +11,9 @@ import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.world.World;
+import net.onixary.shapeShifterCurseFabric.integration.origins.registry.ModEntities;
 
 public class EnderianPearlEntity extends ThrownItemEntity {
    public EnderianPearlEntity(EntityType<? extends EnderianPearlEntity> entityType, World world) {

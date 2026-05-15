@@ -13,7 +13,6 @@ import net.onixary.shapeShifterCurseFabric.player_form_render.OriginFurModel;
 import org.apache.commons.lang3.tuple.ImmutableTriple;
 import org.apache.commons.lang3.tuple.Triple;
 
-import java.awt.*;
 import java.io.IOException;
 import java.io.InputStream;
 

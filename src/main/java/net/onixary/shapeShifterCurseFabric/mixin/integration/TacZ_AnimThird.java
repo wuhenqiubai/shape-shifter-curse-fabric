@@ -1,7 +1,6 @@
 package net.onixary.shapeShifterCurseFabric.mixin.integration;
 
 import com.tacz.guns.client.animation.third.InnerThirdPersonManager;
-import com.tacz.guns.compat.playeranimator.PlayerAnimatorCompat;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.model.ModelPart;
 import net.minecraft.entity.LivingEntity;

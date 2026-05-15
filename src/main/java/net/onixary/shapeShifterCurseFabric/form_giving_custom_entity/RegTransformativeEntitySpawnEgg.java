@@ -1,17 +1,17 @@
 package net.onixary.shapeShifterCurseFabric.form_giving_custom_entity;
 
 // FabricItemSettings removed in 1.21, use Item.Settings directly
+
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroups;
 import net.minecraft.item.SpawnEggItem;
 import net.minecraft.registry.Registries;
-import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.Registry;
+import net.minecraft.registry.RegistryKey;
 import net.minecraft.util.Identifier;
 import net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric;
 
-import static net.minecraft.item.Items.register;
 import static net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric.T_AXOLOTL;
 import static net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric.T_BAT;
 

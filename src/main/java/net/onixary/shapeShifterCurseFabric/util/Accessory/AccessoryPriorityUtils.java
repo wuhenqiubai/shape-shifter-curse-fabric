@@ -1,6 +1,5 @@
 package net.onixary.shapeShifterCurseFabric.util.Accessory;
 
-import com.google.gson.JsonObject;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
 import net.fabricmc.loader.api.metadata.CustomValue;

@@ -9,7 +9,6 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.world.World;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.UUID;
 
 public class AttackEntityDataTracker {

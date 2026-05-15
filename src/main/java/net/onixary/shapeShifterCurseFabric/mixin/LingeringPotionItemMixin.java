@@ -1,15 +1,13 @@
 package net.onixary.shapeShifterCurseFabric.mixin;
 
-import net.minecraft.item.Item;
-import net.minecraft.item.Item.TooltipContext;
-import net.minecraft.item.tooltip.TooltipType;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.LingeringPotionItem;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.PotionContentsComponent;
+import net.minecraft.item.Item.TooltipContext;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.LingeringPotionItem;
+import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
-import net.minecraft.world.World;
 import net.onixary.shapeShifterCurseFabric.items.RegCustomPotions;
 import net.onixary.shapeShifterCurseFabric.player_form.RegPlayerForms;
 import net.onixary.shapeShifterCurseFabric.status_effects.CTPUtils;

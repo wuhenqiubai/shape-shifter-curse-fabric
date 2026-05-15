@@ -1,17 +1,12 @@
 package net.onixary.shapeShifterCurseFabric.mixin;
 
-import net.minecraft.entity.Entity;
+import io.github.apace100.apoli.component.PowerHolderComponent;
 import net.minecraft.entity.player.PlayerEntity;
 import net.onixary.shapeShifterCurseFabric.additional_power.ModifyStepHeightPower;
-import io.github.apace100.apoli.component.PowerHolderComponent;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.Redirect;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import virtuoel.pehkui.util.ScaleUtils;
 
 @Mixin(value = PlayerEntity.class, priority = 1200)
 public class SneakEdgeCheckMixin {

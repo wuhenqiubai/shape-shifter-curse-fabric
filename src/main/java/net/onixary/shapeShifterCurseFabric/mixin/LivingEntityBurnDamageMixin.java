@@ -6,7 +6,6 @@ import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.registry.tag.DamageTypeTags;
 import net.onixary.shapeShifterCurseFabric.additional_power.BurnDamageModifierPower;
-import net.onixary.shapeShifterCurseFabric.additional_power.EnhancedFallingAttackPower;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;

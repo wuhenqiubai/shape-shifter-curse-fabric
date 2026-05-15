@@ -14,8 +14,6 @@ import net.minecraft.registry.tag.FluidTags;
 import net.minecraft.registry.tag.TagKey;
 import net.minecraft.world.World;
 import net.onixary.shapeShifterCurseFabric.additional_power.CustomWaterBreathingPower;
-import net.onixary.shapeShifterCurseFabric.additional_power.LootingPower;
-import net.onixary.shapeShifterCurseFabric.integration.origins.power.OriginsPowerTypes;
 import net.onixary.shapeShifterCurseFabric.integration.origins.registry.ModDamageSources;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;

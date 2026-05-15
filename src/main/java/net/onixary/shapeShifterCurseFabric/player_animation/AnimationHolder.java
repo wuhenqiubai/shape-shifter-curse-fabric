@@ -1,11 +1,9 @@
 package net.onixary.shapeShifterCurseFabric.player_animation;
 
-import net.minecraft.util.Identifier;
-import org.jetbrains.annotations.Nullable;
-
 import dev.kosmx.playerAnim.core.data.KeyframeAnimation;
 import dev.kosmx.playerAnim.minecraftApi.PlayerAnimationRegistry;
-import net.minecraft.registry.Registries;
+import net.minecraft.util.Identifier;
+import org.jetbrains.annotations.Nullable;
 
 // fetch from Animation_Overhaul mod
 // https://github.com/nvb-uy/Animation_Overhaul/blob/main/src/main/java/elocindev/animation_overhaul/api/AnimationHolder.java

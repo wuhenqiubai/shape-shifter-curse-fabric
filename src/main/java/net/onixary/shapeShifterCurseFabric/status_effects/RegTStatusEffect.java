@@ -1,12 +1,12 @@
 package net.onixary.shapeShifterCurseFabric.status_effects;
 
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
 import net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric;
 import net.onixary.shapeShifterCurseFabric.player_form.RegPlayerForms;
-import net.onixary.shapeShifterCurseFabric.status_effects.transformative_effects.*;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
+import net.onixary.shapeShifterCurseFabric.status_effects.transformative_effects.CustomTransformativeStatue;
+import net.onixary.shapeShifterCurseFabric.status_effects.transformative_effects.TransformativeStatus;
 
 import java.util.ArrayList;
 import java.util.List;

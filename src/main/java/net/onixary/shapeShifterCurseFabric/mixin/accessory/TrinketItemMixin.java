@@ -1,13 +1,15 @@
 package net.onixary.shapeShifterCurseFabric.mixin.accessory;
 
-import dev.emi.trinkets.api.*;
+import dev.emi.trinkets.api.SlotReference;
+import dev.emi.trinkets.api.SlotType;
+import dev.emi.trinkets.api.TrinketInventory;
+import dev.emi.trinkets.api.TrinketsApi;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
 import net.onixary.shapeShifterCurseFabric.util.Accessory.AccessoryUtils;
-import net.onixary.shapeShifterCurseFabric.util.TrinketUtils;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;

@@ -1,13 +1,7 @@
 package net.onixary.shapeShifterCurseFabric.mixin;
 
-import io.github.apace100.apoli.component.PowerHolderComponent;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.input.Input;
 import net.minecraft.client.input.KeyboardInput;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric;
-import net.onixary.shapeShifterCurseFabric.additional_power.KeepSneakingPower;
 import net.onixary.shapeShifterCurseFabric.client.ClientPlayerStateManager;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;

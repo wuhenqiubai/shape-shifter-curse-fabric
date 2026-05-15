@@ -2,8 +2,6 @@
 package net.onixary.shapeShifterCurseFabric.util;
 
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.server.MinecraftServer;
-import net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric;
 
 public class ClientTicker implements ClientTickable {
     private final MinecraftClient client;

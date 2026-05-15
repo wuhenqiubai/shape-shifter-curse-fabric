@@ -9,7 +9,6 @@ import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
-import net.minecraft.world.tick.OrderedTick;
 
 public class TemporaryCobwebBlock extends CobwebBlock {
 

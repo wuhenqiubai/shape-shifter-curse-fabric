@@ -10,8 +10,6 @@ import net.onixary.shapeShifterCurseFabric.player_form.PlayerFormBodyType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import static net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric.MOD_ID;
-
 public class Form_AnubisWolf3 extends PlayerFormBase {
     public Form_AnubisWolf3(Identifier formID) {
         super(formID);

@@ -11,9 +11,7 @@ import net.onixary.shapeShifterCurseFabric.integration.origins.component.OriginC
 import net.onixary.shapeShifterCurseFabric.integration.origins.origin.Origin;
 import net.onixary.shapeShifterCurseFabric.integration.origins.origin.OriginLayer;
 import net.onixary.shapeShifterCurseFabric.integration.origins.registry.ModComponents;
-import net.onixary.shapeShifterCurseFabric.integration.origins.registry.ModLoot;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 

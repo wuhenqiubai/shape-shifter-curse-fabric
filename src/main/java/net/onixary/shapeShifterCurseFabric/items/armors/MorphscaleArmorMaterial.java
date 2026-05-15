@@ -6,7 +6,6 @@ import net.minecraft.item.Items;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
-import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Identifier;
@@ -14,7 +13,6 @@ import net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric;
 
 import java.util.List;
 import java.util.Map;
-import java.util.function.Supplier;
 
 public class MorphscaleArmorMaterial {
     public static final ArmorMaterial INSTANCE = new ArmorMaterial(

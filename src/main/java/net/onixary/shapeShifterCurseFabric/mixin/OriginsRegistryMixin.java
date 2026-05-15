@@ -1,15 +1,14 @@
 package net.onixary.shapeShifterCurseFabric.mixin;
 
 import com.google.gson.JsonParser;
-import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.network.PacketByteBuf;
+import net.minecraft.util.Identifier;
 import net.onixary.shapeShifterCurseFabric.integration.origins.networking.ModPacketsS2C;
 import net.onixary.shapeShifterCurseFabric.integration.origins.origin.Origin;
 import net.onixary.shapeShifterCurseFabric.integration.origins.origin.OriginRegistry;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.util.Identifier;
 import net.onixary.shapeShifterCurseFabric.player_form_render.OriginEvents;
 import net.onixary.shapeShifterCurseFabric.player_form_render.OriginalFurClient;
 import org.spongepowered.asm.mixin.Mixin;

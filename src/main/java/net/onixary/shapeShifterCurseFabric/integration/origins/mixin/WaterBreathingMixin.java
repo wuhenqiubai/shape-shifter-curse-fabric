@@ -1,22 +1,19 @@
 package net.onixary.shapeShifterCurseFabric.integration.origins.mixin;
 
 import io.github.apace100.apoli.mixin.EntityAccessor;
-import net.onixary.shapeShifterCurseFabric.integration.origins.power.OriginsPowerTypes;
-import net.onixary.shapeShifterCurseFabric.integration.origins.registry.ModDamageSources;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.fluid.Fluid;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.registry.tag.FluidTags;
-import net.minecraft.registry.tag.TagKey;
 import net.minecraft.world.World;
+import net.onixary.shapeShifterCurseFabric.integration.origins.power.OriginsPowerTypes;
+import net.onixary.shapeShifterCurseFabric.integration.origins.registry.ModDamageSources;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 

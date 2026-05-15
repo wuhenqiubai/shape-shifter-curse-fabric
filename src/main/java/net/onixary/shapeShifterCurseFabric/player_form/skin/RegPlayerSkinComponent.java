@@ -1,13 +1,12 @@
 package net.onixary.shapeShifterCurseFabric.player_form.skin;
 
+import net.minecraft.util.Identifier;
+import net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric;
 import org.ladysnake.cca.api.v3.component.ComponentKey;
 import org.ladysnake.cca.api.v3.component.ComponentRegistry;
 import org.ladysnake.cca.api.v3.entity.EntityComponentFactoryRegistry;
 import org.ladysnake.cca.api.v3.entity.EntityComponentInitializer;
 import org.ladysnake.cca.api.v3.entity.RespawnCopyStrategy;
-import net.minecraft.util.Identifier;
-import net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric;
-import net.onixary.shapeShifterCurseFabric.player_form.ability.PlayerFormComponent;
 
 public class RegPlayerSkinComponent  implements EntityComponentInitializer {
     public static final ComponentKey<PlayerSkinComponent> SKIN_SETTINGS =

@@ -1,6 +1,5 @@
 package net.onixary.shapeShifterCurseFabric.status_effects.attachment;
 
-import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -8,16 +7,14 @@ import net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric;
 import net.onixary.shapeShifterCurseFabric.data.StaticParams;
 import net.onixary.shapeShifterCurseFabric.player_form.PlayerFormBase;
 import net.onixary.shapeShifterCurseFabric.player_form.RegPlayerForms;
-import net.onixary.shapeShifterCurseFabric.player_form.ability.PlayerFormComponent;
 import net.onixary.shapeShifterCurseFabric.player_form.ability.RegPlayerFormComponent;
 import net.onixary.shapeShifterCurseFabric.status_effects.BaseTransformativeStatusEffect;
 import net.onixary.shapeShifterCurseFabric.status_effects.transformative_effects.TransformativeStatusInstance;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Iterator;
-import java.util.Map;
 
-import static net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric.*;
+import static net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric.ON_GET_TRANSFORM_EFFECT;
 
 public class EffectManager {
     // public static final AttachmentType<PlayerEffectAttachment> EFFECT_ATTACHMENT =
