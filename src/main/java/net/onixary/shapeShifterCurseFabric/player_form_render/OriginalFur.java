@@ -2,6 +2,7 @@ package net.onixary.shapeShifterCurseFabric.player_form_render;
 
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric;
 import net.onixary.shapeShifterCurseFabric.networking.BytePayload;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.Identifier;
@@ -24,7 +25,13 @@ public class OriginalFur implements ModInitializer {
             var buf = payload.data();
             RequestOriginPacket packet = new RequestOriginPacket();
             packet.read(buf);
-            var server = context.player().getServer();
+
+	        var server = context.server();
+	        if (server == null) {
+		        ShapeShifterCurseFabric.LOGGER.warn("Server is null when handling origin request");
+		        return;
+	        }
+
             var rqPlayer = server.getPlayerManager().getPlayer(packet.requestedPlayerUUID);
             if (rqPlayer != null){
                 ArrayList<Identifier> ids = new ArrayList<>();
@@ -34,7 +41,7 @@ public class OriginalFur implements ModInitializer {
                 response.requestedPlayerUUID = packet.requestedPlayerUUID;
                 response.requestedPlayerName = rqPlayer.getName().getString();
             } else {
-                System.out.println("Player was null.. what the bingle!?");
+	            ShapeShifterCurseFabric.LOGGER.warn("Player not found for UUID: {}", packet.requestedPlayerUUID);
             }
         });
     }

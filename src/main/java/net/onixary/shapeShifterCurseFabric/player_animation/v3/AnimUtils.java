@@ -14,6 +14,77 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 
 public class AnimUtils {
+    public static @NotNull AnimationHolderData readAnim(JsonObject jsonData) {
+        try {
+            Identifier AnimID = Identifier.tryParse(jsonData.get("animID").getAsString());
+            float Speed = 1.0f;
+            int Fade = 2;
+            if (jsonData.has("speed")) {
+                Speed = jsonData.get("speed").getAsFloat();
+            }
+            if (jsonData.has("fade")) {
+                Fade = jsonData.get("fade").getAsInt();
+            }
+            return new AnimUtils.AnimationHolderData(AnimID, Speed, Fade);
+        }
+        catch(Exception e) {
+	        ShapeShifterCurseFabric.LOGGER.warn("Error while loading player animation: {}", e.getMessage());
+            return EMPTY_ANIM;
+        }
+    }
+
+    public static final String ANIM_CONTROLLER_TYPE_KEY = "controllerType";
+
+    private static class EmptyAnimationHolderData extends AnimationHolderData {
+        public EmptyAnimationHolderData() {
+            super(null, 0.0f, 0);
+        }
+        @Override
+        public AnimationHolder build() {
+            return null;
+        }
+    }
+
+    public static AnimationHolderData EMPTY_ANIM = new EmptyAnimationHolderData();
+    public static AbstractAnimStateController EMPTY_CONTROLLER = new EmptyController();
+
+    public static @NotNull AbstractAnimStateController readController(JsonObject jsonData) {
+        try {
+            Identifier ControllerType = Identifier.tryParse(jsonData.get(ANIM_CONTROLLER_TYPE_KEY).getAsString());
+            Function<JsonObject, AbstractAnimStateController> controllerFactory = AnimRegistry.getAnimStateControllerSupplier(ControllerType);
+            if (controllerFactory != null) {
+                return controllerFactory.apply(jsonData);
+            } else {
+	            ShapeShifterCurseFabric.LOGGER.warn("Unknown animation controller type: {}", ControllerType);
+                return EMPTY_CONTROLLER;
+            }
+        } catch (Exception e) {
+	        ShapeShifterCurseFabric.LOGGER.warn("Error while loading player animation: {}", e.getMessage());
+            return EMPTY_CONTROLLER;
+        }
+    }
+
+    // 还是防一下AnimationHolderData=null的情况吧
+    public static @NotNull AnimationHolderData ensureAnimHolderDataNotNull(AnimationHolderData animationHolderData) {
+        if (animationHolderData == null) {
+            return EMPTY_ANIM;
+        }
+        else {
+            return animationHolderData;
+        }
+    }
+
+    public static @NotNull AnimationHolderData readAnimInJson(JsonObject jsonObject, String Key, @Nullable AnimationHolderData defaultValue) {
+        if (ANIM_CONTROLLER_TYPE_KEY.equals(Key)) {
+            throw new IllegalArgumentException("Cannot read animation from controllerType");
+        }
+        if (jsonObject.has(Key) && jsonObject.get(Key).isJsonObject()) {
+            return readAnim(jsonObject.get(Key).getAsJsonObject());
+        } else {
+            return ensureAnimHolderDataNotNull(defaultValue);
+        }
+    }
+
     public static class AnimationHolderData {
         public Identifier AnimID;
         public float Speed;
@@ -61,81 +132,10 @@ public class AnimUtils {
             if (animationHolder == null) {
                 animationHolder = new AnimationHolder(AnimID, true, Speed, Fade);
                 if (ShapeShifterCurseFabric.IsDevelopmentEnvironment() && animationHolder.getAnimation() == null)  {
-                    ShapeShifterCurseFabric.LOGGER.warn("Animation " + AnimID + " not found!");
+	                ShapeShifterCurseFabric.LOGGER.warn("Animation {} not found!", AnimID);
                 }
             }
             return animationHolder;
-        }
-    }
-
-    public static final String ANIM_CONTROLLER_TYPE_KEY = "controllerType";
-
-    private static class EmptyAnimationHolderData extends AnimationHolderData {
-        public EmptyAnimationHolderData() {
-            super(null, 0.0f, 0);
-        }
-        @Override
-        public AnimationHolder build() {
-            return null;
-        }
-    }
-
-    public static AnimationHolderData EMPTY_ANIM = new EmptyAnimationHolderData();
-    public static AbstractAnimStateController EMPTY_CONTROLLER = new EmptyController();
-
-    public static @NotNull AnimationHolderData readAnim(JsonObject jsonData) {
-        try {
-            Identifier AnimID = Identifier.tryParse(jsonData.get("animID").getAsString());
-            float Speed = 1.0f;
-            int Fade = 2;
-            if (jsonData.has("speed")) {
-                Speed = jsonData.get("speed").getAsFloat();
-            }
-            if (jsonData.has("fade")) {
-                Fade = jsonData.get("fade").getAsInt();
-            }
-            return new AnimUtils.AnimationHolderData(AnimID, Speed, Fade);
-        }
-        catch(Exception e) {
-            ShapeShifterCurseFabric.LOGGER.warn("Error while loading player animation: " + e.getMessage());
-            return EMPTY_ANIM;
-        }
-    }
-
-    // 还是防一下AnimationHolderData=null的情况吧
-    public static @NotNull AnimationHolderData ensureAnimHolderDataNotNull(AnimationHolderData animationHolderData) {
-        if (animationHolderData == null) {
-            return EMPTY_ANIM;
-        }
-        else {
-            return animationHolderData;
-        }
-    }
-
-    public static @NotNull AnimationHolderData readAnimInJson(JsonObject jsonObject, String Key, @Nullable AnimationHolderData defaultValue) {
-        if (ANIM_CONTROLLER_TYPE_KEY.equals(Key)) {
-            throw new IllegalArgumentException("Cannot read animation from controllerType");
-        }
-        if (jsonObject.has(Key) && jsonObject.get(Key).isJsonObject()) {
-            return readAnim(jsonObject.get(Key).getAsJsonObject());
-        } else {
-            return ensureAnimHolderDataNotNull(defaultValue);
-        }
-    }
-
-    public static @NotNull AbstractAnimStateController readController(JsonObject jsonData) {
-        try {
-            Identifier ControllerType = Identifier.tryParse(jsonData.get(ANIM_CONTROLLER_TYPE_KEY).getAsString());
-            Function<JsonObject, AbstractAnimStateController> controllerFactory = AnimRegistry.getAnimStateControllerSupplier(ControllerType);
-            if (controllerFactory != null) {
-                return controllerFactory.apply(jsonData);
-            } else {
-                ShapeShifterCurseFabric.LOGGER.warn("Unknown animation controller type: " + ControllerType);
-                return EMPTY_CONTROLLER;
-            }
-        } catch (Exception e) {
-            ShapeShifterCurseFabric.LOGGER.warn("Error while loading player animation: " + e.getMessage());
-            return EMPTY_CONTROLLER;
         }
     }
 

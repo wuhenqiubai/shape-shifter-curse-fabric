@@ -40,12 +40,12 @@ public class OriginUpgradeMixin {
                             component.setOrigin(layer, upgradeTo);
                             component.sync();
                             String announcement = upgrade.get().getAnnouncement();
-                            if (!announcement.isEmpty()) {
-                                owner.sendMessage(Text.translatable(announcement).formatted(Formatting.GOLD), false);
-                            }
+	                        if (announcement != null && !announcement.isEmpty()) {
+		                        owner.sendMessage(Text.translatable(announcement).formatted(Formatting.GOLD), false);
+	                        }
                         }
                     } catch(IllegalArgumentException e) {
-                        Origins.LOGGER.error("Could not perform Origins upgrade from " + o.getIdentifier().toString() + " to " + upgrade.get().getUpgradeToOrigin().toString() + ", as the upgrade origin did not exist!");
+	                    Origins.LOGGER.error("Could not perform Origins upgrade from {} to {}, as the upgrade origin did not exist!", o.getIdentifier().toString(), upgrade.get().getUpgradeToOrigin().toString());
                     }
                 }
             });

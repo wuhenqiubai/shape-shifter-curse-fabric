@@ -1,6 +1,7 @@
 package net.onixary.shapeShifterCurseFabric.mixin;
 
 import com.llamalad7.mixinextras.sugar.Local;
+import net.minecraft.component.type.PotionContentsComponent;
 import net.minecraft.entity.AreaEffectCloudEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.effect.StatusEffectInstance;
@@ -9,6 +10,7 @@ import net.minecraft.entity.projectile.thrown.PotionEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.util.Identifier;
+import net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric;
 import net.onixary.shapeShifterCurseFabric.status_effects.CTPUtils;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -24,24 +26,27 @@ public class PotionEntityMixin {
         if (entity instanceof PlayerEntity player) {
             PotionEntity realThis = ((PotionEntity) (Object) this);
             ItemStack stack = realThis.getStack();
-            Identifier CTPFormID = CTPUtils.getCTPFormIDFromNBT(stack.get(net.minecraft.component.DataComponentTypes.CUSTOM_DATA).copyNbt());
-            if (CTPFormID != null) {
-                CTPUtils.setTransformativePotionForm(player, CTPFormID);
+            var customData = stack.get(net.minecraft.component.DataComponentTypes.CUSTOM_DATA);
+            if (customData != null) {
+                Identifier CTPFormID = CTPUtils.getCTPFormIDFromNBT(customData.copyNbt());
+                if (CTPFormID != null) {
+                    CTPUtils.setTransformativePotionForm(player, CTPFormID);
+                }
             }
         }
-        return;
     }
 
-    // 1.21: applyLingeringPotion(PotionContentsComponent) — completely different, no setPotion call
-    // TODO: rewrite to use PotionContentsComponent
-    /*
-    @Inject(method = "applyLingeringPotion", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/AreaEffectCloudEntity;setPotion(Lnet/minecraft/potion/Potion;)V"))
-    public void applyLingeringPotion(ItemStack stack, Potion potion, CallbackInfo ci, @Local AreaEffectCloudEntity areaEffectCloudEntity) {
-        Identifier CTPFormID = CTPUtils.getCTPFormIDFromNBT(stack.get(net.minecraft.component.DataComponentTypes.CUSTOM_DATA).copyNbt());
-        if (CTPFormID != null && areaEffectCloudEntity instanceof CTPUtils.CTPFormIDHolder) {
-            ((CTPUtils.CTPFormIDHolder) areaEffectCloudEntity).setCTPFormID(CTPFormID);
+    @Inject(method = "applyLingeringPotion", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/World;spawnEntity(Lnet/minecraft/entity/Entity;)Z"))
+    public void applyLingeringPotion(PotionContentsComponent potion, CallbackInfo ci, @Local AreaEffectCloudEntity areaEffectCloudEntity) {
+        PotionEntity realThis = ((PotionEntity) (Object) this);
+        ItemStack stack = realThis.getStack();
+        var customData = stack.get(net.minecraft.component.DataComponentTypes.CUSTOM_DATA);
+        if (customData != null) {
+            Identifier CTPFormID = CTPUtils.getCTPFormIDFromNBT(customData.copyNbt());
+            if (CTPFormID != null && areaEffectCloudEntity instanceof CTPUtils.CTPFormIDHolder) {
+                ((CTPUtils.CTPFormIDHolder) areaEffectCloudEntity).setCTPFormID(CTPFormID);
+            }
         }
-        return;
     }
-    */
+
 }

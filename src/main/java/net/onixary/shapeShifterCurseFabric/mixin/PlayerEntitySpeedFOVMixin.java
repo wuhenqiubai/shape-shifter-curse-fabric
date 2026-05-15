@@ -53,18 +53,28 @@ public abstract class PlayerEntitySpeedFOVMixin {
     // f *= ((float)this.getAttributeValue(EntityAttributes.GENERIC_MOVEMENT_SPEED) / this.getAbilities().getWalkSpeed() + 1.0F) / 2.0F;
     @Inject(method = "getFovMultiplier", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerAbilities;getWalkSpeed()F"))
     private void shape_shifter_curse$modifyWalkSpeed(CallbackInfoReturnable<Float> cir) {
-        shape_shifter_curse$originalWalkSpeed = ((AbstractClientPlayerEntity) (Object) this).getAbilities().getWalkSpeed();
-        PlayerFormBase playerFormBase = RegPlayerFormComponent.PLAYER_FORM.get((AbstractClientPlayerEntity) (Object) this).getCurrentForm();
-        if (playerFormBase.FormID == RegPlayerForms.ORIGINAL_BEFORE_ENABLE.FormID) {
+	    AbstractClientPlayerEntity player = (AbstractClientPlayerEntity) (Object) this;
+
+	    shape_shifter_curse$originalWalkSpeed = player.getAbilities().getWalkSpeed();
+
+	    var formComponent = RegPlayerFormComponent.PLAYER_FORM.get(player);
+	    if (formComponent == null) {
             return;
         }
-        float nowSpeed = (float)(((AbstractClientPlayerEntity) (Object) this).getAttributeValue(EntityAttributes.GENERIC_MOVEMENT_SPEED));
+
+	    PlayerFormBase playerFormBase = formComponent.getCurrentForm();
+	    if (playerFormBase == null || playerFormBase.FormID == RegPlayerForms.ORIGINAL_BEFORE_ENABLE.FormID) {
+		    return;
+	    }
+
+	    float nowSpeed = (float) player.getAttributeValue(EntityAttributes.GENERIC_MOVEMENT_SPEED);
         float targetWalkSpeed = Math.min(nowSpeedMinMul * nowSpeed, Math.max(nowSpeedMaxMul * nowSpeed, shape_shifter_curse$originalWalkSpeed));
-        ((AbstractClientPlayerEntity) (Object) this).getAbilities().setWalkSpeed(targetWalkSpeed);
+	    player.getAbilities().setWalkSpeed(targetWalkSpeed);
     }
 
     @Inject(method = "getFovMultiplier", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerAbilities;getWalkSpeed()F", shift = At.Shift.AFTER))
     private void shape_shifter_curse$restoreWalkSpeed(CallbackInfoReturnable<Float> cir) {
-        ((AbstractClientPlayerEntity) (Object) this).getAbilities().setWalkSpeed(shape_shifter_curse$originalWalkSpeed);
+	    AbstractClientPlayerEntity player = (AbstractClientPlayerEntity) (Object) this;
+	    player.getAbilities().setWalkSpeed(shape_shifter_curse$originalWalkSpeed);
     }
 }

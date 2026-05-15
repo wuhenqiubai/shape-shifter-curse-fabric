@@ -8,15 +8,24 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.potion.Potion;
 import net.minecraft.recipe.BrewingRecipeRegistry;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.onixary.shapeShifterCurseFabric.recipes.BrewingRecipeUtils;
 import net.onixary.shapeShifterCurseFabric.status_effects.CTPUtils;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(BrewingRecipeRegistry.class)
 public class BrewingRecipeRegistryMixin {
+	@Unique
+    private static void setTargetForm(ItemStack stack, net.minecraft.util.Identifier formID) {
+        NbtCompound nbt = stack.getOrDefault(DataComponentTypes.CUSTOM_DATA, NbtComponent.DEFAULT).copyNbt();
+        CTPUtils.setCTPFormIDToNBT(nbt, formID);
+        stack.set(DataComponentTypes.CUSTOM_DATA, NbtComponent.of(nbt));
+    }
+
     @Inject(method = "craft", at = @At("RETURN"))
     private void onCraft(ItemStack ingredient, ItemStack input, CallbackInfoReturnable<ItemStack> cir) {
         if (input.isEmpty()) {
@@ -39,11 +48,12 @@ public class BrewingRecipeRegistryMixin {
         }
 
         // Check mod's dynamic potion recipes
-        Potion potion = input.getOrDefault(DataComponentTypes.POTION_CONTENTS, PotionContentsComponent.DEFAULT)
-                .potion().orElse(null).value();
-        if (potion == null) {
+	    PotionContentsComponent potionContents = input.getOrDefault(DataComponentTypes.POTION_CONTENTS, PotionContentsComponent.DEFAULT);
+	    RegistryEntry<Potion> potionEntry = potionContents.potion().orElse(null);
+	    if (potionEntry == null) {
             return;
         }
+	    Potion potion = potionEntry.value();
         for (BrewingRecipeUtils.DynamicRecipe<Potion> recipe : BrewingRecipeUtils.getPotionRecipes()) {
             if (recipe.matchesInput(potion) && recipe.ingredient.test(ingredient)) {
                 if (recipe.targetForm != null) {
@@ -52,11 +62,5 @@ public class BrewingRecipeRegistryMixin {
                 return;
             }
         }
-    }
-
-    private static void setTargetForm(ItemStack stack, net.minecraft.util.Identifier formID) {
-        NbtCompound nbt = stack.getOrDefault(DataComponentTypes.CUSTOM_DATA, NbtComponent.DEFAULT).copyNbt();
-        CTPUtils.setCTPFormIDToNBT(nbt, formID);
-        stack.set(DataComponentTypes.CUSTOM_DATA, NbtComponent.of(nbt));
     }
 }

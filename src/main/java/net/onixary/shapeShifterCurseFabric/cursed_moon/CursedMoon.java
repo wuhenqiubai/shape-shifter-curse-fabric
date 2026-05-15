@@ -134,7 +134,7 @@ public class CursedMoon {
         long newTime = currentTime + (daysToSkip * 24000L);
         world.setTimeOfDay(newTime);
 
-        ShapeShifterCurseFabric.LOGGER.info("CursedMoon manually triggered! Skipped " + daysToSkip + " days to reach moon phase " + targetPhase);
+	    ShapeShifterCurseFabric.LOGGER.info("CursedMoon manually triggered! Skipped {} days to reach moon phase {}", daysToSkip, targetPhase);
 
         // 向所有玩家发送消息
         for (ServerPlayerEntity player : world.getServer().getPlayerManager().getPlayerList()) {
@@ -217,7 +217,7 @@ public class CursedMoon {
         PlayerFormComponent formComp = RegPlayerFormComponent.PLAYER_FORM.get(player);
         if(!formComp.isEndMoonEffectApplied() && formComp.isMoonEffectApplied()){
             boolean wasByCursedMoon = RegPlayerFormComponent.PLAYER_FORM.get(player).isByCursedMoon();
-            ShapeShifterCurseFabric.LOGGER.info("is player form by cursed moon? : " + wasByCursedMoon);
+	        ShapeShifterCurseFabric.LOGGER.info("is player form by cursed moon? : {}", wasByCursedMoon);
             if(FormAbilityManager.getForm(player).equals(RegPlayerForms.ORIGINAL_BEFORE_ENABLE)) {
                 player.sendMessage(Text.translatable("info.shape-shifter-curse.end_cursed_moon_before_enable").formatted(Formatting.LIGHT_PURPLE));
             }
@@ -292,7 +292,7 @@ public class CursedMoon {
         clientIsCursedMoon = isCursedMoonByPhase(world);
         clientIsNight = isNight(world);
 
-        ShapeShifterCurseFabric.LOGGER.info("Updated Cursed Moon status for new day: " + day + ", Moon Phase: " + world.getMoonPhase() + ", Is Cursed: " + clientIsCursedMoon);
+	    ShapeShifterCurseFabric.LOGGER.info("Updated Cursed Moon status for new day: {}, Moon Phase: {}, Is Cursed: {}", day, world.getMoonPhase(), clientIsCursedMoon);
     }
 
 

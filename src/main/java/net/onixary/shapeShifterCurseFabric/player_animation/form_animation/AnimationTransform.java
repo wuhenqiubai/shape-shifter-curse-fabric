@@ -39,7 +39,7 @@ public class AnimationTransform {
             }
             return anim_on_transform_default;
         } catch (Exception e) {
-            ShapeShifterCurseFabric.LOGGER.error("Error in getFormAnimToPlay: " + e.getMessage());
+	        ShapeShifterCurseFabric.LOGGER.error("Error in getFormAnimToPlay: {}", e.getMessage());
             return anim_on_transform_default;
         }
     }

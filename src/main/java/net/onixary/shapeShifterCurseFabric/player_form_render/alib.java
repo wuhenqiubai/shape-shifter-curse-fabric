@@ -61,19 +61,16 @@ public class alib {
             var value = prop.createValue(s);
             Object vL = value.value();
             if (vL instanceof Number num) {
-                if (num instanceof Float f) {
-                    c.putFloat(n, f);
-                } else if (num instanceof Double d) {
-                    c.putDouble(n,d);
-                } else if (num instanceof Long l) {
-                    c.putLong(n,l);
-                } else if (num instanceof Integer i) {
-                    c.putInt(n,i);
-                } else if (num instanceof Byte b) {
-                    c.putByte(n,b);
-                } else if (num instanceof Short sH) {
-                    c.putShort(n,sH);
-                }
+	            switch (num) {
+		            case Float f -> c.putFloat(n, f);
+		            case Double d -> c.putDouble(n, d);
+		            case Long l -> c.putLong(n, l);
+		            case Integer i -> c.putInt(n, i);
+		            case Byte b -> c.putByte(n, b);
+		            case Short sH -> c.putShort(n, sH);
+		            default -> {
+		            }
+	            }
             } else if (vL instanceof Boolean bl) {
                 c.putBoolean(n, bl);
             } else if (vL instanceof Identifier id) {
@@ -87,7 +84,7 @@ public class alib {
     public static boolean checkNBTEquals(NbtElement leftE, NbtElement rightE) {
         boolean bl = true;
         if (leftE instanceof NbtList left && rightE instanceof  NbtList right) {
-            if (left.size() == right.size() && left.size() == 0) {
+	        if (left.size() == right.size() && left.isEmpty()) {
                 System.out.println("was empty");
                 return true;
             }
@@ -142,10 +139,18 @@ public class alib {
                         case NbtType.DOUBLE -> bl = numL.doubleValue() == numR.doubleValue();
                         case NbtType.LONG -> bl = numL.longValue() == numR.longValue();
                     }
-                }
-                switch (elem_t) {
-                    case NbtType.COMPOUND -> bl = checkNBTEquals(left.getCompound(key), right.getCompound(key));
-                    case NbtType.STRING -> bl = e_L.asString().contentEquals(e_R.asString());
+                } else if (e_L != null && e_R != null) {
+	                switch (elem_t) {
+		                case NbtType.COMPOUND -> bl = checkNBTEquals(e_L, e_R);
+		                case NbtType.STRING -> bl = e_L.asString().contentEquals(e_R.asString());
+		                default -> {
+			                System.out.println("Unhandled NBT type: " + elem_t);
+			                bl = false;
+		                }
+	                }
+                } else {
+	                System.out.println("NBT element is null for key: " + key);
+	                bl = false;
                 }
             }
         }
@@ -266,17 +271,14 @@ public class alib {
                             // Sometimes, it won't parse properly.
                             num = parseGsonLazilyParsedNumber(lPN);
                         }
-                        if (num instanceof Integer i) {
-                            ((NbtCompound) nbtCompound).putInt(key, i);
-                        } else if (num instanceof Float i) {
-                            ((NbtCompound) nbtCompound).putFloat(key, i);
-                        } else if (num instanceof Double i) {
-                            ((NbtCompound) nbtCompound).putDouble(key, i);
-                        } else if (num instanceof Short i) {
-                            ((NbtCompound) nbtCompound).putShort(key, i);
-                        } else {
-                            System.out.println("Found unexpected primitive: " + alib.getPrivateMixinField(primitive, "value").getClass().getTypeName());
-                        }
+	                    switch (num) {
+		                    case Integer i -> ((NbtCompound) nbtCompound).putInt(key, i);
+		                    case Float i -> ((NbtCompound) nbtCompound).putFloat(key, i);
+		                    case Double i -> ((NbtCompound) nbtCompound).putDouble(key, i);
+		                    case Short i -> ((NbtCompound) nbtCompound).putShort(key, i);
+		                    case null, default ->
+				                    System.out.println("Found unexpected primitive: " + alib.getPrivateMixinField(primitive, "value").getClass().getTypeName());
+	                    }
                     } else if (primitive.isBoolean()) {
                         ((NbtCompound) nbtCompound).putBoolean(key, primitive.getAsBoolean());
                     } else if (primitive.isString()) {
@@ -294,7 +296,7 @@ public class alib {
     }
     private static Number parseGsonLazilyParsedNumber(LazilyParsedNumber number) {
         String value = getPrivateMixinField(number, "value");
-        Number n = null;
+	    Number n;
         try {
             n = Integer.parseInt(value);
         } catch (Exception _0i) {

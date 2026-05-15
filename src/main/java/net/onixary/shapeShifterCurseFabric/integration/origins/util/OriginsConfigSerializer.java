@@ -33,7 +33,7 @@ public class OriginsConfigSerializer<T extends ConfigData> extends Toml4jConfigS
         try {
             t = super.deserialize();
         } catch(Exception e) {
-            Origins.LOGGER.error("Failed reading config (re-creating default): " + e.getMessage());
+	        Origins.LOGGER.error("Failed reading config (re-creating default): {}", e.getMessage());
             return super.createDefault();
         }
         return t;

@@ -21,7 +21,7 @@ import java.util.List;
 /**
  * 拦截 GameRenderer.bobView，根据玩家身上的 FormCameraBobbingPower
  * 将原版视角晃动替换为自定义晃动逻辑。
- *
+ * <p>
  * 若玩家没有该 Power（或条件不满足），则原版晃动照常运行。
  */
 @Environment(EnvType.CLIENT)

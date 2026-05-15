@@ -142,7 +142,7 @@ public class RegPlayerForms {
         for (Map.Entry<String, JsonElement> entry : dynamicPlayerFormList.entrySet()) {
             Identifier ID = Identifier.tryParse(entry.getKey());
             if (ID == null) {
-                ShapeShifterCurseFabric.LOGGER.warn("Invalid dynamic player form ID: " + entry.getKey());
+	            ShapeShifterCurseFabric.LOGGER.warn("Invalid dynamic player form ID: {}", entry.getKey());
                 continue;
             }
             PlayerFormDynamic dynamicPlayerForm = buildDynamicPlayerForm(ID, entry.getValue().getAsJsonObject());
@@ -158,7 +158,7 @@ public class RegPlayerForms {
                 dynamicPlayerFormMap.put(id, playerFormDynamic);
             }
             else {
-                ShapeShifterCurseFabric.LOGGER.warn("Attempted to save non-dynamic player form: " + id);
+	            ShapeShifterCurseFabric.LOGGER.warn("Attempted to save non-dynamic player form: {}", id);
             }
         }
         return dynamicPlayerFormMap;
@@ -178,11 +178,11 @@ public class RegPlayerForms {
 
     public static boolean removeDynamicPlayerForm(Identifier id, boolean RemoveDynamicRegistry) {
         if (!dynamicPlayerForms.contains(id)) {
-            ShapeShifterCurseFabric.LOGGER.warn("Attempted to remove non-dynamic player form: " + id);
+	        ShapeShifterCurseFabric.LOGGER.warn("Attempted to remove non-dynamic player form: {}", id);
             return false;
         }
         if (!playerForms.containsKey(id)) {
-            ShapeShifterCurseFabric.LOGGER.warn("Attempted to remove non-existent player form: " + id);
+	        ShapeShifterCurseFabric.LOGGER.warn("Attempted to remove non-existent player form: {}", id);
             return false;
         }
         if (RemoveDynamicRegistry) {
@@ -194,11 +194,11 @@ public class RegPlayerForms {
 
     public static boolean removeDynamicPlayerFormGroup(Identifier id, boolean RemoveDynamicRegistry) {
         if (!dynamicPlayerFormGroups.contains(id)) {
-            ShapeShifterCurseFabric.LOGGER.warn("Attempted to remove non-dynamic player form group: " + id);
+	        ShapeShifterCurseFabric.LOGGER.warn("Attempted to remove non-dynamic player form group: {}", id);
             return false;
         }
         if (!playerFormGroups.containsKey(id)) {
-            ShapeShifterCurseFabric.LOGGER.warn("Attempted to remove non-existent player form group: " + id);
+	        ShapeShifterCurseFabric.LOGGER.warn("Attempted to remove non-existent player form group: {}", id);
             return false;
         }
         if (RemoveDynamicRegistry) {

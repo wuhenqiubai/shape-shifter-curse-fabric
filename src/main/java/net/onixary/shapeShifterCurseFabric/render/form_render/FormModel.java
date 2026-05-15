@@ -206,7 +206,26 @@ public class FormModel extends GeoModel<FormAnimatable> {
         }
         this.AnimationSystem = null;
         if (this.modelJson.has("animation_system")) {
-            this.AnimationSystem = FormRenderUtils.get_MAS(Identifier.tryParse(JsonHelper.getString(this.modelJson, "animation_system", null)), this.modelJson.getAsJsonObject("animation_system_config"));
+	        String animationSystemId = JsonHelper.getString(this.modelJson, "animation_system", null);
+	        if (animationSystemId != null) {
+		        Identifier masId = Identifier.tryParse(animationSystemId);
+		        if (masId != null) {
+			        JsonObject config = this.modelJson.has("animation_system_config")
+					        ? this.modelJson.getAsJsonObject("animation_system_config")
+					        : null;
+
+			        try {
+				        IModelAnimationSystem system = FormRenderUtils.get_MAS(masId, config);
+				        if (system != null) {
+					        this.AnimationSystem = system;
+				        }
+			        } catch (Exception e) {
+				        ShapeShifterCurseFabric.LOGGER.warn("Failed to load animation system: {}", masId, e);
+			        }
+		        } else {
+			        ShapeShifterCurseFabric.LOGGER.warn("Invalid animation system identifier: {}", animationSystemId);
+		        }
+	        }
         }
         if (AnimationSystem == null) {
             this.AnimationSystem = FormRenderUtils.get_MAS(FormRenderUtils.DEFAULT_MAS, null);

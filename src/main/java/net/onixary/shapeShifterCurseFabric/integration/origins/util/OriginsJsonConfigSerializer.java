@@ -45,14 +45,14 @@ public class OriginsJsonConfigSerializer<T extends ConfigData> extends GsonConfi
                 Files.move(legacySerializer.getConfigPath(), legacySerializer.getConfigPath().getParent().resolve("origins_server.toml.unused"));
                 return t;
             } catch (Exception e) {
-                Origins.LOGGER.error("Failed converting old .toml config to new .json5 format: " + e.getMessage());
+	            Origins.LOGGER.error("Failed converting old .toml config to new .json5 format: {}", e.getMessage());
             }
         }
 
         try {
             t = super.deserialize();
         } catch(Exception e) {
-            Origins.LOGGER.error("Failed reading config (re-creating default): " + e.getMessage());
+	        Origins.LOGGER.error("Failed reading config (re-creating default): {}", e.getMessage());
             t = super.createDefault();
         }
 

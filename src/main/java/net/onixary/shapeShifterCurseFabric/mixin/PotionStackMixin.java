@@ -50,7 +50,7 @@ public abstract class PotionStackMixin {
                 int StackCount = PowerHolderComponent.getPowers(player, ModifyPotionStackPower.class)
                         .stream()
                         .mapToInt(ModifyPotionStackPower::getCount)
-                        .max().orElseGet(() -> 1);
+		                .max().orElse(1);
                 cir.setReturnValue(Math.max(StackCount, cir.getReturnValue()));
             }
         }

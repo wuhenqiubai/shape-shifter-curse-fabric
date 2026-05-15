@@ -241,7 +241,7 @@ public class Origin {
                 PowerType powerType = PowerTypeRegistry.get(powerId);
                 origin.add(powerType);
             } catch(IllegalArgumentException e) {
-                Origins.LOGGER.error("Origin \"" + id + "\" contained unregistered power: \"" + powerId + "\"");
+	            Origins.LOGGER.error("Origin \"{}\" contained unregistered power: \"{}\"", id, powerId);
             }
         });
 
@@ -267,13 +267,13 @@ public class Origin {
 
     @Override
     public String toString() {
-        String str = "Origin(" + identifier.toString() + ")[";
+	    StringBuilder str = new StringBuilder("Origin(" + identifier.toString() + ")[");
         for(PowerType<?> pt : powerTypes) {
-            str += PowerTypeRegistry.getId(pt);
-            str += ",";
+	        str.append(PowerTypeRegistry.getId(pt));
+	        str.append(",");
         }
-        str = str.substring(0, str.length() - 1) + "]";
-        return str;
+	    str = new StringBuilder(str.substring(0, str.length() - 1) + "]");
+	    return str.toString();
     }
 
     @Override

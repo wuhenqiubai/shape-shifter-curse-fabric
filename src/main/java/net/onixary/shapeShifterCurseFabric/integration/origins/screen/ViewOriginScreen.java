@@ -30,7 +30,10 @@ public class ViewOriginScreen extends OriginDisplayScreen {
 	public ViewOriginScreen() {
 		super(Text.translatable(Origins.MODID + ".screen.view_origin"), false);
 		PlayerEntity player = MinecraftClient.getInstance().player;
-		HashMap<OriginLayer, Origin> origins = ModComponents.ORIGIN.get(player).getOrigins();
+		HashMap<OriginLayer, Origin> origins = null;
+		if (player != null) {
+			origins = ModComponents.ORIGIN.get(player).getOrigins();
+		}
 		originLayers = new ArrayList<>(origins.size());
 
 		origins.forEach((layer, origin) -> {

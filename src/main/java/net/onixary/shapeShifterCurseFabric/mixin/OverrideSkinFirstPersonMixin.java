@@ -8,6 +8,7 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.model.ModelPart;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
+import net.minecraft.client.render.OverlayTexture;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
@@ -89,7 +90,10 @@ public abstract class OverrideSkinFirstPersonMixin extends LivingEntityRenderer<
             if (fur == null) {return;}
             Origin origin = fur.currentAssociatedOrigin;
             if (origin == null) {return;}
-            PlayerEntityRenderer EntityRender = (PlayerEntityRenderer) MinecraftClient.getInstance().getEntityRenderDispatcher().getRenderer(player);
+            var _ed5 = MinecraftClient.getInstance().getEntityRenderDispatcher();
+            if (_ed5 == null) return;
+            PlayerEntityRenderer EntityRender = (PlayerEntityRenderer) _ed5.getRenderer(player);
+            if (EntityRender == null) return;
             OriginFurModel OFModel = (OriginFurModel) fur.getGeoModel();
             OriginFurAnimatable OFAnimatable = fur.getAnimatable();
             Optional<GeoBone> OptionalGeoBone = OFModel.getBone(GeoBoneName);
@@ -136,21 +140,17 @@ public abstract class OverrideSkinFirstPersonMixin extends LivingEntityRenderer<
                 } else {
                     OverlayLayer = RenderLayer.getEntityCutout(OverlayTextureID);
                 }
-                // TODO: OverlayTexture + ModelPart.render API changed in 1.21, needs verification
-                // int OverlayInt = OverlayTexture.getUv(...); arm.render(matrices, ...);
+                int OverlayInt = OverlayTexture.packUv(OverlayTexture.getU(this.getAnimationCounter(player, MinecraftClient.getInstance().getRenderTickCounter().getTickDelta(false))), OverlayTexture.getV(player.hurtTime > 0 || player.deathTime > 0));
+                arm.render(matrices, vertexConsumers.getBuffer(OverlayLayer), light, OverlayInt);
             }
         }
     }
-    // fur.renderBone - AzureLib 3.x API migration needed (preRender/renderRecursively/postRender changed from 2.x)
-
-    // TODO: AzureLib 3.x migration
-    // 模拟fur.render 但只渲染特定GeoBone 使用AzureLib默认渲染渲染逻辑
 
     // 模拟fur.render 但只渲染特定GeoBone 使用AzureLib默认渲染渲染逻辑
-        @Unique
+    @Unique
     private void RenderOFModelBone(OriginalFurClient.OriginFur OFRender, GeoBone geoBone, MatrixStack poseStack, OriginFurAnimatable animatable, VertexConsumerProvider bufferSource, RenderLayer renderType, VertexConsumer buffer, int packedLight) {
         this.RenderOFModelBone(OFRender, geoBone, poseStack, animatable, bufferSource, renderType, buffer, packedLight, -1);
-        }
+    }
 
     @Unique
     private void RenderOFModelBone(OriginalFurClient.OriginFur OFRender, GeoBone geoBone, MatrixStack poseStack, OriginFurAnimatable animatable, VertexConsumerProvider bufferSource, RenderLayer renderType, VertexConsumer buffer, int packedLight, int colour) {

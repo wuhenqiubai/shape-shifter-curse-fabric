@@ -50,6 +50,14 @@ public class Origins implements ModInitializer, OrderedResourceListenerInitializ
 	public static ServerConfig config;
 	private static ConfigSerializer<ServerConfig> configSerializer;
 
+	public static void serializeConfig() {
+		try {
+			configSerializer.serialize(config);
+		} catch (ConfigSerializer.SerializationException e) {
+			Origins.LOGGER.error("Failed serialization of config file: {}", e.getMessage());
+		}
+	}
+
 	@Override
 	public void onInitialize() {
 		FabricLoader.getInstance().getModContainer(MOD_ID).ifPresent(modContainer -> {
@@ -66,7 +74,7 @@ public class Origins implements ModInitializer, OrderedResourceListenerInitializ
 				SEMVER[i] = Integer.parseInt(splitVersion[i]);
 			}
 		});
-		LOGGER.info("Origins " + VERSION + " is initializing. Have fun!");
+		LOGGER.info("Origins {} is initializing. Have fun!", VERSION);
 
 		AutoConfig.register(ServerConfig.class,
 			(definition, configClass) -> {
@@ -96,14 +104,6 @@ public class Origins implements ModInitializer, OrderedResourceListenerInitializ
 		});
 
 		net.minecraft.advancement.criterion.Criteria.register(ChoseOriginCriterion.ID.toString(), ChoseOriginCriterion.INSTANCE);
-	}
-
-	public static void serializeConfig() {
-		try {
-			configSerializer.serialize(config);
-		} catch (ConfigSerializer.SerializationException e) {
-			Origins.LOGGER.error("Failed serialization of config file: " + e.getMessage());
-		}
 	}
 
 	public static Identifier identifier(String path) {

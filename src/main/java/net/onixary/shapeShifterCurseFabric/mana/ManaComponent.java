@@ -10,9 +10,7 @@ import net.minecraft.nbt.NbtList;
 import net.minecraft.nbt.NbtString;
 import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
-import net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric;
 import net.onixary.shapeShifterCurseFabric.util.ClientUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -73,12 +71,6 @@ public class ManaComponent implements AutoSyncedComponent {
     // 双端 不会更新 这个Field应该仅ManaComponent内部调用
     private boolean ManaHandler_IsManaEmpty = false;
 
-    public ManaComponent() {
-        ShapeShifterCurseFabric.LOGGER.error("ManaComponent: You should not create a ManaComponent without a player entity!");
-        this.player = null;
-        this.isClient = false;
-    }
-
     public ManaComponent(PlayerEntity player) {
         this.player = Objects.requireNonNull(player);
         this.isClient = this.player.getWorld().isClient;
@@ -92,7 +84,7 @@ public class ManaComponent implements AutoSyncedComponent {
         return ManaTypeID != null;
     }
 
-    public Identifier getManaTypeID() {
+	public @Nullable Identifier getManaTypeID() {
         return ManaTypeID;
     }
 
@@ -230,7 +222,7 @@ public class ManaComponent implements AutoSyncedComponent {
     }
 
     @Override
-    public void readFromNbt(NbtCompound nbtCompound, RegistryWrapper.WrapperLookup registryLookup) {
+    public void readFromNbt(@NotNull NbtCompound nbtCompound, RegistryWrapper.@NotNull WrapperLookup registryLookup) {
         this.readFromNbt(nbtCompound, true, registryLookup);
     }
 
@@ -299,7 +291,7 @@ public class ManaComponent implements AutoSyncedComponent {
     }
 
     @Override
-    public void writeToNbt(NbtCompound nbtCompound, RegistryWrapper.WrapperLookup registryLookup) {
+    public void writeToNbt(@NotNull NbtCompound nbtCompound, RegistryWrapper.@NotNull WrapperLookup registryLookup) {
         this.writeToNbt(nbtCompound, true, registryLookup);
     }
 

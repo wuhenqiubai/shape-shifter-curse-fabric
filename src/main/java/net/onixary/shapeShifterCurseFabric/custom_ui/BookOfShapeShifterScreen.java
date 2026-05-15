@@ -5,7 +5,6 @@ import io.wispforest.owo.ui.component.Components;
 import io.wispforest.owo.ui.container.Containers;
 import io.wispforest.owo.ui.container.FlowLayout;
 import io.wispforest.owo.ui.container.OverlayContainer;
-import io.wispforest.owo.ui.container.ScrollContainer;
 import io.wispforest.owo.ui.core.*;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.text.Text;
@@ -15,6 +14,7 @@ import net.onixary.shapeShifterCurseFabric.custom_ui.util.ScaledLabelComponent;
 import net.onixary.shapeShifterCurseFabric.data.CodexData;
 import net.onixary.shapeShifterCurseFabric.player_form.ability.PlayerFormComponent;
 import net.onixary.shapeShifterCurseFabric.player_form.ability.RegPlayerFormComponent;
+import org.jetbrains.annotations.NotNull;
 
 import static net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric.MOD_ID;
 
@@ -39,7 +39,7 @@ public class BookOfShapeShifterScreen extends BaseOwoScreen<FlowLayout> {
 
 
     @Override
-    protected OwoUIAdapter<FlowLayout> createAdapter() {
+    protected @NotNull OwoUIAdapter<FlowLayout> createAdapter() {
         return OwoUIAdapter.create(this, Containers::verticalFlow);
     }
 

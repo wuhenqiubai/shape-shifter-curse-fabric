@@ -25,7 +25,7 @@ public abstract class MinionPlayerEntityMixin implements IPlayerEntityMinion {
     @Unique
     private @Nullable PlayerMinionComponent getPlayerMinionComponent() {
         try {
-            return RegPlayerMinionComponent.PLAYER_MINION_DATA.get((PlayerEntity)(Object)this);
+	        return RegPlayerMinionComponent.PLAYER_MINION_DATA.get(this);
         } catch (Exception e) {
             ShapeShifterCurseFabric.LOGGER.error("Failed to get PlayerMinionComponent", e);
             return null;
@@ -35,7 +35,7 @@ public abstract class MinionPlayerEntityMixin implements IPlayerEntityMinion {
     @Unique
     private boolean syncPlayerMinionComponent() {
         try {
-            RegPlayerMinionComponent.PLAYER_MINION_DATA.sync((PlayerEntity)(Object)this);
+	        RegPlayerMinionComponent.PLAYER_MINION_DATA.sync(this);
             return true;
         } catch (Exception e) {
             ShapeShifterCurseFabric.LOGGER.error("Failed to sync PlayerMinionComponent", e);

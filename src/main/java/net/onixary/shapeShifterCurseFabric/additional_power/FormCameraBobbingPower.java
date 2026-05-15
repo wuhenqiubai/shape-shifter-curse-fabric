@@ -11,7 +11,7 @@ import net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric;
 /**
  * 根据当前形态改变玩家视角晃动方式的客户端 Power。
  * 实际晃动逻辑由 CameraBobbingMixin 负责处理。
- *
+ * <p>
  * 数据驱动配置示例:
  * {
  *   "type": "shape-shifter-curse:form_camera_bobbing",

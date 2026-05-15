@@ -39,7 +39,7 @@ public class OriginManager extends MultiJsonDataLoader implements IdentifiableRe
 						}
 					}
 				} catch(Exception e) {
-					Origins.LOGGER.error("There was a problem reading Origin file " + id.toString() + " (skipping): " + e.getMessage());
+					Origins.LOGGER.error("There was a problem reading Origin file {} (skipping): {}", id.toString(), e.getMessage());
 				}
 			});
 			if(OriginRegistry.contains(id)) {
@@ -58,7 +58,7 @@ public class OriginManager extends MultiJsonDataLoader implements IdentifiableRe
 				}
 			}
 		});
-		Origins.LOGGER.info("Finished loading origins from data files. Registry contains " + OriginRegistry.size() + " origins.");
+		Origins.LOGGER.info("Finished loading origins from data files. Registry contains {} origins.", OriginRegistry.size());
 		if(hasConfigChanged.get()) {
 			Origins.serializeConfig();
 		}

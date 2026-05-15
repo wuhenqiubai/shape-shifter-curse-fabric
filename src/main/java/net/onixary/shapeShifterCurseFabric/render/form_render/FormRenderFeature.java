@@ -250,7 +250,10 @@ public class FormRenderFeature <T extends PlayerEntity, M extends BipedEntityMod
                 if (formRenderer == null) {
                     continue;
                 }
-                PlayerEntityRenderer playerEntityRenderer = (PlayerEntityRenderer) MinecraftClient.getInstance().getEntityRenderDispatcher().getRenderer(abstractClientPlayerEntity);
+	            var _ed = MinecraftClient.getInstance().getEntityRenderDispatcher();
+	            if (_ed == null) continue;
+	            PlayerEntityRenderer playerEntityRenderer = (PlayerEntityRenderer) _ed.getRenderer(abstractClientPlayerEntity);
+	            if (playerEntityRenderer == null) continue;
                 PlayerEntityModel<AbstractClientPlayerEntity> playerEntityModel = playerEntityRenderer.getModel();
                 FormModel formModel = (FormModel) formRenderer.getGeoModel();
                 FormAnimatable formAnimatable = formRenderer.getAnimatable();

@@ -55,16 +55,16 @@ public class WebBullet extends ThrownItemEntity {
         this.EnableTopBlockBuild = true;
     }
 
-    public WebBullet(LivingEntity livingEntity, int Tier) {
-        super(WEB_BULLET, livingEntity, livingEntity.getWorld());
+    public WebBullet(@org.jetbrains.annotations.Nullable LivingEntity livingEntity, int Tier) {
+        super(WEB_BULLET, livingEntity, livingEntity != null ? livingEntity.getWorld() : null);
         this.Tier = Tier;
         this.owner = livingEntity;
         this.EnableEntangledEffect = true;
         this.EnableTopBlockBuild = true;
     }
 
-    public WebBullet(LivingEntity livingEntity, int Tier, boolean EnableEntangledEffect, boolean EnableTopBlockBuild) {
-        super(WEB_BULLET, livingEntity, livingEntity.getWorld());
+    public WebBullet(@org.jetbrains.annotations.Nullable LivingEntity livingEntity, int Tier, boolean EnableEntangledEffect, boolean EnableTopBlockBuild) {
+        super(WEB_BULLET, livingEntity, livingEntity != null ? livingEntity.getWorld() : null);
         this.Tier = Tier;
         this.owner = livingEntity;
         this.EnableEntangledEffect = EnableEntangledEffect;

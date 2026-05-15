@@ -1,5 +1,6 @@
 package net.onixary.shapeShifterCurseFabric.integration.origins.content;
 
+import net.onixary.shapeShifterCurseFabric.integration.origins.Origins;
 import net.onixary.shapeShifterCurseFabric.integration.origins.component.OriginComponent;
 import net.onixary.shapeShifterCurseFabric.integration.origins.networking.ModPackets;
 import net.onixary.shapeShifterCurseFabric.integration.origins.origin.Origin;
@@ -90,23 +91,41 @@ public class OrbOfOriginItem extends Item {
         if(!nbt.contains("Targets", NbtElement.LIST_TYPE)) {
             return targets;
         }
-        NbtList targetList = (NbtList)nbt.get("Targets");
+
+	    NbtElement targetsElement = nbt.get("Targets");
+	    if (!(targetsElement instanceof NbtList targetList)) {
+		    return targets;
+	    }
+
         for (NbtElement nbtElement : targetList) {
             if(nbtElement instanceof NbtCompound targetNbt) {
                 if(targetNbt.contains("Layer", NbtElement.STRING_TYPE)) {
                     try {
                         Identifier id = Identifier.tryParse(targetNbt.getString("Layer"));
+	                    if (id == null) {
+		                    continue;
+	                    }
+
                         OriginLayer layer = OriginLayers.getLayer(id);
+	                    if (layer == null) {
+		                    continue;
+	                    }
+
                         Origin origin = Origin.EMPTY;
                         if(targetNbt.contains("Origin", NbtElement.STRING_TYPE)) {
                             Identifier originId = Identifier.tryParse(targetNbt.getString("Origin"));
-                            origin = OriginRegistry.get(originId);
+	                        if (originId != null) {
+		                        Origin registryOrigin = OriginRegistry.get(originId);
+		                        if (registryOrigin != null) {
+			                        origin = registryOrigin;
+		                        }
+	                        }
                         }
                         if(layer.isEnabled() && (layer.contains(origin) || origin.isSpecial())) {
                             targets.put(layer, origin);
                         }
                     } catch (Exception e) {
-                        // no op
+	                    Origins.LOGGER.warn("Failed to parse origin target from NBT", e);
                     }
                 }
             }

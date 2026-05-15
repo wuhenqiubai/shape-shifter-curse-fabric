@@ -95,7 +95,10 @@ public class MouthItemFeature<T extends LivingEntity, M extends EntityModel<T> &
             return;
         }
         matrixStack.push();
-        var eR = (PlayerEntityRenderer) MinecraftClient.getInstance().getEntityRenderDispatcher().getRenderer(livingEntity);
+	    var _ed = MinecraftClient.getInstance().getEntityRenderDispatcher();
+	    if (_ed == null) return;
+	    var eR = (PlayerEntityRenderer) _ed.getRenderer(livingEntity);
+	    if (eR == null) return;
         var head = eR.getModel().head;
         matrixStack.translate(head.pivotX / 16.0F, head.pivotY / 16.0F, head.pivotZ / 16.0F);
         matrixStack.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(k));
@@ -111,7 +114,10 @@ public class MouthItemFeature<T extends LivingEntity, M extends EntityModel<T> &
 
     private void renderShieldOnBack(MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i, T livingEntity, ItemStack itemStack, boolean isLeftHand) {
         matrixStack.push();
-        var eR = (PlayerEntityRenderer) MinecraftClient.getInstance().getEntityRenderDispatcher().getRenderer(livingEntity);
+	    var _ed = MinecraftClient.getInstance().getEntityRenderDispatcher();
+	    if (_ed == null) return;
+	    var eR = (PlayerEntityRenderer) _ed.getRenderer(livingEntity);
+	    if (eR == null) return;
         var body = eR.getModel().body;
         body.rotate(matrixStack);
         // --- 格挡时盾牌的调整 ---
@@ -127,7 +133,10 @@ public class MouthItemFeature<T extends LivingEntity, M extends EntityModel<T> &
 
     private void renderDefaultItemOnBack(MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i, T livingEntity, ItemStack itemStack) {
         matrixStack.push();
-        var eR = (PlayerEntityRenderer) MinecraftClient.getInstance().getEntityRenderDispatcher().getRenderer(livingEntity);
+	    var _ed = MinecraftClient.getInstance().getEntityRenderDispatcher();
+	    if (_ed == null) return;
+	    var eR = (PlayerEntityRenderer) _ed.getRenderer(livingEntity);
+	    if (eR == null) return;
         var body = eR.getModel().body;
         body.rotate(matrixStack);
         matrixStack.translate(0.0F, 0.5F, 0.25F);

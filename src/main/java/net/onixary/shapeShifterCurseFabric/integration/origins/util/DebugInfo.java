@@ -22,18 +22,16 @@ public class DebugInfo {
                 longest = lines[i].length();
             lines[i] = "| " + lines[i];
         }
-        String border = "+";
-        for(int i = 0; i < longest + 2; i++) {
-            border += "-";
-        }
-        border += "+";
-        Origins.LOGGER.info(border);
+	    StringBuilder border = new StringBuilder("+");
+	    border.repeat("-", Math.max(0, longest + 2));
+	    border.append("+");
+	    Origins.LOGGER.info(border.toString());
         for(int i = 0; i < lines.length; i++) {
             while(lines[i].length() < longest + 3)
                 lines[i] += " ";
             lines[i] += "|";
             Origins.LOGGER.info(lines[i]);
         }
-        Origins.LOGGER.info(border);
+	    Origins.LOGGER.info(border.toString());
     }
 }

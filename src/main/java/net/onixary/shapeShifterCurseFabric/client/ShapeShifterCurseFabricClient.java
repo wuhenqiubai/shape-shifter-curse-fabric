@@ -250,8 +250,7 @@ public class ShapeShifterCurseFabricClient implements ClientModInitializer {
 		stage.IsTransforming = isTransforming;
 		stage.TransformFromForm = fromForm;
 		stage.TransformToForm = toForm;
-		ShapeShifterCurseFabric.LOGGER.info("Updated client transform state: " + isTransforming +
-											", from: " + fromForm + ", to: " + toForm);
+		ShapeShifterCurseFabric.LOGGER.info("Updated client transform state: {}, from: {}, to: {}", isTransforming, fromForm, toForm);
 	}
 
 	// 获取客户端变身状态的方法（供动画系统使用）

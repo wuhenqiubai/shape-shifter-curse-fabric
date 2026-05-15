@@ -178,8 +178,8 @@ public class EffectManager {
     }
      */
 
-    /**
-     * 获取玩家的 PlayerEffectAttachment，如果不存在则创建新的
+    /*
+      获取玩家的 PlayerEffectAttachment，如果不存在则创建新的
      */
     /*
     public static PlayerEffectAttachment getOrCreateAttachment(PlayerEntity player) {
@@ -195,16 +195,16 @@ public class EffectManager {
 
     // ========== 私有辅助方法 ==========
 
-    /**
-     * 检查玩家是否有变形效果
+    /*
+      检查玩家是否有变形效果
      */
     // private static boolean hasTransformativeEffect(PlayerEntity player) {
     //     return player.getStatusEffects().stream()
     //             .anyMatch(effect -> effect.getEffectType() instanceof BaseTransformativeStatusEffect);
     // }
 
-    /**
-     * 清空附件数据
+    /*
+      清空附件数据
      */
     // private static void clearAttachmentData(PlayerEffectAttachment attachment) {
     //     attachment.currentToForm = RegPlayerForms.ORIGINAL_SHIFTER;

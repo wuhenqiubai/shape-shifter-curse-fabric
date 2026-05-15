@@ -25,7 +25,9 @@ import java.util.List;
 public class TippedArrowItemMixin {
     @Inject(method = "appendTooltip", at = @At("RETURN"))
     public void appendTooltip(ItemStack stack, TooltipContext context, List<Text> tooltip, TooltipType type, CallbackInfo ci) {
-        if (stack.getOrDefault(DataComponentTypes.POTION_CONTENTS, PotionContentsComponent.DEFAULT).potion().orElse(null).value() != RegCustomPotions.CUSTOM_STATUE_FORM_POTION) {
+        var potionContents = stack.getOrDefault(DataComponentTypes.POTION_CONTENTS, PotionContentsComponent.DEFAULT);
+        var potionEntry = potionContents.potion().orElse(null);
+        if (potionEntry == null || potionEntry.value() != RegCustomPotions.CUSTOM_STATUE_FORM_POTION) {
             return;
         }
         var nbt = stack.get(net.minecraft.component.DataComponentTypes.CUSTOM_DATA);

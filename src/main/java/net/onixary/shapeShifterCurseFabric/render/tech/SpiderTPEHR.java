@@ -7,6 +7,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.model.ModelPart;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.client.render.VertexConsumerProvider;
+import net.minecraft.client.render.entity.EntityRenderDispatcher;
 import net.minecraft.client.render.entity.PlayerEntityRenderer;
 import net.minecraft.client.render.item.HeldItemRenderer;
 import net.minecraft.client.render.model.json.ModelTransformationMode;
@@ -30,7 +31,10 @@ public class SpiderTPEHR extends ThirdPersonExtraHandItemRender.TPEHR_Render {
             return;
         }
 
-        PlayerEntityRenderer eR = (PlayerEntityRenderer) MinecraftClient.getInstance().getEntityRenderDispatcher().getRenderer(player);
+	    EntityRenderDispatcher ed = MinecraftClient.getInstance().getEntityRenderDispatcher();
+	    if (ed == null) return;
+	    PlayerEntityRenderer eR = (PlayerEntityRenderer) ed.getRenderer(player);
+	    if (eR == null) return;
         ModelPart body = eR.getModel().body;
         body.rotate(matrices);
         if(stack.getItem() == Items.SHIELD){

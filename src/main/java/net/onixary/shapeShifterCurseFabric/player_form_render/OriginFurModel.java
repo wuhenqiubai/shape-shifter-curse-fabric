@@ -9,6 +9,7 @@ import mod.azure.azurelib.common.internal.common.cache.object.GeoBone;
 import mod.azure.azurelib.core.animation.AnimationState;
 import mod.azure.azurelib.common.api.client.model.GeoModel;
 import net.minecraft.util.math.MathHelper;
+import net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric;
 import net.onixary.shapeShifterCurseFabric.integration.origins.origin.Origin;
 import it.unimi.dsi.fastutil.longs.Long2ReferenceLinkedOpenHashMap;
 
@@ -188,21 +189,38 @@ public class OriginFurModel extends GeoModel<OriginFurAnimatable> {
     }
     public void recompile(JsonObject json) {
         this.json = json;
+
+	    if (this.json == null) {
+		    ShapeShifterCurseFabric.LOGGER.warn("recompile called with null json");
+		    return;
+	    }
+
         hiddenParts.clear();
         parseHiddenParts();
         boneCache.clear();
-//        AzureLibCache.getBakedModels().remove(this.getModelResource(null));
-        // Force cache this model! This is so getCachedGeoModel will not throw an exception unless the bone doesn't exist!
-//        var bM = AzureLibCache.getBakedModels().put(this.getModelResource(null), this.getBakedModel(this.getModelResource(null)));
-//        assert bM != null;
-        if (this.json.has("overrides") && this.json.get("overrides").isJsonArray()) {
-            JsonHelper.getArray(this.json,"overrides").forEach(jsonElement -> {
-                var o = ResourceOverride.deserialize(jsonElement.getAsJsonObject());
-                overrides.add(o);
-            });
-            overrides.sort((o1, o2) -> Float.compare(o1.weight, o2.weight));
-        }
 
+	    if (this.json.has("overrides")) {
+		    JsonElement overridesElement = this.json.get("overrides");
+		    if (overridesElement != null && overridesElement.isJsonArray()) {
+			    JsonArray overridesArray = overridesElement.getAsJsonArray();
+			    if (overridesArray != null) {
+				    overrides.clear();
+				    overridesArray.forEach(jsonElement -> {
+					    try {
+						    if (jsonElement != null && jsonElement.isJsonObject()) {
+							    var o = ResourceOverride.deserialize(jsonElement.getAsJsonObject());
+							    if (o != null) {
+								    overrides.add(o);
+							    }
+						    }
+					    } catch (Exception e) {
+						    ShapeShifterCurseFabric.LOGGER.warn("Failed to deserialize resource override", e);
+					    }
+				    });
+				    overrides.sort((o1, o2) -> Float.compare(o1.weight, o2.weight));
+			    }
+		    }
+	    }
     }
     public boolean hasRenderingOffsets() {
         return json.has("rendering_offsets");

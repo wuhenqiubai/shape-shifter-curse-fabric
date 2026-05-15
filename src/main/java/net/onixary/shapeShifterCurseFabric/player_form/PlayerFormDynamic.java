@@ -85,7 +85,7 @@ public class PlayerFormDynamic extends PlayerFormBase{
         if (!this.isModelExist()) {
             return new Pair<>(false, null); // 如果未加载模型则不修改动画
         }
-        Boolean isAnimRegistered = powerAnimMap.containsKey(powerAnimID);
+	    boolean isAnimRegistered = powerAnimMap.containsKey(powerAnimID);
         AnimationHolder powerAnimData = powerAnimMap.get(powerAnimID);
         if (isAnimRegistered) {
             return new Pair<>(true, powerAnimData);

@@ -108,9 +108,12 @@ public class OriginCommand {
 				processedTargets++;
 				
 			}
-			
-			if (processedTargets == 1) serverCommandSource.sendFeedback(() -> Text.translatable("commands.origin.set.success.single", targets.iterator().next().getDisplayName().getString(), Text.translatable(originLayer.getTranslationKey()), origin.getName()), true);
-			else {
+
+			if (processedTargets == 1) {
+				ServerPlayerEntity player = targets.iterator().next();
+				String playerName = player.getDisplayName() != null ? player.getDisplayName().getString() : player.getName().getString();
+				serverCommandSource.sendFeedback(() -> Text.translatable("commands.origin.set.success.single", playerName, Text.translatable(originLayer.getTranslationKey()), origin.getName()), true);
+			} else {
 				int finalProcessedTargets = processedTargets;
 				serverCommandSource.sendFeedback(() -> Text.translatable("commands.origin.set.success.multiple", finalProcessedTargets, Text.translatable(originLayer.getTranslationKey()), origin.getName()), true);
 			}
@@ -174,8 +177,9 @@ public class OriginCommand {
 		OriginComponent originComponent = ModComponents.ORIGIN.get(target);
 		OriginLayer originLayer = LayerArgumentType.getLayer(commandContext, "layer");
 		Origin origin = originComponent.getOrigin(originLayer);
-		
-		serverCommandSource.sendFeedback(() -> Text.translatable("commands.origin.get.result", target.getDisplayName().getString(), Text.translatable(originLayer.getTranslationKey()), origin.getName(), origin.getIdentifier()), true);
+
+		String targetName = target.getDisplayName() != null ? target.getDisplayName().getString() : target.getName().getString();
+		serverCommandSource.sendFeedback(() -> Text.translatable("commands.origin.get.result", targetName, Text.translatable(originLayer.getTranslationKey()), origin.getName(), origin.getIdentifier()), true);
 		
 		return 1;
 		
@@ -251,8 +255,10 @@ public class OriginCommand {
 
 			if (targets.size() > 1) serverCommandSource.sendFeedback(() -> Text.translatable("commands.origin.random.success.multiple", targets.size(), Text.translatable(originLayer.getTranslationKey())), true);
 			else if (targets.size() == 1) {
+				ServerPlayerEntity player = targets.iterator().next();
 				Origin finalOrigin = origin;
-				serverCommandSource.sendFeedback(() -> Text.translatable("commands.origin.random.success.single", targets.iterator().next().getDisplayName().getString(), finalOrigin.getName(), Text.translatable(originLayer.getTranslationKey())), false);
+				String playerName = player.getDisplayName() != null ? player.getDisplayName().getString() : player.getName().getString();
+				serverCommandSource.sendFeedback(() -> Text.translatable("commands.origin.random.success.single", playerName, finalOrigin.getName(), Text.translatable(originLayer.getTranslationKey())), false);
 			}
 
 			return targets.size();
@@ -325,10 +331,10 @@ public class OriginCommand {
 		if (originComponent.hasAllOrigins() && !hadAllOrigins) OriginComponent.onChosen(target, hadOriginBefore);
 
 		Origins.LOGGER.info(
-			"Player {} was randomly assigned the origin {} for layer {}",
-			target.getDisplayName().getString(),
-			origin.getIdentifier().toString(),
-			originLayer.getIdentifier().toString()
+				"Player {} was randomly assigned the origin {} for layer {}",
+				target.getDisplayName() != null ? target.getDisplayName().getString() : target.getName().getString(),
+				origin.getIdentifier().toString(),
+				originLayer.getIdentifier().toString()
 		);
 
 		return origin;

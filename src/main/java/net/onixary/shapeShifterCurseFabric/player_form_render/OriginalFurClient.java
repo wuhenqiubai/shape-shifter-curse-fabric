@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import dev.kosmx.playerAnim.minecraftApi.PlayerAnimationFactory;
 import mod.azure.azurelib.common.api.client.renderer.GeoObjectRenderer;
+import net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric;
 import net.onixary.shapeShifterCurseFabric.integration.origins.origin.Origin;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
@@ -63,21 +64,33 @@ public class OriginalFurClient implements ClientModInitializer {
     public static class OriginFur extends GeoObjectRenderer<OriginFurAnimatable> {
         public Origin currentAssociatedOrigin = Origin.EMPTY;
         public static final OriginFur NULL_OR_DEFAULT_FUR = new OriginFur(JsonParser.parseString("{}").getAsJsonObject());
+
         public void renderBone(String name, MatrixStack poseStack, @Nullable VertexConsumerProvider bufferSource, @Nullable RenderLayer renderType, @Nullable VertexConsumer buffer, int packedLight) {
+	        if (bufferSource == null || renderType == null) {
+		        ShapeShifterCurseFabric.LOGGER.warn("renderBone called with null bufferSource or renderType for bone: {}", name);
+		        return;
+	        }
+
             poseStack.push();
             var b = this.getGeoModel().getBone(name).orElse(null);
-            if (b == null) {return;}
-            if (buffer == null) {buffer = bufferSource.getBuffer(renderType);}
+	        if (b == null) {
+		        poseStack.pop();
+		        return;
+	        }
+
+	        VertexConsumer finalBuffer = buffer != null ? buffer : bufferSource.getBuffer(renderType);
             var cubes = b.getCubes();
             int packedOverlay = this.getPackedOverlay(animatable, 0.0F, MinecraftClient.getInstance().getRenderTickCounter().getTickDelta(false));
-            for (var child_bones : b.getChildBones()) {
+
+	        for (var child_bones : b.getChildBones()) {
                 cubes.addAll(child_bones.getCubes());
             }
-            @Nullable VertexConsumer finalBuffer = buffer;
-            cubes.forEach(geoCube -> {
+
+	        cubes.forEach(geoCube -> {
                 renderRecursively(poseStack, this.animatable, b, renderType, bufferSource, finalBuffer, false, MinecraftClient.getInstance().getRenderTickCounter().getTickDelta(false), packedLight, packedOverlay, -1);
             });
-            poseStack.pop();
+
+	        poseStack.pop();
         }
 
         public void setPlayer(PlayerEntity e) {

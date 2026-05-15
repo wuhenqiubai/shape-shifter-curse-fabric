@@ -100,21 +100,28 @@ public class RegCustomPotions {
         JsonObject json = new JsonObject();
         json.addProperty("type", "potion");
 
-        // 处理输入药水/物品
+        // 处理输入药水
         if (input instanceof Potion) {
-            json.addProperty("input", Registries.POTION.getId((Potion) input).toString());
-        } else if (input instanceof net.minecraft.potion.Potion) {
-            json.addProperty("input", ((net.minecraft.potion.Potion) input).toString());
+            var potionId = Registries.POTION.getId((Potion) input);
+            if (potionId != null) {
+                json.addProperty("input", potionId.toString());
+            }
         }
 
-        // 处理输出药水/物品
+        // 处理输出药水
         if (output instanceof Potion) {
-            json.addProperty("output", Registries.POTION.getId((Potion) output).toString());
+            var potionId = Registries.POTION.getId((Potion) output);
+            if (potionId != null) {
+                json.addProperty("output", potionId.toString());
+            }
         }
 
         // 处理材料（物品）
         if (ingredient instanceof net.minecraft.item.Item) {
-            json.addProperty("ingredient", Registries.ITEM.getId((net.minecraft.item.Item) ingredient).toString());
+            var itemId = Registries.ITEM.getId((net.minecraft.item.Item) ingredient);
+            if (itemId != null) {
+                json.addProperty("ingredient", itemId.toString());
+            }
         }
 
         return json;

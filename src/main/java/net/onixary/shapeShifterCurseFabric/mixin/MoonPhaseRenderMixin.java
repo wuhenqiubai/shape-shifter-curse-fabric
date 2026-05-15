@@ -34,11 +34,13 @@ public class MoonPhaseRenderMixin {
 
     @ModifyArg(method = "renderSky", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/systems/RenderSystem;setShaderTexture(ILnet/minecraft/util/Identifier;)V", ordinal = 1))
     private Identifier getMoonPhaseTexture(Identifier identifier) {
-        return getMoonIdentifier();
+        Identifier moonId = getMoonIdentifier();
+        // 防止返回 null 导致崩溃
+        return moonId != null ? moonId : identifier;
     }
 
-    @Inject(method = "renderSky", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/systems/RenderSystem;setShaderTexture(ILnet/minecraft/util/Identifier;)V", ordinal = 1, shift = At.Shift.AFTER))
-    private void tintMoonPurple(CallbackInfo ci) {
+    @Inject(method = "renderSky", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/systems/RenderSystem;setShaderTexture(ILnet/minecraft/util/Identifier;)V", ordinal = 1, shift = At.Shift.BEFORE))
+    private void setMoonPurpleTint(CallbackInfo ci) {
         MinecraftClient client = MinecraftClient.getInstance();
         if (client.world != null && CursedMoon.isCursedMoon(client.world)) {
             RenderSystem.setShaderColor(1.0F, 0.24F, 0.82F, 1.0F);

@@ -109,8 +109,7 @@ public class TransformManager {
             String toFormName = data.curToForm != null ? data.curToForm.getIDString() : null;
 
             ModPacketsS2CServer.sendTransformState(serverPlayer, transforming, fromFormName, toFormName);
-            ShapeShifterCurseFabric.LOGGER.info("Sent transform state to client: " + transforming +
-                    ", from: " + fromFormName + ", to: " + toFormName);
+	        ShapeShifterCurseFabric.LOGGER.info("Sent transform state to client: {}, from: {}, to: {}", transforming, fromFormName, toFormName);
         }
     }
 
@@ -127,7 +126,7 @@ public class TransformManager {
 
         RegPlayerFormComponent.PLAYER_FORM.get(player).setByCursedMoon(isByCursedMoon);
         RegPlayerFormComponent.PLAYER_FORM.sync(player);
-        ShapeShifterCurseFabric.LOGGER.info("Progressive transform started, isByCursedMoon: " + isByCursedMoon + ", from: " + data.curFromForm);
+	    ShapeShifterCurseFabric.LOGGER.info("Progressive transform started, isByCursedMoon: {}, from: {}", isByCursedMoon, data.curFromForm);
         int currentFormIndex = currentForm.getIndex();
         PlayerFormGroup currentFormGroup = currentForm.getGroup();
         PlayerFormBase toForm = null;
@@ -183,7 +182,7 @@ public class TransformManager {
         }
         data.curPlayer = player;
         data.curToForm = toForm;
-        ShapeShifterCurseFabric.LOGGER.info("Cur Player: " + data.curPlayer + " To Form: " + data.curToForm);
+	    ShapeShifterCurseFabric.LOGGER.info("Cur Player: {} To Form: {}", data.curPlayer, data.curToForm);
         applyStartTransformEffect((ServerPlayerEntity) player, StaticParams.TRANSFORM_FX_DURATION_IN);
         handleTransformEffect(player);
         RegPlayerFormComponent.PLAYER_FORM.sync(player);
@@ -238,7 +237,7 @@ public class TransformManager {
         }
         data.curPlayer = player;
         data.curToForm = toForm;
-        ShapeShifterCurseFabric.LOGGER.info("Cur Player: " + data.curPlayer + " To Form: " + data.curToForm);
+	    ShapeShifterCurseFabric.LOGGER.info("Cur Player: {} To Form: {}", data.curPlayer, data.curToForm);
         data._isByCursedMoonEnd = true;
         data._isByCursedMoon = true;
         RegPlayerFormComponent.PLAYER_FORM.get(player).setByCursedMoon(true);
@@ -246,8 +245,7 @@ public class TransformManager {
         applyStartTransformEffect((ServerPlayerEntity) player, StaticParams.TRANSFORM_FX_DURATION_IN);
         handleTransformEffect(player);
         RegPlayerFormComponent.PLAYER_FORM.sync(player);
-        ShapeShifterCurseFabric.LOGGER.info("Moon end transform，_isByCursedMoonEnd=" + data._isByCursedMoonEnd +
-                "，component isByCursedMoon=" + RegPlayerFormComponent.PLAYER_FORM.get(player).isByCursedMoon());
+	    ShapeShifterCurseFabric.LOGGER.info("Moon end transform，_isByCursedMoonEnd={}，component isByCursedMoon={}", data._isByCursedMoonEnd, RegPlayerFormComponent.PLAYER_FORM.get(player).isByCursedMoon());
     }
 
     // 仅服务端
@@ -464,7 +462,7 @@ public class TransformManager {
             }
         }
 
-        ShapeShifterCurseFabric.LOGGER.info("Cur Player: " + data.curPlayer + " To Form: " + data.curToForm);
+	    ShapeShifterCurseFabric.LOGGER.info("Cur Player: {} To Form: {}", data.curPlayer, data.curToForm);
         handleTransformEffect(player);
         applyStartTransformEffect((ServerPlayerEntity) player, StaticParams.TRANSFORM_FX_DURATION_IN);
         // FormAbilityManager.applyForm(player, toForm);
@@ -577,8 +575,7 @@ public class TransformManager {
         PlayerTransformData data = getPlayerTransformData(player);
         boolean wasByCursedMoon = RegPlayerFormComponent.PLAYER_FORM.get(player).isByCursedMoon();
 
-        ShapeShifterCurseFabric.LOGGER.info("Clearing form flags, wasByCursedMoon: " + wasByCursedMoon +
-                ", _isByCursedMoonEnd: " + data._isByCursedMoonEnd);
+	    ShapeShifterCurseFabric.LOGGER.info("Clearing form flags, wasByCursedMoon: {}, _isByCursedMoonEnd: {}", wasByCursedMoon, data._isByCursedMoonEnd);
 
         // 只在诅咒月亮结束时才重置诅咒月亮标志\
         // Only reset the Cursed Moon flag when the Cursed Moon ends
@@ -603,7 +600,7 @@ public class TransformManager {
     public static void setIsByCursedMoonEnd(ServerPlayerEntity player, boolean value) {
         PlayerTransformData data = getPlayerTransformData(player);
         data._isByCursedMoonEnd = value;
-        ShapeShifterCurseFabric.LOGGER.info("设置_isByCursedMoonEnd=" + value);
+	    ShapeShifterCurseFabric.LOGGER.info("设置_isByCursedMoonEnd={}", value);
     }
 
     // 没有调用 默认双端
@@ -631,6 +628,6 @@ public class TransformManager {
         RegPlayerFormComponent.PLAYER_FORM.get(player).setByCure(false);
         RegPlayerFormComponent.PLAYER_FORM.sync(player);
 
-        ShapeShifterCurseFabric.LOGGER.info("月亮标记已清除，原状态：" + wasByCursedMoon);
+	    ShapeShifterCurseFabric.LOGGER.info("月亮标记已清除，原状态：{}", wasByCursedMoon);
     }
 }

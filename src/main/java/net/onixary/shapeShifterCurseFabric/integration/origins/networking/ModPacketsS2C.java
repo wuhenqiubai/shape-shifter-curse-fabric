@@ -64,14 +64,32 @@ public class ModPacketsS2C {
     private static void receiveOriginConfirmation(MinecraftClient minecraftClient, ClientPlayNetworkHandler clientPlayNetworkHandler, PacketByteBuf packetByteBuf, PacketSender packetSender) {
         OriginLayer layer = OriginLayers.getLayer(packetByteBuf.readIdentifier());
         Origin origin = OriginRegistry.get(packetByteBuf.readIdentifier());
+
+	    if (layer == null) {
+		    Origins.LOGGER.warn("Received origin confirmation with null layer");
+		    return;
+	    }
+
+	    if (origin == null) {
+		    Origins.LOGGER.warn("Received origin confirmation with null origin");
+		    return;
+	    }
+
         minecraftClient.execute(() -> {
-            OriginComponent component = null;
-            if (minecraftClient.player != null) {
-                component = ModComponents.ORIGIN.get(minecraftClient.player);
+	        if (minecraftClient.player == null) {
+		        Origins.LOGGER.warn("Client player is null when receiving origin confirmation");
+		        return;
             }
+
+	        OriginComponent component = ModComponents.ORIGIN.get(minecraftClient.player);
+	        if (component == null) {
+		        Origins.LOGGER.warn("OriginComponent is null for player when receiving origin confirmation");
+		        return;
+	        }
+
             component.setOrigin(layer, origin);
-            if(minecraftClient.currentScreen instanceof WaitForNextLayerScreen) {
-                ((WaitForNextLayerScreen)minecraftClient.currentScreen).openSelection();
+	        if (minecraftClient.currentScreen instanceof WaitForNextLayerScreen) {
+		        ((WaitForNextLayerScreen) minecraftClient.currentScreen).openSelection();
             }
         });
     }

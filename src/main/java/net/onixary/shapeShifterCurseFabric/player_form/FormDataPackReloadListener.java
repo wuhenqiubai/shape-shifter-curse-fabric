@@ -30,11 +30,11 @@ public class FormDataPackReloadListener implements SimpleSynchronousResourceRelo
             try {
                 formData = JsonParser.parseString(new String(resource.getInputStream().readAllBytes())).getAsJsonObject();
             } catch (IOException e) {
-                ShapeShifterCurseFabric.LOGGER.error("Failed to load form data for " + formID);
+	            ShapeShifterCurseFabric.LOGGER.error("Failed to load form data for {}", formID);
                 return;
             }
             RegPlayerForms.registerDynamicPlayerForm(PlayerFormDynamic.of(formID, formData));
-            ShapeShifterCurseFabric.LOGGER.info("Loaded form data for " + formID);
+	        ShapeShifterCurseFabric.LOGGER.info("Loaded form data for {}", formID);
         });
         // origins_power_extra
         FormAbilityManager.OriginExtraPowerRegistry.clear();
@@ -51,13 +51,13 @@ public class FormDataPackReloadListener implements SimpleSynchronousResourceRelo
                     ExtraPowerIDs.add(Identifier.tryParse(PowerIDs.get(i).getAsString()));
                 }
             } catch (Exception e) {
-                ShapeShifterCurseFabric.LOGGER.error("Failed to load extra power data for " + ID);
+	            ShapeShifterCurseFabric.LOGGER.error("Failed to load extra power data for {}", ID);
                 return;
             }
             if (!ExtraPowerIDs.isEmpty()) {
                 FormAbilityManager.RegisterOriginExtraPower(ID, OriginID, ExtraPowerIDs);
             }
-            ShapeShifterCurseFabric.LOGGER.info("Loaded extra power data for " + ID);
+	        ShapeShifterCurseFabric.LOGGER.info("Loaded extra power data for {}", ID);
         });
     }
 }

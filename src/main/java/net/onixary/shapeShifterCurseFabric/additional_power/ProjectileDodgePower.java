@@ -132,7 +132,7 @@ public class ProjectileDodgePower extends Power {
         } else {
             dodgeDirection = new Vec3d(horizontalVel.z, 0, -horizontalVel.x).normalize();
         }
-        ShapeShifterCurseFabric.LOGGER.info("正在躲避投射物: " + projectile.getUuid());
+	    ShapeShifterCurseFabric.LOGGER.info("正在躲避投射物: {}", projectile.getUuid());
         // 应用躲避速度
         player.addVelocity(dodgeDirection.multiply(dodgeSpeed));
         player.velocityModified = true;

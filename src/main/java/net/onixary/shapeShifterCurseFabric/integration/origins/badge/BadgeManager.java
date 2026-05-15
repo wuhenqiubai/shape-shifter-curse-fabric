@@ -18,7 +18,7 @@ public final class BadgeManager {
 
     public static final DataObjectRegistry<Badge> REGISTRY = new DataObjectRegistry.Builder<>(Origins.identifier("badge"), Badge.class)
         .readFromData("badges", true)
-        .dataErrorHandler((id, exception) -> Origins.LOGGER.error("Failed to read badge " + id + ", caused by", exception))
+		    .dataErrorHandler((id, exception) -> Origins.LOGGER.error("Failed to read badge {}, caused by", id, exception))
         .defaultFactory(BadgeFactories.KEYBIND)
         .buildAndRegister();
     public static final Identifier PHASE = Origins.identifier("phase/badge_manager");

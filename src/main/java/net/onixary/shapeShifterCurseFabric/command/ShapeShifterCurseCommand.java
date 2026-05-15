@@ -249,9 +249,13 @@ public class ShapeShifterCurseCommand {
         try {
             ServerPlayerEntity player = commandContext.getSource().getPlayer();
             boolean newSetting = BoolArgumentType.getBool(commandContext, "value");
-            RegPlayerSkinComponent.SKIN_SETTINGS.get(player).setKeepOriginalSkin(newSetting);
-            RegPlayerSkinComponent.SKIN_SETTINGS.sync(player);
-            String message = newSetting
+	        if (player != null) {
+		        RegPlayerSkinComponent.SKIN_SETTINGS.get(player).setKeepOriginalSkin(newSetting);
+	        }
+	        if (player != null) {
+		        RegPlayerSkinComponent.SKIN_SETTINGS.sync(player);
+	        }
+	        String message = newSetting
                     ? "Successfully set to use your original skin!"
                     : "Successfully set to use built-in skin!";
             player.sendMessage(Text.literal(message), false);

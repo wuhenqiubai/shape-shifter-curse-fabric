@@ -88,7 +88,7 @@ public class PlayerEventHandler {
             ModPacketsS2CServer.sendCursedMoonData(player, world.getTimeOfDay(), CursedMoon.getDay(world),
                     currentIsCursedMoon, currentIsNight);
 
-            ShapeShifterCurseFabric.LOGGER.info("向玩家同步诅咒之月状态: " + currentIsCursedMoon + ", 月相: " + world.getMoonPhase());
+	        ShapeShifterCurseFabric.LOGGER.info("向玩家同步诅咒之月状态: {}, 月相: {}", currentIsCursedMoon, world.getMoonPhase());
             // 添加延迟同步，确保客户端完全加载后再次发送状态
             // 延迟40个tick（2秒）再次同步
             // 反正都得延时2秒 先不在主线程处跑了 等新建的线程等完2秒后再切进主线程
@@ -109,9 +109,7 @@ public class PlayerEventHandler {
                         ModPacketsS2CServer.sendCursedMoonData(player, currentWorld.getTimeOfDay(), CursedMoon.getDay(currentWorld),
                                 delayedIsCursedMoon, delayedIsNight);
 
-                        ShapeShifterCurseFabric.LOGGER.info("延迟同步诅咒之月状态: " + delayedIsCursedMoon +
-                                ", 月相: " + currentWorld.getMoonPhase() +
-                                ", 玩家: " + player.getName().getString());
+	                    ShapeShifterCurseFabric.LOGGER.info("延迟同步诅咒之月状态: {}, 月相: {}, 玩家: {}", delayedIsCursedMoon, currentWorld.getMoonPhase(), player.getName().getString());
                     }
                 });
             }).start();
@@ -168,7 +166,7 @@ public class PlayerEventHandler {
                 ModPacketsS2CServer.sendCursedMoonData(player, world.getTimeOfDay(), CursedMoon.getDay(world),
                         currentIsCursedMoon, currentIsNight);
 
-                ShapeShifterCurseFabric.LOGGER.info("向玩家同步诅咒之月状态: " + currentIsCursedMoon + ", 月相: " + world.getMoonPhase());
+	            ShapeShifterCurseFabric.LOGGER.info("向玩家同步诅咒之月状态: {}, 月相: {}", currentIsCursedMoon, world.getMoonPhase());
 
                 // reset moon effect
                 CursedMoon.resetMoonEffect(player);

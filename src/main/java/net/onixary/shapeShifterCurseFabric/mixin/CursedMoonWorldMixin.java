@@ -241,8 +241,7 @@ public abstract class CursedMoonWorldMixin implements WorldAccess, AutoCloseable
                 boolean wasByCursedMoon = RegPlayerFormComponent.PLAYER_FORM.get(player).isByCursedMoon();
                 if (wasByCursedMoon) {
                     // 只有当标记存在时才记录日志，避免过多日志
-                    ShapeShifterCurseFabric.LOGGER.info("Forced clear of cursed moon flag for player " +
-                            player.getName().getString() + " during non-cursed-moon period");
+	                ShapeShifterCurseFabric.LOGGER.info("Forced clear of cursed moon flag for player {} during non-cursed-moon period", player.getName().getString());
 
                     RegPlayerFormComponent.PLAYER_FORM.get(player).setByCursedMoon(false);
                     RegPlayerFormComponent.PLAYER_FORM.sync(player);

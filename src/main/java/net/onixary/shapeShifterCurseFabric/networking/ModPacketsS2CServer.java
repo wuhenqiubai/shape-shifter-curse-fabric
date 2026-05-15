@@ -44,7 +44,7 @@ public class ModPacketsS2CServer {
         PacketByteBuf buf = PacketByteBufs.create();
         buf.writeString(newFormName);
         ServerPlayNetworking.send(player, new BytePayload(BytePayload.id(ModPackets.SYNC_FORM_CHANGE), buf));
-        ShapeShifterCurseFabric.LOGGER.info("Sent form change to client: " + newFormName);
+	    ShapeShifterCurseFabric.LOGGER.info("Sent form change to client: {}", newFormName);
     }
 
     /* 重构后不需要了 仅用于参考旧实现逻辑
@@ -69,7 +69,7 @@ public class ModPacketsS2CServer {
         for (ServerPlayerEntity p : player.getServerWorld().getPlayers()) {
             ServerPlayNetworking.send(p, new BytePayload(BytePayload.id(ModPackets.SYNC_TRANSFORM_STATE), buf));
         }
-        ShapeShifterCurseFabric.LOGGER.info("Sent transform state to client: isTransforming=" + isTransforming);
+	    ShapeShifterCurseFabric.LOGGER.info("Sent transform state to client: isTransforming={}", isTransforming);
     }
 
     // 发送蝙蝠吸附状态同步包

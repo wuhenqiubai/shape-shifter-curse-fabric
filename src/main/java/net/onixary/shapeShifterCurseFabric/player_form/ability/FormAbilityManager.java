@@ -103,7 +103,7 @@ public class FormAbilityManager {
         if (!player.getWorld().isClient() && player instanceof ServerPlayerEntity serverPlayer) {
             try {
                 ModPacketsS2CServer.sendFormChange(serverPlayer, newForm.getIDString());
-                ShapeShifterCurseFabric.LOGGER.info("Sent form change notification to client: " + newForm.getIDString());
+	            ShapeShifterCurseFabric.LOGGER.info("Sent form change notification to client: {}", newForm.getIDString());
             } catch (Exception e) {
                 ShapeShifterCurseFabric.LOGGER.error("Failed to send form change notification: ", e);
             }
@@ -150,7 +150,7 @@ public class FormAbilityManager {
             if(layer.contains(origin, playerEntity)){
                 component.setOrigin(layer, origin);
                 component.sync();
-                ShapeShifterCurseFabric.LOGGER.info("Set form origin " + id.toString() + " for player " + playerEntity.getName());
+	            ShapeShifterCurseFabric.LOGGER.info("Set form origin {} for player {}", id.toString(), playerEntity.getName());
             }
         }
     }
@@ -183,7 +183,7 @@ public class FormAbilityManager {
                         }
                     }
                     else {
-                        ShapeShifterCurseFabric.LOGGER.warn("Failed to apply power " + powerId.toString() + " for player " + player.getName() + " after 2 seconds");
+	                    ShapeShifterCurseFabric.LOGGER.warn("Failed to apply power {} for player {} after 2 seconds", powerId.toString(), player.getName());
                     }
                 } catch (InterruptedException e) {
                     e.printStackTrace();

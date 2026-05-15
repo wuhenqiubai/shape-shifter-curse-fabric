@@ -11,6 +11,7 @@ import net.minecraft.block.pattern.CachedBlockPosition;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
@@ -23,6 +24,7 @@ import net.onixary.shapeShifterCurseFabric.player_animation.v3.AnimRegistries;
 import net.onixary.shapeShifterCurseFabric.player_animation.v3.AnimUtils;
 import net.onixary.shapeShifterCurseFabric.player_animation.v3.IPlayerAnimController;
 
+import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
@@ -170,11 +172,14 @@ public class BatBlockAttachPower extends Power {
 
         // 在设置位置后发送同步包
         if (attached && !player.getWorld().isClient() && player instanceof ServerPlayerEntity serverPlayer) {
-            // 添加小延迟确保位置设置生效
-            player.getWorld().getServer().execute(() -> {
-                ModPacketsS2CServer.sendBatAttachState(serverPlayer, isAttached, attachType.ordinal(), attachedBlockPos, attachedSide);
-                ModPacketsS2CServer.broadcastBatAttachState(serverPlayer, isAttached, attachType.ordinal(), attachedBlockPos, attachedSide);
-            });
+	        MinecraftServer server = player.getWorld().getServer();
+	        if (server != null && attachedBlockPos != null && attachedSide != null) {
+		        // 添加小延迟确保位置设置生效
+		        server.execute(() -> {
+			        ModPacketsS2CServer.sendBatAttachState(serverPlayer, isAttached, attachType.ordinal(), attachedBlockPos, attachedSide);
+			        ModPacketsS2CServer.broadcastBatAttachState(serverPlayer, isAttached, attachType.ordinal(), attachedBlockPos, attachedSide);
+		        });
+	        }
         }
 
         return attached;

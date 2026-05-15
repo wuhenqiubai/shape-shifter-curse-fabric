@@ -47,11 +47,21 @@ public class FormRenderUtils {
     }
 
     public static @Nullable IModelAnimationSystem get_MAS(Identifier id, @Nullable JsonObject json) {
+	    if (id == null) {
+		    return null;
+	    }
+
         @Nullable Supplier<IModelAnimationSystem> supplier = modelAnimationSystemRegistry.get(id);
         if (supplier != null) {
-            IModelAnimationSystem system = supplier.get();
-            system.loadConfig(json);
-            return system;
+	        try {
+		        IModelAnimationSystem system = supplier.get();
+		        if (system != null) {
+			        system.loadConfig(json);
+			        return system;
+		        }
+	        } catch (Exception e) {
+		        ShapeShifterCurseFabric.LOGGER.warn("Failed to create or configure animation system for identifier: {}", id, e);
+	        }
         }
         return null;
     }

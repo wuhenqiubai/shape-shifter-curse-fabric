@@ -16,6 +16,7 @@ import net.onixary.shapeShifterCurseFabric.player_form.PlayerFormBase;
 import net.onixary.shapeShifterCurseFabric.player_form.RegPlayerForms;
 import net.onixary.shapeShifterCurseFabric.player_form.ability.RegPlayerFormComponent;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -23,6 +24,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(WitchEntity.class)
 public abstract class WitchEntityMixin {
 
+	@Unique
     private static final float POTION_REPLACE_CHANCE = 0.6f;
 
 	@Inject(method = "shootAt", at = @At("HEAD"), cancellable = true)

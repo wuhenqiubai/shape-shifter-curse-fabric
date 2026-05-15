@@ -21,6 +21,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(CapeFeatureRenderer.class)
 public class CapeFeatureRendererMixin {
 
+	@Unique
     private AbstractClientPlayerEntity currentPlayer;
 
     @Inject(method = "render*", at = @At("HEAD"))

@@ -70,7 +70,7 @@ public class AccessoryUtils {
                 list.add(new Pair<>(entry.getValue(), entry.getValue().priority()));
                 activeAccessoryModInterfaces.put(entry.getKey(), entry.getValue());
             } else {
-                ShapeShifterCurseFabric.LOGGER.warn("Accessory Mod: " + entry.getKey() + " can't loaded");
+	            ShapeShifterCurseFabric.LOGGER.warn("Accessory Mod: {} can't loaded", entry.getKey());
             }
         }
         list.sort((o1, o2) -> o2.getRight() - o1.getRight());
@@ -80,7 +80,7 @@ public class AccessoryUtils {
         for (Map.Entry<String, AccessoryIO> entry : accessoryModInterfaces.entrySet()) {
             if (entry.getValue() == nowAccessoryMod) {
                 nowAccessoryModID = entry.getKey();
-                ShapeShifterCurseFabric.LOGGER.info("Active Accessory IO: " + entry.getKey());
+	            ShapeShifterCurseFabric.LOGGER.info("Active Accessory IO: {}", entry.getKey());
             }
         }
     }
@@ -107,7 +107,7 @@ public class AccessoryUtils {
         if (accessoryModInterfaces.containsKey(accessoryModID)) {
             return accessoryModInterfaces.get(accessoryModID).getEntitySlots(entity);
         }
-        ShapeShifterCurseFabric.LOGGER.warn("Can't find Accessory Mod: " + accessoryModID);
+	    ShapeShifterCurseFabric.LOGGER.warn("Can't find Accessory Mod: {}", accessoryModID);
         return null;
     }
 
@@ -121,7 +121,7 @@ public class AccessoryUtils {
         if (accessoryModInterfaces.containsKey(accessoryModID)) {
             return accessoryModInterfaces.get(accessoryModID).getEntitySlot(entity, SlotGroup, SlotName);
         }
-        ShapeShifterCurseFabric.LOGGER.warn("Can't find Accessory Mod: " + accessoryModID);
+	    ShapeShifterCurseFabric.LOGGER.warn("Can't find Accessory Mod: {}", accessoryModID);
         return null;
     }
 
@@ -135,7 +135,7 @@ public class AccessoryUtils {
         if (accessoryModInterfaces.containsKey(accessoryModID)) {
             return accessoryModInterfaces.get(accessoryModID).getEntitySlot(entity, SlotGroup, SlotName, Index);
         }
-        ShapeShifterCurseFabric.LOGGER.warn("Can't find Accessory Mod: " + accessoryModID);
+	    ShapeShifterCurseFabric.LOGGER.warn("Can't find Accessory Mod: {}", accessoryModID);
         return null;
     }
 
@@ -148,7 +148,7 @@ public class AccessoryUtils {
         } else if (accessoryModInterfaces.containsKey(accessoryModID)) {
             accessoryModInterfaces.get(accessoryModID).setEntitySlot(entity, SlotGroup, SlotName, Index, stack);
         } else {
-            ShapeShifterCurseFabric.LOGGER.warn("Can't find Accessory Mod: " + accessoryModID);
+	        ShapeShifterCurseFabric.LOGGER.warn("Can't find Accessory Mod: {}", accessoryModID);
         }
     }
 }

@@ -112,7 +112,10 @@ public class FurRenderFeature <T extends LivingEntity, M extends BipedEntityMode
                 if (o == null) {
                     return;
                 }
-                var eR = (PlayerEntityRenderer) MinecraftClient.getInstance().getEntityRenderDispatcher().getRenderer(abstractClientPlayerEntity);
+                var _ed6 = MinecraftClient.getInstance().getEntityRenderDispatcher();
+                if (_ed6 == null) return;
+                var eR = (PlayerEntityRenderer) _ed6.getRenderer(abstractClientPlayerEntity);
+                if (eR == null) return;
                 var eRA = (IPlayerEntityMixins) eR;
                 var acc = (ModelRootAccessor) eR.getModel();
                 var a = fur.getAnimatable();
@@ -186,6 +189,15 @@ public class FurRenderFeature <T extends LivingEntity, M extends BipedEntityMode
 
     // 将修改模型提取出来 不知道为什么渲染模型和渲染模型发光会冲突(模型旋转会重置)
     private void ProcessModel(OriginFurModel m, PlayerEntityRenderer eR, T entity, float limbAngle, float limbDistance, float headYaw, float headPitch) {
+        if (m == null || eR == null) {
+            return;
+        }
+
+        var playerModel = eR.getModel();
+        if (playerModel == null) {
+            return;
+        }
+
         m.resetBone("bipedHead");
         m.resetBone("bipedBody");
         m.resetBone("bipedLeftArm");
@@ -218,33 +230,43 @@ public class FurRenderFeature <T extends LivingEntity, M extends BipedEntityMode
             this.ProcessExtraBone(m, player, "wingRightBase", "wingRightBase");
         }
 
-        m.setRotationForBone("bipedHead", ((IMojModelPart) (Object) eR.getModel().head).originfurs$getRotation());
-        m.translatePositionForBone("bipedHead", ((IMojModelPart) (Object) eR.getModel().head).originfurs$getPosition());
-        m.translatePositionForBone("bipedBody", ((IMojModelPart) (Object) eR.getModel().body).originfurs$getPosition());
-        m.translatePositionForBone("bipedLeftArm", ((IMojModelPart) (Object) eR.getModel().leftArm).originfurs$getPosition());
-        m.translatePositionForBone("bipedRightArm", ((IMojModelPart) (Object) eR.getModel().rightArm).originfurs$getPosition());
+        try {
+            IMojModelPart headMoj = (IMojModelPart) (Object) playerModel.head;
+            IMojModelPart bodyMoj = (IMojModelPart) (Object) playerModel.body;
+            IMojModelPart leftArmMoj = (IMojModelPart) (Object) playerModel.leftArm;
+            IMojModelPart rightArmMoj = (IMojModelPart) (Object) playerModel.rightArm;
+            IMojModelPart leftLegMoj = (IMojModelPart) (Object) playerModel.leftLeg;
+            IMojModelPart rightLegMoj = (IMojModelPart) (Object) playerModel.rightLeg;
 
-        m.translatePositionForBone("bipedRightLeg", ((IMojModelPart) (Object) eR.getModel().rightLeg).originfurs$getPosition());
-        m.translatePositionForBone("bipedLeftLeg", ((IMojModelPart) (Object) eR.getModel().leftLeg).originfurs$getPosition());
-        m.translatePositionForBone("bipedLeftArm", new Vec3d(5, 2, 0));
-        m.translatePositionForBone("bipedRightArm", new Vec3d(-5, 2, 0));
-        m.translatePositionForBone("bipedLeftLeg", new Vec3d(2, 12, 0));
-        m.translatePositionForBone("bipedRightLeg", new Vec3d(-2, 12, 0));
-        m.setRotationForBone("bipedBody", ((IMojModelPart) (Object) eR.getModel().body).originfurs$getRotation());
+            m.setRotationForBone("bipedHead", headMoj.originfurs$getRotation());
+            m.translatePositionForBone("bipedHead", headMoj.originfurs$getPosition());
+            m.translatePositionForBone("bipedBody", bodyMoj.originfurs$getPosition());
+            m.translatePositionForBone("bipedLeftArm", leftArmMoj.originfurs$getPosition());
+            m.translatePositionForBone("bipedRightArm", rightArmMoj.originfurs$getPosition());
+            m.translatePositionForBone("bipedRightLeg", rightLegMoj.originfurs$getPosition());
+            m.translatePositionForBone("bipedLeftLeg", leftLegMoj.originfurs$getPosition());
+            m.translatePositionForBone("bipedLeftArm", new Vec3d(5, 2, 0));
+            m.translatePositionForBone("bipedRightArm", new Vec3d(-5, 2, 0));
+            m.translatePositionForBone("bipedLeftLeg", new Vec3d(2, 12, 0));
+            m.translatePositionForBone("bipedRightLeg", new Vec3d(-2, 12, 0));
+            m.setRotationForBone("bipedBody", bodyMoj.originfurs$getRotation());
 
-        m.setRotationForTailBones(limbAngle, limbDistance, entity.age, currentTailDragAmount, tailDragAmountVertical);
-        m.setRotationForHeadTailBones(headYaw, entity.age, currentTailDragAmount, tailDragAmountVertical);
-        m.setRotationForWingBones(limbAngle, limbDistance, entity.age, tailDragAmountVertical);
+            m.setRotationForTailBones(limbAngle, limbDistance, entity.age, currentTailDragAmount, tailDragAmountVertical);
+            m.setRotationForHeadTailBones(headYaw, entity.age, currentTailDragAmount, tailDragAmountVertical);
+            m.setRotationForWingBones(limbAngle, limbDistance, entity.age, tailDragAmountVertical);
 
-        m.invertRotForPart("bipedBody", false, true, false);
-        m.setRotationForBone("bipedLeftArm", ((IMojModelPart) (Object) eR.getModel().leftArm).originfurs$getRotation());
-        m.setRotationForBone("bipedRightArm", ((IMojModelPart) (Object) eR.getModel().rightArm).originfurs$getRotation());
-        m.setRotationForBone("bipedRightLeg", ((IMojModelPart) (Object) eR.getModel().rightLeg).originfurs$getRotation());
-        m.setRotationForBone("bipedLeftLeg", ((IMojModelPart) (Object) eR.getModel().leftLeg).originfurs$getRotation());
-        m.invertRotForPart("bipedHead", false, true, true);
-        m.invertRotForPart("bipedRightArm", false, true, true);
-        m.invertRotForPart("bipedLeftArm", false, true, true);
-        m.invertRotForPart("bipedRightLeg", false, true, true);
-        m.invertRotForPart("bipedLeftLeg", false, true, true);
+            m.invertRotForPart("bipedBody", false, true, false);
+            m.setRotationForBone("bipedLeftArm", leftArmMoj.originfurs$getRotation());
+            m.setRotationForBone("bipedRightArm", rightArmMoj.originfurs$getRotation());
+            m.setRotationForBone("bipedRightLeg", rightLegMoj.originfurs$getRotation());
+            m.setRotationForBone("bipedLeftLeg", leftLegMoj.originfurs$getRotation());
+            m.invertRotForPart("bipedHead", false, true, true);
+            m.invertRotForPart("bipedRightArm", false, true, true);
+            m.invertRotForPart("bipedLeftArm", false, true, true);
+            m.invertRotForPart("bipedRightLeg", false, true, true);
+            m.invertRotForPart("bipedLeftLeg", false, true, true);
+        } catch (ClassCastException e) {
+            ShapeShifterCurseFabric.LOGGER.warn("ModelPart Mixin failed to apply. This may indicate a Mod conflict.", e);
+        }
     }
 }

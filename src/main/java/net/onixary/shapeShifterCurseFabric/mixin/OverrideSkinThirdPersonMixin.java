@@ -9,6 +9,7 @@ import net.onixary.shapeShifterCurseFabric.player_form.RegPlayerForms;
 import net.onixary.shapeShifterCurseFabric.player_form.ability.RegPlayerFormComponent;
 import net.onixary.shapeShifterCurseFabric.player_form.skin.RegPlayerSkinComponent;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -17,6 +18,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class OverrideSkinThirdPersonMixin {
 
     // 自定义皮肤路径
+    @Unique
     private static final Identifier CUSTOM_SKIN =
             Identifier.of(ShapeShifterCurseFabric.MOD_ID, "textures/entity/base_player/ssc_base_skin.png");
 

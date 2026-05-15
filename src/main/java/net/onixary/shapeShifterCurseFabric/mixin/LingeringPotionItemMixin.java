@@ -24,10 +24,13 @@ import java.util.List;
 public class LingeringPotionItemMixin {
     @Inject(method = "appendTooltip", at = @At("RETURN"))
     public void appendTooltip(ItemStack stack, TooltipContext context, List<Text> tooltip, TooltipType type, CallbackInfo ci) {
-        if (stack.getOrDefault(DataComponentTypes.POTION_CONTENTS, PotionContentsComponent.DEFAULT).potion().orElse(null).value() != RegCustomPotions.CUSTOM_STATUE_FORM_POTION) {
+	    PotionContentsComponent potionContents = stack.getOrDefault(DataComponentTypes.POTION_CONTENTS, PotionContentsComponent.DEFAULT);
+	    var potionEntry = potionContents.potion().orElse(null);
+	    if (potionEntry == null || potionEntry.value() != RegCustomPotions.CUSTOM_STATUE_FORM_POTION) {
             return;
         }
-        var nbt = stack.get(net.minecraft.component.DataComponentTypes.CUSTOM_DATA);
+
+	    var nbt = stack.get(net.minecraft.component.DataComponentTypes.CUSTOM_DATA);
         if (nbt == null) return;
         Identifier CTPFormID = CTPUtils.getCTPFormIDFromNBT(nbt.copyNbt());
         if (CTPFormID != null) {

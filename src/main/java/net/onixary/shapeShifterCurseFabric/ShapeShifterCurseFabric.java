@@ -189,7 +189,7 @@ public class ShapeShifterCurseFabric implements ModInitializer {
             AnimationTransform.registerAnims();
             LOGGER.info("Transform animations registered successfully");
         } catch (Exception e) {
-            LOGGER.warn("Failed to register transform animations: " + e.getMessage());
+	        LOGGER.warn("Failed to register transform animations: {}", e.getMessage());
         }
     }
 

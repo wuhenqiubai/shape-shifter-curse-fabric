@@ -138,7 +138,7 @@ public class ModPacketsS2C {
         client.execute(() -> {
             // 强制客户端重新注册动画（如果需要）
             if (client.player != null) {
-                ShapeShifterCurseFabric.LOGGER.info("Client received form change: " + newFormName);
+	            ShapeShifterCurseFabric.LOGGER.info("Client received form change: {}", newFormName);
                 // 触发动画重新初始化
                 net.onixary.shapeShifterCurseFabric.client.ShapeShifterCurseFabricClient.refreshPlayerAnimations();
             }
@@ -155,7 +155,7 @@ public class ModPacketsS2C {
 
         client.execute(() -> {
             if (client.player != null) {
-                ShapeShifterCurseFabric.LOGGER.info("Client received transform state: isTransforming=" + isTransforming);
+	            ShapeShifterCurseFabric.LOGGER.info("Client received transform state: isTransforming={}", isTransforming);
                 // 更新客户端的变身状态
                 net.onixary.shapeShifterCurseFabric.client.ShapeShifterCurseFabricClient.updateTransformState(
                         playerUuid, isTransforming, fromForm.isEmpty() ? null : fromForm, toForm.isEmpty() ? null : toForm);
@@ -374,7 +374,9 @@ public class ModPacketsS2C {
             if (playerEntity instanceof IPlayerAnimController animPlayer) {
                 animPlayer.shape_shifter_curse$setAnimationData(animationId, animationCount, animationLength);
             } else {
-                ShapeShifterCurseFabric.LOGGER.error("Player {} is not a IPlayerAnimController when receiving update power anim data packet", playerEntity.getName());
+	            if (playerEntity != null) {
+		            ShapeShifterCurseFabric.LOGGER.error("Player {} is not a IPlayerAnimController when receiving update power anim data packet", playerEntity.getName());
+	            }
             }
         });
     }

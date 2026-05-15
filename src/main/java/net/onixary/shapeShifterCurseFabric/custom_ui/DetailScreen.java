@@ -40,7 +40,9 @@ public class DetailScreen extends Screen implements WidgetEXUtils.IWidgetEX {
 
     @Override
     public void close() {
-        this.client.setScreen(this.PreviousScreen);
+	    if (this.client != null) {
+		    this.client.setScreen(this.PreviousScreen);
+	    }
     }
 
     @Override
