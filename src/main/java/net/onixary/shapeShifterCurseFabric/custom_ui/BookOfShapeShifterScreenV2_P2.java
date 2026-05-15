@@ -22,7 +22,7 @@ import java.util.List;
 import static net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric.MOD_ID;
 
 public class BookOfShapeShifterScreenV2_P2 extends Screen implements WidgetEXUtils.IWidgetEX {
-    private static final Identifier page_texID = Identifier.of(MOD_ID, "textures/gui/codex_page_2.png");
+    private static final Identifier page_texID = new Identifier(MOD_ID,"textures/gui/codex_page_2.png");
     public PlayerEntity currentPlayer;
     public static final int BookSizeX = 350;
     public static final int BookSizeY = 220;
@@ -50,9 +50,8 @@ public class BookOfShapeShifterScreenV2_P2 extends Screen implements WidgetEXUti
         // Size -> (83, 181) Pos -> (13, 26)
         this.addDrawableChild(BuildDetailScreenButton(80, 12, 9, 9, CodexData.getContentText(CodexData.ContentType.PROS, currentPlayer)));
         this.addDrawableChild(new TextWidget(BookPosX + 26 * BookScale, BookPosY + 10 * BookScale, 53 * BookScale, 11 * BookScale, CodexData.headerPros, textRenderer).setTextColor(HeaderTextColor));
-	    ScaleScrollTextWidget Pros = (ScaleScrollTextWidget) new ScaleScrollTextWidget(BookPosX + 13 * BookScale, BookPosY + 26 * BookScale, 83 * BookScale, 18 * BookScale, Scale, CodexData.getContentText(CodexData.ContentType.PROS, currentPlayer), scaleTextRenderer).shadow(false).setTextColor(DefaultTextColor);
+        ScaleScrollTextWidget Pros = (ScaleScrollTextWidget) new ScaleScrollTextWidget(BookPosX + 13 * BookScale, BookPosY + 26 * BookScale, 83 * BookScale, 18 * BookScale, Scale, CodexData.getContentText(CodexData.ContentType.PROS, currentPlayer), scaleTextRenderer).shadow(false).setTextColor(DefaultTextColor);
         // ScaleScrollTextWidget Pros = (ScaleScrollTextWidget) new ScaleScrollTextWidget(BookPosX + 13 * BookScale, BookPosY + 26 * BookScale, 83 * BookScale, 4 * BookScale, Scale, CodexData.getContentText(CodexData.ContentType.PROS, currentPlayer), scaleTextRenderer).shadow(false).setTextColor(DefaultTextColor);
-	    Pros.setTextWrapWidth(154);
         Pros.setEnableScrollableIconRender(true);
         this.addWidget(Pros);
         this.addDrawableChild(Pros);
@@ -61,9 +60,8 @@ public class BookOfShapeShifterScreenV2_P2 extends Screen implements WidgetEXUti
         // Size -> (82, 182) Pos -> (110, 26)
         this.addDrawableChild(BuildDetailScreenButton(185, 12, 9, 9, CodexData.getContentText(CodexData.ContentType.CONS, currentPlayer)));
         this.addDrawableChild(new TextWidget(BookPosX + 120 * BookScale, BookPosY + 10 * BookScale, 63 * BookScale, 11 * BookScale, CodexData.headerCons, textRenderer).setTextColor(HeaderTextColor));
-	    ScaleScrollTextWidget Cons = (ScaleScrollTextWidget) new ScaleScrollTextWidget(BookPosX + 110 * BookScale, BookPosY + 26 * BookScale, 82 * BookScale, 18 * BookScale, Scale, CodexData.getContentText(CodexData.ContentType.CONS, currentPlayer), scaleTextRenderer).shadow(false).setTextColor(DefaultTextColor);
+        ScaleScrollTextWidget Cons = (ScaleScrollTextWidget) new ScaleScrollTextWidget(BookPosX + 110 * BookScale, BookPosY + 26 * BookScale, 82 * BookScale, 18 * BookScale, Scale, CodexData.getContentText(CodexData.ContentType.CONS, currentPlayer), scaleTextRenderer).shadow(false).setTextColor(DefaultTextColor);
         // ScaleScrollTextWidget Cons = (ScaleScrollTextWidget) new ScaleScrollTextWidget(BookPosX + 110 * BookScale, BookPosY + 26 * BookScale, 82 * BookScale, 4 * BookScale, Scale, CodexData.getContentText(CodexData.ContentType.CONS, currentPlayer), scaleTextRenderer).shadow(false).setTextColor(DefaultTextColor);
-	    Cons.setTextWrapWidth(152);
         Cons.setEnableScrollableIconRender(true);
         this.addWidget(Cons);
         this.addDrawableChild(Cons);
@@ -76,7 +74,7 @@ public class BookOfShapeShifterScreenV2_P2 extends Screen implements WidgetEXUti
         MultilineTextWidget InstinctsDesc = new ScaleMultilineTextWidget(BookPosX + 220 * BookScale, BookPosY + 24 * BookScale, CodexData.getDescText(CodexData.ContentType.INSTINCTS, currentPlayer), scaleTextRenderer, Scale).shadow(false).setMaxWidth(106 * BookScale);
         this.addDrawableChild(InstinctsDesc);
         int InstinctsDescHeight = InstinctsDesc.getHeight();
-        ScaleScrollTextWidget Instincts = (ScaleScrollTextWidget) new ScaleScrollTextWidget(BookPosX + 220 * BookScale, BookPosY + 24 * BookScale + InstinctsDescHeight + Math.round(9 * Scale), 106 * BookScale, ((112 - (BookPosY * BookScale + InstinctsDescHeight)) / 9 + 1) * BookScale, Scale, CodexData.getContentText(CodexData.ContentType.INSTINCTS, currentPlayer), scaleTextRenderer).shadow(false).setTextColor(DefaultTextColor);
+        ScaleScrollTextWidget Instincts = (ScaleScrollTextWidget) new ScaleScrollTextWidget(BookPosX + 220 * BookScale, BookPosY + 24 * BookScale + InstinctsDescHeight + Math.round(9 * Scale), 106 * BookScale, ((112 - InstinctsDescHeight) / 9 + 1) * BookScale, Scale, CodexData.getContentText(CodexData.ContentType.INSTINCTS, currentPlayer), scaleTextRenderer).shadow(false).setTextColor(DefaultTextColor);
         Instincts.setEnableScrollableIconRender(true);
         this.addWidget(Instincts);
         this.addDrawableChild(Instincts);
@@ -124,11 +122,6 @@ public class BookOfShapeShifterScreenV2_P2 extends Screen implements WidgetEXUti
         }).size(FixedSizeX, FixedSizeY).position(FixedPosX, FixedPosY).build();
     }
 
-	@Override
-	public void renderBackground(DrawContext context, int mouseX, int mouseY, float delta) {
-		// No blur — book texture serves as the background
-	}
-
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
         this.RenderBook(context);
@@ -171,8 +164,8 @@ public class BookOfShapeShifterScreenV2_P2 extends Screen implements WidgetEXUti
     }
 
     @Override
-    public boolean mouseScrolled(double mouseX, double mouseY, double horizontalAmount, double verticalAmount) {
-        this.onScrollWidget(mouseX, mouseY, verticalAmount);
-        return super.mouseScrolled(mouseX, mouseY, horizontalAmount, verticalAmount);
+    public boolean mouseScrolled(double mouseX, double mouseY, double mouseZ) {
+        this.onScrollWidget(mouseX, mouseY, mouseZ);
+        return super.mouseScrolled(mouseX, mouseY, mouseZ);
     }
 }

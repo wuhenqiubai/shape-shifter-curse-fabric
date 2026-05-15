@@ -8,6 +8,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -20,15 +21,14 @@ public class ScaleScrollTextWidget extends MultilineTextWidget implements Widget
     private int realHeight;
     private int MaxWidth;
     private int MaxRows;
-	public int iconOffsetX = 0; // 滚动图标在文字区域右侧的额外偏移（正=更右，负=更左）
 
     private boolean textDone = false;
 
     private final List<WidgetEXUtils.IWidgetEX> widgetList = List.of();
     private WidgetEXUtils.WidgetRect rect;
 
-    private List<OrderedText> texts;
-    private List<OrderedText> currentTexts;
+    private List<OrderedText> texts = new ArrayList<>();
+    private List<OrderedText> currentTexts = new ArrayList<>();
 
     public boolean enableScrollableIconRender = false;
     public int IconSize = 8;
@@ -41,6 +41,8 @@ public class ScaleScrollTextWidget extends MultilineTextWidget implements Widget
         super(x, y, message, textRenderer);
         this.Scale = Scale;
         this.rect = new WidgetEXUtils.WidgetRect(x, y, width, maxRow * 9);
+        assert width > 0;
+        assert maxRow > 0;
         this.setMaxWidth(width);
         this.setMaxRows(maxRow);
         this.calculateText();
@@ -105,7 +107,17 @@ public class ScaleScrollTextWidget extends MultilineTextWidget implements Widget
             this.currentTexts = this.texts.subList(this.scroll, this.scroll + this.MaxRows);
         }
     }
-	private int wrapWidth = 0; // 0 = 使用 realWidth
+
+    private void calculateText() {
+        try {
+            this.texts = this.getTextRenderer().wrapLines(this.getMessage(), this.getTextWidth());
+            this.textsLineCount = this.texts.size();
+            this.calculateCurrentText();
+            this.textDone = true;
+        } catch (Exception e) {
+            ShapeShifterCurseFabric.LOGGER.error("Error while calculating text", e);
+        }
+    }
 
     public ScaleScrollTextWidget shadow(boolean shadow) {
         this.shadow = shadow;
@@ -152,18 +164,6 @@ public class ScaleScrollTextWidget extends MultilineTextWidget implements Widget
 
     public int modMaxWidth = 0;
 
-    private void calculateText() {
-        try {
-	        int wrapW = this.wrapWidth > 0 ? this.wrapWidth : this.realWidth;
-	        this.texts = this.getTextRenderer().wrapLines(this.getMessage(), wrapW);
-            this.textsLineCount = this.texts.size();
-            this.calculateCurrentText();
-            this.textDone = true;
-        } catch (Exception e) {
-            ShapeShifterCurseFabric.LOGGER.error("Error while calculating text", e);
-        }
-    }
-
     public void modMaxWidth(int value) {
         this.modMaxWidth = value;
         super.setMaxWidth(this.MaxWidth + this.modMaxWidth);
@@ -177,15 +177,6 @@ public class ScaleScrollTextWidget extends MultilineTextWidget implements Widget
         return this;
     }
 
-	public ScaleScrollTextWidget setTextWrapWidth(int wrapWidth) {
-		this.wrapWidth = wrapWidth;
-		int adjustedWidth = Math.round(wrapWidth * (1 / this.Scale));
-		this.MaxWidth = adjustedWidth;
-		super.setMaxWidth(adjustedWidth + this.modMaxWidth);
-		if (this.textDone) this.reloadText();
-		return this;
-	}
-
     @Override
     public MultilineTextWidget setMaxRows(int maxRows) {
         this.realHeight = maxRows * 9;
@@ -196,7 +187,11 @@ public class ScaleScrollTextWidget extends MultilineTextWidget implements Widget
 
     @Override
     public int getWidth() {
-        return (int) (super.getWidth() * this.Scale);
+        return (int) ((this.MaxWidth + this.modMaxWidth) * this.Scale);
+    }
+
+    public int getTextWidth() {
+        return (int) (this.MaxWidth + this.modMaxWidth);
     }
 
     @Override
@@ -237,7 +232,7 @@ public class ScaleScrollTextWidget extends MultilineTextWidget implements Widget
     }
 
     @Override
-    public void renderWidget(DrawContext context, int mouseX, int mouseY, float delta) {
+    public void renderButton(DrawContext context, int mouseX, int mouseY, float delta) {
         if (!this.textDone) {
             this.calculateText();
         }

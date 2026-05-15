@@ -81,6 +81,7 @@ public class AdditionalPowers {
         register(RenderTrinketsSlotPower.createFactory());
         register(DisablePlayerRotationPower.createFactory());
         register(HideTPHeldItemPower.createFactory());
+        register(ModifyFootstepSoundSpeedPower.createFactory());
     }
 
     public static PowerFactory<?> register(PowerFactory<?> powerFactory) {
