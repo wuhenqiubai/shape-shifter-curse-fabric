@@ -77,6 +77,11 @@ public class StartBookScreenV2 extends Screen implements WidgetEXUtils.IWidgetEX
     }
 
     @Override
+    public void renderBackground(DrawContext context, int mouseX, int mouseY, float delta) {
+        // No blur — book texture serves as the background
+    }
+
+    @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
         this.RenderBook(context);
         super.render(context, mouseX, mouseY, delta);
