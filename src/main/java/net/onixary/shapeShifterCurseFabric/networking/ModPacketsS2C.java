@@ -304,6 +304,9 @@ public class ModPacketsS2C {
 
     // 临时先放这里，以后再整理
     public static void sendUpdateCustomSetting(boolean ForceUpdate) {
+        if (MinecraftClient.getInstance().getNetworkHandler() == null) {
+            return; // Not connected to a server
+        }
         PacketByteBuf buf = PacketByteBufs.create();
         boolean autoSyncConfig = ShapeShifterCurseFabric.playerCustomConfig.auto_sync_config;
         if (!ForceUpdate && !autoSyncConfig) {
