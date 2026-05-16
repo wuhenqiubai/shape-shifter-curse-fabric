@@ -76,7 +76,6 @@
     "CustomEdibleHeldItemRendererMixin",
     "DisablePlayerRotationRendererMixin",
     "ElytraEntityModelMixin",
-    "EntityRenderDispatcherMixin",
     "EntityRenderDispatcherSafetyMixin",
     "EntityRendererMixin",
     "FeralPlayerEntityRendererMixin",

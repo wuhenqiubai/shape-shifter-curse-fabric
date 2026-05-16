@@ -8,26 +8,33 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
 import net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric;
 
-public class OnFirstTransformEnableFormList extends AbstractCriterion<OnFirstTransformEnableFormList.Condition> {
-    public static final Identifier ID = new Identifier(ShapeShifterCurseFabric.MOD_ID, "on_first_transform_enable_form_list");
+import java.util.Optional;
 
-    @Override
+public class OnFirstTransformEnableFormList extends AbstractCriterion<OnFirstTransformEnableFormList.Condition> {
+    public static final Identifier ID = Identifier.of(ShapeShifterCurseFabric.MOD_ID, "on_first_transform_enable_form_list");
+
     public Identifier getId() {
         return ID;
     }
 
     public void trigger(ServerPlayerEntity player) {
-        trigger(player, condition -> true);
+        trigger(player, Condition::requirementsMet);
     }
 
     @Override
-    protected Condition conditionsFromJson(JsonObject obj, LootContextPredicate playerPredicate, AdvancementEntityPredicateDeserializer predicateDeserializer) {
-        return new Condition();
+    public Codec<Condition> getConditionsCodec() {
+        return Condition.CODEC;
     }
 
-    public static class Condition extends AbstractCriterionConditions {
-        public Condition() {
-            super(ID, LootContextPredicate.EMPTY);
+    public record Condition(Optional<LootContextPredicate> player) implements AbstractCriterion.Conditions {
+        public static final Codec<Condition> CODEC = RecordCodecBuilder.create(instance ->
+                instance.group(
+                        LootContextPredicate.CODEC.optionalFieldOf("player").forGetter(Condition::player)
+                ).apply(instance, Condition::new)
+        );
+
+        public boolean requirementsMet() {
+            return true;
         }
     }
 }
