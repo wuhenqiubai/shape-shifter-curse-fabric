@@ -47,7 +47,7 @@ public class ModPacketsC2S {
         ServerPlayNetworking.registerGlobalReceiver(BytePayload.id(id), (payload, context) -> {
             ShapeShifterCurseFabric.LOGGER.debug("[C2S] Received packet: {}", id);
             context.server().execute(() -> {
-                ShapeShifterCurseFabric.LOGGER.info("[C2S] Executing handler for: {}", id);
+                ShapeShifterCurseFabric.LOGGER.debug("[C2S] Executing handler for: {}", id);
                 receiver.receive(context.server(), context.player(), null, payload.data(), null);
             });
         });
