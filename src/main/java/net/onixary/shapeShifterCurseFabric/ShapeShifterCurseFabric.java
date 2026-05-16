@@ -320,7 +320,7 @@ public class ShapeShifterCurseFabric implements ModInitializer {
         // allow sleep when status effect is active
         EntitySleepEvents.ALLOW_SLEEP_TIME.register((entity, world, pos) -> {
             if (entity instanceof PlayerEntity) {
-                LOGGER.info("[Sleep] ALLOW_SLEEP_TIME check for {} - hasEffect={}",
+                LOGGER.debug("[Sleep] ALLOW_SLEEP_TIME check for {} - hasEffect={}",
                     entity.getName().getString(), EffectManager.hasTransformativeEffect(entity));
                 if (EffectManager.hasTransformativeEffect(entity)) {
                     return ActionResult.success(true);
@@ -408,7 +408,7 @@ public class ShapeShifterCurseFabric implements ModInitializer {
         List<ServerPlayerEntity> players = minecraftServer.getPlayerManager().getPlayerList();
 
         if (++playerTickDebugCounter % 200 == 0) {
-            LOGGER.info("[PlayerTick] players={} isEmpty={}", players.size(), players.isEmpty());
+            LOGGER.debug("[PlayerTick] players={} isEmpty={}", players.size(), players.isEmpty());
         }
 
         if (players.isEmpty()) return;

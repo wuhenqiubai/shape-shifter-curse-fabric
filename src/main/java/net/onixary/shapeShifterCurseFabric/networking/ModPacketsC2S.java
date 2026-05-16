@@ -1,7 +1,9 @@
 package net.onixary.shapeShifterCurseFabric.networking;
 
 import io.github.apace100.apoli.component.PowerHolderComponent;
-import net.fabricmc.fabric.api.networking.v1.*;
+import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
+import net.fabricmc.fabric.api.networking.v1.PacketSender;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.MinecraftServer;
@@ -24,13 +26,12 @@ import net.onixary.shapeShifterCurseFabric.player_form.skin.PlayerSkinComponent;
 import net.onixary.shapeShifterCurseFabric.player_form.skin.RegPlayerSkinComponent;
 import net.onixary.shapeShifterCurseFabric.player_form.transform.TransformManager;
 import net.onixary.shapeShifterCurseFabric.util.FormTextureUtils;
-import org.jetbrains.annotations.Nullable;
 import net.onixary.shapeShifterCurseFabric.util.PatronUtils;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
 
 import static net.onixary.shapeShifterCurseFabric.networking.ModPackets.*;
-import net.onixary.shapeShifterCurseFabric.networking.BytePayload;
 
 // 应仅在服务器端注册
 // This class should only be registered on the server side
@@ -44,7 +45,7 @@ public class ModPacketsC2S {
     private static void reg(Identifier id, LegacyC2SReceiver receiver) {
         BytePayload.registerC2S(id);
         ServerPlayNetworking.registerGlobalReceiver(BytePayload.id(id), (payload, context) -> {
-            ShapeShifterCurseFabric.LOGGER.info("[C2S] Received packet: {}", id);
+            ShapeShifterCurseFabric.LOGGER.debug("[C2S] Received packet: {}", id);
             context.server().execute(() -> {
                 ShapeShifterCurseFabric.LOGGER.info("[C2S] Executing handler for: {}", id);
                 receiver.receive(context.server(), context.player(), null, payload.data(), null);
