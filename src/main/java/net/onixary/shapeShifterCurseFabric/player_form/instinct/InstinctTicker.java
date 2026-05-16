@@ -90,7 +90,7 @@ public class InstinctTicker {
         player.syncComponent(RegPlayerInstinctComponent.PLAYER_INSTINCT_COMP);
 
         if (++debugTickCounter % 100 == 0) {
-            ShapeShifterCurseFabric.LOGGER.info("[Instinct] player={} value={} rate={} pausing={} phase={}",
+            ShapeShifterCurseFabric.LOGGER.debug("[Instinct] player={} value={} rate={} pausing={} phase={}",
                 player.getName().getString(), comp.instinctValue, comp.currentInstinctRate,
                 isPausing, FormAbilityManager.getForm(player).getPhase());
         }
