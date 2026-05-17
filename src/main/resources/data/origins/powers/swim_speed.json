@@ -1,5 +1,5 @@
 {
-  "type": "origins:attribute",
+  "type": "apoli:attribute",
   "modifier": {
     "attribute": "additionalentityattributes:generic.water_speed",
     "id": "additional_swim_speed",

@@ -3,22 +3,22 @@
   "fountain": {
     "type": "shape-shifter-curse:action_on_sprinting_to_sneaking",
     "entity_action": {
-      "type": "origins:and",
+      "type": "apoli:and",
       "actions": [
         {
-          "type": "origins:add_velocity",
+          "type": "apoli:add_velocity",
           "y": 1.2,
           "z": 0.1,
           "space": "local_horizontal_normalized"
         },
         {
-          "type": "origins:play_sound",
+          "type": "apoli:play_sound",
           "sound": "minecraft:entity.axolotl.splash",
           "volume": 0.5,
           "pitch": 0.8
         },
         {
-          "type": "origins:play_sound",
+          "type": "apoli:play_sound",
           "sound": "minecraft:entity.wither.break_block",
           "volume": 0.5,
           "pitch": 0.8
@@ -27,10 +27,10 @@
           "type": "shape-shifter-curse:explosion_damage_entity",
           "power": 3,
           "entity_condition": {
-            "type": "origins:and",
+            "type": "apoli:and",
             "conditions": [
               {
-                "type": "origins:target_condition",
+                "type": "apoli:target_condition",
                 "condition": {
                   "type": "apoli:in_tag",
                   "tag": "shape-shifter-curse:water_explode_immune"
@@ -38,16 +38,16 @@
                 "inverted": true
               },
               {
-                "type": "origins:owner",
+                "type": "apoli:owner",
                 "inverted": true
               }
             ]
           },
           "entity_action": {
-            "type": "origins:and",
+            "type": "apoli:and",
             "actions": [
               {
-                "type": "origins:add_velocity",
+                "type": "apoli:add_velocity",
                 "y": 1.0,
                 "space": "world"
               }
@@ -56,7 +56,7 @@
           "explosion_damage_entity": false
         },
         {
-          "type": "origins:gain_air",
+          "type": "apoli:gain_air",
           "value": -15
         },
         {
@@ -94,13 +94,13 @@
       ]
     },
     "entity_condition": {
-      "type": "origins:and",
+      "type": "apoli:and",
       "conditions": [
         {
-          "type": "origins:on_block"
+          "type": "apoli:on_block"
         },
         {
-          "type": "origins:air",
+          "type": "apoli:air",
           "comparison": ">",
           "compare_to": 0
         }

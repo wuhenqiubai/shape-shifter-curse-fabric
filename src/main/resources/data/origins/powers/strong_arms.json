@@ -1,5 +1,5 @@
 {
-  "type": "origins:modify_harvest",
+  "type": "apoli:modify_harvest",
   "allow": true,
   "block_condition": {
     "type": "apoli:in_tag",

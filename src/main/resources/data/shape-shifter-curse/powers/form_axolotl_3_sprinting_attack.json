@@ -1,19 +1,19 @@
 {
-  "type": "origins:action_on_hit",
+  "type": "apoli:action_on_hit",
   "bientity_action": {
-    "type": "origins:and",
+    "type": "apoli:and",
     "actions": [
       {
-        "type": "origins:add_velocity",
+        "type": "apoli:add_velocity",
         "z": 4.0
       },
       {
-        "type": "origins:target_action",
+        "type": "apoli:target_action",
         "action": {
-          "type": "origins:and",
+          "type": "apoli:and",
           "actions": [
             {
-              "type": "origins:play_sound",
+              "type": "apoli:play_sound",
               "sound": "minecraft:entity.axolotl.splash",
               "volume": 0.5,
               "pitch": 0.8
@@ -54,33 +54,33 @@
         }
       },
       {
-        "type": "origins:actor_action",
+        "type": "apoli:actor_action",
         "action": {
-          "type": "origins:gain_air",
+          "type": "apoli:gain_air",
           "value": -10
         }
       }
     ]
   },
   "bientity_condition": {
-    "type": "origins:actor_condition",
+    "type": "apoli:actor_condition",
     "condition": {
-      "type": "origins:and",
+      "type": "apoli:and",
       "conditions": [
         {
-          "type": "origins:sprinting"
+          "type": "apoli:sprinting"
         },
         {
-          "type": "origins:fluid_height",
+          "type": "apoli:fluid_height",
           "fluid": "minecraft:water",
           "comparison": "<=",
           "compare_to": 0
         },
         {
-          "type": "origins:on_block"
+          "type": "apoli:on_block"
         },
         {
-          "type": "origins:air",
+          "type": "apoli:air",
           "comparison": ">",
           "compare_to": 0
         }
@@ -88,7 +88,7 @@
     }
   },
   "damage_condition": {
-    "type": "origins:or",
+    "type": "apoli:or",
     "conditions": [
       {
         "type": "apoli:in_tag",

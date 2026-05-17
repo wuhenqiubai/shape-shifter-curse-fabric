@@ -1,5 +1,5 @@
 {
-  "type": "origins:attribute",
+  "type": "apoli:attribute",
   "modifiers": [
     {
       "id": "extra_reach_block_reach",

@@ -1,15 +1,15 @@
 {
-  "type": "origins:burn",
+  "type": "apoli:burn",
   "interval": 20,
   "burn_duration": 6,
   "condition": {
-    "type": "origins:and",
+    "type": "apoli:and",
     "conditions": [
       {
-        "type": "origins:exposed_to_sun"
+        "type": "apoli:exposed_to_sun"
       },
       {
-        "type": "origins:invisible",
+        "type": "apoli:invisible",
         "inverted": true
       }
     ]

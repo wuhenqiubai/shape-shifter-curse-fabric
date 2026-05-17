@@ -7,19 +7,19 @@
     "inverted": true
   },
   "entity_condition": {
-    "type": "origins:and",
+    "type": "apoli:and",
     "conditions": [
       {
-        "type": "origins:fluid_height",
+        "type": "apoli:fluid_height",
         "fluid": "minecraft:water",
         "comparison": "<=",
         "compare_to": 0
       },
       {
-        "type": "origins:sprinting"
+        "type": "apoli:sprinting"
       },
       {
-        "type": "origins:air",
+        "type": "apoli:air",
         "comparison": ">",
         "compare_to": 0
       }

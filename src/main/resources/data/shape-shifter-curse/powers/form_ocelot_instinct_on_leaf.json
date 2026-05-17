@@ -4,7 +4,7 @@
   "value": 0.008,
   "duration": 1,
   "condition": {
-    "type": "origins:on_block",
+    "type": "apoli:on_block",
     "block_condition": {
       "type": "apoli:in_tag",
       "tag": "origins:leaves"

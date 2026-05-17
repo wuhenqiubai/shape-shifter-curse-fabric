@@ -1,5 +1,5 @@
 {
-  "type": "origins:attribute",
+  "type": "apoli:attribute",
   "modifier": {
     "id": "natural_armor_health_bonus",
     "attribute": "minecraft:generic.armor",

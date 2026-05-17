@@ -1,5 +1,5 @@
 {
-  "type": "origins:attribute",
+  "type": "apoli:attribute",
   "modifier": {
     "id": "tailwind_speed_bonus",
     "attribute": "minecraft:generic.movement_speed",

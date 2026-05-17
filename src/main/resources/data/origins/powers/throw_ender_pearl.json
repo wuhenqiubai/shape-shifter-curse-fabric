@@ -1,5 +1,5 @@
 {
-  "type": "origins:fire_projectile",
+  "type": "apoli:fire_projectile",
   "cooldown": 30,
   "hud_render": {
     "sprite_location": "origins:textures/gui/resource_bar.png",

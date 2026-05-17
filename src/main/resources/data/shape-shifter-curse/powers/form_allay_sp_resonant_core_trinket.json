@@ -10,19 +10,19 @@
     "always_edible": true
   },
   "eat_amethyst_shard_effect": {
-    "type": "origins:action_on_item_use",
+    "type": "apoli:action_on_item_use",
     "trigger": "finish",
     "entity_action": {
-      "type": "origins:and",
+      "type": "apoli:and",
       "actions": [
         {
           "type": "shape-shifter-curse:explosion_damage_entity",
           "power": 3,
           "entity_condition": {
-            "type": "origins:and",
+            "type": "apoli:and",
             "conditions": [
               {
-                "type": "origins:target_condition",
+                "type": "apoli:target_condition",
                 "condition": {
                   "type": "apoli:in_tag",
                   "tag": "shape-shifter-curse:water_explode_immune"
@@ -32,7 +32,7 @@
             ]
           },
           "entity_action": {
-            "type": "origins:apply_effect",
+            "type": "apoli:apply_effect",
             "effect": {
               "effect": "minecraft:regeneration",
               "duration": 160,
@@ -60,7 +60,7 @@
       ]
     },
     "item_condition": {
-      "type": "origins:ingredient",
+      "type": "apoli:ingredient",
       "ingredient": {
         "item": "minecraft:amethyst_shard"
       }

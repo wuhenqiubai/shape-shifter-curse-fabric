@@ -1,20 +1,20 @@
 {
   "type": "shape-shifter-curse:attract_by_entity",
   "entity_condition": {
-    "type": "origins:or",
+    "type": "apoli:or",
     "conditions": [
       {
-        "type": "origins:entity_type",
+        "type": "apoli:entity_type",
         "entity_type": "minecraft:witch"
       },
       {
-        "type": "origins:entity_type",
+        "type": "apoli:entity_type",
         "entity_type": "minecraft:evoker"
       }
     ]
   },
   "self_action": {
-    "type": "origins:apply_effect",
+    "type": "apoli:apply_effect",
     "effect": {
       "effect": "minecraft:nausea",
       "amplifier": 1,

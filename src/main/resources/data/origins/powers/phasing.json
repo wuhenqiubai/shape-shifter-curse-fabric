@@ -1,5 +1,5 @@
 {
-  "type": "origins:phasing",
+  "type": "apoli:phasing",
   "blacklist": true,
   "render_type": "blindness",
   "view_distance": 10,
@@ -8,18 +8,18 @@
     "tag": "origins:unphasable"
   },
   "phase_down_condition": {
-    "type": "origins:and",
+    "type": "apoli:and",
     "conditions": [
       {
-        "type": "origins:sneaking"
+        "type": "apoli:sneaking"
       },
       {
-        "type": "origins:on_block"
+        "type": "apoli:on_block"
       }
     ]
   },
   "condition": {
-    "type": "origins:power_active",
+    "type": "apoli:power_active",
     "power": "*:phantomize"
   }
 }

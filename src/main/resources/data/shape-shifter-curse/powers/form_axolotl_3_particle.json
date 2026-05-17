@@ -1,7 +1,7 @@
 {
-  "type": "origins:action_over_time",
+  "type": "apoli:action_over_time",
   "entity_action": {
-    "type": "origins:and",
+    "type": "apoli:and",
     "actions": [
       {
         "type": "apoli:spawn_particles",
@@ -35,22 +35,22 @@
   },
   "interval": 5,
   "condition": {
-    "type": "origins:and",
+    "type": "apoli:and",
     "conditions": [
       {
-        "type": "origins:sprinting"
+        "type": "apoli:sprinting"
       },
       {
-        "type": "origins:fluid_height",
+        "type": "apoli:fluid_height",
         "fluid": "minecraft:water",
         "comparison": "<=",
         "compare_to": 0
       },
       {
-        "type": "origins:on_block"
+        "type": "apoli:on_block"
       },
       {
-        "type": "origins:air",
+        "type": "apoli:air",
         "comparison": ">",
         "compare_to": 0
       }
