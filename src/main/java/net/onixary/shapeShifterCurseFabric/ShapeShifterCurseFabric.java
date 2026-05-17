@@ -208,21 +208,42 @@ public class ShapeShifterCurseFabric implements ModInitializer {
     @Override
     public void onInitialize() {
         // PlayerDataStorage.initialize(); // 移除这行，因为这里还没有服务器实例
+
+        // 首先注册配置文件，确保其他模块可以访问配置
+        AutoConfig.register(PlayerCustomConfig.class, Toml4jConfigSerializer::new);
+        playerCustomConfig = AutoConfig.getConfigHolder(PlayerCustomConfig.class).getConfig();
+        AutoConfig.register(ClientConfig.class, Toml4jConfigSerializer::new);
+        clientConfig = AutoConfig.getConfigHolder(ClientConfig.class).getConfig();
+        AutoConfig.register(CommonConfig.class, Toml4jConfigSerializer::new);
+        commonConfig = AutoConfig.getConfigHolder(CommonConfig.class).getConfig();
+
+        // 注册基础物品和方块
         RegCustomItem.initialize();
         RegCustomBlock.initialize();
-        RegTransformativeEntity.register();
-        RegTransformativeEntitySpawnEgg.initialize();
+
+        // 注册状态效果（必须在实体之前，因为实体可能依赖这些效果）
         RegTStatusEffect.initialize();
         RegTStatusPotionEffect.initialize();
-        PlayerEventHandler.register();
-        RegTransformativeEntity.register();
         RegOtherStatusEffects.initialize();
-        TransformativeEntitySpawning.addEntitySpawns();
-        BatAttachEventHandler.register();
+
+        // 注册实体类型
+        RegTransformativeEntity.register();
         RegCustomEntity.init();
+
+        // 注册实体生成蛋
+        RegTransformativeEntitySpawnEgg.initialize();
+
+        // 注册事件处理器
+        PlayerEventHandler.register();
+        BatAttachEventHandler.register();
+
+        // 注册实体生成逻辑
+        TransformativeEntitySpawning.addEntitySpawns();
+
         // 注册动画（需要在服务端也执行以支持变换动画的同步）
         registerAnimations();
 
+        // 注册额外能力系统
         AdditionalEntityConditions.register();
         AdditionalItemCondition.register();
         AdditionalPowers.register();
@@ -233,22 +254,14 @@ public class ShapeShifterCurseFabric implements ModInitializer {
 
         AttackEntityDataTracker.init();
 
-        // 注册配置文件
-        AutoConfig.register(PlayerCustomConfig.class, Toml4jConfigSerializer::new);  // 客户端配置
-        playerCustomConfig = AutoConfig.getConfigHolder(PlayerCustomConfig.class).getConfig();
-        AutoConfig.register(ClientConfig.class, Toml4jConfigSerializer::new);  // 客户端配置
-        clientConfig = AutoConfig.getConfigHolder(ClientConfig.class).getConfig();
-        AutoConfig.register(CommonConfig.class, Toml4jConfigSerializer::new);  // 双端配置
-        commonConfig = AutoConfig.getConfigHolder(CommonConfig.class).getConfig();
-
         // network package
         ModPacketsC2S.register();
-	    ModPacketsInit.registerS2CPayloads();
+        ModPacketsInit.registerS2CPayloads();
 
-	    if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) {
-		    TransformFX.INSTANCE.registerCallbacks();
-		    TransformOverlay.INSTANCE.init();
-	    }
+        if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) {
+            TransformFX.INSTANCE.registerCallbacks();
+            TransformOverlay.INSTANCE.init();
+        }
         save_timer = 0;
 
         // Reg potions
@@ -270,6 +283,7 @@ public class ShapeShifterCurseFabric implements ModInitializer {
             TransformManager.onServerInit();
             AccessoryUtils.onStartServer();
         });
+
         // 获取动态Form(DataPack)
         ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(new FormDataPackReloadListener());
         ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(new TrinketDataPackReloadListener());
@@ -280,6 +294,7 @@ public class ShapeShifterCurseFabric implements ModInitializer {
                 FormAbilityManager.applyForm(player, RegPlayerForms.ORIGINAL_BEFORE_ENABLE);
             }
         }));
+
         initLocalDataStorage();
 
         // Reg origins content
@@ -321,7 +336,7 @@ public class ShapeShifterCurseFabric implements ModInitializer {
         EntitySleepEvents.ALLOW_SLEEP_TIME.register((entity, world, pos) -> {
             if (entity instanceof PlayerEntity) {
                 LOGGER.debug("[Sleep] ALLOW_SLEEP_TIME check for {} - hasEffect={}",
-                    entity.getName().getString(), EffectManager.hasTransformativeEffect(entity));
+                        entity.getName().getString(), EffectManager.hasTransformativeEffect(entity));
                 if (EffectManager.hasTransformativeEffect(entity)) {
                     return ActionResult.success(true);
                 }

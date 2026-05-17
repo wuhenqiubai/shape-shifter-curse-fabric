@@ -34,11 +34,13 @@ loom {
     accessWidenerPath = file("src/main/resources/shape-shifter-curse.accesswidener")
 }
 
-
 repositories {
     // Local maven repo for patched dependencies (must be first)
     maven {
         url = uri("${project.projectDir}/libs/maven_local")
+    }
+    flatDir {
+        dir 'libs'
     }
     // Add repositories to retrieve artifacts from in here.
     // You should only use this when depending on other mods because
