@@ -44,8 +44,10 @@
     "PotionItemMixin",
     "PotionStackMixin",
     "ServerPlayerEntityForceInputMixin",
+    "ShearsItemMixin",
     "SneakEdgeCheckMixin",
     "StatusEffectMixin",
+    "SwordItemMixin",
     "ThrowablePotionStackMixin",
     "TippedArrowItemMixin",
     "VirtualTotemMixin",
@@ -96,7 +98,9 @@
     "PlayerRotationRendererMixin",
     "accessor.ApoliClientAccessor",
     "integration.TacZ_Anim",
-    "integration.TacZ_AnimThird"
+    "integration.TacZ_AnimThird",
+    "render.LivingEntityRendererMixin",
+    "render.PlayerEntityRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -27,6 +27,7 @@ import net.onixary.shapeShifterCurseFabric.player_animation.v3.IPlayerAnimContro
 import net.onixary.shapeShifterCurseFabric.player_form.RegPlayerForms;
 import net.onixary.shapeShifterCurseFabric.player_form.transform.TransformManager;
 import net.onixary.shapeShifterCurseFabric.util.FormTextureUtils;
+import net.onixary.shapeShifterCurseFabric.util.Interface.IJumpController;
 import net.onixary.shapeShifterCurseFabric.util.PatronUtils;
 import org.jetbrains.annotations.Nullable;
 
@@ -80,6 +81,7 @@ public class ModPacketsS2C {
         reg(UPDATE_PATRON_LEVEL, ModPacketsS2C::receiveUpdatePatronLevel);
         reg(OPEN_PATRON_FORM_SELECT_MENU, ModPacketsS2C::receiveOpenPatronFormSelectMenu);
         reg(OPEN_FORM_SELECT_MENU, ModPacketsS2C::receiveOpenFormSelectMenu);
+        reg(SET_NO_JUMP_TICK, ModPacketsS2C::receiveSetNoJumpTick);
     }
 
     /* 重构后不需要了 仅用于参考旧实现逻辑
@@ -448,5 +450,14 @@ public class ModPacketsS2C {
         buf.writeUuid(target);
         buf.writeIdentifier(formID);
         ClientPlayNetworking.send(new BytePayload(BytePayload.id(SET_FORM), buf));
+    }
+
+    public static void receiveSetNoJumpTick(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender responseSender) {
+        int tick = buf.readInt();
+        client.execute(() -> {
+            if (client.player instanceof IJumpController jumpController) {
+                jumpController.shape_shifter_curse$setNoJumpTick(tick);
+            }
+        });
     }
 }

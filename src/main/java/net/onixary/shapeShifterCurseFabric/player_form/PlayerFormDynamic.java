@@ -16,7 +16,8 @@ import net.onixary.shapeShifterCurseFabric.player_animation.AnimationHolder;
 import net.onixary.shapeShifterCurseFabric.player_animation.v3.AbstractAnimStateController;
 import net.onixary.shapeShifterCurseFabric.player_animation.v3.AnimSystem;
 import net.onixary.shapeShifterCurseFabric.player_animation.v3.AnimUtils;
-import net.onixary.shapeShifterCurseFabric.player_form_render.OriginalFurClient;
+import net.onixary.shapeShifterCurseFabric.render.form_render.FormModelResourceReloadListener;
+import net.onixary.shapeShifterCurseFabric.render.form_render.FormRenderUtils;
 import net.onixary.shapeShifterCurseFabric.util.PatronUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -46,7 +47,7 @@ public class PlayerFormDynamic extends PlayerFormBase{
     }
 
     public boolean isModelExist() {
-        return OriginalFurClient.FUR_REGISTRY.containsKey(this.getFormOriginID());
+	    return FormRenderUtils.formRendererRegistry.getOrDefault(FormModelResourceReloadListener.defaultLayer, new HashMap<>()).containsKey(this.getFormOriginID());
     }
 
     private Map<Identifier, AbstractAnimStateController> animStateControllerMap = new HashMap<>();
