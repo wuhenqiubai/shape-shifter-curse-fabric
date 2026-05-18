@@ -29,13 +29,11 @@ public class PotionEntityMixin {
             if (entity instanceof PlayerEntity player) {
                 double distance = self.squaredDistanceTo(entity);
                 if (distance < 16.0) {
-                    PowerHolderComponent.getPowers(player, ActionOnSplashPotionTakeEffect.class)
+	                //ShapeShifterCurseFabric.LOGGER.info("Water bottle hit player {}, triggering action", player.getName().getString());
+	                PowerHolderComponent.getPowers(player, ActionOnSplashPotionTakeEffect.class)
                             .stream()
                             .filter(ActionOnSplashPotionTakeEffect::shouldTriggerOnNoEffect)
-                            .forEach(power -> {
-                                //ShapeShifterCurseFabric.LOGGER.info("Water bottle hit player {}, triggering action", player.getName().getString());
-                                power.executeAction();
-                            });
+			                .forEach(ActionOnSplashPotionTakeEffect::executeAction);
                 }
             }
         }

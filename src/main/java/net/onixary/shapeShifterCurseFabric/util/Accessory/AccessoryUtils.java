@@ -17,22 +17,32 @@ import java.util.List;
 import java.util.Map;
 
 public class AccessoryUtils {
-    public interface AccessoryIO {
-        public default int priority() {
-            return 1000;
+    public static void reCalcAccessoryMod() {
+        nowAccessoryModID = "";
+        nowAccessoryMod = null;
+        activeAccessoryModInterfaces.clear();
+        if (accessoryModInterfaces.isEmpty()) {
+            return;
         }
-
-        public default boolean canLoaded() {
-            return true;
+        List<Pair<AccessoryIO, Integer>> list = new ArrayList<>();
+        for (Map.Entry<String, AccessoryIO> entry : accessoryModInterfaces.entrySet()) {
+            if (entry.getValue().canLoaded()) {
+                list.add(new Pair<>(entry.getValue(), entry.getValue().priority()));
+                activeAccessoryModInterfaces.put(entry.getKey(), entry.getValue());
+            } else {
+	            ShapeShifterCurseFabric.LOGGER.warn("Accessory Mod: {} can't loaded", entry.getKey());
+            }
         }
-
-        public Map<Pair<@Nullable String, String>, List<ItemStack>> getEntitySlots(LivingEntity entity);
-
-        public List<@Nullable ItemStack> getEntitySlot(LivingEntity entity, @Nullable String SlotGroup, String SlotName);
-
-        public @Nullable ItemStack getEntitySlot(LivingEntity entity, @Nullable String SlotGroup, String SlotName, int Index);
-
-        public void setEntitySlot(LivingEntity entity, @Nullable String SlotGroup, String SlotName, int Index, ItemStack stack);
+        list.sort((o1, o2) -> o2.getRight() - o1.getRight());
+        if (!list.isEmpty()) {
+	        nowAccessoryMod = list.getFirst().getLeft();
+        }
+        for (Map.Entry<String, AccessoryIO> entry : accessoryModInterfaces.entrySet()) {
+            if (entry.getValue() == nowAccessoryMod) {
+                nowAccessoryModID = entry.getKey();
+	            ShapeShifterCurseFabric.LOGGER.info("Active Accessory IO: {}", entry.getKey());
+            }
+        }
     }
 
     public static void onPlayerEquip(PlayerEntity player, Identifier itemID, String pluginID) {
@@ -57,32 +67,22 @@ public class AccessoryUtils {
         accessoryModInterfaces.put(identifier, io);
     }
 
-    public static void reCalcAccessoryMod() {
-        nowAccessoryModID = "";
-        nowAccessoryMod = null;
-        activeAccessoryModInterfaces.clear();
-        if (accessoryModInterfaces.isEmpty()) {
-            return;
+    public interface AccessoryIO {
+	    default int priority() {
+            return 1000;
         }
-        List<Pair<AccessoryIO, Integer>> list = new ArrayList<>();
-        for (Map.Entry<String, AccessoryIO> entry : accessoryModInterfaces.entrySet()) {
-            if (entry.getValue().canLoaded()) {
-                list.add(new Pair<>(entry.getValue(), entry.getValue().priority()));
-                activeAccessoryModInterfaces.put(entry.getKey(), entry.getValue());
-            } else {
-	            ShapeShifterCurseFabric.LOGGER.warn("Accessory Mod: {} can't loaded", entry.getKey());
-            }
+
+	    default boolean canLoaded() {
+            return true;
         }
-        list.sort((o1, o2) -> o2.getRight() - o1.getRight());
-        if (!list.isEmpty()) {
-            nowAccessoryMod = list.get(0).getLeft();
-        }
-        for (Map.Entry<String, AccessoryIO> entry : accessoryModInterfaces.entrySet()) {
-            if (entry.getValue() == nowAccessoryMod) {
-                nowAccessoryModID = entry.getKey();
-	            ShapeShifterCurseFabric.LOGGER.info("Active Accessory IO: {}", entry.getKey());
-            }
-        }
+
+	    Map<Pair<@Nullable String, String>, List<ItemStack>> getEntitySlots(LivingEntity entity);
+
+	    List<@Nullable ItemStack> getEntitySlot(LivingEntity entity, @Nullable String SlotGroup, String SlotName);
+
+	    @Nullable ItemStack getEntitySlot(LivingEntity entity, @Nullable String SlotGroup, String SlotName, int Index);
+
+	    void setEntitySlot(LivingEntity entity, @Nullable String SlotGroup, String SlotName, int Index, ItemStack stack);
     }
 
     public static void onStartServer() {

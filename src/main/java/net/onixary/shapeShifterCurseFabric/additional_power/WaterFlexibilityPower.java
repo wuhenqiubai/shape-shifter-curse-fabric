@@ -15,7 +15,7 @@ public class WaterFlexibilityPower extends Power {
 
     public WaterFlexibilityPower(PowerType<?> type, LivingEntity entity, float resistance) {
         super(type, entity);
-        this.resistance = Math.max(0.0f, Math.min(1.0f, resistance));
+	    this.resistance = Math.clamp(resistance, 0.0f, 1.0f);
     }
 
     public float getResistance() {

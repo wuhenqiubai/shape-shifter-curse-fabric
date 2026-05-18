@@ -20,7 +20,7 @@ public record BytePayload(Id<BytePayload> id, PacketByteBuf data) implements Cus
     private static final java.util.HashSet<Identifier> REGISTERED_C2S = new java.util.HashSet<>();
 
     public static Id<BytePayload> id(Identifier identifier) {
-        return IDS.computeIfAbsent(identifier, id -> new Id<>(id));
+	    return IDS.computeIfAbsent(identifier, Id::new);
     }
 
     /** Create a per-ID CODEC whose decoder returns the correct Id */

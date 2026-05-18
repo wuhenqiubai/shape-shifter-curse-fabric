@@ -55,9 +55,7 @@ public class ModPacketsS2C {
 
     private static void reg(Identifier id, LegacyReceiver receiver) {
         BytePayload.registerS2C(id);
-        ClientPlayNetworking.registerGlobalReceiver(BytePayload.id(id), (payload, context) -> {
-            context.client().execute(() -> receiver.receive(context.client(), null, payload.data(), null));
-        });
+	    ClientPlayNetworking.registerGlobalReceiver(BytePayload.id(id), (payload, context) -> context.client().execute(() -> receiver.receive(context.client(), null, payload.data(), null)));
     }
 
     public static void register() {
@@ -102,18 +100,14 @@ public class ModPacketsS2C {
 
     public static void receiveTransformEffect(MinecraftClient client, ClientPlayNetworkHandler handler,
                                               PacketByteBuf buf, PacketSender responseSender) {
-        client.execute(() -> {
-            // 当客户端收到这个数据包时，调用TransformManager中的新方法来播放特效
-            TransformManager.playClientTransformEffect();
-        });
+	    // 当客户端收到这个数据包时，调用TransformManager中的新方法来播放特效
+	    client.execute(TransformManager::playClientTransformEffect);
     }
 
     public static void receiveInstinctThresholdEffect(MinecraftClient client, ClientPlayNetworkHandler handler,
                                                       PacketByteBuf buf, PacketSender responseSender) {
-        client.execute(() -> {
-            // 当客户端收到这个数据包时，调用TransformManager中的新方法来播放特效
-            ShapeShifterCurseFabricClient.applyInstinctThresholdEffect();
-        });
+	    // 当客户端收到这个数据包时，调用TransformManager中的新方法来播放特效
+	    client.execute(ShapeShifterCurseFabricClient::applyInstinctThresholdEffect);
     }
 
     public static void receiveCursedMoonData(MinecraftClient client, ClientPlayNetworkHandler handler,
@@ -171,9 +165,7 @@ public class ModPacketsS2C {
         float nauseaStrength = buf.readFloat();
         int ticks = buf.readInt();
 
-        client.execute(() -> {
-            TransformManager.handleClientOverlayUpdate(nauseaStrength, ticks);
-        });
+	    client.execute(() -> TransformManager.handleClientOverlayUpdate(nauseaStrength, ticks));
     }
 
     // 接收Overlay淡出效果更新包
@@ -182,9 +174,7 @@ public class ModPacketsS2C {
         float nauseaStrength = buf.readFloat();
         int ticks = buf.readInt();
 
-        client.execute(() -> {
-            TransformManager.handleClientOverlayFadeUpdate(nauseaStrength, ticks);
-        });
+	    client.execute(() -> TransformManager.handleClientOverlayFadeUpdate(nauseaStrength, ticks));
     }
 
     // 接收变身完成效果包
@@ -249,17 +239,13 @@ public class ModPacketsS2C {
             attachedSide = null;
         }
 
-        client.execute(() -> {
-            ClientPlayerStateManager.updatePlayerAttachState(targetPlayerUuid, isAttached,
-                    attachType, attachedPos, attachedSide);
-        });
+	    client.execute(() -> ClientPlayerStateManager.updatePlayerAttachState(targetPlayerUuid, isAttached,
+			    attachType, attachedPos, attachedSide));
     }
 
     private static void receiveForceSneakState(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender responseSender) {
         boolean shouldForce = buf.readBoolean();
-        client.execute(() -> {
-            ClientPlayerStateManager.shouldForceSneak = shouldForce;
-        });
+	    client.execute(() -> ClientPlayerStateManager.shouldForceSneak = shouldForce);
     }
 
     private static void handleUpdateDynamicForm(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender responseSender) {
@@ -272,9 +258,7 @@ public class ModPacketsS2C {
             JsonObject jsonObject = new Gson().fromJson(jsonStr, JsonObject.class);
             allFrom.add(formName, jsonObject);
         }
-        client.execute(() -> {
-            RegPlayerForms.ApplyDynamicPlayerForms(allFrom);
-        });
+	    client.execute(() -> RegPlayerForms.ApplyDynamicPlayerForms(allFrom));
     }
 
     private static void handleRemoveDynamicExcept(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender responseSender) {
@@ -285,9 +269,7 @@ public class ModPacketsS2C {
             String formName = buf.readString();
             except.add(Identifier.tryParse(formName));
         }
-        client.execute(() -> {
-            RegPlayerForms.removeDynamicPlayerFormsExcept(except);
-        });
+	    client.execute(() -> RegPlayerForms.removeDynamicPlayerFormsExcept(except));
     }
 
     public static void onPlayerConnectServer(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender responseSender) {
@@ -418,9 +400,7 @@ public class ModPacketsS2C {
             int level = buf.readInt();
             map.put(uuid, level);
         }
-        client.execute(() -> {
-            PatronUtils.ApplyPatronLevel(map);
-        });
+	    client.execute(() -> PatronUtils.ApplyPatronLevel(map));
     }
 
     public static void receiveOpenPatronFormSelectMenu(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender responseSender) {

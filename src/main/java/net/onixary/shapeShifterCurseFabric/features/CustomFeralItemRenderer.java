@@ -591,7 +591,7 @@ public class CustomFeralItemRenderer {
 
 	@Environment(EnvType.CLIENT)
 	@VisibleForTesting
-	static enum HandRenderType {
+	enum HandRenderType {
 		RENDER_BOTH_HANDS(true, true),
 		RENDER_MAIN_HAND_ONLY(true, false),
 		RENDER_OFF_HAND_ONLY(false, true);
@@ -599,7 +599,7 @@ public class CustomFeralItemRenderer {
 		final boolean renderMainHand;
 		final boolean renderOffHand;
 
-		private HandRenderType(boolean renderMainHand, boolean renderOffHand) {
+		HandRenderType(boolean renderMainHand, boolean renderOffHand) {
 			this.renderMainHand = renderMainHand;
 			this.renderOffHand = renderOffHand;
 		}

@@ -42,9 +42,8 @@ public class EnderianPearlEntity extends ThrownItemEntity {
       }
 
       if (!this.getWorld().isClient && !this.isRemoved()) {
-         if (entity instanceof ServerPlayerEntity) {
-            ServerPlayerEntity serverPlayerEntity = (ServerPlayerEntity)entity;
-            if (serverPlayerEntity.networkHandler.isConnectionOpen() && serverPlayerEntity.getWorld() == this.getWorld() && !serverPlayerEntity.isSleeping()) {
+	      if (entity instanceof ServerPlayerEntity serverPlayerEntity) {
+		      if (serverPlayerEntity.networkHandler.isConnectionOpen() && serverPlayerEntity.getWorld() == this.getWorld() && !serverPlayerEntity.isSleeping()) {
 
                if (entity.hasVehicle()) {
                   entity.stopRiding();

@@ -10,7 +10,7 @@ import java.util.HashMap;
 @Mixin(ApoliClient.class)
 public interface ApoliClientAccessor {
     @Accessor(value = "idToKeyBindingMap", remap = false)
-    public static HashMap<String, KeyBinding> get_idToKeyBindingMap() {
+    static HashMap<String, KeyBinding> get_idToKeyBindingMap() {
         throw new AssertionError();
-    };
+    }
 }

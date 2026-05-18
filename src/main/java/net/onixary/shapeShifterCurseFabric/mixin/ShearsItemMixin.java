@@ -21,10 +21,12 @@ public class ShearsItemMixin {
 		}
 	}
 
+/* 1.21.1的ShearsItem没有getMiningSpeedMultiplier
 	@Inject(method = "getMiningSpeedMultiplier", at = @At("HEAD"), cancellable = true)
 	private void getMiningSpeedMultiplierMixin(ItemStack stack, BlockState state, CallbackInfoReturnable<Float> cir) {
 		if (state.isIn(ModTags.LIKE_COBWEB_TAG)) {
 			cir.setReturnValue(15.0f);
 		}
 	}
+*/
 }

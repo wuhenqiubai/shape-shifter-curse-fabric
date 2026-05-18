@@ -72,7 +72,7 @@ public class AttractByEntityPower extends Power{
             List<Entity> entities = player.getWorld().getOtherEntities(
                     player,
                     searchBox,
-                    e -> entityCondition.test(e)
+		            entityCondition::test
             );
 
             // 2. 找到最近的符合条件的实体

@@ -50,7 +50,7 @@ public class FormModelResourceReloadListener implements SimpleSynchronousResourc
                 jsonMap.computeIfAbsent(LayerID, k -> new HashMap<>()).computeIfAbsent(FormID, k -> new ArrayList<>()).add(json);
             } catch (IOException e) {
 	            ShapeShifterCurseFabric.LOGGER.error("Error reading ssc_form_model json file: {}", identifier, e);
-            };
+            }
         }
         // 解析文件
         // 最高load_priority的json会被加载 同load_priority先到者会被加载 无论能否被正常加载(好进行调试)

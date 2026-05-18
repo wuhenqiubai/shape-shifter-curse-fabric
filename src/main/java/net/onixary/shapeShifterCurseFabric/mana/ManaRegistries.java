@@ -18,18 +18,10 @@ public class ManaRegistries {
     public static final ManaHandler EMPTY_MANA_HANDLER = new ManaHandler().setImmutable();
     public static final ManaHandler DEBUG_MANA_HANDLER = new ManaHandler()
             // 所有Hook执行时间不保证在同一Tick
-            .setOnClientManaFull((component, player) -> {
-                player.sendMessage(Text.literal("[Client] 魔力值已满!").formatted(Formatting.GREEN));
-            })
-            .setOnClientManaEmpty((component, player) -> {
-                player.sendMessage(Text.literal("[Client] 魔力值已空!").formatted(Formatting.RED));
-            })
-            .setOnServerManaFull((component, player) -> {
-                player.sendMessage(Text.literal("[Server] 魔力值已满!").formatted(Formatting.GREEN));
-            })
-            .setOnServerManaEmpty((component, player) -> {
-                player.sendMessage(Text.literal("[Server] 魔力值已空!").formatted(Formatting.RED));
-            })
+		    .setOnClientManaFull((component, player) -> player.sendMessage(Text.literal("[Client] 魔力值已满!").formatted(Formatting.GREEN)))
+		    .setOnClientManaEmpty((component, player) -> player.sendMessage(Text.literal("[Client] 魔力值已空!").formatted(Formatting.RED)))
+		    .setOnServerManaFull((component, player) -> player.sendMessage(Text.literal("[Server] 魔力值已满!").formatted(Formatting.GREEN)))
+		    .setOnServerManaEmpty((component, player) -> player.sendMessage(Text.literal("[Server] 魔力值已空!").formatted(Formatting.RED)))
             .setImmutable();
 
     private static final HashMap<Identifier, Function<PlayerEntity, Boolean>> manaConditionTypeRegistry = new HashMap<>();
@@ -46,35 +38,35 @@ public class ManaRegistries {
 
     public static final Identifier FAMILIAR_FOX_MANA = registerManaType(ShapeShifterCurseFabric.identifier("familiar_fox_mana"),
             new ManaUtils.ModifierList(
-                    new Pair<Identifier, Pair<Identifier, ManaUtils.Modifier>>(
-                            ShapeShifterCurseFabric.identifier("base_value"),
-                            new Pair<Identifier, ManaUtils.Modifier>(
-                                    MC_AlwaysTrue,
-                                    new ManaUtils.Modifier(100d, 1.0d, 0d)
-                            )
-                    )
+		            new Pair<>(
+				            ShapeShifterCurseFabric.identifier("base_value"),
+				            new Pair<>(
+						            MC_AlwaysTrue,
+						            new ManaUtils.Modifier(100d, 1.0d, 0d)
+				            )
+		            )
             ),
             new ManaUtils.ModifierList(
-                    new Pair<Identifier, Pair<Identifier, ManaUtils.Modifier>>(
-                            ShapeShifterCurseFabric.identifier("cursed_moon"),
-                            new Pair<Identifier, ManaUtils.Modifier>(
-                                    MC_IsCursedMoon,
-                                    new ManaUtils.Modifier(0.02d, 1.0d, 0d)
-                            )
-                    )
+		            new Pair<>(
+				            ShapeShifterCurseFabric.identifier("cursed_moon"),
+				            new Pair<>(
+						            MC_IsCursedMoon,
+						            new ManaUtils.Modifier(0.02d, 1.0d, 0d)
+				            )
+		            )
             ),
             EMPTY_MANA_HANDLER
     );
 
     public static final Identifier WEB_RESOURCE = registerManaType(ShapeShifterCurseFabric.identifier("web_resource"),
             new ManaUtils.ModifierList(
-                    new Pair<Identifier, Pair<Identifier, ManaUtils.Modifier>>(
-                            ShapeShifterCurseFabric.identifier("base_value"),
-                            new Pair<Identifier, ManaUtils.Modifier>(
-                                    MC_AlwaysTrue,
-                                    new ManaUtils.Modifier(100d, 1.0d, 0d)
-                            )
-                    )
+		            new Pair<>(
+				            ShapeShifterCurseFabric.identifier("base_value"),
+				            new Pair<>(
+						            MC_AlwaysTrue,
+						            new ManaUtils.Modifier(100d, 1.0d, 0d)
+				            )
+		            )
             ),
             new ManaUtils.ModifierList(),
             EMPTY_MANA_HANDLER

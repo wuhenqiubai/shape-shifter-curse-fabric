@@ -10,5 +10,7 @@ import org.spongepowered.asm.mixin.gen.Invoker;
 @Mixin(PowerTypeRegistry.class)
 public interface  PowerTypeRegistryAccessor {
     @Invoker("update")
-    public static PowerType Invoke_Update(Identifier id, PowerType powerType) {return null;}
+    static PowerType Invoke_Update(Identifier id, PowerType powerType) {
+	    return null;
+    }
 }

@@ -27,5 +27,5 @@ public class CustomTransformativeStatue extends BaseTransformativeStatusEffect {
         }
         TransformManager.handleDirectTransform(player, targetForm, false);
         CTPUtils.resetTransformativePotionForm(player);
-    };
+    }
 }

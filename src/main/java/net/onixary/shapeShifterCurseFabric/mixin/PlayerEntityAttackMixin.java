@@ -2,6 +2,7 @@ package net.onixary.shapeShifterCurseFabric.mixin;
 
 import com.llamalad7.mixinextras.sugar.Local;
 import io.github.apace100.apoli.component.PowerHolderComponent;
+import io.github.apace100.apoli.power.Power;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
@@ -78,7 +79,7 @@ public abstract class PlayerEntityAttackMixin {
         float enhancedCritDamage = baseDamage * critMultiplier;
 
         // 第二步：检查是否有下落增伤 power
-        boolean hasFallingAttackPower = fallingAttackPowers.stream().anyMatch(p -> p.isActive());
+	    boolean hasFallingAttackPower = fallingAttackPowers.stream().anyMatch(Power::isActive);
 
         if (hasFallingAttackPower) {
             // 计算下落增伤倍数

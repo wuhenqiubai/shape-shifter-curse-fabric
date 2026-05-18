@@ -42,10 +42,10 @@ public class MustCrawlingCondition {
     }
 
     public static ConditionFactory<Entity> getFactory() {
-        return new ConditionFactory<Entity>(
-                ShapeShifterCurseFabric.identifier("must_crawling"),
-                new SerializableData(),
-                MustCrawlingCondition::condition
+	    return new ConditionFactory<>(
+			    ShapeShifterCurseFabric.identifier("must_crawling"),
+			    new SerializableData(),
+			    MustCrawlingCondition::condition
         );
     }
 }

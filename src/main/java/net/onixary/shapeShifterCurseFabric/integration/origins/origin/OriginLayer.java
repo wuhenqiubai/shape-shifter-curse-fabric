@@ -123,7 +123,7 @@ public class OriginLayer implements Comparable<OriginLayer> {
 
     public int getOriginOptionCount(PlayerEntity playerEntity) {
         long choosableOrigins = getOrigins(playerEntity).stream().map(OriginRegistry::get).filter(Origin::isChoosable).count();
-        if(isRandomAllowed && getRandomOrigins(playerEntity).size() > 0) {
+	    if (isRandomAllowed && !getRandomOrigins(playerEntity).isEmpty()) {
             choosableOrigins++;
         }
         return (int)choosableOrigins;

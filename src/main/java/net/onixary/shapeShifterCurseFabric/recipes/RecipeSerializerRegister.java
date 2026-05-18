@@ -12,10 +12,10 @@ public class RecipeSerializerRegister {
 
     public static void register() {
         // 用于加载静态注册
-    };
+    }
 
 
-    public static <S extends RecipeSerializer<T>, T extends Recipe<?>> S register(Identifier id, S serializer) {
+	public static <S extends RecipeSerializer<T>, T extends Recipe<?>> S register(Identifier id, S serializer) {
         return (S)(Registry.register(Registries.RECIPE_SERIALIZER, id, serializer));
-    };
+	}
 }

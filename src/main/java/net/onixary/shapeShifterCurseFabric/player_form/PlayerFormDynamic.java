@@ -29,12 +29,12 @@ public class PlayerFormDynamic extends PlayerFormBase{
     public static final UUID PublicUUID = UUID.fromString("00000000-0000-0000-0000-000000000000");
 
     public Identifier FurModelID = null;
-    public List<Identifier> ExtraPower = new LinkedList<Identifier>();
+	public List<Identifier> ExtraPower = new LinkedList<>();
     public HashMap<Identifier, JsonObject> ExtraPowerData = new LinkedHashMap<>();
     private int TempPowerIndex = 0;
     public boolean IsPatronForm = false;  // 可以使用特殊物品直接变形
     public int RequirePatronLevel = 0;  // 需要的赞助等级
-    public List<UUID> PlayerUUIDs = new ArrayList<UUID>();
+	public List<UUID> PlayerUUIDs = new ArrayList<>();
 
     // 覆写数据
     private Identifier originID = null;

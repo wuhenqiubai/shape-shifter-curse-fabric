@@ -65,7 +65,7 @@ public abstract class PlayerEntitySpeedFOVMixin {
 	    }
 
 	    float nowSpeed = (float) player.getAttributeValue(EntityAttributes.GENERIC_MOVEMENT_SPEED);
-        float targetWalkSpeed = Math.min(nowSpeedMinMul * nowSpeed, Math.max(nowSpeedMaxMul * nowSpeed, shape_shifter_curse$originalWalkSpeed));
+	    float targetWalkSpeed = Math.clamp(nowSpeedMaxMul * nowSpeed, shape_shifter_curse$originalWalkSpeed, nowSpeedMinMul * nowSpeed);
 	    player.getAbilities().setWalkSpeed(targetWalkSpeed);
     }
 

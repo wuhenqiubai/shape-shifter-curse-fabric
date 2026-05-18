@@ -17,16 +17,18 @@ import java.util.List;
 public class ItemStorePowerRender {
     private static final Identifier WIDGETS_TEXTURE = Identifier.of("textures/gui/sprites/hud/hotbar_offhand_left.png");
 
-    public static interface itemStorePowerRenderInterface {
-        public int getSlot();
-        public ItemStack getStack();
-        public default float getBobbingAnimationTime() {
+	private static final List<itemStorePowerRenderInterface> tempPower = new ArrayList<>();
+
+    private static final MinecraftClient mc = MinecraftClient.getInstance();
+	public interface itemStorePowerRenderInterface {
+		int getSlot();
+
+		ItemStack getStack();
+
+		default float getBobbingAnimationTime() {
             return 0;
         }
     }
-
-    private static final MinecraftClient mc = MinecraftClient.getInstance();
-    private static final List<itemStorePowerRenderInterface> tempPower = new ArrayList<itemStorePowerRenderInterface>();
     private static int timer = 0;
     private static final int MaxSlot = 12;
     private static final int SlotPerRow = 4;

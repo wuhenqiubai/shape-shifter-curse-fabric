@@ -21,7 +21,7 @@ public class SpiderEntityMixin extends HostileEntity {
 
     @Redirect(at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/ai/goal/GoalSelector;add(ILnet/minecraft/entity/ai/goal/Goal;)V", ordinal = 7), method = "initGoals")
     private void redirectTargetGoal(GoalSelector goalSelector, int priority, Goal goal) {
-	    Goal newGoal = new ActiveTargetGoalWithCondition<PlayerEntity>(this, PlayerEntity.class, 10, true, false, e -> !AdditionalPowers.SPIDER_FRIENDLY.isActive(e), e -> e.getBrightnessAtEyes() < 0.5f);
+	    Goal newGoal = new ActiveTargetGoalWithCondition<>(this, PlayerEntity.class, 10, true, false, e -> !AdditionalPowers.SPIDER_FRIENDLY.isActive(e), e -> e.getBrightnessAtEyes() < 0.5f);
         goalSelector.add(priority, newGoal);
     }
 }

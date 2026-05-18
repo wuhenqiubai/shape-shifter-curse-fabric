@@ -22,8 +22,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import static net.onixary.shapeShifterCurseFabric.blocks.RegCustomBlock.DEW_COVERED_COBWEB;
-import static net.onixary.shapeShifterCurseFabric.blocks.RegCustomBlock.MOONDUST_CRYSTAL_GRIT;
+import static net.onixary.shapeShifterCurseFabric.blocks.RegCustomBlock.*;
 
 public class RegCustomItem {
     private RegCustomItem(){}

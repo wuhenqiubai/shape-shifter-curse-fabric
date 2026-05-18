@@ -7,10 +7,6 @@ import io.github.apace100.apoli.power.PowerType;
 import io.github.apace100.apoli.power.PowerTypeRegistry;
 import io.github.apace100.calio.data.SerializableData;
 import io.github.apace100.calio.data.SerializableDataTypes;
-import net.onixary.shapeShifterCurseFabric.integration.origins.Origins;
-import net.onixary.shapeShifterCurseFabric.integration.origins.data.CompatibilityDataTypes;
-import net.onixary.shapeShifterCurseFabric.integration.origins.data.OriginsDataTypes;
-import net.onixary.shapeShifterCurseFabric.integration.origins.registry.ModComponents;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.advancement.AdvancementEntry;
@@ -22,6 +18,10 @@ import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+import net.onixary.shapeShifterCurseFabric.integration.origins.Origins;
+import net.onixary.shapeShifterCurseFabric.integration.origins.data.CompatibilityDataTypes;
+import net.onixary.shapeShifterCurseFabric.integration.origins.data.OriginsDataTypes;
+import net.onixary.shapeShifterCurseFabric.integration.origins.registry.ModComponents;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -96,7 +96,7 @@ public class Origin {
     }
 
     public boolean hasUpgrade() {
-        return this.upgrades.size() > 0;
+	    return !this.upgrades.isEmpty();
     }
 
     public Optional<OriginUpgrade> getUpgrade(AdvancementEntry advancement) {

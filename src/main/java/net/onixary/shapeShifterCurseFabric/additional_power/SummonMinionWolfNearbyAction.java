@@ -105,7 +105,7 @@ public class SummonMinionWolfNearbyAction {
                         .add("owner_action", ApoliDataTypes.ENTITY_ACTION, null)
                         .add("target_action", ApoliDataTypes.ENTITY_ACTION, null)  // 没用 但是防止解析错误 但是会正常执行
                         .add("reverse", SerializableDataTypes.BOOLEAN, false),  // 没用 但是防止解析错误
-                (data, entity) -> {action(data, new Pair<>(entity, entity));}
+		        (data, entity) -> action(data, new Pair<>(entity, entity))
         );
     }
 }

@@ -38,25 +38,13 @@ public class ModPacketsS2C {
 
     @Environment(EnvType.CLIENT)
     public static void register() {
-        ClientLoginNetworking.registerGlobalReceiver(ModPackets.HANDSHAKE, (client, handler, buf, responseConsumer) -> {
-            return handleHandshake(client, handler, buf);
-        });
+	    ClientLoginNetworking.registerGlobalReceiver(ModPackets.HANDSHAKE, (client, handler, buf, responseConsumer) -> handleHandshake(client, handler, buf));
         ClientPlayConnectionEvents.INIT.register(((clientPlayNetworkHandler, minecraftClient) -> {
-            ClientPlayNetworking.registerReceiver(BytePayload.id(ModPackets.OPEN_ORIGIN_SCREEN), (payload, context) -> {
-                openOriginScreen(context.client(), context.player().networkHandler, payload.data(), context.responseSender());
-            });
-            ClientPlayNetworking.registerReceiver(BytePayload.id(ModPackets.ORIGIN_LIST), (payload, context) -> {
-                receiveOriginList(context.client(), context.player().networkHandler, payload.data(), context.responseSender());
-            });
-            ClientPlayNetworking.registerReceiver(BytePayload.id(ModPackets.LAYER_LIST), (payload, context) -> {
-                receiveLayerList(context.client(), context.player().networkHandler, payload.data(), context.responseSender());
-            });
-            ClientPlayNetworking.registerReceiver(BytePayload.id(ModPackets.CONFIRM_ORIGIN), (payload, context) -> {
-                receiveOriginConfirmation(context.client(), context.player().networkHandler, payload.data(), context.responseSender());
-            });
-            ClientPlayNetworking.registerReceiver(BytePayload.id(ModPackets.BADGE_LIST), (payload, context) -> {
-                receiveBadgeList(context.client(), context.player().networkHandler, payload.data(), context.responseSender());
-            });
+	        ClientPlayNetworking.registerReceiver(BytePayload.id(ModPackets.OPEN_ORIGIN_SCREEN), (payload, context) -> openOriginScreen(context.client(), context.player().networkHandler, payload.data(), context.responseSender()));
+	        ClientPlayNetworking.registerReceiver(BytePayload.id(ModPackets.ORIGIN_LIST), (payload, context) -> receiveOriginList(context.client(), context.player().networkHandler, payload.data(), context.responseSender()));
+	        ClientPlayNetworking.registerReceiver(BytePayload.id(ModPackets.LAYER_LIST), (payload, context) -> receiveLayerList(context.client(), context.player().networkHandler, payload.data(), context.responseSender()));
+	        ClientPlayNetworking.registerReceiver(BytePayload.id(ModPackets.CONFIRM_ORIGIN), (payload, context) -> receiveOriginConfirmation(context.client(), context.player().networkHandler, payload.data(), context.responseSender()));
+	        ClientPlayNetworking.registerReceiver(BytePayload.id(ModPackets.BADGE_LIST), (payload, context) -> receiveBadgeList(context.client(), context.player().networkHandler, payload.data(), context.responseSender()));
         }));
     }
 

@@ -394,7 +394,7 @@ public class FormModel extends GeoModel<FormAnimatable> {
         float SWAY_SCALE = 0.05F;
         if(BCD_TailChain.isEmpty()) {return;}
         for (List<String> tailChain : BCD_TailChain) {
-            GeoBone firstTail = this.getCachedGeoBone(tailChain.get(0));
+	        GeoBone firstTail = this.getCachedGeoBone(tailChain.getFirst());
             if (firstTail == null) {
                 continue;
             }
@@ -426,7 +426,7 @@ public class FormModel extends GeoModel<FormAnimatable> {
         float SWAY_SCALE = 0.05F;
         if (BCD_TailChainHead.isEmpty()) {return;}
         for (List<String> tailChain : BCD_TailChainHead) {
-            GeoBone firstHeadTail = this.getCachedGeoBone(tailChain.get(0));
+	        GeoBone firstHeadTail = this.getCachedGeoBone(tailChain.getFirst());
             if (firstHeadTail == null) {
                 continue;
             }
@@ -453,7 +453,7 @@ public class FormModel extends GeoModel<FormAnimatable> {
 
         if (BCD_WingChainL != null) {
             for (List<String> wingChain : BCD_WingChainL) {
-                GeoBone firstWing = this.getCachedGeoBone(wingChain.get(0));
+	            GeoBone firstWing = this.getCachedGeoBone(wingChain.getFirst());
                 if (firstWing == null) { continue; }
                 firstWing.setRotY(sway_l);
                 firstWing.setRotX(-tailDragAmountVertical * 0.35f);
@@ -468,7 +468,7 @@ public class FormModel extends GeoModel<FormAnimatable> {
         }
         if (BCD_WingChainR != null) {
             for (List<String> wingChain : BCD_WingChainR) {
-                GeoBone firstWing = this.getCachedGeoBone(wingChain.get(0));
+	            GeoBone firstWing = this.getCachedGeoBone(wingChain.getFirst());
                 if (firstWing == null)  continue;
                 firstWing.setRotY(sway_r);
                 firstWing.setRotX(-tailDragAmountVertical * 0.35f);
