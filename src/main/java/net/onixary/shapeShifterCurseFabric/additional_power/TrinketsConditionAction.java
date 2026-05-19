@@ -108,47 +108,47 @@ public class TrinketsConditionAction {
     }
 
     public static void registerCondition(Consumer<ConditionFactory<Entity>> registerFunc) {
-        registerFunc.accept(new ConditionFactory<Entity>(
-                ShapeShifterCurseFabric.identifier("equip_accessory"),  // 为了之后写双端不用改 还是使用equip_accessories吧
-                new SerializableData()
-                        .add("accessory_mod", SerializableDataTypes.STRING, "auto")
-                        .add("accessory", SerializableDataTypes.IDENTIFIER, null),
-                (data, e) -> isEquipped(e, data.get("accessory_mod"), data.get("accessory"))
+	    registerFunc.accept(new ConditionFactory<>(
+			    ShapeShifterCurseFabric.identifier("equip_accessory"),  // 为了之后写双端不用改 还是使用equip_accessories吧
+			    new SerializableData()
+					    .add("accessory_mod", SerializableDataTypes.STRING, "auto")
+					    .add("accessory", SerializableDataTypes.IDENTIFIER, null),
+			    (data, e) -> isEquipped(e, data.get("accessory_mod"), data.get("accessory"))
         ));
 
-        registerFunc.accept(new ConditionFactory<Entity>(
-                ShapeShifterCurseFabric.identifier("check_accessory"),
-                new SerializableData()
-                        .add("accessory_mod", SerializableDataTypes.STRING, "auto")
-                        .add("group", SerializableDataTypes.STRING, "")
-                        .add("slot", SerializableDataTypes.STRING, "")
-                        .add("slot_index", SerializableDataTypes.INT, 0)
-                        .add("condition", ApoliDataTypes.ITEM_CONDITION, null),
-                (data, e) -> CheckEquipped(e, data.get("accessory_mod"), data.get("group"), data.get("slot"), data.get("slot_index"), data.get("condition"), false)
+	    registerFunc.accept(new ConditionFactory<>(
+			    ShapeShifterCurseFabric.identifier("check_accessory"),
+			    new SerializableData()
+					    .add("accessory_mod", SerializableDataTypes.STRING, "auto")
+					    .add("group", SerializableDataTypes.STRING, "")
+					    .add("slot", SerializableDataTypes.STRING, "")
+					    .add("slot_index", SerializableDataTypes.INT, 0)
+					    .add("condition", ApoliDataTypes.ITEM_CONDITION, null),
+			    (data, e) -> CheckEquipped(e, data.get("accessory_mod"), data.get("group"), data.get("slot"), data.get("slot_index"), data.get("condition"), false)
         ));
     }
 
     public static void registerAction(Consumer<ActionFactory<Entity>> ActionRegister, Consumer<ActionFactory<Pair<Entity, Entity>>> BIActionRegister) {
-        ActionRegister.accept(new ActionFactory<Entity>(
-                ShapeShifterCurseFabric.identifier("drop_accessory"),
-                new SerializableData()
-                        .add("accessory_mod", SerializableDataTypes.STRING, "auto")
-                        .add("group", SerializableDataTypes.STRING, "")
-                        .add("slot", SerializableDataTypes.STRING, "")
-                        .add("slot_index", SerializableDataTypes.INT, -1)
-                        .add("remove", SerializableDataTypes.BOOLEAN, false),
-                (data, e) -> DropEquipped(e, data.get("accessory_mod"), data.get("group"), data.get("slot"), data.get("slot_index"), data.get("remove"))
+	    ActionRegister.accept(new ActionFactory<>(
+			    ShapeShifterCurseFabric.identifier("drop_accessory"),
+			    new SerializableData()
+					    .add("accessory_mod", SerializableDataTypes.STRING, "auto")
+					    .add("group", SerializableDataTypes.STRING, "")
+					    .add("slot", SerializableDataTypes.STRING, "")
+					    .add("slot_index", SerializableDataTypes.INT, -1)
+					    .add("remove", SerializableDataTypes.BOOLEAN, false),
+			    (data, e) -> DropEquipped(e, data.get("accessory_mod"), data.get("group"), data.get("slot"), data.get("slot_index"), data.get("remove"))
         ));
 
-        ActionRegister.accept(new ActionFactory<Entity>(
-                ShapeShifterCurseFabric.identifier("invoke_accessory"),
-                new SerializableData()
-                        .add("accessory_mod", SerializableDataTypes.STRING, "auto")
-                        .add("group", SerializableDataTypes.STRING, "")
-                        .add("slot", SerializableDataTypes.STRING, "")
-                        .add("slot_index", SerializableDataTypes.INT, 0)
-                        .add("action", ApoliDataTypes.ITEM_ACTION, null),
-                (data, e) -> InvokeEquipped(e, data.get("accessory_mod"), data.get("group"), data.get("slot"), data.get("slot_index"), data.get("action"))
+	    ActionRegister.accept(new ActionFactory<>(
+			    ShapeShifterCurseFabric.identifier("invoke_accessory"),
+			    new SerializableData()
+					    .add("accessory_mod", SerializableDataTypes.STRING, "auto")
+					    .add("group", SerializableDataTypes.STRING, "")
+					    .add("slot", SerializableDataTypes.STRING, "")
+					    .add("slot_index", SerializableDataTypes.INT, 0)
+					    .add("action", ApoliDataTypes.ITEM_ACTION, null),
+			    (data, e) -> InvokeEquipped(e, data.get("accessory_mod"), data.get("group"), data.get("slot"), data.get("slot_index"), data.get("action"))
         ));
     }
 }

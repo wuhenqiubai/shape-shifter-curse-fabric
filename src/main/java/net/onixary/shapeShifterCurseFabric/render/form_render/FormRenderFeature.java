@@ -21,7 +21,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerModelPart;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
-import net.onixary.shapeShifterCurseFabric.player_form_render.ModelRootAccessor;
 import net.onixary.shapeShifterCurseFabric.util.ClientUtils;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Quaternionf;
@@ -47,8 +46,8 @@ public class FormRenderFeature <T extends PlayerEntity, M extends BipedEntityMod
         for (FormRenderer formRenderer : formRendererList) {
             PlayerEntityModel<AbstractClientPlayerEntity> playerEntityModel = playerEntityRenderer.getModel();
             FormModel formModel = (FormModel) formRenderer.getGeoModel();
-            Identifier overlayTexture = formModel.getOverlayTextureResource(((ModelRootAccessor) playerEntityModel).originalFur$isSlim());
-            Identifier emissiveTexture = formModel.getEmissiveTextureResource(((ModelRootAccessor) playerEntityModel).originalFur$isSlim());
+            Identifier overlayTexture = formModel.getOverlayTextureResource(playerEntityModel.thinArms);
+            Identifier emissiveTexture = formModel.getEmissiveTextureResource(playerEntityModel.thinArms);
             boolean bl2 = !player.isInvisibleTo(MinecraftClient.getInstance().player);
             if (overlayTexture != null) {
                 RenderLayer l = null;
@@ -180,7 +179,7 @@ public class FormRenderFeature <T extends PlayerEntity, M extends BipedEntityMod
             PlayerEntityModel<AbstractClientPlayerEntity> playerEntityModel = playerEntityRenderer.getModel();
             FormModel formModel = (FormModel) formRenderer.getGeoModel();
             FormAnimatable formAnimatable = formRenderer.getAnimatable();
-            formRenderer.setPlayer(player, ((ModelRootAccessor) playerEntityModel).originalFur$isSlim());
+            formRenderer.setPlayer(player, playerEntityModel.thinArms);
             matrices.push();
             matrices.multiply(new Quaternionf().rotateX(180 * MathHelper.RADIANS_PER_DEGREE));
             matrices.translate(0, -1.51f, 0);
@@ -199,7 +198,7 @@ public class FormRenderFeature <T extends PlayerEntity, M extends BipedEntityMod
 
             // Render Overlay 藏得够深的 要不是发现悦灵手臂无法显示我都不会发现
             // 从 PlayerEntityRendererMixin.renderOverlayTexture 提取的代码并进行修改
-            Identifier OverlayTextureID = formModel.getOverlayTextureResource(((ModelRootAccessor) playerEntityModel).originalFur$isSlim());
+            Identifier OverlayTextureID = formModel.getOverlayTextureResource(playerEntityModel.thinArms);
             if (OverlayTextureID != null) {
                 RenderLayer OverlayLayer = null;
                 if (FormRenderUtils.isRenderingInWorld && IRISInstalled) {
@@ -257,7 +256,7 @@ public class FormRenderFeature <T extends PlayerEntity, M extends BipedEntityMod
                 PlayerEntityModel<AbstractClientPlayerEntity> playerEntityModel = playerEntityRenderer.getModel();
                 FormModel formModel = (FormModel) formRenderer.getGeoModel();
                 FormAnimatable formAnimatable = formRenderer.getAnimatable();
-                formRenderer.setPlayer(abstractClientPlayerEntity, ((ModelRootAccessor) playerEntityModel).originalFur$isSlim());
+                formRenderer.setPlayer(abstractClientPlayerEntity, playerEntityModel.thinArms);
                 matrices.push();
                 matrices.multiply(new Quaternionf().rotateX(180 * MathHelper.RADIANS_PER_DEGREE));
                 matrices.translate(0, -1.51f, 0);

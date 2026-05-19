@@ -1,7 +1,6 @@
 package net.onixary.shapeShifterCurseFabric.integration.origins.mixin;
 
 
-import net.onixary.shapeShifterCurseFabric.integration.origins.power.OriginsPowerTypes;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ai.goal.ActiveTargetGoal;
 import net.minecraft.entity.ai.goal.FleeEntityGoal;
@@ -12,6 +11,7 @@ import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.predicate.entity.EntityPredicates;
 import net.minecraft.world.World;
+import net.onixary.shapeShifterCurseFabric.integration.origins.power.OriginsPowerTypes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -32,7 +32,7 @@ public abstract class ScareCreepersMixin extends HostileEntity {
 
     @Redirect(at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/ai/goal/GoalSelector;add(ILnet/minecraft/entity/ai/goal/Goal;)V", ordinal = 8), method = "initGoals")
     private void redirectTargetGoal(GoalSelector goalSelector, int priority, Goal goal) {
-        Goal newGoal = new ActiveTargetGoal<PlayerEntity>(this, PlayerEntity.class, 10, true, false, e -> !OriginsPowerTypes.SCARE_CREEPERS.isActive(e));
+	    Goal newGoal = new ActiveTargetGoal<>(this, PlayerEntity.class, 10, true, false, e -> !OriginsPowerTypes.SCARE_CREEPERS.isActive(e));
         goalSelector.add(priority, newGoal);
     }
 }

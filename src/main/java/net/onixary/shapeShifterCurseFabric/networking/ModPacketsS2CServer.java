@@ -264,9 +264,13 @@ public class ModPacketsS2CServer {
 
     public static void sendPowerAnimationDataToNearPlayer(ServerPlayerEntity player, @Nullable Identifier animationId, int animationCount, int animationLength) {
         player.getServerWorld().getPlayers(near_player -> near_player.squaredDistanceTo(player) <= 128 * 128).forEach(
-                nearPlayer -> {
-                    sendPowerAnimationDataToClient(nearPlayer, player.getUuid(), animationId, animationCount, animationLength);
-                }
+                nearPlayer -> sendPowerAnimationDataToClient(nearPlayer, player.getUuid(), animationId, animationCount, animationLength)
         );
     }
+
+	public static void sendNoJumpTick(ServerPlayerEntity player, int tick) {
+		PacketByteBuf buf = PacketByteBufs.create();
+		buf.writeInt(tick);
+        ServerPlayNetworking.send(player, new BytePayload(BytePayload.id(ModPackets.SET_NO_JUMP_TICK), buf));
+	}
 }

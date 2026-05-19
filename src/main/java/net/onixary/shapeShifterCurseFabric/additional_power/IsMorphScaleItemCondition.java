@@ -27,10 +27,10 @@ public class IsMorphScaleItemCondition {
     }
 
     public static ConditionFactory<Pair<World, ItemStack>> getFactory() {
-        return new ConditionFactory<Pair<World, ItemStack>>(
-                ShapeShifterCurseFabric.identifier("is_morph_scale_item"),
-                new SerializableData(),
-                IsMorphScaleItemCondition::condition
+	    return new ConditionFactory<>(
+			    ShapeShifterCurseFabric.identifier("is_morph_scale_item"),
+			    new SerializableData(),
+			    IsMorphScaleItemCondition::condition
         );
     }
 }

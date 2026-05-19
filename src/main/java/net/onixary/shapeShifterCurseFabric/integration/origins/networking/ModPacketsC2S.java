@@ -27,12 +27,8 @@ public class ModPacketsC2S {
         BytePayload.registerS2C(ModPackets.OPEN_ORIGIN_SCREEN);
         BytePayload.registerS2C(ModPackets.CONFIRM_ORIGIN);
 
-        ServerPlayNetworking.registerGlobalReceiver(BytePayload.id(ModPackets.CHOOSE_ORIGIN), (payload, context) -> {
-            chooseOrigin(context.player(), payload.data());
-        });
-        ServerPlayNetworking.registerGlobalReceiver(BytePayload.id(ModPackets.CHOOSE_RANDOM_ORIGIN), (payload, context) -> {
-            chooseRandomOrigin(context.player(), payload.data());
-        });
+	    ServerPlayNetworking.registerGlobalReceiver(BytePayload.id(ModPackets.CHOOSE_ORIGIN), (payload, context) -> chooseOrigin(context.player(), payload.data()));
+	    ServerPlayNetworking.registerGlobalReceiver(BytePayload.id(ModPackets.CHOOSE_RANDOM_ORIGIN), (payload, context) -> chooseRandomOrigin(context.player(), payload.data()));
     }
 
     private static void chooseOrigin(ServerPlayerEntity player, PacketByteBuf buf) {

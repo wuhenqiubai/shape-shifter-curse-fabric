@@ -193,14 +193,30 @@ public class FormModel extends GeoModel<FormAnimatable> {
                     case "head" -> { this.Hidden_Head = true; }
                     case "body" -> { this.Hidden_Body = true; }
                     case "jacket" -> { this.Hidden_Jacket = true; }
-                    case "left_arm" -> { this.Hidden_LeftArm = true; }
-                    case "right_arm" -> { this.Hidden_RightArm = true; }
-                    case "left_sleeve" -> { this.Hidden_LeftSleeve = true; }
-                    case "right_sleeve" -> { this.Hidden_RightSleeve = true; }
-                    case "left_leg" -> { this.Hidden_LeftLeg = true; }
-                    case "right_leg" -> { this.Hidden_RightLeg = true; }
-                    case "left_pants" -> { this.Hidden_LeftPants = true; }
-                    case "right_pants" -> { this.Hidden_RightPants = true; }
+	                case "leftArm" -> {
+		                this.Hidden_LeftArm = true;
+	                }
+	                case "rightArm" -> {
+		                this.Hidden_RightArm = true;
+	                }
+	                case "leftSleeve" -> {
+		                this.Hidden_LeftSleeve = true;
+	                }
+	                case "rightSleeve" -> {
+		                this.Hidden_RightSleeve = true;
+	                }
+	                case "leftLeg" -> {
+		                this.Hidden_LeftLeg = true;
+	                }
+	                case "rightLeg" -> {
+		                this.Hidden_RightLeg = true;
+	                }
+	                case "leftPants" -> {
+		                this.Hidden_LeftPants = true;
+	                }
+	                case "rightPants" -> {
+		                this.Hidden_RightPants = true;
+	                }
                 }
             }
         }
@@ -241,7 +257,7 @@ public class FormModel extends GeoModel<FormAnimatable> {
                 JsonArray array = entry.getValue().getAsJsonArray();
                 List<String> chain = new ArrayList<>();
                 for (int i = 0; i < array.size(); i++) {
-                    chain.add(array.get(i).getAsString());
+	                chain.add(base + "_" + array.get(i).getAsString());
                 }
                 ChainData.add(chain);
             }
@@ -378,7 +394,7 @@ public class FormModel extends GeoModel<FormAnimatable> {
         float SWAY_SCALE = 0.05F;
         if(BCD_TailChain.isEmpty()) {return;}
         for (List<String> tailChain : BCD_TailChain) {
-            GeoBone firstTail = this.getCachedGeoBone(tailChain.get(0));
+	        GeoBone firstTail = this.getCachedGeoBone(tailChain.getFirst());
             if (firstTail == null) {
                 continue;
             }
@@ -410,7 +426,7 @@ public class FormModel extends GeoModel<FormAnimatable> {
         float SWAY_SCALE = 0.05F;
         if (BCD_TailChainHead.isEmpty()) {return;}
         for (List<String> tailChain : BCD_TailChainHead) {
-            GeoBone firstHeadTail = this.getCachedGeoBone(tailChain.get(0));
+	        GeoBone firstHeadTail = this.getCachedGeoBone(tailChain.getFirst());
             if (firstHeadTail == null) {
                 continue;
             }
@@ -437,7 +453,7 @@ public class FormModel extends GeoModel<FormAnimatable> {
 
         if (BCD_WingChainL != null) {
             for (List<String> wingChain : BCD_WingChainL) {
-                GeoBone firstWing = this.getCachedGeoBone(wingChain.get(0));
+	            GeoBone firstWing = this.getCachedGeoBone(wingChain.getFirst());
                 if (firstWing == null) { continue; }
                 firstWing.setRotY(sway_l);
                 firstWing.setRotX(-tailDragAmountVertical * 0.35f);
@@ -452,7 +468,7 @@ public class FormModel extends GeoModel<FormAnimatable> {
         }
         if (BCD_WingChainR != null) {
             for (List<String> wingChain : BCD_WingChainR) {
-                GeoBone firstWing = this.getCachedGeoBone(wingChain.get(0));
+	            GeoBone firstWing = this.getCachedGeoBone(wingChain.getFirst());
                 if (firstWing == null)  continue;
                 firstWing.setRotY(sway_r);
                 firstWing.setRotX(-tailDragAmountVertical * 0.35f);

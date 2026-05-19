@@ -59,7 +59,7 @@ public class ChooseOriginScreen extends OriginDisplayScreen {
 			return impDelta == 0 ? a.getOrder() - b.getOrder() : impDelta;
 		});
 		maxSelection = originSelection.size();
-		if(currentLayer.isRandomAllowed() && currentLayer.getRandomOrigins(player).size() > 0) {
+		if (currentLayer.isRandomAllowed() && !currentLayer.getRandomOrigins(player).isEmpty()) {
 			maxSelection += 1;
 		}
 		if(maxSelection == 0) {

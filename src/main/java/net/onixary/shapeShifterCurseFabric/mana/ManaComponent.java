@@ -1,19 +1,19 @@
 package net.onixary.shapeShifterCurseFabric.mana;
 
-import org.ladysnake.cca.api.v3.component.sync.AutoSyncedComponent;
-import org.ladysnake.cca.api.v3.component.sync.PlayerSyncPredicate;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.nbt.NbtString;
 import net.minecraft.network.RegistryByteBuf;
+import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
 import net.onixary.shapeShifterCurseFabric.util.ClientUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.ladysnake.cca.api.v3.component.sync.AutoSyncedComponent;
+import org.ladysnake.cca.api.v3.component.sync.PlayerSyncPredicate;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -371,7 +371,7 @@ public class ManaComponent implements AutoSyncedComponent {
     }
 
     private void __SetMana__(double mana) {
-        this.Mana = Math.max(Math.min(mana, this.getMaxMana()), 0.0d);
+	    this.Mana = Math.clamp(mana, 0.0d, this.getMaxMana());
         this.onCommonManaChange();
     }
 

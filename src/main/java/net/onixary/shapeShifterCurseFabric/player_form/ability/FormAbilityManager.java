@@ -112,8 +112,8 @@ public class FormAbilityManager {
 
     public static void loadForm(PlayerEntity player) {
         PlayerFormComponent component = player.getComponent(RegPlayerFormComponent.PLAYER_FORM);
-        PlayerFormBase savedForm = RegPlayerFormComponent.PLAYER_FORM.get(player).getCurrentForm();;
-        if (savedForm != null) {
+	    PlayerFormBase savedForm = RegPlayerFormComponent.PLAYER_FORM.get(player).getCurrentForm();
+	    if (savedForm != null) {
             applyForm(player, savedForm);
         }
         else{

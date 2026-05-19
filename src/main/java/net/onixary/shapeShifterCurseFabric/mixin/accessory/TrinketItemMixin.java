@@ -80,27 +80,25 @@ public class TrinketItemMixin {
         if ((Object)this instanceof PlayerEntity player) {
             if (!player.isRemoved()) {
                 Map<String, ItemStack> newlyEquippedTrinkets = new HashMap();
-                TrinketsApi.getTrinketComponent(player).ifPresent((trinkets) -> {
-                    trinkets.forEach((ref, stack) -> {
-                        TrinketInventory inventory = ref.inventory();
-                        SlotType slotType = inventory.getSlotType();
-                        int index = ref.index();
-                        ItemStack oldStack = this.getOldStack(slotType, index);
-                        ItemStack newStack = inventory.getStack(index);
-                        ItemStack newStackCopy = newStack.copy();
-                        String newRef = slotType.getGroup() + "/" + slotType.getName() + "/" + index;
-                        if (!ItemStack.areEqual(newStack, oldStack)) {
-                            this.onUnequip(oldStack, ref, player);
-                            this.onEquip(newStack, ref, player);
-                        }
-                        ItemStack tickedStack = inventory.getStack(index);
-                        if (tickedStack.getItem() == newStackCopy.getItem()) {
-                            newlyEquippedTrinkets.put(newRef, tickedStack.copy());
-                        } else {
-                            newlyEquippedTrinkets.put(newRef, newStackCopy);
-                        }
-                    });
-                });
+	            TrinketsApi.getTrinketComponent(player).ifPresent((trinkets) -> trinkets.forEach((ref, stack) -> {
+		            TrinketInventory inventory = ref.inventory();
+		            SlotType slotType = inventory.getSlotType();
+		            int index = ref.index();
+		            ItemStack oldStack = this.getOldStack(slotType, index);
+		            ItemStack newStack = inventory.getStack(index);
+		            ItemStack newStackCopy = newStack.copy();
+		            String newRef = slotType.getGroup() + "/" + slotType.getName() + "/" + index;
+		            if (!ItemStack.areEqual(newStack, oldStack)) {
+			            this.onUnequip(oldStack, ref, player);
+			            this.onEquip(newStack, ref, player);
+		            }
+		            ItemStack tickedStack = inventory.getStack(index);
+		            if (tickedStack.getItem() == newStackCopy.getItem()) {
+			            newlyEquippedTrinkets.put(newRef, tickedStack.copy());
+		            } else {
+			            newlyEquippedTrinkets.put(newRef, newStackCopy);
+		            }
+	            }));
                 this.lastEquippedTrinkets.clear();
                 this.lastEquippedTrinkets.putAll(newlyEquippedTrinkets);
             }

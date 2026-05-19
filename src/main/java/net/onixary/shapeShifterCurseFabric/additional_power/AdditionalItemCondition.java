@@ -14,7 +14,7 @@ import net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric;
 public class AdditionalItemCondition {
     public static void register() {
         register(IsMorphScaleItemCondition.getFactory());
-        register(new ConditionFactory<Pair<World, ItemStack>>(
+        register(new ConditionFactory<>(
                 ShapeShifterCurseFabric.identifier("is_weapon"),
                 new SerializableData(),
                 (data, worldAndStack) -> {
@@ -22,7 +22,7 @@ public class AdditionalItemCondition {
                     AttributeModifiersComponent modifiers = itemStack.getItem().getAttributeModifiers();
                     for (var entry : modifiers.modifiers()) {
                         if (entry.attribute() == EntityAttributes.GENERIC_ATTACK_DAMAGE
-                            || entry.attribute() == EntityAttributes.GENERIC_ATTACK_SPEED) {
+                                || entry.attribute() == EntityAttributes.GENERIC_ATTACK_SPEED) {
                             return true;
                         }
                     }

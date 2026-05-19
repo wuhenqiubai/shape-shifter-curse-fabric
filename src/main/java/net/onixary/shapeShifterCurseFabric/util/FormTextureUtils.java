@@ -7,9 +7,7 @@ import net.minecraft.client.texture.TextureManager;
 import net.minecraft.resource.Resource;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.JsonHelper;
 import net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric;
-import net.onixary.shapeShifterCurseFabric.player_form_render.OriginFurModel;
 import org.apache.commons.lang3.tuple.ImmutableTriple;
 import org.apache.commons.lang3.tuple.Triple;
 
@@ -49,44 +47,6 @@ public class FormTextureUtils {
         public boolean getAccent2GreyReverse() {
             return this.accent2GreyReverse;
         }
-    }
-
-    public static Identifier getColorMask_Texture(OriginFurModel model) {
-        if (model == null || model.json == null) {
-            return null;
-        }
-        String MaskIDStr = JsonHelper.getString(model.json, "texture_mask", null);
-        return MaskIDStr == null ? null : Identifier.tryParse(MaskIDStr);
-    }
-
-    public static Identifier getColorMask_OverlayTexture(OriginFurModel model, boolean Slim) {
-        if (model == null || model.json == null) {
-            return null;
-        }
-
-        String MaskIDStr = null;
-        if (!Slim) {
-            MaskIDStr = JsonHelper.getString(model.json, "overlay_mask", null);
-        }
-        else {
-            MaskIDStr = JsonHelper.getString(model.json, "overlay_slim_mask", null);
-        }
-        return MaskIDStr == null ? null : Identifier.tryParse(MaskIDStr);
-    }
-
-    public static Identifier getColorMask_EmissiveTexture(OriginFurModel model, boolean Slim) {
-        if (model == null || model.json == null) {
-            return null;
-        }
-
-        String MaskIDStr = null;
-        if (!Slim) {
-            MaskIDStr = JsonHelper.getString(model.json, "emissive_overlay_mask", null);
-        }
-        else {
-            MaskIDStr = JsonHelper.getString(model.json, "emissive_overlay_slim_mask", null);
-        }
-        return MaskIDStr == null ? null : Identifier.tryParse(MaskIDStr);
     }
 
     public static NativeImage toNativeImage(Identifier texture) {
@@ -376,130 +336,5 @@ public class FormTextureUtils {
             maskImage.close();
             return null;
         }
-    }
-
-    public static Identifier getBakedTexture(OriginFurModel model, ColorSetting colorSetting) {
-        if (model == null || colorSetting == null || model.json == null) {
-            return null;
-        }
-
-        Identifier CachedTexture = model.ColorMask_Baked_Textures.get(colorSetting);
-        if (CachedTexture != null) {
-            return CachedTexture;
-        }
-
-        Identifier baseTexture = OriginFurModel.dTR(model.json);
-        Identifier maskTexture = getColorMask_Texture(model);
-
-        if (baseTexture == null || maskTexture == null) {
-            return baseTexture;
-        }
-
-        CachedTexture = BakeTexture(baseTexture, maskTexture, colorSetting, IsModelUseMultiply(model));
-        if (CachedTexture == null) {
-            CachedTexture = baseTexture;
-        }
-        model.ColorMask_Baked_Textures.put(colorSetting, CachedTexture);
-        return CachedTexture;
-    }
-
-    public static Identifier getBakedOverlayTexture(OriginFurModel model, ColorSetting colorSetting, boolean Slim) {
-        if (model == null || colorSetting == null || model.json == null) {
-            return null;
-        }
-
-        if (!Slim) {
-            Identifier CachedTexture = model.ColorMask_Baked_OverlayTexture.get(colorSetting);
-            if (CachedTexture != null) {
-                return CachedTexture;
-            }
-
-            Identifier baseTexture = Identifier.tryParse(JsonHelper.getString(model.json, "overlay", null));
-            Identifier maskTexture = getColorMask_OverlayTexture(model, Slim);
-
-            if (baseTexture == null) {
-                return null;
-            }
-
-            CachedTexture = BakeTexture(baseTexture, maskTexture, colorSetting, IsModelUseMultiply(model));
-            if (CachedTexture == null) {
-                CachedTexture = baseTexture;
-            }
-            model.ColorMask_Baked_OverlayTexture.put(colorSetting, CachedTexture);
-            return CachedTexture;
-        } else {
-            Identifier CachedTexture = model.ColorMask_Baked_OverlayTexture_Slim.get(colorSetting);
-            if (CachedTexture != null) {
-                return CachedTexture;
-            }
-
-            Identifier baseTexture = Identifier.tryParse(JsonHelper.getString(model.json, "overlay_slim", null));
-            Identifier maskTexture = getColorMask_OverlayTexture(model, Slim);
-
-            if (baseTexture == null) {
-                return null;
-            }
-
-            CachedTexture = BakeTexture(baseTexture, maskTexture, colorSetting, IsModelUseMultiply(model));
-            if (CachedTexture == null) {
-                CachedTexture = baseTexture;
-            }
-            model.ColorMask_Baked_OverlayTexture_Slim.put(colorSetting, CachedTexture);
-            return CachedTexture;
-        }
-    }
-
-    public static Identifier getBakedEmissiveTexture(OriginFurModel model, ColorSetting colorSetting, boolean Slim) {
-        if (model == null || colorSetting == null || model.json == null) {
-            return null;
-        }
-
-        if (!Slim) {
-            Identifier CachedTexture = model.ColorMask_Baked_EmissiveTexture.get(colorSetting);
-            if (CachedTexture != null) {
-                return CachedTexture;
-            }
-
-            Identifier baseTexture = Identifier.tryParse(JsonHelper.getString(model.json, "emissive_overlay", null));
-            Identifier maskTexture = getColorMask_EmissiveTexture(model, Slim);
-
-            if (baseTexture == null) {
-                return null;
-            }
-
-            CachedTexture = BakeTexture(baseTexture, maskTexture, colorSetting, IsModelUseMultiply(model));
-            if (CachedTexture == null) {
-                CachedTexture = baseTexture;
-            }
-            model.ColorMask_Baked_EmissiveTexture.put(colorSetting, CachedTexture);
-            return CachedTexture;
-        } else {
-            Identifier CachedTexture = model.ColorMask_Baked_EmissiveTexture_Slim.get(colorSetting);
-            if (CachedTexture != null) {
-                return CachedTexture;
-            }
-
-            Identifier baseTexture = Identifier.tryParse(JsonHelper.getString(model.json, "emissive_overlay_slim", null));
-            Identifier maskTexture = getColorMask_EmissiveTexture(model, Slim);
-
-            if (baseTexture == null) {
-                return null;
-            }
-
-            CachedTexture = BakeTexture(baseTexture, maskTexture, colorSetting, IsModelUseMultiply(model));
-            if (CachedTexture == null) {
-                CachedTexture = baseTexture;
-            }
-            model.ColorMask_Baked_EmissiveTexture_Slim.put(colorSetting, CachedTexture);
-            return CachedTexture;
-        }
-    }
-
-    // 当Json中IsMultiplyMask为true时 直接使用正片叠底混合模式 否则使用灰度修正模式
-    private static boolean IsModelUseMultiply(OriginFurModel model) {
-        if (model == null || model.json == null) {
-            return false;
-        }
-        return JsonHelper.getBoolean(model.json, "IsMultiplyMask", false);
     }
 }

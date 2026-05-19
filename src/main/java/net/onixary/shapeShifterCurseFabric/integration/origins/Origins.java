@@ -96,9 +96,7 @@ public class Origins implements ModInitializer, OrderedResourceListenerInitializ
 		ModLoot.registerLootTables();
 		Origin.init();
 
-		CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
-			OriginCommand.register(dispatcher);
-		});
+		CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> OriginCommand.register(dispatcher));
 		ItemGroupEvents.modifyEntriesEvent(ItemGroups.TOOLS).register((content) -> {
 			//content.add(ModItems.ORB_OF_ORIGIN);
 		});

@@ -28,15 +28,16 @@ public class WidgetEXUtils {
         }
     }
 
-    public static interface IWidgetEX {
-        public WidgetRect getRect();
-        public List<IWidgetEX> getWidgetList();
+	public interface IWidgetEX {
+		WidgetRect getRect();
 
-        public default void addWidget(IWidgetEX widget) {
+		List<IWidgetEX> getWidgetList();
+
+		default void addWidget(IWidgetEX widget) {
             getWidgetList().add(widget);
         }
 
-        public default void onClickWidget(double mouseX, double mouseY, int button) {
+		default void onClickWidget(double mouseX, double mouseY, int button) {
             for (IWidgetEX widget : getWidgetList()) {
                 WidgetRect rect = widget.getRect();
                 if (rect.isMouseInside(mouseX, mouseY)) {
@@ -44,8 +45,9 @@ public class WidgetEXUtils {
                     widget.onClickWidget(newMousePos.getLeft(), newMousePos.getRight(), button);
                 }
             }
-        };
-        public default void onReleaseWidget(double mouseX, double mouseY, int button) {
+		}
+
+		default void onReleaseWidget(double mouseX, double mouseY, int button) {
             for (IWidgetEX widget : getWidgetList()) {
                 WidgetRect rect = widget.getRect();
                 if (rect.isMouseInside(mouseX, mouseY)) {
@@ -53,8 +55,9 @@ public class WidgetEXUtils {
                     widget.onReleaseWidget(newMousePos.getLeft(), newMousePos.getRight(), button);
                 }
             }
-        };
-        public default void onDragWidget(double mouseX, double mouseY, int button, double deltaX, double deltaY) {
+		}
+
+		default void onDragWidget(double mouseX, double mouseY, int button, double deltaX, double deltaY) {
             for (IWidgetEX widget : getWidgetList()) {
                 WidgetRect rect = widget.getRect();
                 if (rect.isMouseInside(mouseX, mouseY)) {
@@ -62,8 +65,9 @@ public class WidgetEXUtils {
                     widget.onDragWidget(newMousePos.getLeft(), newMousePos.getRight(), button, deltaX, deltaY);
                 }
             }
-        };
-        public default void onScrollWidget(double mouseX, double mouseY, double mouseZ) {
+		}
+
+		default void onScrollWidget(double mouseX, double mouseY, double mouseZ) {
             for (IWidgetEX widget : getWidgetList()) {
                 WidgetRect rect = widget.getRect();
                 if (rect.isMouseInside(mouseX, mouseY)) {
@@ -71,6 +75,6 @@ public class WidgetEXUtils {
                     widget.onScrollWidget(newMousePos.getLeft(), newMousePos.getRight(), mouseZ);
                 }
             }
-        };
+		}
     }
 }

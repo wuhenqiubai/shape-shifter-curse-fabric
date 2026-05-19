@@ -79,19 +79,17 @@ public class ModPacketsC2S {
                 }
         );
 
-        reg(JUMP_DETACH_REQUEST_ID, (server, player, handler, buf, responseSender) -> {
-            server.execute(() -> {
-                BatBlockAttachPower attachPower = PowerHolderComponent.getPowers(player, BatBlockAttachPower.class)
-                        .stream()
-                        .filter(BatBlockAttachPower::isAttached)
-                        .findFirst()
-                        .orElse(null);
+	    reg(JUMP_DETACH_REQUEST_ID, (server, player, handler, buf, responseSender) -> server.execute(() -> {
+		    BatBlockAttachPower attachPower = PowerHolderComponent.getPowers(player, BatBlockAttachPower.class)
+				    .stream()
+				    .filter(BatBlockAttachPower::isAttached)
+				    .findFirst()
+				    .orElse(null);
 
-                if (attachPower != null) {
-                    attachPower.handleJump(player);
-                }
-            });
-        });
+		    if (attachPower != null) {
+			    attachPower.handleJump(player);
+		    }
+	    }));
 
         // jump_event condition handle
         reg(JUMP_EVENT_ID, (server, player, handler, buf, responseSender) -> {

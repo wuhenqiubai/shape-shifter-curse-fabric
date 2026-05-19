@@ -152,7 +152,7 @@ public class RegPlayerForms {
 
     // 每次Reload调用
     public static HashMap<Identifier, PlayerFormDynamic> DumpDynamicPlayerForms() {
-        HashMap<Identifier, PlayerFormDynamic> dynamicPlayerFormMap = new HashMap<Identifier, PlayerFormDynamic>();
+	    HashMap<Identifier, PlayerFormDynamic> dynamicPlayerFormMap = new HashMap<>();
         for (Identifier id : dynamicPlayerForms) {
             if (playerForms.get(id) instanceof PlayerFormDynamic playerFormDynamic) {
                 dynamicPlayerFormMap.put(id, playerFormDynamic);

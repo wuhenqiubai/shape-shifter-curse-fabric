@@ -20,8 +20,8 @@ import java.util.List;
 public class DelayAttributePower extends Power {
     private final int TargetDelay;
     private int NowDelay;
-    private final List<AttributedEntityAttributeModifier> modifiers = new LinkedList<>();;
-    private final boolean updateHealth;
+	private final List<AttributedEntityAttributeModifier> modifiers = new LinkedList<>();
+	private final boolean updateHealth;
     private final int tickRate;
     private boolean IsModActive = false;
 

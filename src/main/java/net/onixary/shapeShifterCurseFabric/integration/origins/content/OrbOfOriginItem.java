@@ -41,7 +41,7 @@ public class OrbOfOriginItem extends Item {
         if(!world.isClient) {
             OriginComponent component = ModComponents.ORIGIN.get(user);
             Map<OriginLayer, Origin> targets = getTargets(stack);
-            if(targets.size() > 0) {
+	        if (!targets.isEmpty()) {
                 for(Map.Entry<OriginLayer, Origin> target : targets.entrySet()) {
                     component.setOrigin(target.getKey(), target.getValue());
                 }

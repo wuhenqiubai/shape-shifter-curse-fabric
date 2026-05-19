@@ -2,13 +2,6 @@ package net.onixary.shapeShifterCurseFabric.integration.origins.screen;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.apace100.apoli.power.PowerType;
-import net.onixary.shapeShifterCurseFabric.integration.origins.Origins;
-import net.onixary.shapeShifterCurseFabric.integration.origins.badge.Badge;
-import net.onixary.shapeShifterCurseFabric.integration.origins.badge.BadgeManager;
-import net.onixary.shapeShifterCurseFabric.integration.origins.mixin.DrawContextAccessor;
-import net.onixary.shapeShifterCurseFabric.integration.origins.origin.Impact;
-import net.onixary.shapeShifterCurseFabric.integration.origins.origin.Origin;
-import net.onixary.shapeShifterCurseFabric.integration.origins.origin.OriginLayer;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
@@ -22,6 +15,13 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Language;
+import net.onixary.shapeShifterCurseFabric.integration.origins.Origins;
+import net.onixary.shapeShifterCurseFabric.integration.origins.badge.Badge;
+import net.onixary.shapeShifterCurseFabric.integration.origins.badge.BadgeManager;
+import net.onixary.shapeShifterCurseFabric.integration.origins.mixin.DrawContextAccessor;
+import net.onixary.shapeShifterCurseFabric.integration.origins.origin.Impact;
+import net.onixary.shapeShifterCurseFabric.integration.origins.origin.Origin;
+import net.onixary.shapeShifterCurseFabric.integration.origins.origin.OriginLayer;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -151,7 +151,7 @@ public class OriginDisplayScreen extends Screen {
     public boolean mouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY) {
         if(this.scrolling) {
             int delta = (int)(mouseY - mouseDragStart);
-            int newScrollPos = (int)Math.max(36, Math.min(141, scrollDragStart + delta));
+	        int newScrollPos = (int) Math.clamp(scrollDragStart + delta, 36, 141);
             float part = (newScrollPos - 36) / (float)(141 - 36);
             scrollPos = (int)(part * currentMaxScroll);
         }

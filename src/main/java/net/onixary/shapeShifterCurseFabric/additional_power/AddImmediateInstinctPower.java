@@ -26,9 +26,9 @@ public class AddImmediateInstinctPower extends Power {
             return;
         }
 
-        this.instinctEffectID = data.getString("instinct_effect_id");;
+        this.instinctEffectID = data.getString("instinct_effect_id");
 
-        applyImmediateEffect((ServerPlayerEntity)entity, this.instinctEffectID, this.value);
+        applyImmediateEffect((ServerPlayerEntity) entity, this.instinctEffectID, this.value);
 
 //        InstinctEffectType effectType = null;
 //        try {

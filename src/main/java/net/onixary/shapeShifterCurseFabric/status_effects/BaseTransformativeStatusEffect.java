@@ -24,5 +24,5 @@ public abstract class BaseTransformativeStatusEffect extends StatusEffect {
     // 抽象方法：效果应用时的回调
     public void ActiveEffect(ServerPlayerEntity player){
 
-    };
+    }
 }

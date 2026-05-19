@@ -16,7 +16,8 @@ import net.onixary.shapeShifterCurseFabric.player_animation.AnimationHolder;
 import net.onixary.shapeShifterCurseFabric.player_animation.v3.AbstractAnimStateController;
 import net.onixary.shapeShifterCurseFabric.player_animation.v3.AnimSystem;
 import net.onixary.shapeShifterCurseFabric.player_animation.v3.AnimUtils;
-import net.onixary.shapeShifterCurseFabric.player_form_render.OriginalFurClient;
+import net.onixary.shapeShifterCurseFabric.render.form_render.FormModelResourceReloadListener;
+import net.onixary.shapeShifterCurseFabric.render.form_render.FormRenderUtils;
 import net.onixary.shapeShifterCurseFabric.util.PatronUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -28,12 +29,12 @@ public class PlayerFormDynamic extends PlayerFormBase{
     public static final UUID PublicUUID = UUID.fromString("00000000-0000-0000-0000-000000000000");
 
     public Identifier FurModelID = null;
-    public List<Identifier> ExtraPower = new LinkedList<Identifier>();
+	public List<Identifier> ExtraPower = new LinkedList<>();
     public HashMap<Identifier, JsonObject> ExtraPowerData = new LinkedHashMap<>();
     private int TempPowerIndex = 0;
     public boolean IsPatronForm = false;  // 可以使用特殊物品直接变形
     public int RequirePatronLevel = 0;  // 需要的赞助等级
-    public List<UUID> PlayerUUIDs = new ArrayList<UUID>();
+	public List<UUID> PlayerUUIDs = new ArrayList<>();
 
     // 覆写数据
     private Identifier originID = null;
@@ -46,7 +47,7 @@ public class PlayerFormDynamic extends PlayerFormBase{
     }
 
     public boolean isModelExist() {
-        return OriginalFurClient.FUR_REGISTRY.containsKey(this.getFormOriginID());
+	    return FormRenderUtils.formRendererRegistry.getOrDefault(FormModelResourceReloadListener.defaultLayer, new HashMap<>()).containsKey(this.getFormOriginID());
     }
 
     private Map<Identifier, AbstractAnimStateController> animStateControllerMap = new HashMap<>();

@@ -13,7 +13,7 @@ import net.onixary.shapeShifterCurseFabric.status_effects.attachment.EffectManag
 public class CodexData {
     // 集中管理Codex的数据
 
-    public static enum ContentType{
+	public enum ContentType {
         TITLE,
         APPEARANCE,
         PROS,

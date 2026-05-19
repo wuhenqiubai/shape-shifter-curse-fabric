@@ -1,18 +1,18 @@
 package net.onixary.shapeShifterCurseFabric.integration.origins.component;
 
-import org.ladysnake.cca.api.v3.component.sync.AutoSyncedComponent;
 import io.github.apace100.apoli.component.PowerHolderComponent;
 import io.github.apace100.apoli.power.ModifyPlayerSpawnPower;
 import io.github.apace100.apoli.power.Power;
 import io.github.apace100.apoli.power.PowerType;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.Identifier;
 import net.onixary.shapeShifterCurseFabric.integration.origins.origin.Origin;
 import net.onixary.shapeShifterCurseFabric.integration.origins.origin.OriginLayer;
 import net.onixary.shapeShifterCurseFabric.integration.origins.origin.OriginLayers;
 import net.onixary.shapeShifterCurseFabric.integration.origins.origin.OriginRegistry;
 import net.onixary.shapeShifterCurseFabric.integration.origins.power.OriginsCallbackPower;
 import net.onixary.shapeShifterCurseFabric.integration.origins.registry.ModComponents;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.Identifier;
+import org.ladysnake.cca.api.v3.component.sync.AutoSyncedComponent;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -80,11 +80,11 @@ public interface OriginComponent extends AutoSyncedComponent {
 					shouldContinue = true;
 				} else if (layer.getOriginOptionCount(player) == 1 && layer.shouldAutoChoose()) {
 					List<Origin> origins = layer.getOrigins(player).stream().map(OriginRegistry::get).filter(Origin::isChoosable).collect(Collectors.toList());
-					if (origins.size() == 0) {
+					if (origins.isEmpty()) {
 						List<Identifier> randomOrigins = layer.getRandomOrigins(player);
 						setOrigin(layer, OriginRegistry.get(randomOrigins.get(player.getRandom().nextInt(randomOrigins.size()))));
 					} else {
-						setOrigin(layer, origins.get(0));
+						setOrigin(layer, origins.getFirst());
 					}
 					choseOneAutomatically = true;
 					shouldContinue = true;

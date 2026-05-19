@@ -48,9 +48,8 @@ public class Scheduler {
                 Consumer<MinecraftServer> runnable = runnables.get(i);
                 runnable.accept(m);
 
-                if(runnable instanceof Repeating) {// reschedule repeating tasks
-                    Repeating repeating = ((Repeating) runnable);
-                    if(repeating.shouldQueue(this.currentTick))
+	            if (runnable instanceof Repeating repeating) {// reschedule repeating tasks
+		            if (repeating.shouldQueue(this.currentTick))
                         this.queue(runnable, ((Repeating) runnable).next);
                 }
             }

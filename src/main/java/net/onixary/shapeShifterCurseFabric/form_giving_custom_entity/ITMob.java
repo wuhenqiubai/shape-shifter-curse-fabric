@@ -15,20 +15,23 @@ import net.onixary.shapeShifterCurseFabric.status_effects.TStatusApplier;
 import java.util.Optional;
 
 public interface ITMob {
-    public float getStatusChance();
-    public BaseTransformativeStatusEffect getStatusEffect();
-    public void TickCooldown();
-    public void ApplyCooldown();
-    public boolean IsInCooldown();
+	float getStatusChance();
 
-    public default void TMob_Tick(MobEntity TMob) {
+	BaseTransformativeStatusEffect getStatusEffect();
+
+	void TickCooldown();
+
+	void ApplyCooldown();
+
+	boolean IsInCooldown();
+
+	default void TMob_Tick(MobEntity TMob) {
         TickCooldown();
 
         LivingEntity target = TMob.getTarget();
-        if (target instanceof PlayerEntity && !this.IsInCooldown()) {
-            PlayerEntity player = (PlayerEntity) target;
+		if (target instanceof PlayerEntity player && !this.IsInCooldown()) {
 
-            double distance = TMob.squaredDistanceTo(player);
+			double distance = TMob.squaredDistanceTo(player);
             if (distance <= StaticParams.CUSTOM_MOB_DEFAULT_ATTACK_RANGE * StaticParams.CUSTOM_MOB_DEFAULT_ATTACK_RANGE) {
                 TMob.tryAttack(player);
                 TStatusApplier.applyStatusByChance(this.getStatusChance(), player, this.getStatusEffect());
@@ -48,7 +51,7 @@ public interface ITMob {
         }
     }
 
-    public default Optional<Boolean> TMob_TryAttack(MobEntity TMob, Entity target) {
+	default Optional<Boolean> TMob_TryAttack(MobEntity TMob, Entity target) {
         if(target instanceof PlayerEntity) {
             PlayerFormBase currentForm = target.getComponent(RegPlayerFormComponent.PLAYER_FORM).getCurrentForm();
             if (currentForm.equals(RegPlayerForms.ORIGINAL_SHIFTER)) {

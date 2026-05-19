@@ -9,11 +9,12 @@ import net.minecraft.util.Identifier;
 // 理论上可以用接口的 但是为了最小化注入(使用接口得注入到Item里面 兼容风险较大) 还是用Class吧
 
 public abstract class AccessoryItem extends Item {
-    public static record SlotData(Identifier slot, int index) {}
-
-    public static enum DropRule {
+	public enum DropRule {
         KEEP, DROP, DESTROY, DEFAULT
     }
+
+	public record SlotData(Identifier slot, int index) {
+	}
 
     public AccessoryItem(Settings settings) {
         super(settings);

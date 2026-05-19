@@ -27,6 +27,7 @@
     "HissPhantomMixin",
     "HoldBreathMixin",
     "HungerManagerMixin",
+    "ItemMixin",
     "ItemStackMixin",
     "LingeringPotionItemMixin",
     "LivingEntityBurnDamageMixin",
@@ -34,8 +35,6 @@
     "LivingEntityMixin",
     "LoginMixin",
     "MinionPlayerEntityMixin",
-    "OriginsRegistryMixin",
-    "OriginsRegistryMixin$OriginListMixin$ORIF",
     "PlayerAnimInterfaceMixin",
     "PlayerEntityAttackMixin",
     "PlayerEntityPoseMixin",
@@ -44,6 +43,7 @@
     "PotionItemMixin",
     "PotionStackMixin",
     "ServerPlayerEntityForceInputMixin",
+    "ShearsItemMixin",
     "SneakEdgeCheckMixin",
     "StatusEffectMixin",
     "ThrowablePotionStackMixin",
@@ -86,8 +86,6 @@
     "KeyboardInputMixin",
     "MinecraftClientMixin",
     "MoonPhaseRenderMixin",
-    "OverrideSkinFirstPersonMixin",
-    "OverrideSkinThirdPersonMixin",
     "PlayerClipAtLedgeMixin",
     "PlayerEntityAnimOverrideMixin",
     "PlayerEntityRendererFallFlyingMixin",
@@ -96,7 +94,9 @@
     "PlayerRotationRendererMixin",
     "accessor.ApoliClientAccessor",
     "integration.TacZ_Anim",
-    "integration.TacZ_AnimThird"
+    "integration.TacZ_AnimThird",
+    "render.LivingEntityRendererMixin",
+    "render.PlayerEntityRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1

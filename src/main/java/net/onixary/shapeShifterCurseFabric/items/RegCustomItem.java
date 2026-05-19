@@ -22,8 +22,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import static net.onixary.shapeShifterCurseFabric.blocks.RegCustomBlock.DEW_COVERED_COBWEB;
-import static net.onixary.shapeShifterCurseFabric.blocks.RegCustomBlock.MOONDUST_CRYSTAL_GRIT;
+import static net.onixary.shapeShifterCurseFabric.blocks.RegCustomBlock.*;
 
 public class RegCustomItem {
     private RegCustomItem(){}
@@ -135,6 +134,7 @@ public class RegCustomItem {
                 entries.add(SILK_DEW);
                 // 方块物品注册
                 entries.add(MOONDUST_CRYSTAL_GRIT);
+	            entries.add(WEB_COMPOSTER);
                 entries.add(DEW_COVERED_COBWEB);
                 entries.addAll(buildAllPotions(
                         RegCustomPotions.MOONDUST_POTION,

@@ -7,7 +7,10 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.Pair;
 import net.minecraft.world.World;
 import net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric;
-import net.onixary.shapeShifterCurseFabric.minion.*;
+import net.onixary.shapeShifterCurseFabric.minion.IMinion;
+import net.onixary.shapeShifterCurseFabric.minion.IPlayerEntityMinion;
+import net.onixary.shapeShifterCurseFabric.minion.PlayerMinionComponent;
+import net.onixary.shapeShifterCurseFabric.minion.RegPlayerMinionComponent;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -49,7 +52,7 @@ public abstract class MinionPlayerEntityMixin implements IPlayerEntityMinion {
         if (playerMinionComponent != null) {
             return playerMinionComponent.minions;
         } else {
-            return new ConcurrentHashMap<Identifier, ArrayList<UUID>>();
+	        return new ConcurrentHashMap<>();
         }
     }
 

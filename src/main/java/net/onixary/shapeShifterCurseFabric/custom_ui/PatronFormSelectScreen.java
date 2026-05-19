@@ -46,9 +46,7 @@ public class PatronFormSelectScreen extends Screen {
         }
         // TODO 移除填充项
         // 下面是填充项
-        RegPlayerForms.playerForms.forEach((formID, form) -> {
-            availableForms.add(form.FormID);
-        });
+	    RegPlayerForms.playerForms.forEach((formID, form) -> availableForms.add(form.FormID));
         // 填充项结束
         return availableForms;
     }

@@ -32,7 +32,7 @@ public abstract class ScareSkeletonMixin extends HostileEntity implements Ranged
 
     @Redirect(at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/ai/goal/GoalSelector;add(ILnet/minecraft/entity/ai/goal/Goal;)V", ordinal = 7), method = "initGoals")
     private void redirectTargetGoal(GoalSelector goalSelector, int priority, Goal goal) {
-        Goal newGoal = new ActiveTargetGoal<PlayerEntity>(this, PlayerEntity.class, 10, true, false, e -> !AdditionalPowers.SCARE_SKELETON.isActive(e));
+	    Goal newGoal = new ActiveTargetGoal<>(this, PlayerEntity.class, 10, true, false, e -> !AdditionalPowers.SCARE_SKELETON.isActive(e));
         goalSelector.add(priority, newGoal);
     }
 }
