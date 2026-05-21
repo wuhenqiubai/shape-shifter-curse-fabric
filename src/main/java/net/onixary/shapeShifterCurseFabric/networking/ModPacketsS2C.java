@@ -21,11 +21,13 @@ import net.onixary.shapeShifterCurseFabric.additional_power.BatBlockAttachPower;
 import net.onixary.shapeShifterCurseFabric.additional_power.VirtualTotemPower;
 import net.onixary.shapeShifterCurseFabric.client.ClientPlayerStateManager;
 import net.onixary.shapeShifterCurseFabric.client.ShapeShifterCurseFabricClient;
+import net.onixary.shapeShifterCurseFabric.custom_ui.FormColorSelectMenu;
 import net.onixary.shapeShifterCurseFabric.custom_ui.NormalFormSelectScreen;
 import net.onixary.shapeShifterCurseFabric.custom_ui.PatronFormSelectScreen;
 import net.onixary.shapeShifterCurseFabric.player_animation.v3.IPlayerAnimController;
 import net.onixary.shapeShifterCurseFabric.player_form.RegPlayerForms;
 import net.onixary.shapeShifterCurseFabric.player_form.transform.TransformManager;
+import net.onixary.shapeShifterCurseFabric.util.FormColorData;
 import net.onixary.shapeShifterCurseFabric.util.FormTextureUtils;
 import net.onixary.shapeShifterCurseFabric.util.Interface.IJumpController;
 import net.onixary.shapeShifterCurseFabric.util.PatronUtils;
@@ -59,27 +61,29 @@ public class ModPacketsS2C {
     }
 
     public static void register() {
-        reg(TRANSFORM_EFFECT_ID, ModPacketsS2C::receiveTransformEffect);
-        reg(INSTINCT_THRESHOLD_EFFECT_ID, ModPacketsS2C::receiveInstinctThresholdEffect);
-        reg(SYNC_CURSED_MOON_DATA, ModPacketsS2C::receiveCursedMoonData);
-        reg(SYNC_FORM_CHANGE, ModPacketsS2C::receiveFormChange);
-        reg(SYNC_TRANSFORM_STATE, ModPacketsS2C::receiveTransformState);
-        reg(SYNC_BAT_ATTACH_STATE, ModPacketsS2C::receiveBatAttachState);
-        reg(UPDATE_OVERLAY_EFFECT, ModPacketsS2C::receiveUpdateOverlayEffect);
-        reg(UPDATE_OVERLAY_FADE_EFFECT, ModPacketsS2C::receiveUpdateOverlayFadeEffect);
-        reg(TRANSFORM_COMPLETE_EFFECT, ModPacketsS2C::receiveTransformCompleteEffect);
-        reg(RESET_FIRST_PERSON, ModPacketsS2C::receiveResetFirstPerson);
-        reg(SYNC_OTHER_PLAYER_BAT_ATTACH_STATE, ModPacketsS2C::receiveOtherPlayerBatAttachState);
-        reg(SYNC_FORCE_SNEAK_STATE, ModPacketsS2C::receiveForceSneakState);
-        reg(UPDATE_DYNAMIC_FORM, ModPacketsS2C::handleUpdateDynamicForm);
-        reg(REMOVE_DYNAMIC_FORM_EXCEPT, ModPacketsS2C::handleRemoveDynamicExcept);
-        reg(LOGIN_PACKET, ModPacketsS2C::onPlayerConnectServer);
-        reg(ACTIVE_VIRTUAL_TOTEM, ModPacketsS2C::receiveActiveVirtualTotem);
-        reg(UPDATE_POWER_ANIM_DATA_TO_CLIENT, ModPacketsS2C::receivePowerAnimationData);
-        reg(UPDATE_PATRON_LEVEL, ModPacketsS2C::receiveUpdatePatronLevel);
-        reg(OPEN_PATRON_FORM_SELECT_MENU, ModPacketsS2C::receiveOpenPatronFormSelectMenu);
-        reg(OPEN_FORM_SELECT_MENU, ModPacketsS2C::receiveOpenFormSelectMenu);
-        reg(SET_NO_JUMP_TICK, ModPacketsS2C::receiveSetNoJumpTick);
+        reg(ModPackets.TRANSFORM_EFFECT_ID, ModPacketsS2C::receiveTransformEffect);
+        reg(ModPackets.INSTINCT_THRESHOLD_EFFECT_ID, ModPacketsS2C::receiveInstinctThresholdEffect);
+        reg(ModPackets.SYNC_CURSED_MOON_DATA, ModPacketsS2C::receiveCursedMoonData);
+        reg(ModPackets.SYNC_FORM_CHANGE, ModPacketsS2C::receiveFormChange);
+        reg(ModPackets.SYNC_TRANSFORM_STATE, ModPacketsS2C::receiveTransformState);
+        reg(ModPackets.SYNC_BAT_ATTACH_STATE, ModPacketsS2C::receiveBatAttachState);
+        reg(ModPackets.UPDATE_OVERLAY_EFFECT, ModPacketsS2C::receiveUpdateOverlayEffect);
+        reg(ModPackets.UPDATE_OVERLAY_FADE_EFFECT, ModPacketsS2C::receiveUpdateOverlayFadeEffect);
+        reg(ModPackets.TRANSFORM_COMPLETE_EFFECT, ModPacketsS2C::receiveTransformCompleteEffect);
+        reg(ModPackets.RESET_FIRST_PERSON, ModPacketsS2C::receiveResetFirstPerson);
+        reg(ModPackets.SYNC_OTHER_PLAYER_BAT_ATTACH_STATE, ModPacketsS2C::receiveOtherPlayerBatAttachState);
+        reg(ModPackets.SYNC_FORCE_SNEAK_STATE, ModPacketsS2C::receiveForceSneakState);
+        reg(ModPackets.UPDATE_DYNAMIC_FORM, ModPacketsS2C::handleUpdateDynamicForm);
+        reg(ModPackets.REMOVE_DYNAMIC_FORM_EXCEPT, ModPacketsS2C::handleRemoveDynamicExcept);
+        reg(ModPackets.LOGIN_PACKET, ModPacketsS2C::onPlayerConnectServer);
+        reg(ModPackets.ACTIVE_VIRTUAL_TOTEM, ModPacketsS2C::receiveActiveVirtualTotem);
+        reg(ModPackets.UPDATE_POWER_ANIM_DATA_TO_CLIENT, ModPacketsS2C::receivePowerAnimationData);
+        reg(ModPackets.UPDATE_PATRON_LEVEL, ModPacketsS2C::receiveUpdatePatronLevel);
+        reg(ModPackets.OPEN_PATRON_FORM_SELECT_MENU, ModPacketsS2C::receiveOpenPatronFormSelectMenu);
+        reg(ModPackets.OPEN_FORM_SELECT_MENU, ModPacketsS2C::receiveOpenFormSelectMenu);
+        reg(ModPackets.SET_NO_JUMP_TICK, ModPacketsS2C::receiveSetNoJumpTick);
+        reg(ModPackets.OPEN_FORM_COLOR_SELECT_MENU, ModPacketsS2C::receiveOpenFCSMenu);
+        reg(ModPackets.MODIFY_FCD_DATA, ModPacketsS2C::receiveModifyFCDData);
     }
 
     /* 重构后不需要了 仅用于参考旧实现逻辑
@@ -137,6 +141,9 @@ public class ModPacketsS2C {
 	            ShapeShifterCurseFabric.LOGGER.info("Client received form change: {}", newFormName);
                 // 触发动画重新初始化
                 net.onixary.shapeShifterCurseFabric.client.ShapeShifterCurseFabricClient.refreshPlayerAnimations();
+
+                // 更新 formColorData 的数据(其实是FormColorSelectMenu的数据) 如果启动了自动切换 那么还会自动切换颜色数据
+                ShapeShifterCurseFabricClient.formColorData.onClientFormChange(Identifier.tryParse(newFormName));
             }
         });
     }
@@ -277,20 +284,37 @@ public class ModPacketsS2C {
         TransformManager.executeClientFirstPersonReset();
         new Thread(() -> {
             // 延时5s, 等待服务器component加载完成 重复12次 共计1min
-            boolean success = false;
-            for (int i = 0; i < 12; i++) {
+            for (int i = 0; i < 60; i++) {
                 try {
-                    Thread.sleep(5000);
+                    Thread.sleep(1000);
                     sendUpdateCustomSetting();
-                    success = true;
-                } catch (Exception e) {
-                    ShapeShifterCurseFabric.LOGGER.warn("Error while sending custom setting to server, retrying after 5 second", e);
+                    return;
+                } catch (Exception ignored) {
                 }
             }
-            if (!success) {
-                ShapeShifterCurseFabric.LOGGER.error("Failed to send custom setting to server after 60 seconds");
-            }
+            ShapeShifterCurseFabric.LOGGER.error("Failed to send custom setting to server after 60 seconds");
         }).start();
+    }
+
+    public static void sendUpdateCustomColor(FormTextureUtils.ColorSetting colorSetting, boolean sendRAW) {
+        PacketByteBuf buf = PacketByteBufs.create();
+        if (sendRAW) {
+            buf.writeInt(colorSetting.getPrimaryColor());
+            buf.writeInt(colorSetting.getAccentColor1());
+            buf.writeInt(colorSetting.getAccentColor2());
+            buf.writeInt(colorSetting.getEyeColorA());
+            buf.writeInt(colorSetting.getEyeColorB());
+        } else {
+            buf.writeInt(FormTextureUtils.ARGB2ABGR(colorSetting.getPrimaryColor()));
+            buf.writeInt(FormTextureUtils.ARGB2ABGR(colorSetting.getAccentColor1()));
+            buf.writeInt(FormTextureUtils.ARGB2ABGR(colorSetting.getAccentColor2()));
+            buf.writeInt(FormTextureUtils.ARGB2ABGR(colorSetting.getEyeColorA()));
+            buf.writeInt(FormTextureUtils.ARGB2ABGR(colorSetting.getEyeColorB()));
+        }
+        buf.writeBoolean(colorSetting.getPrimaryGreyReverse());
+        buf.writeBoolean(colorSetting.getAccent1GreyReverse());
+        buf.writeBoolean(colorSetting.getAccent2GreyReverse());
+        ClientPlayNetworking.send(UPDATE_CUSTOM_COLOR, buf);
     }
 
     // 临时先放这里，以后再整理
@@ -303,9 +327,16 @@ public class ModPacketsS2C {
         if (!ForceUpdate && !autoSyncConfig) {
             return;
         }
-        int AGBRInt = 0;
         buf.writeBoolean(ShapeShifterCurseFabric.playerCustomConfig.keep_original_skin);
         buf.writeBoolean(ShapeShifterCurseFabric.playerCustomConfig.enable_form_color);
+        buf.writeBoolean(ShapeShifterCurseFabric.playerCustomConfig.enable_form_random_sound);
+        ClientPlayNetworking.send(UPDATE_CUSTOM_SETTING, buf);
+        boolean autoSyncColorConfig = ShapeShifterCurseFabric.playerCustomConfig.auto_sync_color_config;
+        if (!ForceUpdate && !autoSyncColorConfig) {
+            return;
+        }
+        buf = PacketByteBufs.create();
+        int AGBRInt = 0;
         AGBRInt = FormTextureUtils.ARGB2ABGR(ShapeShifterCurseFabric.playerCustomConfig.primaryColor);
         buf.writeInt(AGBRInt);
         AGBRInt = FormTextureUtils.ARGB2ABGR(ShapeShifterCurseFabric.playerCustomConfig.accentColor1Color);
@@ -439,5 +470,145 @@ public class ModPacketsS2C {
                 jumpController.shape_shifter_curse$setNoJumpTick(tick);
             }
         });
+    }
+
+    public static void receiveOpenFCSMenu(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender responseSender) {
+        client.execute(() -> {
+            if (FormColorSelectMenu.instance == null) {
+                Screen screen = new FormColorSelectMenu(Text.literal("text.shape-shifter-curse.config.form_color_select_menu"));
+                client.setScreen(screen);
+            }
+        });
+    }
+
+    public static void receiveModifyFCDData(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender responseSender) {
+        String commandType = buf.readString();
+        Identifier formID = buf.readIdentifier();
+        String arg1 = buf.readString();
+        String arg2 = buf.readString();
+        String arg3 = buf.readString();
+        String arg4 = buf.readString();
+        // commandType ->
+        // save ->
+        //     formID
+        //     arg1 -> slot_type [form, global, form_default]
+        //     arg2 -> slot_name
+        // load ->
+        //     formID
+        //     arg1 -> slot_type [form, global, form_default]
+        //     arg2 -> slot_name
+        // delete ->
+        //     formID
+        //     arg1 -> slot_type [form, global, form_default]
+        //     arg2 -> slot_name
+        // config ->
+        //     formID -> not used
+        //     arg1 -> config_type [enable_default_color]
+        //     arg2 -> config_value -> not used only toggle
+        // list ->
+        //     formID
+        //     arg1 -> slot_type [form, global, form_default]
+        switch (commandType) {
+            case "save" -> {
+                if (!ShapeShifterCurseFabric.playerCustomConfig.enable_server_modify_FCD_config) {
+                    return;
+                }
+                FormTextureUtils.ColorSetting nowColorSetting = FormColorData.getPlayerColorSetting(false);
+                if (nowColorSetting == null) {
+                    return;
+                }
+                switch (arg1) {
+                    case "form" -> {
+                        ShapeShifterCurseFabricClient.formColorData.customSettingByForm.computeIfAbsent(formID, k -> new HashMap<>()).put(arg2, nowColorSetting);
+                    }
+                    case "global" -> {
+                        ShapeShifterCurseFabricClient.formColorData.customSetting.put(arg2, nowColorSetting);
+                    }
+                    case "form_default" -> {
+                        ShapeShifterCurseFabricClient.formColorData.formDefaultSetting.put(formID, nowColorSetting);
+                    }
+                }
+                ShapeShifterCurseFabricClient.formColorData.writeToConfig();
+            }
+            case "load" -> {
+                if (!ShapeShifterCurseFabric.playerCustomConfig.enable_server_modify_FCD_config) {
+                    return;
+                }
+                FormTextureUtils.ColorSetting colorSetting = null;
+                switch (arg1) {
+                    case "form" -> {
+                        colorSetting = ShapeShifterCurseFabricClient.formColorData.customSettingByForm.getOrDefault(formID, new HashMap<>()).getOrDefault(arg2, null);
+                    }
+                    case "global" -> {
+                        colorSetting = ShapeShifterCurseFabricClient.formColorData.customSetting.getOrDefault(arg2, null);
+                    }
+                    case "form_default" -> {
+                        colorSetting = ShapeShifterCurseFabricClient.formColorData.formDefaultSetting.getOrDefault(formID, null);
+                    }
+                }
+                if (colorSetting != null) {
+                    ModPacketsS2C.sendUpdateCustomColor(colorSetting, false);
+                }
+            }
+            case "delete" -> {
+                if (!ShapeShifterCurseFabric.playerCustomConfig.enable_server_modify_FCD_config) {
+                    return;
+                }
+                switch (arg1) {
+                    case "form" -> {
+                        ShapeShifterCurseFabricClient.formColorData.customSettingByForm.computeIfAbsent(formID, k -> new HashMap<>()).remove(arg2);
+                    }
+                    case "global" -> {
+                        ShapeShifterCurseFabricClient.formColorData.customSetting.remove(arg2);
+                    }
+                    case "form_default" -> {
+                        ShapeShifterCurseFabricClient.formColorData.formDefaultSetting.remove(formID);
+                    }
+                }
+                ShapeShifterCurseFabricClient.formColorData.writeToConfig();
+            }
+            case "config" -> {
+                if (!ShapeShifterCurseFabric.playerCustomConfig.enable_server_modify_FCD_config) {
+                    return;
+                }
+                switch (arg1) {
+                    case "enable_default_color" -> {
+                        ShapeShifterCurseFabricClient.formColorData.enableDefaultFormColor = !ShapeShifterCurseFabricClient.formColorData.enableDefaultFormColor;
+                        if (client.player != null) {
+                            client.player.sendMessage(Text.translatable("message.shape-shifter-curse.enable_default_color", ShapeShifterCurseFabricClient.formColorData.enableDefaultFormColor), true);
+                        }
+                    }
+                }
+                ShapeShifterCurseFabricClient.formColorData.writeToConfig();
+            }
+            case "list" -> {
+                switch (arg1) {
+                    case "form" -> {
+                        StringBuilder stringBuilder = new StringBuilder();
+                        stringBuilder.append("All Custom Form Color Settings For %s:\n|".formatted(formID));
+                        ShapeShifterCurseFabricClient.formColorData.customSettingByForm.getOrDefault(formID, new HashMap<>()).forEach((k, v) -> stringBuilder.append(" %s |".formatted(k)));
+                        if (client.player != null) {
+                            client.player.sendMessage(Text.literal(stringBuilder.toString()), false);
+                        }
+                    }
+                    case "global" -> {
+                        StringBuilder stringBuilder = new StringBuilder();
+                        stringBuilder.append("All Custom Global Color Settings:\n|");
+                        ShapeShifterCurseFabricClient.formColorData.customSetting.forEach((k, v) -> stringBuilder.append(" %s |".formatted(k)));
+                        if (client.player != null) {
+                            client.player.sendMessage(Text.literal(stringBuilder.toString()), false);
+                        }
+                    }
+                    case "form_default" -> {
+                        StringBuilder stringBuilder = new StringBuilder();
+                        stringBuilder.append("All Default Form Color Settings:\n|");
+                        ShapeShifterCurseFabricClient.formColorData.formDefaultSetting.forEach((k, v) -> stringBuilder.append(" %s |".formatted(k)));
+                        if (client.player != null) {
+                            client.player.sendMessage(Text.literal(stringBuilder.toString()), false);
+                        }
+                    }
+                }
+            }
+        }
     }
 }
