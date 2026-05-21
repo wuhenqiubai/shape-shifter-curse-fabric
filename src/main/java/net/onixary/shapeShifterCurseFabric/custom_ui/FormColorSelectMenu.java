@@ -6,7 +6,10 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ingame.InventoryScreen;
-import net.minecraft.client.gui.widget.*;
+import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.client.gui.widget.ClickableWidget;
+import net.minecraft.client.gui.widget.TextFieldWidget;
+import net.minecraft.client.gui.widget.TextWidget;
 import net.minecraft.client.texture.NativeImageBackedTexture;
 import net.minecraft.client.texture.TextureManager;
 import net.minecraft.entity.LivingEntity;
@@ -27,7 +30,6 @@ import net.onixary.shapeShifterCurseFabric.player_form.skin.RegPlayerSkinCompone
 import net.onixary.shapeShifterCurseFabric.util.FormColorData;
 import net.onixary.shapeShifterCurseFabric.util.FormTextureUtils;
 import org.jetbrains.annotations.NotNull;
-import org.joml.Quaternionf;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -52,7 +54,7 @@ import static net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric.MOD_ID
 // RGB 框 -> RGB 条 -> ...
 
 public class FormColorSelectMenu extends Screen implements FormTextureUtils.TempTextureProcessor {
-    private static final Identifier texture = new Identifier(MOD_ID,"textures/gui/form_color_select_menu.png");
+    private static final Identifier texture = Identifier.of(MOD_ID, "textures/gui/form_color_select_menu.png");
     private static final int BG_WIDTH = 420;
     private static final int BG_HEIGHT = 227;
 
@@ -130,7 +132,7 @@ public class FormColorSelectMenu extends Screen implements FormTextureUtils.Temp
     private static long nowColorSettingIndex = 0;  // 自增ID
 
     private Identifier getNextDynamicFormID() {
-        return new Identifier(IdentifierNameSpace, IdentifierPrefix + nowColorSettingIndex++);
+        return Identifier.of(IdentifierNameSpace, IdentifierPrefix + nowColorSettingIndex++);
     }
 
     private void CleanColorSettingCache() {
@@ -884,9 +886,6 @@ public class FormColorSelectMenu extends Screen implements FormTextureUtils.Temp
     private void RenderEntity(DrawContext context, int x, int y, int size, int mouseX, int mouseY, LivingEntity entity) {
         float f = (float)Math.atan((double)(mouseX / 40.0F));
         float g = (float)Math.atan((double)(mouseY / 40.0F));
-        Quaternionf quaternionf = (new Quaternionf()).rotateZ(3.1415927F);
-        Quaternionf quaternionf2 = (new Quaternionf()).rotateX(g * 20.0F * 0.017453292F);
-        quaternionf.mul(quaternionf2);
         float h = entity.bodyYaw;
         float i = entity.getYaw();
         float j = entity.getPitch();
@@ -899,7 +898,11 @@ public class FormColorSelectMenu extends Screen implements FormTextureUtils.Temp
         entity.setPitch(-g * 20.0F);
         entity.headYaw = entity.getYaw();
         entity.prevHeadYaw = entity.getYaw();
-        InventoryScreen.drawEntity(context, x, y, size, quaternionf, quaternionf2, entity);
+        int x1 = x - size;
+        int y1 = y - size;
+        int x2 = x + size;
+        int y2 = y + size;
+        InventoryScreen.drawEntity(context, x1, y1, x2, y2, size, 0.0625f, mouseX, mouseY, entity);
         entity.bodyYaw = h;
         entity.prevBodyYaw = m;
         entity.setYaw(i);
@@ -914,7 +917,7 @@ public class FormColorSelectMenu extends Screen implements FormTextureUtils.Temp
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
         int BPosX = width / 2 - BG_WIDTH / 2;
         int BPosY = height / 2 - BG_HEIGHT / 2;
-        this.renderBackground(context);
+        this.renderBackground(context, mouseX, mouseY, delta);
         this.renderTextureBackground(context);
         // 20,5,60,120
         if (minecraftClient.player != null) {

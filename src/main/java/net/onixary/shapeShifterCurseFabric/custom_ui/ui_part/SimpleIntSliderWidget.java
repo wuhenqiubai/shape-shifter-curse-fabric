@@ -11,7 +11,7 @@ import net.minecraft.util.math.MathHelper;
 import java.util.function.Consumer;
 
 public class SimpleIntSliderWidget extends SliderWidget {
-    private static final Identifier TEXTURE = new Identifier("textures/gui/slider.png");
+    private static final Identifier TEXTURE = Identifier.of("textures/gui/slider.png");
     ;
     public final int minValue;
     public final int maxValue;
@@ -43,15 +43,18 @@ public class SimpleIntSliderWidget extends SliderWidget {
     }
 
     @Override
-    public void renderButton(DrawContext context, int mouseX, int mouseY, float delta) {
+    public void renderWidget(DrawContext context, int mouseX, int mouseY, float delta) {
         MinecraftClient minecraftClient = MinecraftClient.getInstance();
         context.setShaderColor(1.0F, 1.0F, 1.0F, this.alpha);
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
         RenderSystem.enableDepthTest();
-        context.drawNineSlicedTexture(TEXTURE, this.getX(), this.getY(), this.getWidth(), this.getHeight(), 20, 4, 200, 20, 0, this.getYImage());
 
-        context.drawNineSlicedTexture(TEXTURE, this.getX() + (int) (this.value * (double) (this.width - 8)), this.getY(), 8, this.getHeight(), 20, 4, 200, 20, 0, this.getTextureV());
+        int textureY = this.active ? (this.isHovered() ? 1 : 0) : 2;
+        context.drawTexture(TEXTURE, this.getX(), this.getY(), 0, textureY * 20, this.getWidth(), this.getHeight(), 200, 60);
+
+        int sliderX = this.getX() + (int) (this.value * (double) (this.getWidth() - 8));
+        context.drawTexture(TEXTURE, sliderX, this.getY(), 0, textureY * 20 + 40, 8, this.getHeight(), 200, 60);
 
         context.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         int i = this.active ? 16777215 : 10526880;

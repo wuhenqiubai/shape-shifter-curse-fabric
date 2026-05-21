@@ -123,14 +123,10 @@ public class ModPacketsC2S {
         );
 
 
-        ServerPlayNetworking.registerGlobalReceiver(
-                UPDATE_CUSTOM_COLOR,
-                net.onixary.shapeShifterCurseFabric.networking.ModPacketsC2S::onUpdatePlayerCustomColor
+	    reg(UPDATE_CUSTOM_COLOR, net.onixary.shapeShifterCurseFabric.networking.ModPacketsC2S::onUpdatePlayerCustomColor
         );
 
-        ServerPlayNetworking.registerGlobalReceiver(
-                SET_PATRON_FORM,
-                net.onixary.shapeShifterCurseFabric.networking.ModPacketsC2S::receiveSetPatronForm
+	    reg(SET_PATRON_FORM, net.onixary.shapeShifterCurseFabric.networking.ModPacketsC2S::receiveSetPatronForm
         );
 
         reg(SET_FORM, net.onixary.shapeShifterCurseFabric.networking.ModPacketsC2S::receiveSetForm

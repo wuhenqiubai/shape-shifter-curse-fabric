@@ -187,9 +187,9 @@ public class FormColorData {
     public void writeToConfig() {
         Path configPath = getConfigPath();
         try {
-            NbtIo.writeCompressed(this.saveCompound(), configPath.toFile());
+            NbtIo.writeCompressed(this.saveCompound(), configPath.toFile().toPath());
         } catch (IOException e) {
-            ShapeShifterCurseFabric.LOGGER.error("Failed to write form color data to config file: " + e);
+            ShapeShifterCurseFabric.LOGGER.error("Failed to write form color data to config file: {}", String.valueOf(e));
         }
     }
 
@@ -197,10 +197,10 @@ public class FormColorData {
         Path configPath = getConfigPath();
         if (Files.exists(configPath)) {
             try {
-                NbtCompound compound = NbtIo.readCompressed(configPath.toFile());
+                NbtCompound compound = NbtIo.readCompressed(configPath, NbtSizeTracker.ofUnlimitedBytes());
                 this.loadCompound(compound);
             } catch (IOException e) {
-                ShapeShifterCurseFabric.LOGGER.error("Failed to load form color data from config file: " + e);
+                ShapeShifterCurseFabric.LOGGER.error("Failed to load form color data from config file: {}", String.valueOf(e));
             }
         }
     }

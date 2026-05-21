@@ -271,13 +271,13 @@ public class ModPacketsS2CServer {
     public static void sendNoJumpTick(ServerPlayerEntity player, int tick) {
         PacketByteBuf buf = PacketByteBufs.create();
         buf.writeInt(tick);
-        ServerPlayNetworking.send(player, ModPackets.SET_NO_JUMP_TICK, buf);
+        ServerPlayNetworking.send(player, new BytePayload(BytePayload.id(ModPackets.SET_NO_JUMP_TICK), buf));
     }
 
 
     public static void sendOpenFCSMenu(ServerPlayerEntity player) {
         PacketByteBuf buf = PacketByteBufs.create();
-        ServerPlayNetworking.send(player, ModPackets.OPEN_FORM_COLOR_SELECT_MENU, buf);
+        ServerPlayNetworking.send(player, new BytePayload(BytePayload.id(ModPackets.OPEN_FORM_COLOR_SELECT_MENU), buf));
     }
 
     public static void sendModifyFCDData(ServerPlayerEntity player, String commandType, Identifier formID, String arg1, String arg2, String arg3, String arg4) {
@@ -314,6 +314,6 @@ public class ModPacketsS2CServer {
         buf.writeString(arg2);
         buf.writeString(arg3);
         buf.writeString(arg4);
-        ServerPlayNetworking.send(player, ModPackets.MODIFY_FCD_DATA, buf);
+        ServerPlayNetworking.send(player, new BytePayload(BytePayload.id(ModPackets.MODIFY_FCD_DATA), buf));
     }
 }

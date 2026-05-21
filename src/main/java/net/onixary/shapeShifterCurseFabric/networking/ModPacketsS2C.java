@@ -314,7 +314,7 @@ public class ModPacketsS2C {
         buf.writeBoolean(colorSetting.getPrimaryGreyReverse());
         buf.writeBoolean(colorSetting.getAccent1GreyReverse());
         buf.writeBoolean(colorSetting.getAccent2GreyReverse());
-        ClientPlayNetworking.send(UPDATE_CUSTOM_COLOR, buf);
+        ClientPlayNetworking.send(new BytePayload(BytePayload.id(UPDATE_CUSTOM_COLOR), buf));
     }
 
     // 临时先放这里，以后再整理
@@ -330,7 +330,7 @@ public class ModPacketsS2C {
         buf.writeBoolean(ShapeShifterCurseFabric.playerCustomConfig.keep_original_skin);
         buf.writeBoolean(ShapeShifterCurseFabric.playerCustomConfig.enable_form_color);
         buf.writeBoolean(ShapeShifterCurseFabric.playerCustomConfig.enable_form_random_sound);
-        ClientPlayNetworking.send(UPDATE_CUSTOM_SETTING, buf);
+        ClientPlayNetworking.send(new BytePayload(BytePayload.id(UPDATE_CUSTOM_SETTING), buf));
         boolean autoSyncColorConfig = ShapeShifterCurseFabric.playerCustomConfig.auto_sync_color_config;
         if (!ForceUpdate && !autoSyncColorConfig) {
             return;
