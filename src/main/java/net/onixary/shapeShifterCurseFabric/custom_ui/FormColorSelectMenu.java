@@ -914,10 +914,13 @@ public class FormColorSelectMenu extends Screen implements FormTextureUtils.Temp
     private static int timer = 0;
 
     @Override
+    public void renderBackground(DrawContext context, int mouseX, int mouseY, float delta) {
+        // No blur — UI texture serves as the background
+    }
+
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
         int BPosX = width / 2 - BG_WIDTH / 2;
         int BPosY = height / 2 - BG_HEIGHT / 2;
-        this.renderBackground(context, mouseX, mouseY, delta);
         this.renderTextureBackground(context);
         // 20,5,60,120
         if (minecraftClient.player != null) {

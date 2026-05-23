@@ -163,8 +163,6 @@ dependencies {
 
     //Fabric or Quilt
     modImplementation "mod.azure.azurelib:azurelib-fabric-1.21.1:${azurelib_version}"
-    include "mod.azure.azurelib:azurelib-fabric-1.21.1:${azurelib_version}"
-    //modCompileOnly "maven.modrinth:azurelib:2.1.17"
 
 
     //Owo
@@ -219,7 +217,7 @@ dependencies {
     //  Modmenu
     modImplementation "com.terraformersmc:modmenu:${project.mod_menu_version}"
     // Player Anim
-    include modImplementation("dev.kosmx.player-anim:player-animation-lib-fabric:${project.player_anim}")
+    modImplementation("dev.kosmx.player-anim:player-animation-lib-fabric:${project.player_anim}")
 
     // Trinkets
 

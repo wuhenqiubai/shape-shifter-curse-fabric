@@ -16,15 +16,15 @@ public class AnimationHolder {
     @Nullable private KeyframeAnimation animation;
 
     public AnimationHolder(Identifier animation_id, boolean isEnabled, float speed) {
-        this(PlayerAnimationRegistry.getAnimation(animation_id), isEnabled, speed, 5);
+        this((KeyframeAnimation) PlayerAnimationRegistry.getAnimation(animation_id), isEnabled, speed, 5);
     }
 
     public AnimationHolder(Identifier animation_id, boolean isEnabled) {
-        this(PlayerAnimationRegistry.getAnimation(animation_id), isEnabled, 1.0f, 2);
+        this((KeyframeAnimation) PlayerAnimationRegistry.getAnimation(animation_id), isEnabled, 1.0f, 2);
     }
 
     public AnimationHolder(Identifier animation_id, boolean isEnabled, float speed, int fade) {
-        this(PlayerAnimationRegistry.getAnimation(animation_id), isEnabled, speed, fade);
+        this((KeyframeAnimation) PlayerAnimationRegistry.getAnimation(animation_id), isEnabled, speed, fade);
     }
 
     public AnimationHolder(@Nullable KeyframeAnimation animation, boolean isEnabled, float speed, int fade) {
