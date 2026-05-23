@@ -371,7 +371,7 @@ public class ManaComponent implements AutoSyncedComponent {
     }
 
     private void __SetMana__(double mana) {
-	    this.Mana = Math.clamp(mana, 0.0d, this.getMaxMana());
+        this.Mana = Math.max(Math.min(mana, this.getMaxMana()), 0.0d);
         this.onCommonManaChange();
     }
 

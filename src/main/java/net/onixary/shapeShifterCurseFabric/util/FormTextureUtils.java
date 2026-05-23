@@ -1,7 +1,6 @@
 package net.onixary.shapeShifterCurseFabric.util;
 
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.client.texture.NativeImage;
 import net.minecraft.client.texture.NativeImageBackedTexture;
 import net.minecraft.client.texture.TextureManager;
@@ -168,9 +167,9 @@ public class FormTextureUtils {
 
     public static int GreyScaleMul(int Color, float GreyScale) {
         // ABGR顺序
-        int R = Math.clamp((int) (GreyScale * (Color & 0xFF)), 0, 255);
-        int G = Math.clamp((int) (GreyScale * ((Color >> 8) & 0xFF)), 0, 255);
-        int B = Math.clamp((int) (GreyScale * ((Color >> 16) & 0xFF)), 0, 255);
+        int R = Math.min(255, Math.max((int) (GreyScale * (Color & 0xFF)), 0));
+        int G = Math.min(255, Math.max((int) (GreyScale * ((Color >> 8) & 0xFF)), 0));
+        int B = Math.min(255, Math.max((int) (GreyScale * ((Color >> 16) & 0xFF)), 0));
         // Math.clamp 是Java 21的方法
         return 0xFF000000 | (B << 16) | (G << 8) | R;
     }
@@ -237,7 +236,7 @@ public class FormTextureUtils {
         int ColorGreyScale = getGreyScale(Color);
         int GreyScaleOffset = ReverseGreyScale ? AverageGreyScale - ColorGreyScale : ColorGreyScale - AverageGreyScale;
         int ColorSettingGreyScale = getGreyScale(ColorSetting);
-        int TargetGreyScale = Math.clamp(ColorSettingGreyScale + GreyScaleOffset, 0, 255);
+        int TargetGreyScale = Math.min(255, Math.max(ColorSettingGreyScale + GreyScaleOffset, 0));
         int ColorResult = GreyScaleMul(ColorSetting | 0xFF000000,  (float)TargetGreyScale / ColorSettingGreyScale);
         return ColorMulBytes(ColorResult, Mask);
     }
