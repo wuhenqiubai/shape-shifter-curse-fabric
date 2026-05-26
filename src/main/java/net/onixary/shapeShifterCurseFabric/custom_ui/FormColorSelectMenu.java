@@ -13,7 +13,6 @@ import net.minecraft.client.gui.widget.TextWidget;
 import net.minecraft.client.texture.NativeImageBackedTexture;
 import net.minecraft.client.texture.TextureManager;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
@@ -24,17 +23,15 @@ import net.onixary.shapeShifterCurseFabric.config.PlayerCustomConfig;
 import net.onixary.shapeShifterCurseFabric.custom_ui.ui_part.FCS_ButtonWidget;
 import net.onixary.shapeShifterCurseFabric.custom_ui.ui_part.SimpleIntSliderWidget;
 import net.onixary.shapeShifterCurseFabric.networking.ModPacketsS2C;
-import net.onixary.shapeShifterCurseFabric.player_form.ability.PlayerFormComponent;
+import net.onixary.shapeShifterCurseFabric.player_form.PlayerFormBase;
+import net.onixary.shapeShifterCurseFabric.player_form.RegPlayerForms;
 import net.onixary.shapeShifterCurseFabric.player_form.ability.RegPlayerFormComponent;
 import net.onixary.shapeShifterCurseFabric.player_form.skin.RegPlayerSkinComponent;
 import net.onixary.shapeShifterCurseFabric.util.FormColorData;
 import net.onixary.shapeShifterCurseFabric.util.FormTextureUtils;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 
 import static net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric.MOD_ID;
 
@@ -53,8 +50,8 @@ import static net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric.MOD_ID
 //       -> 全局数据
 // RGB 框 -> RGB 条 -> ...
 
-public class FormColorSelectMenu extends Screen implements FormTextureUtils.TempTextureProcessor {
-    private static final Identifier texture = Identifier.of(MOD_ID, "textures/gui/form_color_select_menu.png");
+public class FormColorSelectMenu extends Screen implements FormTextureUtils.TempTextureProcessor, FormTextureUtils.TempFormModelProcessor {
+    private static final Identifier texture = Identifier.of(MOD_ID,"textures/gui/v1_form_color_select_menu.png");
     private static final int BG_WIDTH = 420;
     private static final int BG_HEIGHT = 227;
 
@@ -79,6 +76,7 @@ public class FormColorSelectMenu extends Screen implements FormTextureUtils.Temp
 
     private static final Text IsEnableLayerLabel = Text.translatable("gui.shape_shifter_curse_fabric.fcs.is_enable_layer");
     private static final Text ExitSliderButtonLabel = Text.translatable("gui.shape_shifter_curse_fabric.fcs.exit_slider_button");
+    private static final Text NoneFromNameLabel = Text.translatable("gui.shape_shifter_curse_fabric.fcs.none_from_name");
 
     // Button
     private static final Text DownloadFromServer = Text.translatable("gui.shape_shifter_curse_fabric.fcs.from_server");
@@ -121,6 +119,8 @@ public class FormColorSelectMenu extends Screen implements FormTextureUtils.Temp
     private TextFieldWidget sliderSEditBox = null;
     private TextFieldWidget sliderVEditBox = null;
 
+    private ButtonWidget formNameLabel = null;
+
     private ButtonWidget isEnableLayerButton = null;
 
     private static final MinecraftClient minecraftClient = MinecraftClient.getInstance();
@@ -128,8 +128,56 @@ public class FormColorSelectMenu extends Screen implements FormTextureUtils.Temp
     private final HashMap<String, HashMap<FormTextureUtils.ColorSetting, Identifier>> colorSettingCacheMap = new HashMap<>();  // 防止内存泄漏
     private int modelID = -1;
     private static final String IdentifierNameSpace = MOD_ID;
-    private static final String IdentifierPrefix = "dynamic_fcs_";
+    private static final String IdentifierPrefix = "dynamic_fcs_v1_";
     private static long nowColorSettingIndex = 0;  // 自增ID
+
+    private int formIDIndex = -1;
+
+    public void scrollFormID(int offset, boolean loop) {
+        if (formIDIndex < 0) {
+            formIDIndex = 0;
+        }
+        formIDIndex += offset;
+        if (formIDIndex < 0) {
+            formIDIndex = loop ? RegPlayerForms.playerForms.size() - 1 : 0;
+        } else if (formIDIndex >= RegPlayerForms.playerForms.size()) {
+            formIDIndex = loop ? 0 : RegPlayerForms.playerForms.size() - 1;
+        }
+        this.onFormChange(false, false);
+    }
+
+    public void reloadFormIDName() {
+        PlayerFormBase form = this.getForm();
+        Text message = NoneFromNameLabel;
+        if (!RegPlayerForms.ORIGINAL_BEFORE_ENABLE.equals(form)) {
+            message = form.getFormName();
+        }
+        this.formNameLabel.setMessage(message);
+    }
+
+    public void reloadFormIDIndex() {
+        if (minecraftClient.player != null) {
+            boolean isFind = false;
+            PlayerFormBase form = RegPlayerFormComponent.PLAYER_FORM.get(minecraftClient.player).getCurrentForm();
+            if (form != null) {
+                int Index = 0;
+                for (PlayerFormBase playerFormBase : RegPlayerForms.playerForms.values()) {
+                    if (Objects.equals(playerFormBase.FormID, form.FormID)) {
+                        formIDIndex = Index;
+                        isFind = true;
+                        break;
+                    }
+                    Index++;
+                }
+            }
+            if (!isFind) {
+                formIDIndex = -1;
+            }
+            return;
+        }
+        formIDIndex = -1;
+    }
+
 
     private Identifier getNextDynamicFormID() {
         return Identifier.of(IdentifierNameSpace, IdentifierPrefix + nowColorSettingIndex++);
@@ -342,9 +390,11 @@ public class FormColorSelectMenu extends Screen implements FormTextureUtils.Temp
     }
 
     private boolean isUsingTempTexture = true;
+    private boolean isUsingTempModel = true;
 
     public FormColorSelectMenu(Text title) {
         super(title);
+        this.reloadFormIDIndex();
         loadData();
         if (!FormTextureUtils.useTempTexture) {
             FormTextureUtils.useTempTexture = true;
@@ -352,6 +402,13 @@ public class FormColorSelectMenu extends Screen implements FormTextureUtils.Temp
         } else {
             ShapeShifterCurseFabric.LOGGER.warn("Temp Texture System is already in use, dynamic texture rendering will not work");
             isUsingTempTexture = false;
+        }
+        if (!FormTextureUtils.useTempFormModel) {
+            FormTextureUtils.useTempFormModel = true;
+            FormTextureUtils.tempFormModelProcessor = this;
+        } else {
+            ShapeShifterCurseFabric.LOGGER.warn("Temp Form Model System is already in use, dynamic form rendering will not work");
+            isUsingTempModel = false;
         }
         if (instance != null) {
             ShapeShifterCurseFabric.LOGGER.error("FormColorSelectMenu is already in use, only one instance is allowed");
@@ -443,16 +500,24 @@ public class FormColorSelectMenu extends Screen implements FormTextureUtils.Temp
         this.isUpdateUI = false;
     }
 
-    public void onFormChange() {
+    public void onFormChange(boolean force, boolean reloadColorData) {
         if (!this.isScreenInit) {
             return;
         }
-        this.loadData();
+        if (force) {
+            this.reloadFormIDIndex();
+        }
+        if (reloadColorData) {
+            this.loadData();
+        } else {
+            this.updateUI();
+        }
+        this.reloadFormIDName();
     }
 
-    public static void onFormChange_STATIC() {
+    public static void onFormChange_STATIC(boolean force, boolean reloadColorData) {
         if (instance != null) {
-            instance.onFormChange();
+            instance.onFormChange(force, reloadColorData);
         }
     }
 
@@ -466,8 +531,8 @@ public class FormColorSelectMenu extends Screen implements FormTextureUtils.Temp
         int BPosX = width / 2 - BG_WIDTH / 2;  // 图片左上角 X
         int BPosY = height / 2 - BG_HEIGHT / 2;  // 图片左上角 Y
         // Label
-        // 20,128,80,9 - 形态4槽
-        this.addDrawableChild(new TextWidget(BPosX + 20, BPosY + 128, 80, 9, FormSlotTitle, textRenderer).setTextColor(0xDDDDDD));
+        // 20,146,80,9 - 形态3槽
+        this.addDrawableChild(new TextWidget(BPosX + 20, BPosY + 146, 80, 9, FormSlotTitle, textRenderer).setTextColor(0xDDDDDD));
         // 135,5,180,9 - Title
         this.addDrawableChild(new TextWidget(BPosX + 135, BPosY + 5, 180, 9, Title, textRenderer).setTextColor(0xDDDDDD));
         // 320,5,80,9 - 全局9槽
@@ -513,6 +578,23 @@ public class FormColorSelectMenu extends Screen implements FormTextureUtils.Temp
             minecraftClient.keyboard.setClipboard(keyBoardData);
         }).position(BPosX + 85, BPosY + 95).size(45, 15).build()
         );
+        // Player Form Model Switch
+        // 35,128,80,15 Form Name Button
+        ButtonWidget formScrollButton = ButtonWidget.builder(NoneFromNameLabel, button -> {
+            this.reloadFormIDIndex();
+            this.onFormChange(false, false);
+        }).position(BPosX + 35, BPosY + 128).size(80, 15).build();
+        this.addDrawableChild(formScrollButton);
+        this.formNameLabel = formScrollButton;
+        // 20,128,15,15 Form Scroll Left Button
+        this.addDrawableChild(ButtonWidget.builder(Text.literal("<"), button -> {
+            this.scrollFormID(-1, true);
+        }).position(BPosX + 20, BPosY + 128).size(15, 15).build());
+        // 115,128,15,15 Form Scroll Right Button
+        this.addDrawableChild(ButtonWidget.builder(Text.literal(">"), button -> {
+            this.scrollFormID(1, true);
+        }).position(BPosX + 115, BPosY + 128).size(15, 15).build());
+        this.reloadFormIDName();
         // Config Pair
         // 139,27,75,11 - PrimaryColor Label
         TextWidget primaryColorLabel = new TextWidget(BPosX + 139, BPosY + 27, 75, 11, PrimaryColorLabel, textRenderer).setTextColor(0xDDDDDD);
@@ -848,14 +930,12 @@ public class FormColorSelectMenu extends Screen implements FormTextureUtils.Temp
         this.globalSettingButtons.clear();
         this.globalSettingTextFields.clear();
 
-        // 20,140,80,15 local_form_slot_1
-        this.createSaveDataButtons(0, 0, BPosX + 20, BPosY + 140);
-        // 20,158,80,15 local_form_slot_2
-        this.createSaveDataButtons(0, 1, BPosX + 20, BPosY + 158);
-        // 20,176,80,15 local_form_slot_3
-        this.createSaveDataButtons(0, 2, BPosX + 20, BPosY + 176);
-        // 20,194,80,15 local_form_slot_4
-        this.createSaveDataButtons(0, 3, BPosX + 20, BPosY + 194);
+        // 20,158,80,15 local_form_slot_1
+        this.createSaveDataButtons(0, 0, BPosX + 20, BPosY + 158);
+        // 20,176,80,15 local_form_slot_2
+        this.createSaveDataButtons(0, 1, BPosX + 20, BPosY + 176);
+        // 20,194,80,15 local_form_slot_3
+        this.createSaveDataButtons(0, 2, BPosX + 20, BPosY + 194);
 
         // 320,17,80,15 global_form_slot_1
         this.createSaveDataButtons(1, 0, BPosX + 320, BPosY + 17);
@@ -886,6 +966,9 @@ public class FormColorSelectMenu extends Screen implements FormTextureUtils.Temp
     private void RenderEntity(DrawContext context, int x, int y, int size, int mouseX, int mouseY, LivingEntity entity) {
         float f = (float)Math.atan((double)(mouseX / 40.0F));
         float g = (float)Math.atan((double)(mouseY / 40.0F));
+        Quaternionf quaternionf = (new Quaternionf()).rotateZ(3.1415927F);
+        Quaternionf quaternionf2 = (new Quaternionf()).rotateX(g * 20.0F * 0.017453292F);
+        quaternionf.mul(quaternionf2);
         float h = entity.bodyYaw;
         float i = entity.getYaw();
         float j = entity.getPitch();
@@ -898,11 +981,7 @@ public class FormColorSelectMenu extends Screen implements FormTextureUtils.Temp
         entity.setPitch(-g * 20.0F);
         entity.headYaw = entity.getYaw();
         entity.prevHeadYaw = entity.getYaw();
-        int x1 = x - size;
-        int y1 = y - size;
-        int x2 = x + size;
-        int y2 = y + size;
-        InventoryScreen.drawEntity(context, x1, y1, x2, y2, size, 0.0625f, mouseX, mouseY, entity);
+        InventoryScreen.drawEntity(context, x, y, size, quaternionf, quaternionf2, entity);
         entity.bodyYaw = h;
         entity.prevBodyYaw = m;
         entity.setYaw(i);
@@ -921,6 +1000,7 @@ public class FormColorSelectMenu extends Screen implements FormTextureUtils.Temp
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
         int BPosX = width / 2 - BG_WIDTH / 2;
         int BPosY = height / 2 - BG_HEIGHT / 2;
+        this.renderBackground(context);
         this.renderTextureBackground(context);
         // 20,5,60,120
         if (minecraftClient.player != null) {
@@ -928,17 +1008,23 @@ public class FormColorSelectMenu extends Screen implements FormTextureUtils.Temp
         }
         if (!isOpenSlider) {
             // 228,27,11,11
+            context.fill(BPosX + 228, BPosY + 27, BPosX + 239, BPosY + 38, 0xFF000000);
             context.fill(BPosX + 228, BPosY + 27, BPosX + 239, BPosY + 38, this.primaryColor);
             // 228,41,11,11
+            context.fill(BPosX + 228, BPosY + 41, BPosX + 239, BPosY + 52, 0xFF000000);
             context.fill(BPosX + 228, BPosY + 41, BPosX + 239, BPosY + 52, this.accentColor1Color);
             // 228,55,11,11
+            context.fill(BPosX + 228, BPosY + 55, BPosX + 239, BPosY + 66, 0xFF000000);
             context.fill(BPosX + 228, BPosY + 55, BPosX + 239, BPosY + 66, this.accentColor2Color);
             // 228,69,11,11
+            context.fill(BPosX + 228, BPosY + 69, BPosX + 239, BPosY + 80, 0xFF000000);
             context.fill(BPosX + 228, BPosY + 69, BPosX + 239, BPosY + 80, this.eyeColorA);
             // 228,83,11,11
+            context.fill(BPosX + 228, BPosY + 83, BPosX + 239, BPosY + 94, 0xFF000000);
             context.fill(BPosX + 228, BPosY + 83, BPosX + 239, BPosY + 94, this.eyeColorB);
         } else {
             // 267,111,11,11
+            context.fill(BPosX + 267, BPosY + 111, BPosX + 278, BPosY + 122, 0xFF000000);
             context.fill(BPosX + 267, BPosY + 111, BPosX + 278, BPosY + 122, (this.tempSliderAlpha << 24) | (this.tempSliderR << 16) | (this.tempSliderG << 8) | (this.tempSliderB));
         }
         if (timer > 60) {
@@ -975,6 +1061,11 @@ public class FormColorSelectMenu extends Screen implements FormTextureUtils.Temp
             FormTextureUtils.useTempTexture = false;
             FormTextureUtils.tempTextureProcessor = null;
             isUsingTempTexture = false;
+        }
+        if (isUsingTempModel) {
+            FormTextureUtils.useTempFormModel = false;
+            FormTextureUtils.tempFormModelProcessor = null;
+            isUsingTempModel = false;
         }
         instance = null;
         try {
@@ -1032,12 +1123,11 @@ public class FormColorSelectMenu extends Screen implements FormTextureUtils.Temp
     }
 
     private @Nullable Identifier getPlayerForm() {
-        PlayerEntity player = minecraftClient.player;
-        if (player == null) {
+        PlayerFormBase form = this.getForm();
+        if (RegPlayerForms.ORIGINAL_BEFORE_ENABLE.equals(form)) {
             return null;
         }
-        PlayerFormComponent playerFormComponent = RegPlayerFormComponent.PLAYER_FORM.get(player);
-        return playerFormComponent.getCurrentForm().FormID;
+        return form.FormID;
     }
 
     private boolean isFormLocalSettingExists(int index) {
@@ -1310,5 +1400,27 @@ public class FormColorSelectMenu extends Screen implements FormTextureUtils.Temp
         this.addDrawableChild(updButtonWidget);
         this.addDrawableChild(textFieldWidget);
         this.addDrawableChild(deleteButtonWidget);
+    }
+
+    @Override
+    public PlayerFormBase getForm() {
+        if (this.formIDIndex < 0) {
+            return RegPlayerForms.ORIGINAL_BEFORE_ENABLE;
+        }
+        Collection<PlayerFormBase> playerFormsCollection = RegPlayerForms.playerForms.values();
+        if (this.formIDIndex >= playerFormsCollection.size()) {
+            return RegPlayerForms.ORIGINAL_BEFORE_ENABLE;
+        }
+        return playerFormsCollection.toArray(new PlayerFormBase[0])[this.formIDIndex];
+    }
+
+    @Override
+    public Identifier getLayerID() {
+        return this.getForm().getFormOriginID();
+    }
+
+    @Override
+    public boolean shouldPause() {
+        return false;
     }
 }

@@ -9,6 +9,7 @@ import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.onixary.shapeShifterCurseFabric.player_form.PlayerFormBase;
 import net.onixary.shapeShifterCurseFabric.player_form.PlayerFormBodyType;
 import net.onixary.shapeShifterCurseFabric.player_form.ability.RegPlayerFormComponent;
+import net.onixary.shapeShifterCurseFabric.util.FormTextureUtils;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -19,7 +20,7 @@ public class TacZ_Anim {
     @Inject(method = "onFire", at = @At("HEAD"), cancellable = true)
     private void onFire(GunShootEvent event, CallbackInfo ci) {
         if (event.getShooter() instanceof AbstractClientPlayerEntity player) {
-            PlayerFormBase form = RegPlayerFormComponent.PLAYER_FORM.get(player).getCurrentForm();
+            PlayerFormBase form = FormTextureUtils.getPlayerForm_Render(player);
             if (form.getBodyType() == PlayerFormBodyType.FERAL) {
                 ci.cancel();
             }
@@ -28,7 +29,7 @@ public class TacZ_Anim {
     @Inject(method = "onReload", at = @At("HEAD"), cancellable = true)
     private void onReload(GunReloadEvent event, CallbackInfo ci) {
         if (event.getEntity() instanceof AbstractClientPlayerEntity player) {
-            PlayerFormBase form = RegPlayerFormComponent.PLAYER_FORM.get(player).getCurrentForm();
+            PlayerFormBase form = FormTextureUtils.getPlayerForm_Render(player);
             if (form.getBodyType() == PlayerFormBodyType.FERAL) {
                 ci.cancel();
             }
@@ -37,7 +38,7 @@ public class TacZ_Anim {
     @Inject(method = "onMelee", at = @At("HEAD"), cancellable = true)
     private void onMelee(GunMeleeEvent event, CallbackInfo ci) {
         if (event.getShooter() instanceof AbstractClientPlayerEntity player) {
-            PlayerFormBase form = RegPlayerFormComponent.PLAYER_FORM.get(player).getCurrentForm();
+            PlayerFormBase form = FormTextureUtils.getPlayerForm_Render(player);
             if (form.getBodyType() == PlayerFormBodyType.FERAL) {
                 ci.cancel();
             }
@@ -46,7 +47,7 @@ public class TacZ_Anim {
     @Inject(method = "onDraw", at = @At("HEAD"), cancellable = true)
     private void onDraw(GunDrawEvent event, CallbackInfo ci) {
         if (event.getEntity() instanceof AbstractClientPlayerEntity player) {
-            PlayerFormBase form = RegPlayerFormComponent.PLAYER_FORM.get(player).getCurrentForm();
+            PlayerFormBase form = FormTextureUtils.getPlayerForm_Render(player);
             if (form.getBodyType() == PlayerFormBodyType.FERAL) {
                 ci.cancel();
             }

@@ -13,17 +13,17 @@ import net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric;
 
 public class AdditionalItemCondition {
     public static void register() {
-        register(IsMorphScaleItemCondition.getFactory());
-        register(new ConditionFactory<>(
+        register(IsMorphScaleItemCondition.getFactory1());
+        register(IsMorphScaleItemCondition.getFactory2());
+        register(new ConditionFactory<ItemStack>(
                 ShapeShifterCurseFabric.identifier("is_weapon"),
                 new SerializableData(),
-                (data, worldAndStack) -> {
-                    ItemStack itemStack = worldAndStack.getRight();
-                    AttributeModifiersComponent modifiers = itemStack.getItem().getAttributeModifiers();
-                    for (var entry : modifiers.modifiers()) {
-                        if (entry.attribute() == EntityAttributes.GENERIC_ATTACK_DAMAGE
-                                || entry.attribute() == EntityAttributes.GENERIC_ATTACK_SPEED) {
-                            return true;
+                (data, itemstack) -> {
+                    Collection<EntityAttributeModifier> modifiers = itemstack.getItem().getAttributeModifiers(itemstack, EquipmentSlot.MAINHAND).get(EntityAttributes.GENERIC_ATTACK_DAMAGE);
+                    double totalAdd = 0;
+                    for (EntityAttributeModifier modifier : modifiers) {
+                        if (modifier.getOperation() == EntityAttributeModifier.Operation.ADDITION) {
+                            totalAdd += modifier.getValue();
                         }
                     }
                     return false;

@@ -15,6 +15,7 @@ import net.onixary.shapeShifterCurseFabric.additional_power.HideTPHeldItemPower;
 import net.onixary.shapeShifterCurseFabric.player_form.PlayerFormBase;
 import net.onixary.shapeShifterCurseFabric.player_form.PlayerFormBodyType;
 import net.onixary.shapeShifterCurseFabric.player_form.ability.RegPlayerFormComponent;
+import net.onixary.shapeShifterCurseFabric.util.FormTextureUtils;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -97,7 +98,7 @@ public abstract class AdjustItemHoldFeatureRendererMixin<T extends LivingEntity,
 	@Unique
     private boolean shouldHideItem(LivingEntity entity) {
         if (entity instanceof AbstractClientPlayerEntity player) {
-            PlayerFormBase curForm = RegPlayerFormComponent.PLAYER_FORM.get(player).getCurrentForm();
+            PlayerFormBase curForm = FormTextureUtils.getPlayerForm_Render(player);
             boolean isFeral = curForm.getBodyType() == PlayerFormBodyType.FERAL;
             //ShapeShifterCurseFabric.LOGGER.info("Is Feral Form : " + isFeral);
 

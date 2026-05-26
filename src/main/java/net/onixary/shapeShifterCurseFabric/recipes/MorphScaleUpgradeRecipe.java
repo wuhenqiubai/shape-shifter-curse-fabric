@@ -1,15 +1,21 @@
 package net.onixary.shapeShifterCurseFabric.recipes;
 
-import com.mojang.serialization.MapCodec;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.NbtComponent;
+import com.google.gson.JsonObject;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.Inventory;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.network.RegistryByteBuf;
-import net.minecraft.network.codec.PacketCodec;
+import net.minecraft.network.PacketByteBuf;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.recipe.RecipeSerializer;
+import net.minecraft.registry.DynamicRegistryManager;
+import net.minecraft.screen.SmithingScreenHandler;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.JsonHelper;
+import net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric;
+import net.onixary.shapeShifterCurseFabric.additional_power.IsMorphScaleItemCondition;
+import net.onixary.shapeShifterCurseFabric.items.RegCustomItem;
+import net.onixary.shapeShifterCurseFabric.items.tools.SuperMorphScaleCore;
 
 import static net.onixary.shapeShifterCurseFabric.recipes.RecipeSerializerRegister.MORPH_SCALE_UPGRADE;
 
@@ -21,30 +27,75 @@ public class MorphScaleUpgradeRecipe extends UpgradeRecipe {
     public final Ingredient template;
     public final Ingredient addition;
 
+    public boolean isUpgradeAll() {
+        return ShapeShifterCurseFabric.commonConfig.enableFullStackUpgrade;
+    }
+
     public MorphScaleUpgradeRecipe(Identifier id, Ingredient template, Ingredient addition) {
-        super(id,
-            template,
-            itemStack -> {
-                if (itemStack.isEmpty()) return false;
-                NbtComponent nbt = itemStack.get(DataComponentTypes.CUSTOM_DATA);
-                if (nbt == null) return true;
-                NbtCompound nbtCompound = nbt.copyNbt();
-                return !(nbtCompound.contains("MorphScaleItem") && nbtCompound.getBoolean("MorphScaleItem"));
-            },
-            addition,
-            itemStack -> {
-                NbtCompound nbtCompound = itemStack.getOrDefault(DataComponentTypes.CUSTOM_DATA, NbtComponent.DEFAULT).copyNbt();
-                nbtCompound.putBoolean("MorphScaleItem", true);
-                itemStack.set(DataComponentTypes.CUSTOM_DATA, NbtComponent.of(nbtCompound));
-                return itemStack;
-            });
+        super(id, template, (itemStack -> {
+            if (itemStack.isEmpty()) {
+                return false;
+            }
+            NbtCompound nbtCompound = itemStack.getNbt();
+            if (nbtCompound == null) {
+                return true;
+            }
+            return !(nbtCompound.contains(IsMorphScaleItemCondition.IsMorphScaleArmorTagName) && nbtCompound.getBoolean(IsMorphScaleItemCondition.IsMorphScaleArmorTagName));
+        }), addition, itemStack -> {
+            NbtCompound nbtCompound = itemStack.getOrCreateNbt();
+            nbtCompound.putBoolean(IsMorphScaleItemCondition.IsMorphScaleArmorTagName, true);
+            return itemStack;
+        });
         this.template = template;
         this.addition = addition;
     }
 
     @Override
+    public ItemStack craft(Inventory inventory, DynamicRegistryManager registryManager) {
+        ItemStack coreStack = inventory.getStack(0);
+        if (coreStack.isOf(RegCustomItem.SUPER_MORPHSCALE_CORE)) {
+            ItemStack itemStack = inventory.getStack(1);
+            int multiplier = SuperMorphScaleCore.getUpgradeDamageMultiplier(itemStack);
+            int canCraftCount = SuperMorphScaleCore.getMaxUseCount(coreStack, multiplier);
+            if (this.base.test(itemStack) && canCraftCount > 0) {
+                ItemStack outputStack = itemStack.copy();
+                outputStack.setCount(1);
+                return this.upgradeResult.apply(outputStack);
+            }
+            return ItemStack.EMPTY;
+        }
+        return super.craft(inventory, registryManager);
+    }
+
+    @Override
     public RecipeSerializer<?> getSerializer() {
         return MORPH_SCALE_UPGRADE;
+    }
+
+    @Override
+    public boolean overrideVanillaOnTakeOutput() {
+        return true;
+    }
+
+    @Override
+    public void onTakeOutput(SmithingScreenHandler screenHandler, PlayerEntity player, ItemStack stack) {
+        ItemStack coreStack = screenHandler.input.getStack(0);
+        if (coreStack.isOf(RegCustomItem.SUPER_MORPHSCALE_CORE)) {
+            ItemStack baseStack = screenHandler.input.getStack(1);
+            int multiplier = SuperMorphScaleCore.getUpgradeDamageMultiplier(baseStack);
+            SuperMorphScaleCore.damageItemAfterUpgrade(coreStack, multiplier);
+            screenHandler.decrementStack(1);
+            screenHandler.decrementStack(2);
+        }
+        else {
+            screenHandler.decrementStack(0);
+            if (this.isUpgradeAll()) {
+                screenHandler.input.setStack(1, ItemStack.EMPTY);
+            } else {
+                screenHandler.decrementStack(1);
+            }
+            screenHandler.decrementStack(2);
+        }
     }
 
     public static class Serializer implements RecipeSerializer<MorphScaleUpgradeRecipe> {
