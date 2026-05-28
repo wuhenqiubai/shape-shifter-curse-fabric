@@ -1,17 +1,17 @@
 package net.onixary.shapeShifterCurseFabric.recipes;
 
-import com.google.gson.JsonObject;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.component.type.NbtComponent;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.network.PacketByteBuf;
+import net.minecraft.network.RegistryByteBuf;
+import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.recipe.RecipeSerializer;
-import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.screen.SmithingScreenHandler;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.JsonHelper;
 import net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric;
 import net.onixary.shapeShifterCurseFabric.additional_power.IsMorphScaleItemCondition;
 import net.onixary.shapeShifterCurseFabric.items.RegCustomItem;
@@ -36,14 +36,17 @@ public class MorphScaleUpgradeRecipe extends UpgradeRecipe {
             if (itemStack.isEmpty()) {
                 return false;
             }
-            NbtCompound nbtCompound = itemStack.getNbt();
-            if (nbtCompound == null) {
+	        var customData = itemStack.get(net.minecraft.component.DataComponentTypes.CUSTOM_DATA);
+	        if (customData == null) {
                 return true;
             }
+	        NbtCompound nbtCompound = customData.copyNbt();
             return !(nbtCompound.contains(IsMorphScaleItemCondition.IsMorphScaleArmorTagName) && nbtCompound.getBoolean(IsMorphScaleItemCondition.IsMorphScaleArmorTagName));
         }), addition, itemStack -> {
-            NbtCompound nbtCompound = itemStack.getOrCreateNbt();
-            nbtCompound.putBoolean(IsMorphScaleItemCondition.IsMorphScaleArmorTagName, true);
+	        // 使用 Component 系统设置标记
+	        NbtCompound nbt = itemStack.getOrDefault(net.minecraft.component.DataComponentTypes.CUSTOM_DATA, NbtComponent.DEFAULT).copyNbt();
+	        nbt.putBoolean(IsMorphScaleItemCondition.IsMorphScaleArmorTagName, true);
+	        itemStack.set(net.minecraft.component.DataComponentTypes.CUSTOM_DATA, NbtComponent.of(nbt));
             return itemStack;
         });
         this.template = template;
@@ -51,10 +54,10 @@ public class MorphScaleUpgradeRecipe extends UpgradeRecipe {
     }
 
     @Override
-    public ItemStack craft(Inventory inventory, DynamicRegistryManager registryManager) {
-        ItemStack coreStack = inventory.getStack(0);
+    public ItemStack craft(net.minecraft.recipe.input.SmithingRecipeInput input, net.minecraft.registry.RegistryWrapper.WrapperLookup lookup) {
+	    ItemStack coreStack = input.template();
         if (coreStack.isOf(RegCustomItem.SUPER_MORPHSCALE_CORE)) {
-            ItemStack itemStack = inventory.getStack(1);
+	        ItemStack itemStack = input.base();
             int multiplier = SuperMorphScaleCore.getUpgradeDamageMultiplier(itemStack);
             int canCraftCount = SuperMorphScaleCore.getMaxUseCount(coreStack, multiplier);
             if (this.base.test(itemStack) && canCraftCount > 0) {
@@ -64,7 +67,7 @@ public class MorphScaleUpgradeRecipe extends UpgradeRecipe {
             }
             return ItemStack.EMPTY;
         }
-        return super.craft(inventory, registryManager);
+	    return super.craft(input, lookup);
     }
 
     @Override

@@ -1,32 +1,47 @@
 package net.onixary.shapeShifterCurseFabric.recipes.alter;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
-import com.google.gson.JsonSyntaxException;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.inventory.Inventory;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketByteBuf;
-import net.minecraft.recipe.*;
-import net.minecraft.registry.DynamicRegistryManager;
+import net.minecraft.network.RegistryByteBuf;
+import net.minecraft.network.codec.PacketCodec;
+import net.minecraft.recipe.Ingredient;
+import net.minecraft.recipe.Recipe;
+import net.minecraft.recipe.RecipeSerializer;
+import net.minecraft.recipe.RecipeType;
+import net.minecraft.recipe.input.RecipeInput;
+import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.JsonHelper;
 import net.minecraft.world.World;
 import net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric;
-import net.onixary.shapeShifterCurseFabric.recipes.MorphScaleUpgradeRecipe;
 import net.onixary.shapeShifterCurseFabric.recipes.RecipeSerializerRegister;
 import net.onixary.shapeShifterCurseFabric.recipes.RecipeUtils;
 import org.jetbrains.annotations.Nullable;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
-import java.util.function.Supplier;
 
 // 类熔炉配方 多输入物品 单种燃料 多输出物品
-public class AlterRecipe implements Recipe<Inventory> {
+public class AlterRecipe implements Recipe<AlterRecipe.AlterRecipeInput> {
+
+    @Override
+    public boolean matches(AlterRecipeInput input, World world) {
+        if (this.id.equals(EmptyRecipeId)) {
+            return false;
+        }
+        boolean noPass = false;
+	    noPass |= !this.input1.test(input.getStackInSlot(InputSlotIndex + 0));
+	    noPass |= !this.input2.test(input.getStackInSlot(InputSlotIndex + 1));
+	    noPass |= !this.input3.test(input.getStackInSlot(InputSlotIndex + 2));
+	    noPass |= !this.input4.test(input.getStackInSlot(InputSlotIndex + 3));
+	    noPass |= !this.input5.test(input.getStackInSlot(InputSlotIndex + 4));
+	    noPass |= !this.input6.test(input.getStackInSlot(InputSlotIndex + 5));
+	    noPass |= !this.input7.test(input.getStackInSlot(InputSlotIndex + 6));
+        return !noPass;
+    }
+
     public static final RecipeType<AlterRecipe> ALTER_RECIPE = RecipeUtils.registerRecipeType(ShapeShifterCurseFabric.identifier("alter"));
     public static final Identifier EmptyRecipeId = ShapeShifterCurseFabric.identifier("empty_alter_recipe");
 
@@ -85,24 +100,8 @@ public class AlterRecipe implements Recipe<Inventory> {
     }
 
     @Override
-    public boolean matches(Inventory inventory, World world) {
-        if (this.id.equals(EmptyRecipeId)) {
-            return false;
-        }
-        boolean noPass = false;
-        noPass |= !this.input1.test(inventory.getStack(InputSlotIndex + 0));
-        noPass |= !this.input2.test(inventory.getStack(InputSlotIndex + 1));
-        noPass |= !this.input3.test(inventory.getStack(InputSlotIndex + 2));
-        noPass |= !this.input4.test(inventory.getStack(InputSlotIndex + 3));
-        noPass |= !this.input5.test(inventory.getStack(InputSlotIndex + 4));
-        noPass |= !this.input6.test(inventory.getStack(InputSlotIndex + 5));
-        noPass |= !this.input7.test(inventory.getStack(InputSlotIndex + 6));
-        return !noPass;
-    }
-
-    @Override
-    public ItemStack craft(Inventory inventory, DynamicRegistryManager registryManager) {
-        return this.getVirtualOutput(inventory);
+    public ItemStack craft(AlterRecipeInput input, RegistryWrapper.WrapperLookup lookup) {
+	    return this.getVirtualOutput(input.getInventory());
     }
 
     @Override
@@ -111,11 +110,32 @@ public class AlterRecipe implements Recipe<Inventory> {
     }
 
     @Override
-    public ItemStack getOutput(DynamicRegistryManager registryManager) {
-        return this.VirtualOutput;
+    public ItemStack getResult(RegistryWrapper.WrapperLookup lookup) {
+	    return this.VirtualOutput;
     }
 
-    @Override
+	public static class AlterRecipeInput implements RecipeInput {
+		private final Inventory inventory;
+
+		public AlterRecipeInput(Inventory inventory) {
+			this.inventory = inventory;
+		}
+
+		public Inventory getInventory() {
+			return inventory;
+		}
+
+		@Override
+		public ItemStack getStackInSlot(int slot) {
+			return inventory.getStack(slot);
+		}
+
+		@Override
+		public int getSize() {
+			return inventory.size();
+		}
+	}
+
     public Identifier getId() {
         return this.id;
     }
@@ -131,65 +151,66 @@ public class AlterRecipe implements Recipe<Inventory> {
     }
 
     public static class Serializer implements RecipeSerializer<AlterRecipe> {
-        public AlterRecipe read(Identifier identifier, JsonObject jsonObject) {
-            try {
-                Ingredient input1 = Ingredient.fromJson(JsonHelper.getElement(jsonObject, "input1"));
-                Ingredient input2 = Ingredient.fromJson(JsonHelper.getElement(jsonObject, "input2"));
-                Ingredient input3 = Ingredient.fromJson(JsonHelper.getElement(jsonObject, "input3"));
-                Ingredient input4 = Ingredient.fromJson(JsonHelper.getElement(jsonObject, "input4"));
-                Ingredient input5 = Ingredient.fromJson(JsonHelper.getElement(jsonObject, "input5"));
-                Ingredient input6 = Ingredient.fromJson(JsonHelper.getElement(jsonObject, "input6"));
-                Ingredient input7 = Ingredient.fromJson(JsonHelper.getElement(jsonObject, "input7"));
-                JsonArray jsonArray = JsonHelper.getArray(jsonObject, "output");
-                List<ItemStack> list = new ArrayList<>();
-                for (int i = 0; i < jsonArray.size(); ++i) {
-                    list.add(ShapedRecipe.outputFromJson(jsonArray.get(i).getAsJsonObject()));
-                }
-                Function<@Nullable Inventory, List<ItemStack>> function = inventory -> list;
-                int recipeTime = JsonHelper.getInt(jsonObject, "recipeTime", 200);
-                return new AlterRecipe(identifier, input1, input2, input3, input4, input5, input6, input7, function, recipeTime);
-            } catch (Exception exception) {
-                ShapeShifterCurseFabric.LOGGER.warn("Couldn't read recipe " + identifier, exception);
-                return EmptyRecipe;
-            }
-        }
 
-        public AlterRecipe read(Identifier identifier, PacketByteBuf packetByteBuf) {
-            try {
-                Ingredient input1 = Ingredient.fromPacket(packetByteBuf);
-                Ingredient input2 = Ingredient.fromPacket(packetByteBuf);
-                Ingredient input3 = Ingredient.fromPacket(packetByteBuf);
-                Ingredient input4 = Ingredient.fromPacket(packetByteBuf);
-                Ingredient input5 = Ingredient.fromPacket(packetByteBuf);
-                Ingredient input6 = Ingredient.fromPacket(packetByteBuf);
-                Ingredient input7 = Ingredient.fromPacket(packetByteBuf);
-                List<ItemStack> list = new ArrayList<>();
-                for (int i = 0; i < packetByteBuf.readVarInt(); ++i) {
-                    list.add(packetByteBuf.readItemStack());
-                }
-                Function<@Nullable Inventory, List<ItemStack>> function = inventory -> list;
-                int recipeTime = packetByteBuf.readVarInt();
-                return new AlterRecipe(identifier, input1, input2, input3, input4, input5, input6, input7, function, recipeTime);
-            } catch (Exception exception) {
-                ShapeShifterCurseFabric.LOGGER.warn("Couldn't read recipe " + identifier, exception);
-                return EmptyRecipe;
-            }
-        }
+	    private static final MapCodec<AlterRecipe> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+			    Ingredient.DISALLOW_EMPTY_CODEC.fieldOf("input1").forGetter(r -> r.input1),
+			    Ingredient.DISALLOW_EMPTY_CODEC.fieldOf("input2").forGetter(r -> r.input2),
+			    Ingredient.DISALLOW_EMPTY_CODEC.fieldOf("input3").forGetter(r -> r.input3),
+			    Ingredient.DISALLOW_EMPTY_CODEC.fieldOf("input4").forGetter(r -> r.input4),
+			    Ingredient.DISALLOW_EMPTY_CODEC.fieldOf("input5").forGetter(r -> r.input5),
+			    Ingredient.DISALLOW_EMPTY_CODEC.fieldOf("input6").forGetter(r -> r.input6),
+			    Ingredient.DISALLOW_EMPTY_CODEC.fieldOf("input7").forGetter(r -> r.input7),
+			    ItemStack.CODEC.listOf().fieldOf("output").forGetter(r -> r.output.apply(null)),
+			    com.mojang.serialization.Codec.INT.optionalFieldOf("recipeTime", 200).forGetter(r -> r.recipeTime)
+	    ).apply(instance, (i1, i2, i3, i4, i5, i6, i7, outputList, time) ->
+			    new AlterRecipe(Identifier.of("alter"), i1, i2, i3, i4, i5, i6, i7, inv -> outputList, time)
+	    ));
 
-        public void write(PacketByteBuf packetByteBuf, AlterRecipe alterRecipe) {
-            alterRecipe.input1.write(packetByteBuf);
-            alterRecipe.input2.write(packetByteBuf);
-            alterRecipe.input3.write(packetByteBuf);
-            alterRecipe.input4.write(packetByteBuf);
-            alterRecipe.input5.write(packetByteBuf);
-            alterRecipe.input6.write(packetByteBuf);
-            alterRecipe.input7.write(packetByteBuf);
-            List<ItemStack> list = alterRecipe.output.apply(null);
-            packetByteBuf.writeVarInt(list.size());
-            for (ItemStack itemStack : list) {
-                packetByteBuf.writeItemStack(itemStack);
+	    private static final PacketCodec<RegistryByteBuf, AlterRecipe> PACKET_CODEC = new PacketCodec<>() {
+		    @Override
+		    public AlterRecipe decode(RegistryByteBuf buf) {
+			    Ingredient i1 = Ingredient.PACKET_CODEC.decode(buf);
+			    Ingredient i2 = Ingredient.PACKET_CODEC.decode(buf);
+			    Ingredient i3 = Ingredient.PACKET_CODEC.decode(buf);
+			    Ingredient i4 = Ingredient.PACKET_CODEC.decode(buf);
+			    Ingredient i5 = Ingredient.PACKET_CODEC.decode(buf);
+			    Ingredient i6 = Ingredient.PACKET_CODEC.decode(buf);
+			    Ingredient i7 = Ingredient.PACKET_CODEC.decode(buf);
+			    List<ItemStack> outputs = new ArrayList<>();
+			    int outputCount = buf.readVarInt();
+			    for (int i = 0; i < outputCount; i++) {
+				    outputs.add(ItemStack.OPTIONAL_PACKET_CODEC.decode(buf));
+                }
+			    int time = buf.readVarInt();
+			    return new AlterRecipe(Identifier.of("alter"), i1, i2, i3, i4, i5, i6, i7, inv -> outputs, time);
+		    }
+
+		    @Override
+		    public void encode(RegistryByteBuf buf, AlterRecipe recipe) {
+			    Ingredient.PACKET_CODEC.encode(buf, recipe.input1);
+			    Ingredient.PACKET_CODEC.encode(buf, recipe.input2);
+			    Ingredient.PACKET_CODEC.encode(buf, recipe.input3);
+			    Ingredient.PACKET_CODEC.encode(buf, recipe.input4);
+			    Ingredient.PACKET_CODEC.encode(buf, recipe.input5);
+			    Ingredient.PACKET_CODEC.encode(buf, recipe.input6);
+			    Ingredient.PACKET_CODEC.encode(buf, recipe.input7);
+			    List<ItemStack> outputs = recipe.output.apply(null);
+			    buf.writeVarInt(outputs.size());
+			    for (ItemStack stack : outputs) {
+				    ItemStack.OPTIONAL_PACKET_CODEC.encode(buf, stack);
+                }
+			    buf.writeVarInt(recipe.recipeTime);
             }
-            packetByteBuf.writeVarInt(alterRecipe.recipeTime);
+	    };
+
+	    @Override
+	    public MapCodec<AlterRecipe> codec() {
+		    return CODEC;
+	    }
+
+	    @Override
+	    public PacketCodec<RegistryByteBuf, AlterRecipe> packetCodec() {
+		    return PACKET_CODEC;
         }
     }
 }

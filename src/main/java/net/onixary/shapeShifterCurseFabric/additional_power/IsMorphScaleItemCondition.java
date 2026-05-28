@@ -4,6 +4,7 @@ import io.github.apace100.apoli.power.factory.condition.ConditionFactory;
 import io.github.apace100.calio.data.SerializableData;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.Pair;
 import net.minecraft.world.World;
 import net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric;
@@ -13,7 +14,8 @@ public class IsMorphScaleItemCondition {
     public static final String IsMorphScaleArmorTagName = "MorphScaleItem";
     public static final String IsMorphScaleFoodTagName = "MorphScaleFood";  // TODO 得改一下名称 我想不出名字了
 
-    public static boolean MSI_condition(SerializableData.Instance data, ItemStack itemStack) {
+	public static boolean MSI_condition(SerializableData.Instance data, Pair<World, ItemStack> pair) {
+		ItemStack itemStack = pair.getRight();
         if (itemStack.isIn(ModTags.MorphScaleItem_Tag)) {
             return true;
         }
@@ -26,15 +28,17 @@ public class IsMorphScaleItemCondition {
         return false;
     }
 
-    public static boolean MSF_condition(SerializableData.Instance data, ItemStack itemStack) {
+	public static boolean MSF_condition(SerializableData.Instance data, Pair<World, ItemStack> pair) {
+		ItemStack itemStack = pair.getRight();
         if (!ShapeShifterCurseFabric.commonConfig.enableFoodHabitSystem) {
             return true;
         }
         if (itemStack.isIn(ModTags.MorphScaleItem_Tag)) {
             return true;
         }
-        NbtCompound itemNBT = itemStack.getNbt();
-        if (itemNBT != null) {
+		var customData = itemStack.get(DataComponentTypes.CUSTOM_DATA);
+		if (customData != null) {
+			NbtCompound itemNBT = customData.copyNbt();
             if (itemNBT.getBoolean(IsMorphScaleFoodTagName)) {
                 return true;
             }
@@ -45,15 +49,16 @@ public class IsMorphScaleItemCondition {
         return false;
     }
 
-    public static ConditionFactory<ItemStack> getFactory1() {
-        return new ConditionFactory<ItemStack>(
+	public static ConditionFactory<Pair<World, ItemStack>> getFactory1() {
+		return new ConditionFactory<Pair<World, ItemStack>>(
                 ShapeShifterCurseFabric.identifier("is_morph_scale_item"),
                 new SerializableData(),
                 IsMorphScaleItemCondition::MSI_condition
         );
     }
-    public static ConditionFactory<ItemStack> getFactory2() {
-        return new ConditionFactory<ItemStack>(
+
+	public static ConditionFactory<Pair<World, ItemStack>> getFactory2() {
+		return new ConditionFactory<Pair<World, ItemStack>>(
                 ShapeShifterCurseFabric.identifier("is_morph_scale_food"),
                 new SerializableData(),
                 IsMorphScaleItemCondition::MSF_condition

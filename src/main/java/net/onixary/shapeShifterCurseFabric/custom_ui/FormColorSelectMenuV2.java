@@ -121,7 +121,7 @@ public class FormColorSelectMenuV2 extends Screen implements FormTextureUtils.Te
     // 私有变量 用于部分逻辑
     private boolean isScreenInit = false;
     private static final MinecraftClient minecraftClient = MinecraftClient.getInstance();
-    private static final Identifier BG_TEXTURE = new Identifier(MOD_ID,"textures/gui/v2_form_color_select_menu.png");
+    private static final Identifier BG_TEXTURE = Identifier.of(MOD_ID, "textures/gui/v2_form_color_select_menu.png");
     private static final int BG_WIDTH = 420;
     private static final int BG_HEIGHT = 227;
     public static FormColorSelectMenuV2 instance;
@@ -482,7 +482,7 @@ public class FormColorSelectMenuV2 extends Screen implements FormTextureUtils.Te
 
     // 实时形态颜色显示系统
     private Identifier getNextDynamicFormID() {
-        return new Identifier(identifierNameSpace, identifierPrefix + nowColorSettingIndex++);
+        return Identifier.of(identifierNameSpace, identifierPrefix + nowColorSettingIndex++);
     }
 
     private void CleanColorSettingCache() {

@@ -1,17 +1,14 @@
 package net.onixary.shapeShifterCurseFabric.items.tools;
 
-import net.minecraft.client.item.TooltipContext;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Vanishable;
+import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
-import net.minecraft.world.World;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class SuperMorphScaleCore extends Item implements Vanishable {
+public class SuperMorphScaleCore extends Item {
     public static final int damagePerItem = 64;
 
     public SuperMorphScaleCore(Settings settings) {
@@ -45,7 +42,7 @@ public class SuperMorphScaleCore extends Item implements Vanishable {
     }
 
     @Override
-    public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
+    public void appendTooltip(ItemStack stack, Item.TooltipContext context, List<Text> tooltip, TooltipType type) {
         tooltip.add(Text.translatable("item.shape-shifter-curse.super_morphscale_core.tooltip", getMaxUseCount(stack, 1)).formatted(Formatting.DARK_PURPLE));
     }
 }
