@@ -44,6 +44,7 @@ import net.onixary.shapeShifterCurseFabric.player_animation.RegPlayerAnimation;
 import net.onixary.shapeShifterCurseFabric.render.form_render.FormRenderUtils;
 import net.onixary.shapeShifterCurseFabric.render.render_layer.FurGradientRenderLayer;
 import net.onixary.shapeShifterCurseFabric.util.ClientTicker;
+import net.onixary.shapeShifterCurseFabric.util.FormColorData;
 import net.onixary.shapeShifterCurseFabric.util.PatronUtils;
 import net.onixary.shapeShifterCurseFabric.util.TickManager;
 import org.lwjgl.glfw.GLFW;
@@ -59,6 +60,8 @@ public class ShapeShifterCurseFabricClient implements ClientModInitializer {
 	//public static final EntityModelLayer T_BAT_LAYER = new EntityModelLayer(Identifier.of(MOD_ID, "t_bat"), "main");
 	//public static final EntityModelLayer T_AXOLOTL_LAYER = new EntityModelLayer(Identifier.of(MOD_ID, "t_axolotl"), "main");
 	//public static final EntityModelLayer T_OCELOT_LAYER = new EntityModelLayer(Identifier.of(MOD_ID, "t_ocelot"), "main");
+
+	public static final FormColorData formColorData = new FormColorData();
 
 	public static MinecraftClient getClient() {
 		return MinecraftClient.getInstance();
@@ -297,6 +300,8 @@ public class ShapeShifterCurseFabricClient implements ClientModInitializer {
 		RegCustomEntityRenderer.init();
 
 		FormRenderUtils.onClientInit();
+
+		formColorData.loadFormConfig();
 
 		ClientTickEvents.END_CLIENT_TICK.register(ShapeShifterCurseFabricClient::onClientTick);
 		// 客户端能力处理

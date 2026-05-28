@@ -3,27 +3,31 @@ package net.onixary.shapeShifterCurseFabric.additional_power;
 import io.github.apace100.apoli.power.factory.condition.ConditionFactory;
 import io.github.apace100.apoli.registry.ApoliRegistries;
 import io.github.apace100.calio.data.SerializableData;
-import net.minecraft.component.type.AttributeModifiersComponent;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.Registry;
-import net.minecraft.util.Pair;
-import net.minecraft.world.World;
 import net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric;
 
 public class AdditionalItemCondition {
     public static void register() {
-        register(IsMorphScaleItemCondition.getFactory());
-        register(new ConditionFactory<>(
+        register(IsMorphScaleItemCondition.getFactory1());
+        register(IsMorphScaleItemCondition.getFactory2());
+        register(new ConditionFactory<ItemStack>(
                 ShapeShifterCurseFabric.identifier("is_weapon"),
                 new SerializableData(),
-                (data, worldAndStack) -> {
-                    ItemStack itemStack = worldAndStack.getRight();
-                    AttributeModifiersComponent modifiers = itemStack.getItem().getAttributeModifiers();
-                    for (var entry : modifiers.modifiers()) {
-                        if (entry.attribute() == EntityAttributes.GENERIC_ATTACK_DAMAGE
-                                || entry.attribute() == EntityAttributes.GENERIC_ATTACK_SPEED) {
-                            return true;
+                (data, itemstack) -> {
+	                var attrComponent = itemstack.get(DataComponentTypes.ATTRIBUTE_MODIFIERS);
+                    double totalAdd = 0;
+	                if (attrComponent != null) {
+		                for (var entry : attrComponent.modifiers()) {
+			                if (entry.slot().matches(EquipmentSlot.MAINHAND)
+					                && entry.attribute() == EntityAttributes.GENERIC_ATTACK_DAMAGE
+					                && entry.modifier().operation() == EntityAttributeModifier.Operation.ADD_VALUE) {
+				                totalAdd += entry.modifier().value();
+			                }
                         }
                     }
                     return false;
@@ -32,7 +36,7 @@ public class AdditionalItemCondition {
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})
-    private static void register(ConditionFactory<Pair<World, ItemStack>> conditionFactory) {
+    private static void register(ConditionFactory<?> conditionFactory) {
         Registry.register(ApoliRegistries.ITEM_CONDITION, conditionFactory.getSerializerId(), (ConditionFactory) conditionFactory);
     }
 }

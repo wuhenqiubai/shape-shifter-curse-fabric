@@ -23,3 +23,13 @@ mutable field net/minecraft/world/gen/structure/Structure$Config spawnOverrides 
 accessible field net/minecraft/client/render/entity/model/PlayerEntityModel thinArms Z
 accessible method net/minecraft/client/render/entity/LivingEntityRenderer getAnimationCounter (Lnet/minecraft/entity/LivingEntity;F)F
 accessible method net/minecraft/client/render/entity/LivingEntityRenderer isVisible (Lnet/minecraft/entity/LivingEntity;)Z
+accessible method net/minecraft/client/gui/widget/TextFieldWidget onChanged (Ljava/lang/String;)V
+accessible method net/minecraft/screen/SmithingScreenHandler decrementStack (I)V
+accessible field net/minecraft/screen/SmithingScreenHandler world Lnet/minecraft/world/World;
+accessible field net/minecraft/screen/ForgingScreenHandler output Lnet/minecraft/inventory/CraftingResultInventory;
+accessible method net/minecraft/screen/SmithingScreenHandler getInputStacks ()Ljava/util/List;
+accessible field net/minecraft/screen/ForgingScreenHandler context Lnet/minecraft/screen/ScreenHandlerContext;
+
+accessible class net/minecraft/advancement/AdvancementEntry
+accessible class net/minecraft/advancement/AdvancementCriterion
+accessible class net/minecraft/advancement/criterion/InventoryChangedCriterion$Conditions

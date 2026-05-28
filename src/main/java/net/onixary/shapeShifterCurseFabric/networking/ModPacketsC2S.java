@@ -122,7 +122,11 @@ public class ModPacketsC2S {
         reg(UPDATE_CUSTOM_SETTING, net.onixary.shapeShifterCurseFabric.networking.ModPacketsC2S::onUpdatePlayerCustomConfig
         );
 
-        reg(SET_PATRON_FORM, net.onixary.shapeShifterCurseFabric.networking.ModPacketsC2S::receiveSetPatronForm
+
+	    reg(UPDATE_CUSTOM_COLOR, net.onixary.shapeShifterCurseFabric.networking.ModPacketsC2S::onUpdatePlayerCustomColor
+        );
+
+	    reg(SET_PATRON_FORM, net.onixary.shapeShifterCurseFabric.networking.ModPacketsC2S::receiveSetPatronForm
         );
 
         reg(SET_FORM, net.onixary.shapeShifterCurseFabric.networking.ModPacketsC2S::receiveSetForm
@@ -161,6 +165,21 @@ public class ModPacketsC2S {
     private static void onUpdatePlayerCustomConfig(MinecraftServer minecraftServer, ServerPlayerEntity playerEntity, ServerPlayNetworkHandler serverPlayNetworkHandler, PacketByteBuf packetByteBuf, PacketSender packetSender) {
         boolean keepOriginalSkin = packetByteBuf.readBoolean();
         boolean enableFormColor = packetByteBuf.readBoolean();
+        boolean enableFormRandomSound = packetByteBuf.readBoolean();
+        minecraftServer.execute(() -> {
+            try {
+                PlayerSkinComponent component = RegPlayerSkinComponent.SKIN_SETTINGS.get(playerEntity);
+                component.setKeepOriginalSkin(keepOriginalSkin);
+                component.setEnableFormColor(enableFormColor);
+                component.setEnableFormRandomSound(enableFormRandomSound);
+                RegPlayerSkinComponent.SKIN_SETTINGS.sync(playerEntity);
+            } catch (Exception e) {
+                ShapeShifterCurseFabric.LOGGER.error("Error while updating player custom config", e);
+            }
+        });
+    }
+
+    private static void onUpdatePlayerCustomColor(MinecraftServer minecraftServer, ServerPlayerEntity playerEntity, ServerPlayNetworkHandler serverPlayNetworkHandler, PacketByteBuf packetByteBuf, PacketSender packetSender) {
         int primaryColor = packetByteBuf.readInt();
         int accentColor1Color = packetByteBuf.readInt();
         int accentColor2Color = packetByteBuf.readInt();
@@ -169,17 +188,13 @@ public class ModPacketsC2S {
         boolean primaryGreyReverse = packetByteBuf.readBoolean();
         boolean accent1GreyReverse = packetByteBuf.readBoolean();
         boolean accent2GreyReverse = packetByteBuf.readBoolean();
-        boolean enableFormRandomSound = packetByteBuf.readBoolean();
         minecraftServer.execute(() -> {
             try {
                 PlayerSkinComponent component = RegPlayerSkinComponent.SKIN_SETTINGS.get(playerEntity);
-                component.setKeepOriginalSkin(keepOriginalSkin);
-                component.setEnableFormColor(enableFormColor);
                 component.setFormColor(new FormTextureUtils.ColorSetting(primaryColor, accentColor1Color, accentColor2Color, eyeColorA, eyeColorB, primaryGreyReverse, accent1GreyReverse, accent2GreyReverse));
-                component.setEnableFormRandomSound(enableFormRandomSound);
                 RegPlayerSkinComponent.SKIN_SETTINGS.sync(playerEntity);
             } catch (Exception e) {
-                ShapeShifterCurseFabric.LOGGER.error("Error while updating player custom config", e);
+                ShapeShifterCurseFabric.LOGGER.error("Error while updating player custom color", e);
             }
         });
     }

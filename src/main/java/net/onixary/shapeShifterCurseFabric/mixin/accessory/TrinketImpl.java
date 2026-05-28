@@ -2,7 +2,6 @@ package net.onixary.shapeShifterCurseFabric.mixin.accessory;
 
 import dev.emi.trinkets.api.*;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 import net.onixary.shapeShifterCurseFabric.items.accessory.AccessoryItem;
@@ -38,11 +37,8 @@ public class TrinketImpl implements Trinket {
     }
 
     @Inject(method = "accessoryInit", at = @At("HEAD"), cancellable = true)
-    private void initAccessory(Item.Settings settings, CallbackInfo ci) {
-        AccessoryItem realThis = ((AccessoryItem) (Object) this);
-        if (realThis instanceof Trinket trinket) {
-            TrinketsApi.registerTrinket(realThis, trinket);
-        }
+    private void initAccessory(CallbackInfo ci) {
+        TrinketsApi.registerTrinket((AccessoryItem) (Object) this, (Trinket) (Object) this);
     }
 
     @Override
