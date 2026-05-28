@@ -10,6 +10,7 @@
     "item": "minecraft:netherite_scrap"
   },
   "result": {
-    "item": "shape-shifter-curse:netherite_morphscale_headring"
+    "id": "shape-shifter-curse:netherite_morphscale_headring",
+    "count": 1
   }
 }

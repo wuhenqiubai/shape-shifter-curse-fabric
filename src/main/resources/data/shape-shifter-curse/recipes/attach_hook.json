@@ -20,7 +20,7 @@
     }
   },
   "result": {
-    "item": "shape-shifter-curse:attach_hook",
-    "count": 1
+    "count": 1,
+    "id": "shape-shifter-curse:attach_hook"
   }
 }
