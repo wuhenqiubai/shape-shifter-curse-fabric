@@ -106,6 +106,8 @@ public class RegCustomPotions {
             if (potionId != null) {
                 json.addProperty("input", potionId.toString());
             }
+        } else if (input instanceof String str) {
+            json.addProperty("input", str);
         }
 
         // 处理输出药水
@@ -114,6 +116,8 @@ public class RegCustomPotions {
             if (potionId != null) {
                 json.addProperty("output", potionId.toString());
             }
+        } else if (output instanceof String str) {
+            json.addProperty("output", str);
         }
 
         // 处理材料（物品）
