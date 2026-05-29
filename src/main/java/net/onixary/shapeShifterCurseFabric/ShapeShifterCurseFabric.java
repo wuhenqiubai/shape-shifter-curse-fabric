@@ -103,43 +103,30 @@ public class ShapeShifterCurseFabric implements ModInitializer {
     public static float feralItemEulerX = 0.0F;
 
     // Reg custom advancement criterion
-    public static final OnEnableMod ON_ENABLE_MOD = Criteria.register(OnEnableMod.ID.toString(), new OnEnableMod());
-    public static final OnOpenBookOfShapeShifter ON_OPEN_BOOK_OF_SHAPE_SHIFTER = Criteria.register(OnOpenBookOfShapeShifter.ID.toString(), new OnOpenBookOfShapeShifter());
-    public static final OnEndCursedMoon ON_END_CURSED_MOON = Criteria.register(OnEndCursedMoon.ID.toString(), new OnEndCursedMoon());
-    public static final OnEndCursedMoonCured ON_END_CURSED_MOON_CURED = Criteria.register(OnEndCursedMoonCured.ID.toString(), new OnEndCursedMoonCured());
-    public static final OnEndCursedMoonCuredForm2 ON_END_CURSED_MOON_CURED_FORM_2 = Criteria.register(OnEndCursedMoonCuredForm2.ID.toString(), new OnEndCursedMoonCuredForm2());
-    public static final OnGetTransformEffect ON_GET_TRANSFORM_EFFECT = Criteria.register(OnGetTransformEffect.ID.toString(), new OnGetTransformEffect());
-    public static final OnSleepWhenHaveTransformEffect ON_SLEEP_WHEN_HAVE_TRANSFORM_EFFECT = Criteria.register(OnSleepWhenHaveTransformEffect.ID.toString(), new OnSleepWhenHaveTransformEffect());
-    public static final OnTransform0 ON_TRANSFORM_0 = Criteria.register(OnTransform0.ID.toString(), new OnTransform0());
-    public static final OnTransform1 ON_TRANSFORM_1 = Criteria.register(OnTransform1.ID.toString(), new OnTransform1());
-    public static final OnTransform2 ON_TRANSFORM_2 = Criteria.register(OnTransform2.ID.toString(), new OnTransform2());
-    public static final OnTransformByCatalyst ON_TRANSFORM_BY_CATALYST = Criteria.register(OnTransformByCatalyst.ID.toString(), new OnTransformByCatalyst());
-    public static final OnTransformByCure ON_TRANSFORM_BY_CURE = Criteria.register(OnTransformByCure.ID.toString(), new OnTransformByCure());
-    public static final OnUseGoldenApple ON_USE_GOLDEN_APPLE = Criteria.register(OnUseGoldenApple.ID.toString(), new OnUseGoldenApple());
-    public static final OnTransformByCureFinal ON_TRANSFORM_BY_CURE_FINAL = Criteria.register(OnTransformByCureFinal.ID.toString(), new OnTransformByCureFinal());
-    public static final OnTransformEffectFade ON_TRANSFORM_EFFECT_FADE = Criteria.register(OnTransformEffectFade.ID.toString(), new OnTransformEffectFade());
-    public static final OnTriggerCursedMoon ON_TRIGGER_CURSED_MOON = Criteria.register(OnTriggerCursedMoon.ID.toString(), new OnTriggerCursedMoon());
-    public static final OnTriggerCursedMoonForm2 ON_TRIGGER_CURSED_MOON_FORM_2 = Criteria.register(OnTriggerCursedMoonForm2.ID.toString(), new OnTriggerCursedMoonForm2());
-    public static final OnFirstJoinWithMod ON_FIRST_JOIN_WITH_MOD = Criteria.register(OnFirstJoinWithMod.ID.toString(), new OnFirstJoinWithMod());
-    public static final OnTransform3 ON_TRANSFORM_3 = Criteria.register(OnTransform3.ID.toString(), new OnTransform3());
-    public static final OnTransformSP ON_TRANSFORM_SP = Criteria.register(OnTransformSP.ID.toString(), new OnTransformSP());
-    public static final OnFirstTransformEnableFormList ON_FIRST_TRANSFORM_ENABLE_FORM_LIST = Criteria.register(OnFirstTransformEnableFormList.ID.toString(), new OnFirstTransformEnableFormList());
-    public static final OnTransformAxolotl0 ON_TRANSFORM_AXOLOTL_0 = Criteria.register(OnTransformAxolotl0.ID.toString(), new OnTransformAxolotl0());
-    public static final OnTransformAxolotl3 ON_TRANSFORM_AXOLOTL_3 = Criteria.register(OnTransformAxolotl3.ID.toString(), new OnTransformAxolotl3());
-    public static final OnTransformBat0 ON_TRANSFORM_BAT_0 = Criteria.register(OnTransformBat0.ID.toString(), new OnTransformBat0());
-    public static final OnTransformBat3 ON_TRANSFORM_BAT_3 = Criteria.register(OnTransformBat3.ID.toString(), new OnTransformBat3());
-    public static final OnTransformOcelot0 ON_TRANSFORM_OCELOT_0 = Criteria.register(OnTransformOcelot0.ID.toString(), new OnTransformOcelot0());
-    public static final OnTransformOcelot3 ON_TRANSFORM_OCELOT_3 = Criteria.register(OnTransformOcelot3.ID.toString(), new OnTransformOcelot3());
-    public static final OnTransformFamiliarFox0 ON_TRANSFORM_FAMILIAR_FOX_0 = Criteria.register(OnTransformFamiliarFox0.ID.toString(), new OnTransformFamiliarFox0());
-    public static final OnTransformFamiliarFox3 ON_TRANSFORM_FAMILIAR_FOX_3 = Criteria.register(OnTransformFamiliarFox3.ID.toString(), new OnTransformFamiliarFox3());
-    public static final OnTransformSnowFox0 ON_TRANSFORM_SNOW_FOX_0 = Criteria.register(OnTransformSnowFox0.ID.toString(), new OnTransformSnowFox0());
-    public static final OnTransformSnowFox3 ON_TRANSFORM_SNOW_FOX_3 = Criteria.register(OnTransformSnowFox3.ID.toString(), new OnTransformSnowFox3());
-    public static final OnTransformAnubisWolf0 ON_TRANSFORM_ANUBIS_WOLF_0 = Criteria.register(OnTransformAnubisWolf0.ID.toString(), new OnTransformAnubisWolf0());
-    public static final OnTransformAnubisWolf3 ON_TRANSFORM_ANUBIS_WOLF_3 = Criteria.register(OnTransformAnubisWolf3.ID.toString(), new OnTransformAnubisWolf3());
-    public static final OnTransformSpider0 ON_TRANSFORM_SPIDER_0 = Criteria.register(OnTransformSpider0.ID.toString(), new OnTransformSpider0());
-    public static final OnTransformSpider3 ON_TRANSFORM_SPIDER_3 = Criteria.register(OnTransformSpider3.ID.toString(), new OnTransformSpider3());
-    public static final OnTransformAllaySP ON_TRANSFORM_ALLAY_SP = Criteria.register(OnTransformAllaySP.ID.toString(), new OnTransformAllaySP());
-    public static final OnTransformFeralCatSP ON_TRANSFORM_FERAL_CAT_SP = Criteria.register(OnTransformFeralCatSP.ID.toString(), new OnTransformFeralCatSP());
+    public static final OnEnableMod ON_ENABLE_MOD = Criteria.register(new OnEnableMod());
+    public static final OnOpenBookOfShapeShifter ON_OPEN_BOOK_OF_SHAPE_SHIFTER = Criteria.register(new OnOpenBookOfShapeShifter());
+    public static final OnEndCursedMoon ON_END_CURSED_MOON = Criteria.register(new OnEndCursedMoon());
+    public static final OnEndCursedMoonCured ON_END_CURSED_MOON_CURED = Criteria.register(new OnEndCursedMoonCured());
+    public static final OnEndCursedMoonCuredForm2 ON_END_CURSED_MOON_CURED_FORM_2 = Criteria.register(new OnEndCursedMoonCuredForm2());
+    public static final OnGetTransformEffect ON_GET_TRANSFORM_EFFECT = Criteria.register(new OnGetTransformEffect());
+    public static final OnSleepWhenHaveTransformEffect ON_SLEEP_WHEN_HAVE_TRANSFORM_EFFECT = Criteria.register(new OnSleepWhenHaveTransformEffect());
+    public static final OnTransform0 ON_TRANSFORM_0 = Criteria.register(new OnTransform0());
+    public static final OnTransform1 ON_TRANSFORM_1 = Criteria.register(new OnTransform1());
+    public static final OnTransform2 ON_TRANSFORM_2 = Criteria.register(new OnTransform2());
+    public static final OnTransformByCatalyst ON_TRANSFORM_BY_CATALYST = Criteria.register(new OnTransformByCatalyst());
+    public static final OnTransformByCure ON_TRANSFORM_BY_CURE = Criteria.register(new OnTransformByCure());
+    public static final OnUseGoldenApple ON_USE_GOLDEN_APPLE = Criteria.register(new OnUseGoldenApple());
+    public static final OnTransformByCureFinal ON_TRANSFORM_BY_CURE_FINAL = Criteria.register(new OnTransformByCureFinal());
+    public static final OnTransformEffectFade ON_TRANSFORM_EFFECT_FADE = Criteria.register(new OnTransformEffectFade());
+    public static final OnTriggerCursedMoon ON_TRIGGER_CURSED_MOON = Criteria.register(new OnTriggerCursedMoon());
+    public static final OnTriggerCursedMoonForm2 ON_TRIGGER_CURSED_MOON_FORM_2 = Criteria.register(new OnTriggerCursedMoonForm2());
+    public static final OnFirstJoinWithMod ON_FIRST_JOIN_WITH_MOD = Criteria.register(new OnFirstJoinWithMod());
+    public static final OnTransform3 ON_TRANSFORM_3 = Criteria.register(new OnTransform3());
+    public static final OnTransformSP ON_TRANSFORM_SP = Criteria.register(new OnTransformSP());
+    public static final OnFirstTransformEnableFormList ON_FIRST_TRANSFORM_ENABLE_FORM_LIST = Criteria.register(new OnFirstTransformEnableFormList());
+
+    public static final OnTransformForm ON_TRANSFORM_FORM = Criteria.register(new OnTransformForm());
+    public static final OnWebEntity ON_WEB_ENTITY = Criteria.register(new OnWebEntity());
 
     // Reg custom entities
     // Bat
