@@ -57,6 +57,7 @@
     "accessor.PowerTypeRegistryAccessor",
     "accessory.TrinketImpl",
     "accessory.TrinketItemMixin",
+    "accessory.TrinketSlotMixin",
     "block.PowderSnowBlockMixin",
     "block.SweetBerryBushBlockMixin",
     "integration.AppleSkin",
