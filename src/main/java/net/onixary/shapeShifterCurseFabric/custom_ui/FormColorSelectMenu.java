@@ -15,6 +15,7 @@ import net.minecraft.client.texture.TextureManager;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
+import net.minecraft.text.TextColor;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Pair;
 import net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric;
@@ -57,7 +58,7 @@ public class FormColorSelectMenu extends Screen implements FormTextureUtils.Temp
 
     public static FormColorSelectMenu instance = null;
 
-    private static final Text EmptyText = Text.empty();
+    static final Text EmptyText = Text.empty();
     private static final Text BoolBTN_ON = Text.translatable("text.cloth-config.boolean.value.true");
     private static final Text BoolBTN_OFF = Text.translatable("text.cloth-config.boolean.value.false");
 
@@ -76,7 +77,7 @@ public class FormColorSelectMenu extends Screen implements FormTextureUtils.Temp
 
     private static final Text IsEnableLayerLabel = Text.translatable("gui.shape_shifter_curse_fabric.fcs.is_enable_layer");
     private static final Text ExitSliderButtonLabel = Text.translatable("gui.shape_shifter_curse_fabric.fcs.exit_slider_button");
-    private static final Text NoneFromNameLabel = Text.translatable("gui.shape_shifter_curse_fabric.fcs.none_from_name");
+    static final MutableText NoneFromNameLabel = Text.translatable("gui.shape_shifter_curse_fabric.fcs.none_from_name");
 
     // Button
     private static final Text DownloadFromServer = Text.translatable("gui.shape_shifter_curse_fabric.fcs.from_server");
@@ -147,10 +148,17 @@ public class FormColorSelectMenu extends Screen implements FormTextureUtils.Temp
     }
 
     public void reloadFormIDName() {
-        PlayerFormBase form = this.getForm();
-        Text message = NoneFromNameLabel;
+        PlayerFormBase form = this.getFormNoCheckUnlock();
+        boolean isUnlocked = ShapeShifterCurseFabricClient.formColorData.isUnlock(form.FormID);
+        if (ShapeShifterCurseFabric.clientConfig.disableUnlockCheckInFormColorSelectMenu) {
+            isUnlocked = true;
+        }
+        MutableText message = NoneFromNameLabel;
         if (!RegPlayerForms.ORIGINAL_BEFORE_ENABLE.equals(form)) {
             message = form.getFormName();
+        }
+        if (!isUnlocked) {
+            message.setStyle(message.getStyle().withColor(TextColor.fromRgb(0xFF0000)));
         }
         this.formNameLabel.setMessage(message);
     }
@@ -1385,8 +1393,7 @@ public class FormColorSelectMenu extends Screen implements FormTextureUtils.Temp
         this.addDrawableChild(deleteButtonWidget);
     }
 
-    @Override
-    public PlayerFormBase getForm() {
+    public PlayerFormBase getFormNoCheckUnlock() {
         if (this.formIDIndex < 0) {
             return RegPlayerForms.ORIGINAL_BEFORE_ENABLE;
         }
@@ -1395,6 +1402,32 @@ public class FormColorSelectMenu extends Screen implements FormTextureUtils.Temp
             return RegPlayerForms.ORIGINAL_BEFORE_ENABLE;
         }
         return playerFormsCollection.toArray(new PlayerFormBase[0])[this.formIDIndex];
+    }
+
+    @Override
+    public PlayerFormBase getForm() {
+        if (ShapeShifterCurseFabric.clientConfig.disableUnlockCheckInFormColorSelectMenu) {
+            return this.getFormNoCheckUnlock();
+        }
+        PlayerFormBase finalForm = null;
+        if (this.formIDIndex < 0) {
+            finalForm = RegPlayerForms.ORIGINAL_BEFORE_ENABLE;
+        } else {
+            Collection<PlayerFormBase> playerFormsCollection = RegPlayerForms.playerForms.values();
+            if (this.formIDIndex >= playerFormsCollection.size()) {
+                finalForm = RegPlayerForms.ORIGINAL_BEFORE_ENABLE;
+            } else {
+                finalForm = playerFormsCollection.toArray(new PlayerFormBase[0])[this.formIDIndex];
+            }
+        }
+        if (finalForm == null || !ShapeShifterCurseFabricClient.formColorData.isUnlock(finalForm.FormID)) {
+            if (minecraftClient.player != null) {
+                return RegPlayerFormComponent.PLAYER_FORM.get(minecraftClient.player).getCurrentForm();
+            } else {
+                return RegPlayerForms.ORIGINAL_BEFORE_ENABLE;
+            }
+        }
+        return finalForm;
     }
 
     @Override
