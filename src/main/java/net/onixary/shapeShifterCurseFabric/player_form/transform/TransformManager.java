@@ -12,6 +12,7 @@ import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
+import net.onixary.shapeShifterCurseFabric.player_form.PlayerFormPhase;
 import net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric;
 import net.onixary.shapeShifterCurseFabric.client.ShapeShifterCurseFabricClient;
 import net.onixary.shapeShifterCurseFabric.cursed_moon.CursedMoon;
@@ -133,11 +134,11 @@ public class TransformManager {
         PlayerFormGroup currentFormGroup = currentForm.getGroup();
         PlayerFormBase toForm = null;
         switch (currentFormIndex) {
-            case -2:
+            case PlayerFormPhase.INDEX_PRE_ACTIVATE:
                 // 未激活mod内容，不做任何事
                 // Mod content not activated, do nothing
                 break;
-            case -1:
+            case PlayerFormPhase.INDEX_BASE_SHIFTER:
                 // 如果没有buff则随机选择一个形态，如果有buff則buff形态+1
                 // If there is no buff, randomly select a form; if there is a buff, buff form +1
                 toForm = getRandomOrBuffForm(player);
@@ -145,13 +146,13 @@ public class TransformManager {
                 // Trigger custom achievement
                 ShapeShifterCurseFabric.ON_TRANSFORM_0.trigger((ServerPlayerEntity) player);
                 break;
-            case 0:
+            case PlayerFormPhase.INDEX_PHASE_0:
                 toForm = currentFormGroup.getForm(1);
                 break;
-            case 1:
+            case PlayerFormPhase.INDEX_PHASE_1:
                 toForm = currentFormGroup.getForm(2);
                 break;
-            case 2:
+            case PlayerFormPhase.INDEX_PHASE_2:
                 if (isByCursedMoon) {
                     toForm = currentFormGroup.getForm(0);
                     data._isRegressedFromFinal = true;
@@ -162,16 +163,15 @@ public class TransformManager {
                     ShapeShifterCurseFabric.LOGGER.info("Triggered transformation when at max phase, this should not happen!");
                 }
                 break;
-            case 3:
+            case PlayerFormPhase.INDEX_PHASE_3:
                 // 永久形态，不受影响
                 // Permanent form, not affected
                 player.sendMessage(Text.translatable("info.shape-shifter-curse.on_cursed_moon_permanent").formatted(Formatting.YELLOW));
                 break;
-            case 5:
+            case PlayerFormPhase.INDEX_PHASE_SP:
                 // SP形态只有一个阶段，不会受到CursedMoon影响
                 // SP form has only one stage, not affected by CursedMoon
                 if (isByCursedMoon) {
-                    //toForm = PlayerForms.ORIGINAL_SHIFTER;
                     player.sendMessage(Text.translatable("info.shape-shifter-curse.on_cursed_moon_special").formatted(Formatting.YELLOW));
                 }
             default:
@@ -201,32 +201,30 @@ public class TransformManager {
         PlayerFormGroup currentFormGroup = currentForm.getGroup();
         PlayerFormBase toForm = null;
         switch (currentFormIndex) {
-            case -2:
+            case PlayerFormPhase.INDEX_PRE_ACTIVATE:
                 // 不应该触发
                 // Should not trigger
                 ShapeShifterCurseFabric.LOGGER.error("Moon end transformation triggered when mod is not enabled, this should not happen!");
                 break;
-            case -1:
+            case PlayerFormPhase.INDEX_BASE_SHIFTER:
                 // 回到之前的SP form
                 // go back to the previous SP form
-                //toForm = player.getComponent(RegPlayerFormComponent.PLAYER_FORM).getPreviousForm();
-                //ShapeShifterCurseFabric.LOGGER.error("Moon end transformation triggered when has original form, this should not happen!");
                 break;
-            case 0:
+            case PlayerFormPhase.INDEX_PHASE_0:
                 if (player.getComponent(RegPlayerFormComponent.PLAYER_FORM).isRegressedFromFinal()) {
                     toForm = currentFormGroup.getForm(2);
                 } else {
                     toForm = RegPlayerForms.ORIGINAL_SHIFTER;
                 }
                 break;
-            case 1:
+            case PlayerFormPhase.INDEX_PHASE_1:
                 toForm = currentFormGroup.getForm(0);
                 break;
-            case 2:
+            case PlayerFormPhase.INDEX_PHASE_2:
                 toForm = currentFormGroup.getForm(1);
                 break;
-            case 3:
-            case 5:
+            case PlayerFormPhase.INDEX_PHASE_3:
+            case PlayerFormPhase.INDEX_PHASE_SP:
                 // 永久形态或SP形态不会受到CursedMoon影响
                 break;
             default:
@@ -298,7 +296,6 @@ public class TransformManager {
                     ShapeShifterCurseFabric.LOGGER.error("curPlayer is null when trying to apply form!");
                 }
                 applyEndTransformEffect((ServerPlayerEntity) data.curPlayer, StaticParams.TRANSFORM_FX_DURATION_OUT);
-                //endTransformEffect();
             }
         } else if (data.isEndEffectActive) {
             // handle overlay fade effect - 通过网络包触发客户端效果
@@ -317,7 +314,6 @@ public class TransformManager {
                 // 发送客户端特定的完成逻辑
                 sendClientTransformCompleteEffect(player);
 
-                //PlayerTeamHandler.updatePlayerTeam((ServerPlayerEntity) curPlayer);
                 applyFinaleTransformEffect((ServerPlayerEntity) data.curPlayer, 5);
                 InstinctTicker.isPausing = false;
 
@@ -450,20 +446,20 @@ public class TransformManager {
         int toFormIndex = data.curToForm.getIndex();
         if (!isByCure) {
             switch (toFormIndex) {
-                case 0:
+                case PlayerFormPhase.INDEX_PHASE_0:
                     ShapeShifterCurseFabric.ON_TRANSFORM_0.trigger((ServerPlayerEntity) player);
                     ShapeShifterCurseFabric.ON_FIRST_TRANSFORM_ENABLE_FORM_LIST.trigger((ServerPlayerEntity) player);
                     break;
-                case 1:
+                case PlayerFormPhase.INDEX_PHASE_1:
                     ShapeShifterCurseFabric.ON_TRANSFORM_1.trigger((ServerPlayerEntity) player);
                     break;
-                case 2:
+                case PlayerFormPhase.INDEX_PHASE_2:
                     ShapeShifterCurseFabric.ON_TRANSFORM_2.trigger((ServerPlayerEntity) player);
                     break;
-                case 3:
+                case PlayerFormPhase.INDEX_PHASE_3:
                     ShapeShifterCurseFabric.ON_TRANSFORM_3.trigger((ServerPlayerEntity) player);
                     break;
-                case 5:
+                case PlayerFormPhase.INDEX_PHASE_SP:
                     ShapeShifterCurseFabric.ON_TRANSFORM_SP.trigger((ServerPlayerEntity) player);
                     break;
                 default:
@@ -474,7 +470,6 @@ public class TransformManager {
 	    ShapeShifterCurseFabric.LOGGER.info("Cur Player: {} To Form: {}", data.curPlayer, data.curToForm);
         handleTransformEffect(player);
         applyStartTransformEffect((ServerPlayerEntity) player, StaticParams.TRANSFORM_FX_DURATION_IN);
-        // FormAbilityManager.applyForm(player, toForm);
     }
 
     // 双端 但我觉得是仅服务端 继承于handleDirectTransform
@@ -489,10 +484,6 @@ public class TransformManager {
         // 添加变身状态同步
         setTransformingState(true, player);
 
-        //if(client) {
-        //    beginTransformEffect();
-        //    TransformOverlay.INSTANCE.setEnableOverlay(true);
-        //}
         if (!player.getWorld().isClient && player instanceof ServerPlayerEntity) {
             // 创建一个空的数据包，因为我们只需要一个触发信号
             PacketByteBuf buf = PacketByteBufs.create();
@@ -534,20 +525,20 @@ public class TransformManager {
         // 直接set时也会触发自定义成就
         int toFormIndex = data.curToForm.getIndex();
         switch (toFormIndex) {
-            case 0:
+            case PlayerFormPhase.INDEX_PHASE_0:
                 ShapeShifterCurseFabric.ON_TRANSFORM_0.trigger((ServerPlayerEntity) player);
                 ShapeShifterCurseFabric.ON_FIRST_TRANSFORM_ENABLE_FORM_LIST.trigger((ServerPlayerEntity) player);
                 break;
-            case 1:
+            case PlayerFormPhase.INDEX_PHASE_1:
                 ShapeShifterCurseFabric.ON_TRANSFORM_1.trigger((ServerPlayerEntity) player);
                 break;
-            case 2:
+            case PlayerFormPhase.INDEX_PHASE_2:
                 ShapeShifterCurseFabric.ON_TRANSFORM_2.trigger((ServerPlayerEntity) player);
                 break;
-            case 3:
+            case PlayerFormPhase.INDEX_PHASE_3:
                 ShapeShifterCurseFabric.ON_TRANSFORM_3.trigger((ServerPlayerEntity) player);
                 break;
-            case 5:
+            case PlayerFormPhase.INDEX_PHASE_SP:
                 ShapeShifterCurseFabric.ON_TRANSFORM_SP.trigger((ServerPlayerEntity) player);
                 break;
             default:
@@ -558,7 +549,6 @@ public class TransformManager {
         FormAbilityManager.applyForm(data.curPlayer, data.curToForm);
         clearFormFlag(data.curPlayer);
         clearInstinct(data.curPlayer);
-        //PlayerTeamHandler.updatePlayerTeam((ServerPlayerEntity) curPlayer);
 
         // 发送客户端特定的FirstPerson重置逻辑
         sendClientFirstPersonReset(player);
@@ -643,33 +633,5 @@ public class TransformManager {
         PlayerTransformData data = getPlayerTransformData(player);
         data._isByCursedMoonEnd = value;
 	    ShapeShifterCurseFabric.LOGGER.info("设置_isByCursedMoonEnd={}", value);
-    }
-
-    // 没有调用 默认双端
-    public static void clearMoonEndFlags(PlayerEntity player) {
-        ShapeShifterCurseFabric.LOGGER.info("安全清除月亮结束标记");
-        PlayerTransformData data = getPlayerTransformData(player);
-
-        // 记录清除前的状态
-        // Record the state before clearing
-        boolean wasByCursedMoon = RegPlayerFormComponent.PLAYER_FORM.get(player).isByCursedMoon();
-
-        if (data._isByCursedMoonEnd) {
-            ShapeShifterCurseFabric.LOGGER.info("Clearing moon end flags (instinct should be preserved)");
-            data._isByCursedMoon = false;
-            data._isByCursedMoonEnd = false;
-            RegPlayerFormComponent.PLAYER_FORM.get(player).setByCursedMoon(false);
-            RegPlayerFormComponent.PLAYER_FORM.sync(player);
-        }
-        // 只清除状态标记，不影响instinct
-        // Only clear the state flags, do not affect instinct
-        data._isRegressedFromFinal = false;
-        data._isByCure = false;
-
-        RegPlayerFormComponent.PLAYER_FORM.get(player).setRegressedFromFinal(false);
-        RegPlayerFormComponent.PLAYER_FORM.get(player).setByCure(false);
-        RegPlayerFormComponent.PLAYER_FORM.sync(player);
-
-	    ShapeShifterCurseFabric.LOGGER.info("月亮标记已清除，原状态：{}", wasByCursedMoon);
     }
 }

@@ -173,10 +173,6 @@ public class ShapeShifterCurseFabric implements ModInitializer {
                     .build()
     );
 
-
-    private int save_timer = 0;
-
-
     public static Identifier identifier(String path) {
         return Identifier.of(MOD_ID, path);
     }
@@ -198,7 +194,6 @@ public class ShapeShifterCurseFabric implements ModInitializer {
 
     @Override
     public void onInitialize() {
-        // PlayerDataStorage.initialize(); // 移除这行，因为这里还没有服务器实例
         RegCustomItem.initialize();
         RegCustomBlock.initialize();
         RegTransformativeEntity.register();
@@ -240,8 +235,6 @@ public class ShapeShifterCurseFabric implements ModInitializer {
 		    TransformFX.INSTANCE.registerCallbacks();
 		    TransformOverlay.INSTANCE.init();
 	    }
-        save_timer = 0;
-
         // Reg potions
         RegCustomPotions.registerPotions();
         RegCustomPotions.registerPotionsRecipes();
@@ -298,11 +291,6 @@ public class ShapeShifterCurseFabric implements ModInitializer {
             PlayerEntity player = handler.player;
             // 清空玩家召唤物
             MinionRegister.DisSpawnAllMinion(player);
-            // 由CCA+原版存储代替
-            // LOGGER.info("Player disconnect, save attachment");
-            // saveCurrentAttachment(server.getOverworld(), player);
-            //saveForm(player);
-            // saveInstinctComp(player);
         });
 
         // Reg listeners
@@ -329,44 +317,6 @@ public class ShapeShifterCurseFabric implements ModInitializer {
             return ActionResult.PASS;
         });
 
-        /// Debug instinct: unregister this to see instinct debug info
-        //InstinctDebugHUD.register();
-
-        /*HudRenderCallback.EVENT.register((drawContext, tickDelta) -> {
-            PlayerEntity player = MinecraftClient.getInstance().player;
-            if (player != null) {
-                for (StatusEffectInstance effect : player.getStatusEffects()) {
-                    if (effect.getEffectType() instanceof BaseTransformativeStatusEffect) {
-                        Text description = Text.translatable(effect.getEffectType().getTranslationKey() + ".description");
-                        drawContext.drawTextWithShadow(MinecraftClient.getInstance().textRenderer, description, 0, 0, 0xFFFFFF);
-                    }
-                }
-            }
-        });*/
-        //TStatusHUDHandler.register();
-
-        /*EntityModelLayerRegistry.registerModelLayer(T_BAT_LAYER, BatEntityModel::getTexturedModelData);
-
-        // entity spawn replacer
-        ServerEntityEvents.ENTITY_LOAD.register((entity, world) -> {
-            if (entity instanceof BatEntity) {
-                // 50% 概率替换为自定义蝙蝠
-                if (world.getRandom().nextFloat() < 0.5f) {
-                    TransformativeBatEntity customBat = new TransformativeBatEntity(
-                            T_BAT, world
-                    );
-                    customBat.refreshPositionAndAngles(
-                            entity.getX(), entity.getY(), entity.getZ(),
-                            entity.getYaw(), entity.getPitch()
-                    );
-                    world.spawnEntity(customBat);
-                    entity.discard(); // 移除原版蝙蝠
-                }
-            }
-        });*/
-
-
-        //LOGGER.info(CONFIG.keepOriginalSkin() ? "Original skin will be kept." : "Override skin");
     }
 
     private void initLocalDataStorage() {
@@ -385,11 +335,6 @@ public class ShapeShifterCurseFabric implements ModInitializer {
 
     private void onPlayerEndSleeping(LivingEntity entity) {
         if (entity instanceof ServerPlayerEntity player) {
-            // handle transformative effects
-            //LOGGER.info(EffectManager.EFFECT_ATTACHMENT.toString());
-            //PlayerEffectAttachment attachment = player.getAttached(EffectManager.EFFECT_ATTACHMENT);
-            //LOGGER.info(attachment == null? "attachment is null" : attachment.currentEffect.toString());
-            // 不用检测诅咒之月状态--作为一个特性还挺有意思的
             if (EffectManager.hasTransformativeEffect(player)) {
                 EffectManager.ActiveTransformativeEffect(player);
                 // 触发自定义成就
@@ -423,36 +368,6 @@ public class ShapeShifterCurseFabric implements ModInitializer {
 
             // Mana System
             ManaUtils.manaTick(player);
-
-            /* 重构后不需要了 仅用于参考旧实现逻辑
-            // handle transformative effects tick
-            PlayerEffectAttachment attachment = player.getAttached(EffectManager.EFFECT_ATTACHMENT);
-            if (attachment != null && attachment.currentEffect != null) {
-                //LOGGER.info("Effect tick");
-                attachment.remainingTicks--;
-                if (attachment.remainingTicks <= 0) {
-                    // 取消效果
-                    cancelEffect(player);
-                    // 触发自定义成就
-                    ShapeShifterCurseFabric.ON_TRANSFORM_EFFECT_FADE.trigger(player);
-                }
-            }
-
-            // save every 5 sec
-            save_timer += 1;
-            if(save_timer >= 100) {
-                //LOGGER.info("Player paused, save attachment");
-                // 重新给与玩家视觉效果，以防其被奶桶等消除
-                if(attachment != null && attachment.currentToForm != null){
-                    if(!player.hasStatusEffect(attachment.currentRegEffect)){
-                        loadEffect(player, attachment);
-                    }
-                }
-                saveCurrentAttachment(minecraftServer.getOverworld(), player);
-                saveForm(player);
-                save_timer = 0;
-            }
-             */
         }
     }
 
