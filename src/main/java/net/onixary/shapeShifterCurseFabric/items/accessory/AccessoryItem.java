@@ -1,11 +1,11 @@
 package net.onixary.shapeShifterCurseFabric.items.accessory;
 
-import dev.emi.trinkets.api.TrinketItem;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 
-public abstract class AccessoryItem extends TrinketItem {
+public abstract class AccessoryItem extends Item {
     public enum DropRule {
         KEEP, DROP, DESTROY, DEFAULT
     }

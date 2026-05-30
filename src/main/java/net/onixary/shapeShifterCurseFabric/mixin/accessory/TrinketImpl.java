@@ -7,11 +7,14 @@ import net.minecraft.util.Identifier;
 import net.onixary.shapeShifterCurseFabric.items.accessory.AccessoryItem;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.HashMap;
 
 @Mixin(AccessoryItem.class)
-public abstract class TrinketImpl {
+public class TrinketImpl implements Trinket {
     @Unique
     private static final HashMap<Integer, AccessoryItem.SlotData> slotDataCache = new HashMap<>();
 
@@ -22,37 +25,49 @@ public abstract class TrinketImpl {
             new AccessoryItem.SlotData(Identifier.of("trinket", "%s/%s".formatted(slotType.getGroup(), slotType.getName())), slot.index()));
     }
 
+    @Inject(method = "accessoryInit", at = @At("HEAD"), cancellable = true)
+    private void initAccessory(CallbackInfo ci) {
+        TrinketsApi.registerTrinket((AccessoryItem) (Object) this, (Trinket) (Object) this);
+    }
+
+    @Override
     public void tick(ItemStack stack, SlotReference slot, LivingEntity entity) {
         ((AccessoryItem) (Object) this).accessoryTick(stack, entity, getSlotData(slot));
     }
 
+    @Override
     public void onEquip(ItemStack stack, SlotReference slot, LivingEntity entity) {
         ((AccessoryItem) (Object) this).onEquip(stack, entity, getSlotData(slot));
     }
 
+    @Override
     public void onUnequip(ItemStack stack, SlotReference slot, LivingEntity entity) {
         ((AccessoryItem) (Object) this).onUnequip(stack, entity, getSlotData(slot));
     }
 
+    @Override
     public boolean canEquip(ItemStack stack, SlotReference slot, LivingEntity entity) {
         return ((AccessoryItem) (Object) this).canEquip(stack, entity, getSlotData(slot));
     }
 
+    @Override
     public boolean canUnequip(ItemStack stack, SlotReference slot, LivingEntity entity) {
         return ((AccessoryItem) (Object) this).canUnequip(stack, entity, getSlotData(slot));
     }
 
+    @Override
     public void onBreak(ItemStack stack, SlotReference slot, LivingEntity entity) {
         ((AccessoryItem) (Object) this).onBreak(stack, entity, getSlotData(slot));
     }
 
+    @Override
     public TrinketEnums.DropRule getDropRule(ItemStack stack, SlotReference slot, LivingEntity entity) {
         AccessoryItem.DropRule dropRule = ((AccessoryItem) (Object) this).getDropRule(stack, entity, getSlotData(slot));
         return switch (dropRule) {
             case KEEP -> TrinketEnums.DropRule.KEEP;
             case DROP -> TrinketEnums.DropRule.DROP;
             case DESTROY -> TrinketEnums.DropRule.DESTROY;
-            case DEFAULT -> TrinketEnums.DropRule.DEFAULT;
+            default -> TrinketEnums.DropRule.DEFAULT;
         };
     }
 }
