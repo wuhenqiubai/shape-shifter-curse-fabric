@@ -119,7 +119,7 @@ public class FormSkinSystem {
         }
 
         public Identifier getNextID() {
-            Identifier id = new Identifier(IdNameSpace, IdPrefix + nowId);
+            Identifier id = Identifier.of(IdNameSpace, IdPrefix + nowId);
             nowId++;
             return id;
         }

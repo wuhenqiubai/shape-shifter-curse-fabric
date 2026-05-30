@@ -7,6 +7,8 @@ import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.Registries;
+import net.onixary.shapeShifterCurseFabric.util.ModTags;
+import net.onixary.shapeShifterCurseFabric.util.MorphScaleTagLoader;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -14,17 +16,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import java.util.Set;
-
 @Mixin(targets = "net.minecraft.screen.slot.ArmorSlot")
 public abstract class ArmorSlotMixin {
-    private static final Set<String> MORPH_SCALE_ITEMS = Set.of(
-        "shape-shifter-curse:morphscale_headring", "shape-shifter-curse:morphscale_vest",
-        "shape-shifter-curse:morphscale_cuish", "shape-shifter-curse:morphscale_anklet",
-        "shape-shifter-curse:netherite_morphscale_headring", "shape-shifter-curse:netherite_morphscale_vest",
-        "shape-shifter-curse:netherite_morphscale_cuish", "shape-shifter-curse:netherite_morphscale_anklet",
-        "shape-shifter-curse:diamond_mining_claw"
-    );
     private static final String MSI_TAG = "MorphScaleItem";
 
     @Shadow @Final private LivingEntity entity;
@@ -43,7 +36,8 @@ public abstract class ArmorSlotMixin {
     }
 
     private static boolean isMorphScaleItem(ItemStack stack) {
-        if (MORPH_SCALE_ITEMS.contains(Registries.ITEM.getId(stack.getItem()).toString())) return true;
+        if (stack.isIn(ModTags.MorphScaleItem_Tag)) return true;
+        if (MorphScaleTagLoader.getMorphScaleItems().contains(Registries.ITEM.getId(stack.getItem()).toString())) return true;
         var c = stack.get(DataComponentTypes.CUSTOM_DATA);
         return c != null && c.copyNbt().getBoolean(MSI_TAG);
     }

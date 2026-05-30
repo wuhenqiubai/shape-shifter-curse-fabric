@@ -5,6 +5,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.PacketByteBuf;
@@ -28,6 +29,7 @@ import net.onixary.shapeShifterCurseFabric.player_form.instinct.InstinctTicker;
 import net.onixary.shapeShifterCurseFabric.screen_effect.TransformOverlay;
 import net.onixary.shapeShifterCurseFabric.status_effects.attachment.EffectManager;
 import net.onixary.shapeShifterCurseFabric.status_effects.transformative_effects.TransformativeStatusInstance;
+import net.onixary.shapeShifterCurseFabric.util.ClientTicker;
 
 import java.util.HashMap;
 import java.util.UUID;
@@ -222,6 +224,7 @@ public class TransformManager {
                 break;
             case 2:
                 toForm = currentFormGroup.getForm(1);
+                break;
             case 3:
             case 5:
                 // 永久形态或SP形态不会受到CursedMoon影响
@@ -591,40 +594,21 @@ public class TransformManager {
             fpm.getConfig().sneakXOffset = 0;
 
             // 0.05s 0.1s 0.2s 1s 后重置 防止 ExtraItemFeatureRenderer 未同步玩家变形状态 减少玩家感知未同步
-            new Thread(() -> {
-                try {
-                    Thread.sleep(50);
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                }  // 0.05s
-                fpm.getConfig().xOffset = 0;
-                fpm.getConfig().sitXOffset = 0;
-                fpm.getConfig().sneakXOffset = 0;
-                try {
-                    Thread.sleep(50);
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                }  // 0.1s
-                fpm.getConfig().xOffset = 0;
-                fpm.getConfig().sitXOffset = 0;
-                fpm.getConfig().sneakXOffset = 0;
-                try {
-                    Thread.sleep(100);
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                }  // 0.2s
-                fpm.getConfig().xOffset = 0;
-                fpm.getConfig().sitXOffset = 0;
-                fpm.getConfig().sneakXOffset = 0;
-                try {
-                    Thread.sleep(800);
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                }  // 1s  最终修复 大部分均在1s内恢复同步
-                fpm.getConfig().xOffset = 0;
-                fpm.getConfig().sitXOffset = 0;
-                fpm.getConfig().sneakXOffset = 0;
-            }).start();
+            MinecraftClient client = MinecraftClient.getInstance();
+            Runnable resetTask = new Runnable() {
+                int tickCount = 0;
+                @Override
+                public void run() {
+                    tickCount++;
+                    if (tickCount == 1 || tickCount == 2 || tickCount == 4 || tickCount == 20) {
+                        fpm.getConfig().xOffset = 0;
+                        fpm.getConfig().sitXOffset = 0;
+                        fpm.getConfig().sneakXOffset = 0;
+                    }
+                }
+            };
+            ClientTicker ticker = new ClientTicker(client, resetTask, 20);
+            ticker.start();
         }
     }
 

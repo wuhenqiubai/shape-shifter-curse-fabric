@@ -50,7 +50,7 @@ import static net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric.MOD_ID
 //       -> 全局数据
 // RGB 框 -> RGB 条 -> ...
 
-public class FormColorSelectMenu extends Screen implements FormTextureUtils.TempTextureProcessor, FormTextureUtils.TempFormModelProcessor {
+public class FormColorSelectMenu extends Screen implements FormTextureUtils.TempFormTextureProcessor, FormTextureUtils.TempFormModelProcessor {
     private static final Identifier texture = Identifier.of(MOD_ID,"textures/gui/v1_form_color_select_menu.png");
     private static final int BG_WIDTH = 420;
     private static final int BG_HEIGHT = 227;
@@ -396,9 +396,9 @@ public class FormColorSelectMenu extends Screen implements FormTextureUtils.Temp
         super(title);
         this.reloadFormIDIndex();
         loadData();
-        if (!FormTextureUtils.useTempTexture) {
-            FormTextureUtils.useTempTexture = true;
-            FormTextureUtils.tempTextureProcessor = this;
+        if (!FormTextureUtils.useTempFormTexture) {
+            FormTextureUtils.useTempFormTexture = true;
+            FormTextureUtils.tempFormTextureProcessor = this;
         } else {
             ShapeShifterCurseFabric.LOGGER.warn("Temp Texture System is already in use, dynamic texture rendering will not work");
             isUsingTempTexture = false;
@@ -1041,8 +1041,8 @@ public class FormColorSelectMenu extends Screen implements FormTextureUtils.Temp
     public void close() {
         CleanColorSettingCache();
         if (isUsingTempTexture) {
-            FormTextureUtils.useTempTexture = false;
-            FormTextureUtils.tempTextureProcessor = null;
+            FormTextureUtils.useTempFormTexture = false;
+            FormTextureUtils.tempFormTextureProcessor = null;
             isUsingTempTexture = false;
         }
         if (isUsingTempModel) {

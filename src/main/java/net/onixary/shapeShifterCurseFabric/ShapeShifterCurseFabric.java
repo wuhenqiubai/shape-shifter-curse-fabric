@@ -265,6 +265,7 @@ public class ShapeShifterCurseFabric implements ModInitializer {
         ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(new FormDataPackReloadListener());
         ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(new TrinketDataPackReloadListener());
         ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(new BrewingRecipeReloadListener());
+        ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(new MorphScaleTagLoader());
         ServerLifecycleEvents.END_DATA_PACK_RELOAD.register((server, resourceManager, success) -> server.getPlayerManager().getPlayerList().forEach((player) -> {
             ModPacketsS2CServer.updateDynamicForm(player);
             if (!player.getComponent(RegPlayerFormComponent.PLAYER_FORM).isCurrentFormExist()) {
@@ -409,12 +410,13 @@ public class ShapeShifterCurseFabric implements ModInitializer {
 
         if (players.isEmpty()) return;
 
+        TickManager.tickServerAll();
+
         for(ServerPlayerEntity player : players) {
             // handle instinct tick
             InstinctTicker.tick(player);
             // handle transform manager update
             TransformManager.update(player);
-            TickManager.tickServerAll();
 
             // CustomEdiblePower Tick
             CustomEdiblePower.OnServerTick(player);

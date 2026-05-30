@@ -311,8 +311,8 @@ public class FormModel extends GeoModel<FormAnimatable> {
         Identifier Resource = uslim ? this.TextureResource_Slim : this.TextureResource;
         Identifier ResourceMask = uslim ? this.TextureMaskResource_Slim : this.TextureMaskResource;
         if (ResourceMask != null) {
-            if (FormTextureUtils.useTempTexture && Objects.equals(this.entity, MinecraftClient.getInstance().player)) {
-                return FormTextureUtils.tempTextureProcessor.getTexture(this.modelID, uslim ? "texture_slim" : "texture", Resource, ResourceMask, UseMultiplyMask);
+            if (FormTextureUtils.useTempFormTexture && Objects.equals(this.entity, MinecraftClient.getInstance().player)) {
+                return FormTextureUtils.tempFormTextureProcessor.getTexture(this.modelID, uslim ? "texture_slim" : "texture", Resource, ResourceMask, UseMultiplyMask);
             }
             FormTextureUtils.ColorSetting colorSetting = FormTextureUtils.getPlayerColorSetting(this.entity);
             if (colorSetting != null) {
@@ -328,8 +328,8 @@ public class FormModel extends GeoModel<FormAnimatable> {
         Identifier Resource = uslim ? this.OverlayTextureResource_Slim : this.OverlayTextureResource;
         Identifier ResourceMask = uslim ? this.OverlayTextureMaskResource_Slim : this.OverlayTextureMaskResource;
         if (ResourceMask != null) {
-            if (FormTextureUtils.useTempTexture && Objects.equals(this.entity, MinecraftClient.getInstance().player)) {
-                return FormTextureUtils.tempTextureProcessor.getTexture(this.modelID, uslim ? "overlay_texture_slim" : "overlay_texture", Resource, ResourceMask, UseMultiplyMask);
+            if (FormTextureUtils.useTempFormTexture && Objects.equals(this.entity, MinecraftClient.getInstance().player)) {
+                return FormTextureUtils.tempFormTextureProcessor.getTexture(this.modelID, uslim ? "overlay_texture_slim" : "overlay_texture", Resource, ResourceMask, UseMultiplyMask);
             }
             FormTextureUtils.ColorSetting colorSetting = FormTextureUtils.getPlayerColorSetting(this.entity);
             if (colorSetting != null) {
@@ -345,8 +345,8 @@ public class FormModel extends GeoModel<FormAnimatable> {
         Identifier Resource = uslim ? this.EmissiveTextureResource_Slim : this.EmissiveTextureResource;
         Identifier ResourceMask = uslim ? this.EmissiveTextureMaskResource_Slim : this.EmissiveTextureMaskResource;
         if (ResourceMask != null) {
-            if (FormTextureUtils.useTempTexture && Objects.equals(this.entity, MinecraftClient.getInstance().player)) {
-                return FormTextureUtils.tempTextureProcessor.getTexture(this.modelID, uslim ? "emissive_texture_slim" : "emissive_texture", Resource, ResourceMask, UseMultiplyMask);
+            if (FormTextureUtils.useTempFormTexture && Objects.equals(this.entity, MinecraftClient.getInstance().player)) {
+                return FormTextureUtils.tempFormTextureProcessor.getTexture(this.modelID, uslim ? "emissive_texture_slim" : "emissive_texture", Resource, ResourceMask, UseMultiplyMask);
             }
             FormTextureUtils.ColorSetting colorSetting = FormTextureUtils.getPlayerColorSetting(this.entity);
             if (colorSetting != null && ResourceMask != null) {
