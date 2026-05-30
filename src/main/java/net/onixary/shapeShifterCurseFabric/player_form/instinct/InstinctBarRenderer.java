@@ -48,7 +48,7 @@ public class InstinctBarRenderer  {
         PlayerFormBase curForm = player.getComponent(RegPlayerFormComponent.PLAYER_FORM).getCurrentForm();
         PlayerFormPhase currentPhase = curForm.getPhase();
 	    boolean showInstinctBar = !(currentPhase == PlayerFormPhase.PHASE_CLEAR || currentPhase == PlayerFormPhase.PHASE_3);
-	    if (curForm.FormIndex < 2) {
+	    if (curForm.FormIndex < PlayerFormPhase.INDEX_PHASE_2) {
             if(CursedMoon.isCursedMoon(player.getWorld()) && CursedMoon.isNight(player.getWorld())){
                 this.isInstinctLock = true;
             }

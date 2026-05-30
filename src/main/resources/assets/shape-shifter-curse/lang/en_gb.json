@@ -420,7 +420,7 @@
     "text.autoconfig.shape-shifter-curse-common.option.CheckUpdateInterval": "Check Update Interval (Seconds) (Unfinished)",
     "text.autoconfig.shape-shifter-curse-custom.title": "Shape Shifter Curse - Player Custom Config",
     "text.autoconfig.shape-shifter-curse-custom.option.keep_original_skin": "Keep Original Skin",
-    "text.autoconfig.shape-shifter-curse-custom.option.enable_form_color": "Enable Form Custom Colour System",
+    "text.autoconfig.shape-shifter-curse-custom.option.enable_form_color": "Enable Form Colour System",
     "text.autoconfig.shape-shifter-curse-custom.option.primaryColor": "Primary Colour",
     "text.autoconfig.shape-shifter-curse-custom.option.accentColor1Color": "Accent Colour 1",
     "text.autoconfig.shape-shifter-curse-custom.option.accentColor2Color": "Accent Colour 2",
@@ -471,5 +471,11 @@
     "text.autoconfig.shape-shifter-curse-common.option.enableFoodHabitSystem": "Enable Food Habit System",
     "item.shape-shifter-curse.super_morphscale_core": "Super Morphscale Core",
     "item.shape-shifter-curse.super_morphscale_core.tooltip": "Remaining charge: %s",
-    "gui.shape_shifter_curse_fabric.fcs.none_from_name": "No Form"
+    "gui.shape_shifter_curse_fabric.fcs.none_from_name": "No Form",
+    "advancements.shape-shifter-curse.spider_catch_a_bug.title": "Caught: Unknown Exception",
+    "advancements.shape-shifter-curse.spider_catch_a_bug.description": "As a \"professional\" \"network engineer\": this bug has been try-catched.",
+    "text.autoconfig.shape-shifter-curse-client.option.disableUnlockCheckInFormColorSelectMenu": "Disable unlock check in the form color selection menu.",
+    "text.autoconfig.shape-shifter-curse-client.category.Tool": "Tools",
+    "text.autoconfig.shape-shifter-curse-client.option.unlockAllFormInFormColorSelectMenu": "Unlock all forms in the form color selection menu.",
+    "text.autoconfig.shape-shifter-curse-client.option.clearFormUnlockRecordInFormColorSelectMenu": "Clear form unlock records in the form color selection menu."
 }

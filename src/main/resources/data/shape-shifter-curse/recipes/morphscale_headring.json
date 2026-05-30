@@ -10,6 +10,7 @@
     "item": "shape-shifter-curse:untreated_moondust"
   },
   "result": {
-    "item": "shape-shifter-curse:morphscale_headring"
+    "id": "shape-shifter-curse:morphscale_headring",
+    "count": 1
   }
 }

@@ -1,56 +1,27 @@
 {
-  "type": "apoli:action_on_hit",
-  "bientity_action": {
-    "type": "apoli:target_action",
-    "action": {
-      "type": "apoli:and",
-      "actions": [
-        {
-          "type": "apoli:heal",
-          "amount": 20.0
-        },
-        {
-          "type": "apoli:play_sound",
-          "sound": "minecraft:entity.ender_eye.death"
+    "type": "origins:action_on_hit",
+    "bientity_action": {
+        "type": "origins:target_action",
+        "action": {
+            "type": "origins:and",
+            "actions": [
+                {
+                    "type": "origins:heal",
+                    "amount": 20.0
+                },
+                {
+                    "type": "origins:play_sound",
+                    "sound": "minecraft:entity.ender_eye.death"
+                }
+            ]
         }
-      ]
-    }
-  },
-  "bientity_condition": {
-    "type": "apoli:target_condition",
-    "condition": {
-      "type": "apoli:or",
-      "conditions": [
-        {
-          "type": "apoli:entity_type",
-          "entity_type": "minecraft:witch"
-        },
-        {
-          "type": "apoli:entity_type",
-          "entity_type": "minecraft:vex"
-        },
-        {
-          "type": "apoli:entity_type",
-          "entity_type": "minecraft:evoker"
-        },
-        {
-          "type": "apoli:entity_type",
-          "entity_type": "minecraft:illusioner"
-        },
-        {
-          "type": "apoli:entity_type",
-          "entity_type": "minecraft:pillager"
-        },
-        {
-          "type": "apoli:entity_type",
-          "entity_type": "minecraft:vindicator"
-        },
-        {
-          "type": "apoli:entity_type",
-          "entity_type": "minecraft:ravager"
+    },
+    "bientity_condition": {
+        "type": "origins:target_condition",
+        "condition": {
+            "type": "origins:in_tag",
+            "tag": "shape-shifter-curse:illager"
         }
-      ]
-    }
-  },
-  "cooldown": 10
+    },
+    "cooldown": 10
 }

@@ -63,7 +63,6 @@ repositories {
     //Owo
     maven { url 'https://maven.wispforest.io/releases/' }
 
-
     exclusiveContent {
 
         forRepository {
@@ -297,7 +296,12 @@ tasks.register('fixEmbeddedModVersions') {
         def sscJar = remapJar.archiveFile.get().asFile
         def tmpDir = layout.buildDirectory.dir('tmp/embedded-patch').get().asFile
         tmpDir.deleteDir()
-        copy { from zipTree(sscJar); into tmpDir }
+        tmpDir.mkdirs()
+        copy {
+            from zipTree(sscJar)
+            into tmpDir
+            include 'META-INF/jars/*.jar'
+        }
         def jarsDir = new File(tmpDir, 'META-INF/jars')
         jarsDir.listFiles()?.each { embedded ->
             if (embedded.name.contains('apoli') || embedded.name.contains('calio') || embedded.name.contains('azurelib')) {
@@ -340,7 +344,12 @@ tasks.register('fixEmbeddedModVersions') {
                 extractDir.deleteDir()
             }
         }
-        ant.jar(destfile: sscJar, basedir: tmpDir, update: false)
+        // Use jar update instead of full repack to preserve data pack structure
+        ant.jar(update: true, destfile: sscJar) {
+            fileset(dir: tmpDir) {
+                include(name: 'META-INF/**')
+            }
+        }
         tmpDir.deleteDir()
     }
 }
