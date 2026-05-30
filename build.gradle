@@ -61,7 +61,6 @@ repositories {
     //Owo
     maven { url 'https://maven.wispforest.io/releases/' }
 
-
     exclusiveContent {
 
         forRepository {
