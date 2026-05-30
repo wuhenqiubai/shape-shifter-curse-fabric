@@ -5,6 +5,7 @@ import net.minecraft.item.Item;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
+import net.onixary.shapeShifterCurseFabric.player_form.PlayerFormPhase;
 import net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric;
 import net.onixary.shapeShifterCurseFabric.items.RegCustomItem;
 import net.onixary.shapeShifterCurseFabric.player_form.PlayerFormBase;
@@ -33,40 +34,40 @@ public class TransformRelatedItems {
         PlayerFormGroup currentFormGroup = currentForm.getGroup();
         PlayerFormBase toForm = null;
         switch (currentFormIndex) {
-            case -2:
+            case PlayerFormPhase.INDEX_PRE_ACTIVATE:
                 // 无用
                 // Useless
                 break;
-            case -1:
+            case PlayerFormPhase.INDEX_BASE_SHIFTER:
                 // 无用
                 // Useless
                 player.sendMessage(Text.translatable("info.shape-shifter-curse.origin_form_used_cure").formatted(Formatting.YELLOW));
                 break;
-            case 0:
+            case PlayerFormPhase.INDEX_PHASE_0:
                 toForm = RegPlayerForms.ORIGINAL_SHIFTER;
                 player.sendMessage(Text.translatable("info.shape-shifter-curse.transformed_by_cure_0").formatted(Formatting.YELLOW));
                 // 触发自定义成就
                 // Trigger custom achievement
                 ShapeShifterCurseFabric.ON_TRANSFORM_BY_CURE.trigger((ServerPlayerEntity) player);
                 break;
-            case 1:
+            case PlayerFormPhase.INDEX_PHASE_1:
                 toForm = currentFormGroup.getForm(0);
                 player.sendMessage(Text.translatable("info.shape-shifter-curse.transformed_by_cure").formatted(Formatting.YELLOW));
                 // 触发自定义成就
                 // Trigger custom achievement
                 ShapeShifterCurseFabric.ON_TRANSFORM_BY_CURE.trigger((ServerPlayerEntity) player);
                 break;
-            case 2:
+            case PlayerFormPhase.INDEX_PHASE_2:
                 // 不会生效
                 // Useless
                 player.sendMessage(Text.translatable("info.shape-shifter-curse.max_form_used_cure").formatted(Formatting.YELLOW));
                 break;
-            case 3:
+            case PlayerFormPhase.INDEX_PHASE_3:
                 // 永久形态不会生效
                 // Permanent form will not be affected
                 player.sendMessage(Text.translatable("info.shape-shifter-curse.permanent_form_used_cure").formatted(Formatting.YELLOW));
                 break;
-            case 5:
+            case PlayerFormPhase.INDEX_PHASE_SP:
                 // SP form可以随时被治愈
                 // SP form can be cured at any time
                 toForm = RegPlayerForms.ORIGINAL_SHIFTER;
@@ -90,30 +91,30 @@ public class TransformRelatedItems {
         PlayerFormBase toForm = null;
         //遇到了魔法数字,意义不明，不敢动，如果重构建议使用 enum+if-else if或者新的switch
         switch (currentFormIndex) {
-            case -2:
+            case PlayerFormPhase.INDEX_PRE_ACTIVATE:
                 // 无用
                 // Useless
                 break;
-            case -1:
+            case PlayerFormPhase.INDEX_BASE_SHIFTER:
                 // 无用
                 // Useless
                 player.sendMessage(Text.translatable("info.shape-shifter-curse.origin_form_used_cure_final").formatted(Formatting.YELLOW));
                 break;
-            case 0:
+            case PlayerFormPhase.INDEX_PHASE_0:
                 toForm = RegPlayerForms.ORIGINAL_SHIFTER;
                 player.sendMessage(Text.translatable("info.shape-shifter-curse.transformed_by_cure_final").formatted(Formatting.YELLOW));
                 // 触发自定义成就
                 // Trigger custom achievement
                 ShapeShifterCurseFabric.ON_TRANSFORM_BY_CURE.trigger((ServerPlayerEntity) player);
                 break;
-            case 1:
+            case PlayerFormPhase.INDEX_PHASE_1:
                 toForm = RegPlayerForms.ORIGINAL_SHIFTER;
                 player.sendMessage(Text.translatable("info.shape-shifter-curse.transformed_by_cure_final").formatted(Formatting.YELLOW));
                 // 触发自定义成就
                 // Trigger custom achievement
                 ShapeShifterCurseFabric.ON_TRANSFORM_BY_CURE.trigger((ServerPlayerEntity) player);
                 break;
-            case 2:
+            case PlayerFormPhase.INDEX_PHASE_2:
                 toForm = currentFormGroup.getForm(1);
                 player.sendMessage(Text.translatable("info.shape-shifter-curse.max_form_used_cure_final").formatted(Formatting.YELLOW));
                 // 触发自定义成就
@@ -121,12 +122,12 @@ public class TransformRelatedItems {
                 ShapeShifterCurseFabric.ON_TRANSFORM_BY_CURE_FINAL.trigger((ServerPlayerEntity) player);
                 ShapeShifterCurseFabric.ON_TRANSFORM_BY_CURE.trigger((ServerPlayerEntity) player);
                 break;
-            case 3:
+            case PlayerFormPhase.INDEX_PHASE_3:
                 // 永久形态不会生效
                 // Permanent form will not be affected
                 player.sendMessage(Text.translatable("info.shape-shifter-curse.permanent_form_used_cure_final").formatted(Formatting.YELLOW));
                 break;
-            case 5:
+            case PlayerFormPhase.INDEX_PHASE_SP:
                 // SP form可以随时被治愈
                 // SP form can be cured at any time
                 toForm = RegPlayerForms.ORIGINAL_SHIFTER;
@@ -159,9 +160,9 @@ public class TransformRelatedItems {
         PlayerFormGroup currentFormGroup = currentForm.getGroup();
         PlayerFormBase toForm = null;
         switch (currentFormIndex) {
-            case -2:
+            case PlayerFormPhase.INDEX_PRE_ACTIVATE:
                 break;
-            case -1:
+            case PlayerFormPhase.INDEX_BASE_SHIFTER:
                 // 特殊逻辑：查看当前是否有在生效的效果，有的话则应用，没有的话则无用
                 // Special logic: check if there is an active effect, if so, apply it, otherwise useless
                 if (EffectManager.hasTransformativeEffect(player)) {
@@ -173,7 +174,7 @@ public class TransformRelatedItems {
                     player.sendMessage(Text.translatable("info.shape-shifter-curse.origin_form_used_catalyst").formatted(Formatting.YELLOW));
                 }
                 break;
-            case 0:
+            case PlayerFormPhase.INDEX_PHASE_0:
                 //toForm = PlayerForms.getFormsByGroup(currentFormGroup)[1];
                 if(currentForm.getIgnoreCatalyst()){
                     player.sendMessage(Text.translatable("info.shape-shifter-curse.use_catalyst_when_ignore").formatted(Formatting.DARK_PURPLE));
@@ -182,7 +183,7 @@ public class TransformRelatedItems {
                     player.sendMessage(Text.translatable("info.shape-shifter-curse.use_catalyst").formatted(Formatting.YELLOW));
                 }
                 break;
-            case 1:
+            case PlayerFormPhase.INDEX_PHASE_1:
                 //toForm = PlayerForms.getFormsByGroup(currentFormGroup)[2];
                 if(currentForm.getIgnoreCatalyst()){
                     player.sendMessage(Text.translatable("info.shape-shifter-curse.use_catalyst_when_ignore").formatted(Formatting.DARK_PURPLE));
@@ -191,7 +192,7 @@ public class TransformRelatedItems {
                     player.sendMessage(Text.translatable("info.shape-shifter-curse.use_catalyst").formatted(Formatting.YELLOW));
                 }
                 break;
-            case 2:
+            case PlayerFormPhase.INDEX_PHASE_2:
                 if(currentForm.getIgnoreCatalyst()){
                     player.sendMessage(Text.translatable("info.shape-shifter-curse.use_catalyst_when_ignore").formatted(Formatting.DARK_PURPLE));
                 }
@@ -200,7 +201,7 @@ public class TransformRelatedItems {
                 }
 
                 break;
-            case 5:
+            case PlayerFormPhase.INDEX_PHASE_SP:
                 player.sendMessage(Text.translatable("info.shape-shifter-curse.sp_form_used_catalyst").formatted(Formatting.YELLOW));
                 break;
             default:
@@ -221,15 +222,15 @@ public class TransformRelatedItems {
         PlayerFormBase toForm = null;
         //遇到了魔法数字,意义不明，不敢动，如果重构建议使用 enum+if-else if或者新的switch
         switch (currentFormIndex) {
-            case -2:
+            case PlayerFormPhase.INDEX_PRE_ACTIVATE:
                 // 无用
                 break;
-            case -1:
-            case 0:
-            case 1:
+            case PlayerFormPhase.INDEX_BASE_SHIFTER:
+            case PlayerFormPhase.INDEX_PHASE_0:
+            case PlayerFormPhase.INDEX_PHASE_1:
                 player.sendMessage(Text.translatable("info.shape-shifter-curse.form_used_powerful_catalyst_failed").formatted(Formatting.YELLOW));
                 break;
-            case 2:
+            case PlayerFormPhase.INDEX_PHASE_2:
                 if (currentFormGroup.hasForm(3)) {
                     toForm = currentFormGroup.getForm(3);
                 }
@@ -240,7 +241,7 @@ public class TransformRelatedItems {
                     player.sendMessage(Text.translatable("info.shape-shifter-curse.form_used_powerful_catalyst_failed").formatted(Formatting.YELLOW));
                 }
                 break;
-            case 5:
+            case PlayerFormPhase.INDEX_PHASE_SP:
                 player.sendMessage(Text.translatable("info.shape-shifter-curse.form_used_powerful_catalyst_failed").formatted(Formatting.YELLOW));
                 break;
             default:
