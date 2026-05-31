@@ -296,6 +296,21 @@ public class ModPacketsS2C {
         }).start();
     }
 
+    public static void sendUpdateCustomColor(FormTextureUtils.ColorSetting colorSetting, boolean sendRAW, boolean syncCustomSettings, boolean keepOriginalSkin, boolean enableFormColorSystem) {
+        sendUpdateCustomColor(colorSetting, sendRAW);
+        if (syncCustomSettings) {
+            sendUpdateCustomSettingWithParams(keepOriginalSkin, enableFormColorSystem);
+        }
+    }
+
+    private static void sendUpdateCustomSettingWithParams(boolean keepOriginalSkin, boolean enableFormColorSystem) {
+        if (MinecraftClient.getInstance().getNetworkHandler() == null) return;
+        PacketByteBuf buf = PacketByteBufs.create();
+        buf.writeBoolean(keepOriginalSkin);
+        buf.writeBoolean(enableFormColorSystem);
+        ClientPlayNetworking.send(new BytePayload(BytePayload.id(UPDATE_CUSTOM_SETTING), buf));
+    }
+
     public static void sendUpdateCustomColor(FormTextureUtils.ColorSetting colorSetting, boolean sendRAW) {
         PacketByteBuf buf = PacketByteBufs.create();
         if (sendRAW) {
