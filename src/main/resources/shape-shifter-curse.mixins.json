@@ -101,6 +101,7 @@
     "integration.TacZ_Anim",
     "integration.TacZ_AnimThird",
     "render.LivingEntityRendererMixin",
+    "render.OverlayRenderMixin",
     "render.PlayerEntityRendererMixin"
   ],
   "injectors": {
