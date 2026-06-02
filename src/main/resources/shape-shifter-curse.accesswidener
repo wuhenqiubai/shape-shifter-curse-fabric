@@ -8,10 +8,8 @@ accessible field net/minecraft/client/font/TextRenderer handler Lnet/minecraft/c
 accessible field net/minecraft/client/gui/widget/MultilineTextWidget cacheKeyToText Lnet/minecraft/util/CachedMapper;
 accessible field net/minecraft/client/gui/widget/MultilineTextWidget centered Z
 accessible method net/minecraft/client/gui/widget/MultilineTextWidget getCacheKey ()Lnet/minecraft/client/gui/widget/MultilineTextWidget$CacheKey;
-
 accessible field net/minecraft/client/render/WorldRenderer bufferBuilders Lnet/minecraft/client/render/BufferBuilderStorage;
 accessible method net/minecraft/entity/LivingEntity onStatusEffectRemoved (Lnet/minecraft/entity/effect/StatusEffectInstance;)V
-
 accessible class net/minecraft/entity/passive/WolfEntity$AvoidLlamaGoal
 accessible field net/minecraft/entity/passive/PassiveEntity$PassiveData babyAllowed Z
 mutable field net/minecraft/entity/passive/PassiveEntity$PassiveData babyAllowed Z
@@ -29,7 +27,9 @@ accessible field net/minecraft/screen/SmithingScreenHandler world Lnet/minecraft
 accessible field net/minecraft/screen/ForgingScreenHandler output Lnet/minecraft/inventory/CraftingResultInventory;
 accessible method net/minecraft/screen/SmithingScreenHandler getInputStacks ()Ljava/util/List;
 accessible field net/minecraft/screen/ForgingScreenHandler context Lnet/minecraft/screen/ScreenHandlerContext;
-
-accessible class net/minecraft/advancement/AdvancementEntry
-accessible class net/minecraft/advancement/AdvancementCriterion
-accessible class net/minecraft/advancement/criterion/InventoryChangedCriterion$Conditions
+accessible field net/minecraft/entity/ai/goal/ActiveTargetGoal targetClass Ljava/lang/Class;
+accessible field net/minecraft/entity/ai/goal/TrackTargetGoal checkVisibility Z
+accessible field net/minecraft/entity/ai/goal/TrackTargetGoal checkCanNavigate Z
+accessible field net/minecraft/entity/ai/goal/ActiveTargetGoal reciprocalChance I
+accessible field net/minecraft/entity/ai/goal/ActiveTargetGoal targetPredicate Lnet/minecraft/entity/ai/TargetPredicate;
+accessible field net/minecraft/entity/ai/TargetPredicate predicate Ljava/util/function/Predicate;
