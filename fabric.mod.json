@@ -1,47 +1,64 @@
 {
   "schemaVersion": 1,
-  "id": "azurelib",
-  "version": "3.0.25",
-  "name": "AzureLib",
-  "description": "Based off Geckolib but now just for my own needs.",
+  "id": "apoli",
+  "version": "${version}",
+
+  "name": "Apoli",
+  "description": "A library mod which allows entities to be imbued with data-driven powers.",
   "authors": [
-    "AzureDoom, Gecko, Eliot, Chappie, DerToaster, Tslat, Bvanseg, ZigyTheBird"
+    "Apace"
   ],
   "contact": {
-    "homepage": "https://www.curseforge.com/minecraft/mc-mods/azurelib",
-    "issues": "https://github.com/AzureDoom/AzureLib/issues",
-    "sources": "https://github.com/AzureDoom/AzureLib"
+    "homepage": "https://apace100.github.io/apoli",
+    "sources": "https://github.com/apace100/apoli"
   },
+
   "license": "MIT",
-  "icon": "azurelib.png",
+  "icon": "assets/apoli/icon.png",
+
   "environment": "*",
   "entrypoints": {
     "main": [
-      "mod.azure.azurelib.fabric.FabricAzureLibMod"
+      "io.github.apace100.apoli.Apoli"
     ],
     "client": [
-      "mod.azure.azurelib.fabric.ClientListener"
+      "io.github.apace100.apoli.ApoliClient"
+    ],
+    "server": [
+      "io.github.apace100.apoli.ApoliServer"
+    ],
+    "cardinal-components-entity": [
+      "io.github.apace100.apoli.Apoli"
     ],
     "modmenu": [
-      "mod.azure.azurelib.fabric.integration.ModMenuIntegration"
+      "io.github.apace100.apoli.integration.ModMenuIntegration"
+    ],
+    "appleskin": [
+      "io.github.apace100.apoli.integration.AppleSkinIntegration"
     ]
   },
   "mixins": [
-    "azurelib.mixins.json",
-    "azurelib.fabric.mixins.json"
+    "apoli.mixins.json"
   ],
-  "accessWidener": "azurelib.accesswidener",
-  "depends": {
-    "fabricloader": ">=0.15.11",
-    "fabric-api": "*",
-    "minecraft": "1.21.1",
-    "java": ">=21"
-  },
   "custom": {
+    "cardinal-components": [
+      "apoli:powers"
+    ],
     "modmenu": {
-      "badges": [
-        "library"
-      ]
+      "badges": ["library"]
+    },
+    "lithium:options": {
+      "mixin.entity.collisions.suffocation": false
     }
+  },
+
+  "accessWidener": "apoli.accesswidener",
+
+  "depends": {
+    "java": ">=21",
+    "fabricloader": ">=0.15.11",
+    "fabric-api": ">=0.100.4",
+    "minecraft": "1.21",
+    "calio": ">=1.13.0"
   }
 }
