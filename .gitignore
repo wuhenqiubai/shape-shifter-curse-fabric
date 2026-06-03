@@ -167,3 +167,6 @@ build_*.txt
 
 # Decompiled code
 /Decompiler/
+
+# ClaudeCode
+/projects/
