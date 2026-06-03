@@ -31,7 +31,7 @@ atlassian-ide-plugin.xml
 *.tar.gz
 *.rar
 
-# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
+# virtual machine crash logs
 hs_err_pid*
 
 *~
@@ -117,13 +117,53 @@ runs/
 
 # Avoid ignoring Gradle wrapper jar file (.jar files are usually ignored)
 !gradle-wrapper.jar
+
+# Non-project artifacts (dev tools, decompiled code, references)
+/_dev/
 /.claude/
 /bin/
 /.sisyphus/
 build_*.txt
+/compile_errors.txt
+/__pycache__/
+
+# IDE/editor config
 /.classpath
 /.factorypath
 /.project
-/compile_errors.txt
+/.settings/
+/.sonarlint/
+/.lingma/
+/.gitnexus/
+
+# Build/dependency artifacts
+/libs/
+/io/
+/net/
+/assets/
+/data/
+/META-INF/MANIFEST.MF
+
+# Embedded mod reference files (now in _dev/)
+/apoli.mixins.json
+/apoli.accesswidener
+
+# Legacy root-level mod descriptor
+/fabric.mod.json
+/azurelib.fabric.mixins.json
+/azurelib.mixins.json
+
+# Tools
+/verify_mixins.py
+
+# 3D models
+/3d_models/
+
+# Example packs
+/custom_form_pack_example/
+
+# Patron server
+/PatronServer/
+
+# Decompiled code
 /Decompiler/
-/.lingma/rules/QWEN.md

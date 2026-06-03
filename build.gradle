@@ -38,7 +38,7 @@ loom {
 repositories {
     // Local maven repo for patched dependencies (must be first)
     maven {
-        url = uri("${project.projectDir}/libs/maven_local")
+        url = uri("${project.projectDir}/_dev/libs/maven_local")
     }
     // Add repositories to retrieve artifacts from in here.
     // You should only use this when depending on other mods because
@@ -48,9 +48,7 @@ repositories {
     maven {
         url 'https://maven.aliyun.com/nexus/content/groups/public'
     }
-    //maven {
-        //url 'https://repository.hanbings.io/proxy'
-        //mavenCentral()
+    mavenCentral()
     //}
 
     // The Maven with the mods source
@@ -242,7 +240,7 @@ dependencies {
     modLocalRuntime "squeek.appleskin:appleskin-fabric:mc1.21-3.0.6"
 
     modCompileOnly "maven.modrinth:vivecraft:9Sa2NEEb"
-    annotationProcessor(files("libs/mixinextras-fabric-0.2.0-beta.8.jar"))
+    annotationProcessor(files("_dev/libs/mixinextras-fabric-0.4.1.jar"))
 
     modCompileOnly "maven.modrinth:tacz-refabricated:HxQ3IsAZ" // TaCZ: Refabricated 1.20.1-0.4.0-forge1.1.7-hotfix
 

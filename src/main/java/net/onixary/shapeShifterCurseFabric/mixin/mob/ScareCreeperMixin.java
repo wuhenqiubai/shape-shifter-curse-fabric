@@ -10,9 +10,8 @@ import net.minecraft.entity.mob.CreeperEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.predicate.entity.EntityPredicates;
 import net.onixary.shapeShifterCurseFabric.additional_power.AdditionalPowers;
-import org.spongepowered.asm.mixin.Final;
+import net.onixary.shapeShifterCurseFabric.mixin.accessor.MobEntityAccessor;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -22,23 +21,23 @@ import java.util.function.Predicate;
 
 @Mixin(CreeperEntity.class)
 public abstract class ScareCreeperMixin {
-    @Shadow @Final protected GoalSelector goalSelector;
-    @Shadow @Final protected GoalSelector targetSelector;
 
     @Inject(at = @At("TAIL"), method = "initGoals")
     private void addGoals(CallbackInfo info) {
-        Goal goal = new FleeEntityGoal<>((CreeperEntity)(Object)this, PlayerEntity.class, AdditionalPowers.SCARE_CREEPERS::isActive, 3.0F, 1.0D, 1.2D, EntityPredicates.EXCEPT_CREATIVE_OR_SPECTATOR::test);
+        GoalSelector goalSelector = ((MobEntityAccessor) this).getGoalSelector();
+        GoalSelector targetSelector = ((MobEntityAccessor) this).getTargetSelector();
+        Goal goal = new FleeEntityGoal<>((CreeperEntity) (Object) this, PlayerEntity.class, AdditionalPowers.SCARE_CREEPERS::isActive, 3.0F, 1.0D, 1.2D, EntityPredicates.EXCEPT_CREATIVE_OR_SPECTATOR::test);
         goalSelector.add(3, goal);
         Set<PrioritizedGoal> goals = targetSelector.getGoals();
         for (PrioritizedGoal prioritizedGoal : goals) {
             if (prioritizedGoal.getGoal() instanceof ActiveTargetGoal<?> atg && prioritizedGoal.getPriority() == 1 && atg.targetClass == PlayerEntity.class) {
-                Predicate<LivingEntity> targetPredicate = (Predicate<LivingEntity>) atg.targetPredicate.predicate;
+                Predicate<LivingEntity> targetPredicate = atg.targetPredicate.predicate;
                 if (targetPredicate == null) {
                     targetPredicate = e -> !AdditionalPowers.SCARE_CREEPERS.isActive(e);
                 } else {
                     targetPredicate = targetPredicate.and(e -> !AdditionalPowers.SCARE_CREEPERS.isActive(e));
                 }
-                ((ActiveTargetGoal<LivingEntity>) atg).targetPredicate.setPredicate(targetPredicate);
+                atg.targetPredicate.setPredicate(targetPredicate);
             }
         }
     }
