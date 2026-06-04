@@ -6,6 +6,7 @@ import com.google.gson.JsonObject;
 import dev.kosmx.playerAnim.core.util.Vec3f;
 import mod.azure.azurelib.common.api.client.model.GeoModel;
 import mod.azure.azurelib.common.internal.common.cache.object.GeoBone;
+import mod.azure.azurelib.core.animation.AnimationState;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.Identifier;

@@ -142,6 +142,9 @@ public class TransformManager {
                 // 如果没有buff则随机选择一个形态，如果有buff則buff形态+1
                 // If there is no buff, randomly select a form; if there is a buff, buff form +1
                 toForm = getRandomOrBuffForm(player);
+                // 触发自定义成就
+                // Trigger custom achievement
+                ShapeShifterCurseFabric.ON_TRANSFORM_0.trigger((ServerPlayerEntity) player);
                 break;
             case PlayerFormPhase.INDEX_PHASE_0:
                 toForm = currentFormGroup.getForm(1);
@@ -540,7 +543,6 @@ public class TransformManager {
                 break;
             default:
                 break;
-            }
         }
 
         EffectManager.clearTransformativeEffect(player);
