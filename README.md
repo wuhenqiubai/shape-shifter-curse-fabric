@@ -1,3 +1,5 @@
+# 此分支的开发已转移到独立的 [Shape-Shifter-Curse Unofficial-Port](https://github.com/wuhenqiubai/Shape-Shifter-Curse_Unofficial-Port) 
+
 # Shape Shifter Curse Mod for Minecraft Java version
 GitHub repository for the mod Shape Shifter Curse, created for Fabric
 
