@@ -144,6 +144,11 @@ public class FormRenderFeature <T extends PlayerEntity, M extends BipedEntityMod
             playerEntityModel.hat.visible = false;
             playerEntityModel.head.visible = false;
         }
+
+        if (IS_FIRST_PERSON_MOD_LOADED && IsFirstPersonView && IsClientNowPlayedPlayer) {
+            playerEntityModel.hat.visible = false;
+            playerEntityModel.head.visible = false;
+        }
     }
 
     private static void renderGeoBone(FormRenderer formRenderer, GeoBone geoBone, MatrixStack matrixStack, FormAnimatable formAnimatable, VertexConsumerProvider vertexConsumerProvider, RenderLayer renderLayer, VertexConsumer vertexConsumer, int packedLight, float R, float G, float B, float A) {

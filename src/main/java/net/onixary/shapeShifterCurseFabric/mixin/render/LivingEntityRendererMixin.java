@@ -1,5 +1,7 @@
 package net.onixary.shapeShifterCurseFabric.mixin.render;
 
+import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.LivingEntityRenderer;
@@ -22,7 +24,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(LivingEntityRenderer.class)
 public abstract class LivingEntityRendererMixin<T extends LivingEntity, M extends EntityModel<T>> {
 
-    // SSC 动画文件名中需要保护的关键词（不被 FA 覆盖）
+    @Unique
+    private static final boolean IS_FPM_LOADED = FabricLoader.getInstance().isModLoaded("firstperson");
+
     @Unique
     private static final java.util.Set<String> SSC_SPECIAL = java.util.Set.of(
         "crawl", "swim", "jump", "rush", "flight", "transform",
@@ -42,13 +46,22 @@ public abstract class LivingEntityRendererMixin<T extends LivingEntity, M extend
     @Inject(method = "render(Lnet/minecraft/entity/LivingEntity;FFLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;I)V", at = @At("HEAD"))
     private void onRenderHead(T livingEntity, float f, float g, MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i, CallbackInfo ci) {
         if (livingEntity instanceof PlayerEntity player && (Object) this instanceof PlayerEntityRenderer) {
+            boolean pause = false;
             if (FormTextureUtils.getPlayerForm_Render(player).getBodyType() == PlayerFormBodyType.FERAL) {
-                EMFIntegration.pauseAllAnimations(player);
+                pause = true;
             } else {
                 String animId = AnimSystem.getCurrentAnimId(player);
                 if (isSscSpecialAnim(animId)) {
-                    EMFIntegration.pauseAllAnimations(player);
+                    pause = true;
                 }
+            }
+            // FPM 第一人称时暂停 EMF 头部渲染，避免 FPM 显示 EMF 自定义头部遮挡视野
+            if (!pause && IS_FPM_LOADED && MinecraftClient.getInstance().options.getPerspective().isFirstPerson()
+                    && player == MinecraftClient.getInstance().player) {
+                pause = true;
+            }
+            if (pause) {
+                EMFIntegration.pauseAllAnimations(player);
             }
         }
     }
