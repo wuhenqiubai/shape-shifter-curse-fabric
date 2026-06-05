@@ -19,8 +19,11 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.UUID;
 
 // 每个玩家的动画系统
 public class AnimSystem {
@@ -193,8 +196,16 @@ public class AnimSystem {
             }
         }
         this.EndProcessAnimSystemData();
+        if (anim != null) {
+            String id = anim.getAnimId();
+            if (id != null) setCurrentAnimId(this.player, id);
+        }
         return anim;
     }
+
+    private static final Map<UUID, String> CURRENT_ANIM = new HashMap<>();
+    private static void setCurrentAnimId(PlayerEntity player, String id) { CURRENT_ANIM.put(player.getUuid(), id); }
+    public static String getCurrentAnimId(PlayerEntity player) { return CURRENT_ANIM.get(player.getUuid()); }
 
     public static @NotNull Vec3f getPlayerBone3DTransform(PlayerEntity player, @NotNull String modelName, @NotNull TransformType type, @NotNull Vec3f DefaultValue) {
         return ((IAnimatedPlayer) player).playerAnimator_getAnimation().get3DTransform(modelName, type, DefaultValue);

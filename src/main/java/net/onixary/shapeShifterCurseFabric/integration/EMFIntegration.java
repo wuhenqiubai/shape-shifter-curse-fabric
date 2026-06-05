@@ -1,6 +1,7 @@
 package net.onixary.shapeShifterCurseFabric.integration;
 
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.client.model.ModelPart;
 import net.minecraft.entity.Entity;
 
 import java.lang.reflect.Method;
@@ -11,8 +12,9 @@ import java.lang.reflect.Method;
 public class EMFIntegration {
     private static final boolean EMF_LOADED;
     private static Method emfEntityOf;
-    private static Method pauseAllCustomAnimationsForEntity;
-    private static Method resumeAllCustomAnimationsForEntity;
+    private static Method pauseAll;
+    private static Method resumeAll;
+    private static Method pauseParts;
 
     static {
         boolean loaded = false;
@@ -21,19 +23,28 @@ public class EMFIntegration {
                 Class<?> api = Class.forName("traben.entity_model_features.EMFAnimationApi");
                 emfEntityOf = api.getMethod("emfEntityOf", Entity.class);
                 Class<?> emfEntityType = emfEntityOf.getReturnType();
-                pauseAllCustomAnimationsForEntity = api.getMethod("pauseAllCustomAnimationsForEntity", emfEntityType);
-                resumeAllCustomAnimationsForEntity = api.getMethod("resumeAllCustomAnimationsForEntity", emfEntityType);
+                pauseAll = api.getMethod("pauseAllCustomAnimationsForEntity", emfEntityType);
+                resumeAll = api.getMethod("resumeAllCustomAnimationsForEntity", emfEntityType);
+                pauseParts = api.getMethod("pauseCustomAnimationsForThesePartsOfEntity", emfEntityType, ModelPart[].class);
                 loaded = true;
             } catch (Exception ignored) {}
         }
         EMF_LOADED = loaded;
     }
 
-    public static void pauseAnimations(Entity entity) {
+    public static void pauseAllAnimations(Entity entity) {
         if (!EMF_LOADED) return;
         try {
             Object emfEntity = emfEntityOf.invoke(null, entity);
-            pauseAllCustomAnimationsForEntity.invoke(null, emfEntity);
+            pauseAll.invoke(null, emfEntity);
+        } catch (Exception ignored) {}
+    }
+
+    public static void pauseAnimationsForParts(Entity entity, ModelPart... parts) {
+        if (!EMF_LOADED || parts == null || parts.length == 0) return;
+        try {
+            Object emfEntity = emfEntityOf.invoke(null, entity);
+            pauseParts.invoke(null, emfEntity, (Object) parts);
         } catch (Exception ignored) {}
     }
 
@@ -41,7 +52,7 @@ public class EMFIntegration {
         if (!EMF_LOADED) return;
         try {
             Object emfEntity = emfEntityOf.invoke(null, entity);
-            resumeAllCustomAnimationsForEntity.invoke(null, emfEntity);
+            resumeAll.invoke(null, emfEntity);
         } catch (Exception ignored) {}
     }
 }
