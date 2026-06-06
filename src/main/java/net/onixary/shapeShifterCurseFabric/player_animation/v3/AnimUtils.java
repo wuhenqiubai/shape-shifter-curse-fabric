@@ -1,6 +1,7 @@
 package net.onixary.shapeShifterCurseFabric.player_animation.v3;
 
 import com.google.gson.JsonObject;
+import com.zigythebird.playeranimcore.easing.EasingType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.Identifier;
 import net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric;
@@ -88,11 +89,17 @@ public class AnimUtils {
         public Identifier AnimID;
         public float Speed;
         public int Fade;
+        public @Nullable EasingType Easing;
+        public boolean skipFade;
         private @Nullable AnimationHolder animationHolder;
-        public AnimationHolderData(Identifier AnimID, float Speed, int Fade) {
+        public AnimationHolderData(Identifier AnimID, float Speed, int Fade, EasingType easing) {
             this.AnimID = AnimID;
             this.Speed = Speed;
             this.Fade = Fade;
+            this.Easing = easing;
+        }
+        public AnimationHolderData(Identifier AnimID, float Speed, int Fade) {
+            this(AnimID, Speed, Fade, null);
         }
 
         public AnimationHolderData setAnimID(Identifier AnimID) {
@@ -130,6 +137,8 @@ public class AnimUtils {
         public AnimationHolder build() {
             if (animationHolder == null) {
                 animationHolder = new AnimationHolder(AnimID, true, Speed, Fade);
+                if (Easing != null) animationHolder.setEasingType(Easing);
+                if (skipFade) animationHolder.setSkipFade(true);
                 if (ShapeShifterCurseFabric.IsDevelopmentEnvironment() && animationHolder.getAnimation() == null)  {
 	                ShapeShifterCurseFabric.LOGGER.warn("Animation {} not found!", AnimID);
                 }

@@ -4,6 +4,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.Identifier;
 import net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric;
 import net.onixary.shapeShifterCurseFabric.player_animation.v3.*;
+import com.zigythebird.playeranimcore.easing.EasingType;
 import net.onixary.shapeShifterCurseFabric.player_animation.v3.AnimStateControllerDP.*;
 import net.onixary.shapeShifterCurseFabric.player_form.PlayerFormBase;
 import org.jetbrains.annotations.NotNull;
@@ -17,27 +18,27 @@ public class Form_Spider3 extends PlayerFormBase {
 
     // v3动画系统
     public static final AnimUtils.AnimationHolderData ANIM_IDLE = 
-        new AnimUtils.AnimationHolderData(ShapeShifterCurseFabric.identifier("spider_3_idle"));
+        new AnimUtils.AnimationHolderData(ShapeShifterCurseFabric.identifier("spider_3_idle"), 1.0f, 6, EasingType.EASE_IN_OUT_QUAD);
     public static final AnimUtils.AnimationHolderData ANIM_RUN =
-            new AnimUtils.AnimationHolderData(ShapeShifterCurseFabric.identifier("spider_3_run")).setSpeed(1.8f);
+            new AnimUtils.AnimationHolderData(ShapeShifterCurseFabric.identifier("spider_3_run"), 1.0f, 6, EasingType.EASE_IN_OUT_EXPO).setSpeed(1.8f);
     public static final AnimUtils.AnimationHolderData ANIM_WALK =
-            new AnimUtils.AnimationHolderData(ShapeShifterCurseFabric.identifier("spider_3_walk")).setSpeed(1.2f);
+            new AnimUtils.AnimationHolderData(ShapeShifterCurseFabric.identifier("spider_3_walk"), 1.0f, 6, EasingType.EASE_IN_OUT_QUAD).setSpeed(1.2f);
     public static final AnimUtils.AnimationHolderData ANIM_SNEAK_IDLE =
-            new AnimUtils.AnimationHolderData(ShapeShifterCurseFabric.identifier("spider_3_sneak_idle"));
+            new AnimUtils.AnimationHolderData(ShapeShifterCurseFabric.identifier("spider_3_sneak_idle"), 1.0f, 6, EasingType.EASE_IN_OUT_QUAD);
     public static final AnimUtils.AnimationHolderData ANIM_SNEAK_WALK =
-            new AnimUtils.AnimationHolderData(ShapeShifterCurseFabric.identifier("spider_3_sneak_walk"));
+            new AnimUtils.AnimationHolderData(ShapeShifterCurseFabric.identifier("spider_3_sneak_walk"), 1.0f, 6, EasingType.EASE_IN_OUT_QUAD);
     public static final AnimUtils.AnimationHolderData ANIM_SWIM_IDLE =
-            new AnimUtils.AnimationHolderData(ShapeShifterCurseFabric.identifier("spider_3_swim_idle"));
+            new AnimUtils.AnimationHolderData(ShapeShifterCurseFabric.identifier("spider_3_swim_idle"), 1.0f, 6, EasingType.EASE_IN_OUT_QUAD);
     public static final AnimUtils.AnimationHolderData ANIM_JUMP =
-            new AnimUtils.AnimationHolderData(ShapeShifterCurseFabric.identifier("spider_3_jump"));
+            new AnimUtils.AnimationHolderData(ShapeShifterCurseFabric.identifier("spider_3_jump"), 1.0f, 6, EasingType.EASE_OUT_BOUNCE);
     public static final AnimUtils.AnimationHolderData ANIM_FALL =
-            new AnimUtils.AnimationHolderData(ShapeShifterCurseFabric.identifier("spider_3_fall"));
+            new AnimUtils.AnimationHolderData(ShapeShifterCurseFabric.identifier("spider_3_fall"), 1.0f, 6, EasingType.EASE_OUT_QUINT);
     public static final AnimUtils.AnimationHolderData ANIM_CLIMB =
-            new AnimUtils.AnimationHolderData(ShapeShifterCurseFabric.identifier("spider_3_climb"));
+            new AnimUtils.AnimationHolderData(ShapeShifterCurseFabric.identifier("spider_3_climb"), 1.0f, 6, EasingType.EASE_IN_OUT_BACK);
     public static final AnimUtils.AnimationHolderData ANIM_FLY =
-            new AnimUtils.AnimationHolderData(ShapeShifterCurseFabric.identifier("spider_3_creative_flight"));
+            new AnimUtils.AnimationHolderData(ShapeShifterCurseFabric.identifier("spider_3_creative_flight"), 1.0f, 6, EasingType.EASE_IN_OUT_QUART);
     public static final AnimUtils.AnimationHolderData ANIM_RIDE =
-            new AnimUtils.AnimationHolderData(ShapeShifterCurseFabric.identifier("spider_3_ride"));
+            new AnimUtils.AnimationHolderData(ShapeShifterCurseFabric.identifier("spider_3_ride"), 1.0f, 6, EasingType.EASE_IN_OUT_CUBIC);
 
     public static final AbstractAnimStateController IDLE_CONTROLLER = 
         new WithSneakAnimController(ANIM_IDLE, ANIM_SNEAK_IDLE);

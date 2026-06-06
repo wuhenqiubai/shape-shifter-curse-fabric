@@ -1,92 +1,67 @@
 package net.onixary.shapeShifterCurseFabric.player_animation;
 
-import dev.kosmx.playerAnim.core.data.KeyframeAnimation;
-import dev.kosmx.playerAnim.minecraftApi.PlayerAnimationRegistry;
+import com.zigythebird.playeranim.animation.PlayerAnimResources;
+import com.zigythebird.playeranimcore.animation.Animation;
+import com.zigythebird.playeranimcore.easing.EasingType;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
 
-// fetch from Animation_Overhaul mod
-// https://github.com/nvb-uy/Animation_Overhaul/blob/main/src/main/java/elocindev/animation_overhaul/api/AnimationHolder.java
 public class AnimationHolder {
-    public static AnimationHolder EMPTY = new AnimationHolder((KeyframeAnimation) null, false);
+    public static AnimationHolder EMPTY = new AnimationHolder((Animation) null, false);
 
     private float speed;
     private int fade;
     private boolean isEnabled;
-    @Nullable private KeyframeAnimation animation;
-    @Nullable private String animId;
+    @Nullable private Animation animation;
+    @Nullable private EasingType easingType;
+    private boolean skipFade;
 
     public AnimationHolder(Identifier animation_id, boolean isEnabled, float speed) {
-        this((KeyframeAnimation) PlayerAnimationRegistry.getAnimation(animation_id), isEnabled, speed, 5);
-        this.animId = animation_id.toString();
+        this(PlayerAnimResources.getAnimation(animation_id), isEnabled, speed, 5);
     }
 
     public AnimationHolder(Identifier animation_id, boolean isEnabled) {
-        this((KeyframeAnimation) PlayerAnimationRegistry.getAnimation(animation_id), isEnabled, 1.0f, 2);
-        this.animId = animation_id.toString();
+        this(PlayerAnimResources.getAnimation(animation_id), isEnabled, 1.0f, 2);
     }
 
     public AnimationHolder(Identifier animation_id, boolean isEnabled, float speed, int fade) {
-        this((KeyframeAnimation) PlayerAnimationRegistry.getAnimation(animation_id), isEnabled, speed, fade);
-        this.animId = animation_id.toString();
+        this(PlayerAnimResources.getAnimation(animation_id), isEnabled, speed, fade);
     }
 
-    public AnimationHolder(@Nullable KeyframeAnimation animation, boolean isEnabled, float speed, int fade) {
+    public AnimationHolder(@Nullable Animation animation, boolean isEnabled, float speed, int fade) {
         this.isEnabled = isEnabled;
         this.animation = animation;
         this.speed = speed;
         this.fade = fade;
     }
 
-    public AnimationHolder(@Nullable KeyframeAnimation animation, boolean isEnabled) {
+    public AnimationHolder(@Nullable Animation animation, boolean isEnabled) {
         this(animation, isEnabled, 1.0f, 2);
     }
 
     public AnimationHolder() { this.isEnabled = false; this.animation = null; }
 
     @Nullable
-    public String getAnimId() { return animId; }
-
-    @Nullable
-    public KeyframeAnimation getAnimation() {
+    public Animation getAnimation() {
         if (!isEnabled) return null;
-
         return animation;
     }
 
-    public AnimationHolder setAnimation(KeyframeAnimation animation) {
+    public AnimationHolder setAnimation(Animation animation) {
         this.animation = animation;
-
         return this;
     }
 
-    public boolean isEnabled() {
-        return isEnabled;
-    }
+    public boolean isEnabled() { return isEnabled; }
+    public AnimationHolder setEnabled(boolean condition) { this.isEnabled = condition; return this; }
+    public float getSpeed() { return speed; }
+    public AnimationHolder setSpeed(float speed) { this.speed = speed; return this; }
+    public int getFade() { return fade; }
+    public AnimationHolder setFade(int fade) { this.fade = fade; return this; }
 
-    public AnimationHolder setEnabled(boolean condition) {
-        this.isEnabled = condition;
-
-        return this;
-    }
-
-    public float getSpeed() {
-        return speed;
-    }
-
-    public AnimationHolder setSpeed(float speed) {
-        this.speed = speed;
-
-        return this;
-    }
-
-    public int getFade() {
-        return fade;
-    }
-
-    public AnimationHolder setFade(int fade) {
-        this.fade = fade;
-
-        return this;
-    }
+    @Nullable
+    public EasingType getEasingType() { return easingType; }
+    public AnimationHolder setEasingType(EasingType easingType) { this.easingType = easingType; return this; }
+    public boolean isSkipFade() { return skipFade; }
+    public AnimationHolder setSkipFade(boolean s) { this.skipFade = s; return this; }
 }

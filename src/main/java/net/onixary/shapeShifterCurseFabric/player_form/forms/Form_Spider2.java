@@ -4,6 +4,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.Identifier;
 import net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric;
 import net.onixary.shapeShifterCurseFabric.player_animation.v3.*;
+import com.zigythebird.playeranimcore.easing.EasingType;
 import net.onixary.shapeShifterCurseFabric.player_animation.v3.AnimStateControllerDP.*;
 import net.onixary.shapeShifterCurseFabric.player_form.PlayerFormBase;
 import org.jetbrains.annotations.NotNull;
@@ -17,7 +18,7 @@ public class Form_Spider2 extends PlayerFormBase {
 
     // v3动画系统
     public static final AnimUtils.AnimationHolderData ANIM_SNEAK_IDLE =
-        new AnimUtils.AnimationHolderData(ShapeShifterCurseFabric.identifier("spider_2_sneak_idle"));
+        new AnimUtils.AnimationHolderData(ShapeShifterCurseFabric.identifier("spider_2_sneak_idle"), 1.0f, 6, EasingType.EASE_IN_OUT_QUAD);
 
     public static final AbstractAnimStateController IDLE_CONTROLLER = 
         new WithSneakAnimController(null, ANIM_SNEAK_IDLE);

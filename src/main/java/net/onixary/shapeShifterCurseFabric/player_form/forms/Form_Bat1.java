@@ -7,6 +7,7 @@ import net.onixary.shapeShifterCurseFabric.player_animation.v3.AbstractAnimState
 import net.onixary.shapeShifterCurseFabric.player_animation.v3.AnimStateControllerDP.WithSneakAnimController;
 import net.onixary.shapeShifterCurseFabric.player_animation.v3.AnimStateEnum;
 import net.onixary.shapeShifterCurseFabric.player_animation.v3.AnimSystem;
+import com.zigythebird.playeranimcore.easing.EasingType;
 import net.onixary.shapeShifterCurseFabric.player_animation.v3.AnimUtils;
 import net.onixary.shapeShifterCurseFabric.player_form.PlayerFormBase;
 import org.jetbrains.annotations.NotNull;
@@ -17,7 +18,7 @@ public class Form_Bat1 extends PlayerFormBase {
         super(formID);
     }
 
-    public static final AbstractAnimStateController JUMP_CONTROLLER = new WithSneakAnimController(new AnimUtils.AnimationHolderData(ShapeShifterCurseFabric.identifier("bat_1_jump")), null);
+    public static final AbstractAnimStateController JUMP_CONTROLLER = new WithSneakAnimController(new AnimUtils.AnimationHolderData(ShapeShifterCurseFabric.identifier("bat_1_jump"), 1.0f, 6, EasingType.EASE_OUT_BOUNCE), null);
 
     @Override
     public @Nullable AbstractAnimStateController getAnimStateController(PlayerEntity player, AnimSystem.AnimSystemData animSystemData, @NotNull Identifier animStateID) {

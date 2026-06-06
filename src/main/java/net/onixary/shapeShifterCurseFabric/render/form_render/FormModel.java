@@ -3,7 +3,7 @@ package net.onixary.shapeShifterCurseFabric.render.form_render;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import dev.kosmx.playerAnim.core.util.Vec3f;
+import com.zigythebird.playeranimcore.math.Vec3f;
 import mod.azure.azurelib.common.api.client.model.GeoModel;
 import mod.azure.azurelib.common.internal.common.cache.object.GeoBone;
 import mod.azure.azurelib.core.animation.AnimationState;
@@ -502,7 +502,7 @@ public class FormModel extends GeoModel<FormAnimatable> {
     }
 
     public final GeoBone setRotationForBone(String bone_name, Vec3f rot) {
-        return setRotationForBone(bone_name, new Vec3d(rot.getX(), rot.getY(), rot.getZ()));
+        return setRotationForBone(bone_name, new Vec3d(rot.x(), rot.y(), rot.z()));
     }
 
     public final GeoBone setModelPositionForBone(String bone_name, Vec3d pos) {
@@ -515,7 +515,7 @@ public class FormModel extends GeoModel<FormAnimatable> {
     }
 
     public final GeoBone setModelPositionForBone(String bone_name, Vec3f pos) {
-        return setModelPositionForBone(bone_name, new Vec3d(pos.getX(), pos.getY(), pos.getZ()));
+        return setModelPositionForBone(bone_name, new Vec3d(pos.x(), pos.y(), pos.z()));
     }
 
     public final GeoBone setScaleForBone(String bone_name, Vec3d scale) {
@@ -530,7 +530,7 @@ public class FormModel extends GeoModel<FormAnimatable> {
     }
 
     public final GeoBone setScaleForBone(String bone_name, Vec3f scale) {
-        return setScaleForBone(bone_name, new Vec3d(scale.getX(), scale.getY(), scale.getZ()));
+        return setScaleForBone(bone_name, new Vec3d(scale.x(), scale.y(), scale.z()));
     }
 
     public final GeoBone invertRotForPart(String bone_name, boolean x, boolean y, boolean z) {

@@ -1,8 +1,8 @@
 package net.onixary.shapeShifterCurseFabric.render.form_render;
 
 import com.google.gson.JsonObject;
-import dev.kosmx.playerAnim.api.TransformType;
-import dev.kosmx.playerAnim.core.util.Vec3f;
+import com.zigythebird.playeranimcore.enums.TransformType;
+import com.zigythebird.playeranimcore.math.Vec3f;
 import mod.azure.azurelib.common.internal.common.cache.object.BakedGeoModel;
 import mod.azure.azurelib.common.internal.common.cache.object.GeoBone;
 import net.minecraft.client.model.ModelPart;
@@ -116,7 +116,7 @@ public class DefaultModelAnimationSystem implements IModelAnimationSystem {
     public void ProcessExtraBone(FormModel m, PlayerEntity player, String OriginFursBoneID, String AnimBoneID) {
         GeoBone bone =  m.resetBone(OriginFursBoneID);
         Vec3f AnimPosition = AnimSystem.getPlayerBone3DTransform(player, AnimBoneID, TransformType.POSITION, new Vec3f(0, 0, 0));
-        m.setPositionForBone(OriginFursBoneID, new Vec3d(AnimPosition.getX(), -AnimPosition.getY(), -AnimPosition.getZ()));
+        m.setPositionForBone(OriginFursBoneID, new Vec3d(AnimPosition.x(), -AnimPosition.y(), -AnimPosition.z()));
         m.setRotationForBone(OriginFursBoneID, AnimSystem.getPlayerBone3DTransform(player, AnimBoneID, TransformType.ROTATION, new Vec3f(0, 0, 0)));
         m.invertRotForPart(OriginFursBoneID, false, true, true);
     }

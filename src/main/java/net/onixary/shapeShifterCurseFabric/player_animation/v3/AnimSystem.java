@@ -1,9 +1,12 @@
 package net.onixary.shapeShifterCurseFabric.player_animation.v3;
 
-import dev.kosmx.playerAnim.api.TransformType;
-import dev.kosmx.playerAnim.core.data.KeyframeAnimation;
-import dev.kosmx.playerAnim.core.util.Vec3f;
-import dev.kosmx.playerAnim.impl.IAnimatedPlayer;
+import com.zigythebird.playeranim.accessors.IAnimatedPlayer;
+import com.zigythebird.playeranim.animation.PlayerAnimManager;
+import com.zigythebird.playeranimcore.animation.Animation;
+import com.zigythebird.playeranimcore.bones.PlayerAnimBone;
+import com.zigythebird.playeranimcore.enums.TransformType;
+import com.zigythebird.playeranimcore.math.Vec3f;
+import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.Identifier;
@@ -53,7 +56,7 @@ public class AnimSystem {
     public final List<AbstractAnimStateController> PreProcessControllers;
 
     public @Nullable Identifier nowPlayingPowerAnimationID = null;
-    public @Nullable KeyframeAnimation nowPlayingPowerAnimation = null;
+    public @Nullable Animation nowPlayingPowerAnimation = null;
     public int NPPA_Length = -1;
     public int NPPA_NowTick = 0;
 
@@ -138,7 +141,7 @@ public class AnimSystem {
             this.NPPA_NowTick = 0;
             return;
         }
-        int AnimLength = this.nowPlayingPowerAnimation.getLength();
+        int AnimLength = (int) this.nowPlayingPowerAnimation.length();
         float Speed = anim.getSpeed();
         if (Speed == 0) {
             this.NPPA_Length = -1;
@@ -196,18 +199,21 @@ public class AnimSystem {
             }
         }
         this.EndProcessAnimSystemData();
-        if (anim != null) {
-            String id = anim.getAnimId();
-            if (id != null) setCurrentAnimId(this.player, id);
-        }
         return anim;
     }
 
-    private static final Map<UUID, String> CURRENT_ANIM = new HashMap<>();
-    private static void setCurrentAnimId(PlayerEntity player, String id) { CURRENT_ANIM.put(player.getUuid(), id); }
-    public static String getCurrentAnimId(PlayerEntity player) { return CURRENT_ANIM.get(player.getUuid()); }
-
-    public static @NotNull Vec3f getPlayerBone3DTransform(PlayerEntity player, @NotNull String modelName, @NotNull TransformType type, @NotNull Vec3f DefaultValue) {
-        return ((IAnimatedPlayer) player).playerAnimator_getAnimation().get3DTransform(modelName, type, DefaultValue);
+    public static @NotNull Vec3f getPlayerBone3DTransform(PlayerEntity player, @NotNull String boneName, @NotNull TransformType type, @NotNull Vec3f defaultValue) {
+        if (!(player instanceof AbstractClientPlayerEntity clientPlayer) || !(clientPlayer instanceof IAnimatedPlayer animatedPlayer))
+            return defaultValue;
+        PlayerAnimManager manager = animatedPlayer.playerAnimLib$getAnimManager();
+        if (manager == null || !manager.isActive()) return defaultValue;
+        PlayerAnimBone bone = new PlayerAnimBone(boneName);
+        bone = manager.get3DTransform(bone);
+        return switch (type) {
+            case POSITION -> new Vec3f(bone.getPosX(), bone.getPosY(), bone.getPosZ());
+            case ROTATION -> new Vec3f(bone.getRotX(), bone.getRotY(), bone.getRotZ());
+            case SCALE -> new Vec3f(bone.getScaleX(), bone.getScaleY(), bone.getScaleZ());
+            default -> defaultValue;
+        };
     }
 }

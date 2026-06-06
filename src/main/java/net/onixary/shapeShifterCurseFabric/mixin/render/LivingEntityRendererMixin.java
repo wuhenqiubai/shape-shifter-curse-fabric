@@ -11,12 +11,10 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.onixary.shapeShifterCurseFabric.integration.EMFIntegration;
-import net.onixary.shapeShifterCurseFabric.player_animation.v3.AnimSystem;
 import net.onixary.shapeShifterCurseFabric.player_form.PlayerFormBodyType;
 import net.onixary.shapeShifterCurseFabric.render.form_render.FormRenderFeature;
 import net.onixary.shapeShifterCurseFabric.util.FormTextureUtils;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -24,39 +22,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(LivingEntityRenderer.class)
 public abstract class LivingEntityRendererMixin<T extends LivingEntity, M extends EntityModel<T>> {
 
-    @Unique
-    private static final boolean IS_FPM_LOADED = FabricLoader.getInstance().isModLoaded("firstperson");
-
-    @Unique
-    private static final java.util.Set<String> SSC_SPECIAL = java.util.Set.of(
-        "crawl", "swim", "jump", "rush", "flight", "transform",
-        "attack", "dig", "climb", "float", "fall", "sleep", "attach", "ride"
-    );
-
-    @Unique
-    private static boolean isSscSpecialAnim(String animId) {
-        if (animId == null) return false;
-        String lower = animId.toLowerCase();
-        for (String kw : SSC_SPECIAL) {
-            if (lower.contains(kw)) return true;
-        }
-        return false;
-    }
-
     @Inject(method = "render(Lnet/minecraft/entity/LivingEntity;FFLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;I)V", at = @At("HEAD"))
     private void onRenderHead(T livingEntity, float f, float g, MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i, CallbackInfo ci) {
         if (livingEntity instanceof PlayerEntity player && (Object) this instanceof PlayerEntityRenderer) {
-            boolean pause = false;
-            if (FormTextureUtils.getPlayerForm_Render(player).getBodyType() == PlayerFormBodyType.FERAL) {
-                pause = true;
-            } else {
-                String animId = AnimSystem.getCurrentAnimId(player);
-                if (isSscSpecialAnim(animId)) {
-                    pause = true;
-                }
-            }
-            // FPM 第一人称时暂停 EMF 头部渲染，避免 FPM 显示 EMF 自定义头部遮挡视野
-            if (!pause && IS_FPM_LOADED && MinecraftClient.getInstance().options.getPerspective().isFirstPerson()
+            boolean pause = FormTextureUtils.getPlayerForm_Render(player).getBodyType() == PlayerFormBodyType.FERAL;
+            if (!pause && FabricLoader.getInstance().isModLoaded("firstperson")
+                    && MinecraftClient.getInstance().options.getPerspective().isFirstPerson()
                     && player == MinecraftClient.getInstance().player) {
                 pause = true;
             }
