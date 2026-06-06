@@ -56,6 +56,7 @@
     "accessor.ActiveTargetGoalAccessor",
     "accessor.MobEntityAccessor",
     "accessor.PowerTypeRegistryAccessor",
+    "AzAnimatorAccessorMixin",
     "accessory.TrinketImpl",
     "accessory.TrinketItemMixin",
     "accessory.TrinketSlotMixin",
