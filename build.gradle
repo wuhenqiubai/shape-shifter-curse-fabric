@@ -4,15 +4,13 @@ plugins {
     //id("com.gradleup.shadow") version "8.3.6"
 }
 
-version = "${project.mod_version}-${build_type}+build.${build_number}+mc.1.21.1"
 group = project.maven_group
 
-// 从Github Action 环境获取构建Channel和BuildVersion
-def channel = System.getenv('channel')
-def build_version = System.getenv('build_version')
-if (channel != null) {
-    version = "${project.mod_version}-${channel}.${build_version}"
-}
+// 统一版本号格式: mod_version-channel.build_number+mc.minecraft_version
+// CI 通过环境变量 channel / build_version 覆盖，本地使用 gradle.properties 默认值
+def channel = System.getenv('channel') ?: build_type
+def build_version = System.getenv('build_version') ?: build_number
+version = "${project.mod_version}-${channel}.${build_version}+mc.${minecraft_version}"
 
 base {
     archivesName = project.archives_base_name
