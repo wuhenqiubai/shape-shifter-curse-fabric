@@ -10,23 +10,94 @@ import net.onixary.shapeShifterCurseFabric.player_form.ability.PlayerFormCompone
 import net.onixary.shapeShifterCurseFabric.player_form.ability.RegPlayerFormComponent;
 import net.onixary.shapeShifterCurseFabric.status_effects.attachment.EffectManager;
 
+/**
+ * 集中管理玩家图鉴（Codex）的所有本地化文本和状态逻辑。
+ * <p>
+ * 提供各形态的标题、外观描述、优点、缺点、本能说明的文本获取方法，
+ * 以及根据玩家当前状态（是否感染、诅咒之月阶段）返回状态文本的功能。
+ * <p>
+ * 所有文本通过 {@link Text#translatable} 从语言文件读取，支持 i18n。
+ *
+ * @see PlayerFormBase#getContentText
+ */
 public class CodexData {
-    // 集中管理Codex的数据
 
-	public enum ContentType {
-        TITLE,
-        APPEARANCE,
-        PROS,
-        CONS,
-        INSTINCTS
-    }
-    // static texts
-    // headers
+	/** "状态" 区域标题 */
     public static final Text headerStatus = Text.translatable("codex.header.status");
+	// ===== 静态文本 =====
+	// 图签各个区域的标题
+	/** "外观" 区域标题 */
     public static final Text headerAppearance = Text.translatable("codex.header.appearance");
+	/** "优点" 区域标题 */
     public static final Text headerPros = Text.translatable("codex.header.pros");
+	/** "缺点" 区域标题 */
     public static final Text headerCons = Text.translatable("codex.header.cons");
+	/** "本能" 区域标题 */
     public static final Text headerInstincts = Text.translatable("codex.header.instincts");
+
+	/**
+	 * 获取玩家当前状态的描述文本。
+	 * <p>
+	 * 根据是否感染变形效果、是否处于诅咒之月期间返回对应的状态文本。
+	 *
+	 * @param player 目标玩家
+	 * @return 状态文本（可能包含感染/诅咒之月/正常状态的组合描述）
+     */
+    public static Text getPlayerStatusText(PlayerEntity player){
+        // 根据当前角色状态与环境返回对应的状态文本
+        StringBuilder statusTextBuilder = new StringBuilder();
+        boolean hasAnyStatus = false;
+
+        /* 重构后不需要了 仅用于参考旧实现逻辑
+        PlayerEffectAttachment currentTransformEffect;
+
+        // 使用环境检测而不是玩家类型检测
+        if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT && player instanceof ClientPlayerEntity) {
+            currentTransformEffect = ClientEffectAttachmentCache.getAttachment();
+        } else {
+            currentTransformEffect = player.getAttached(EFFECT_ATTACHMENT);
+        }
+
+        if(currentTransformEffect != null && currentTransformEffect.currentToForm != null){
+            ShapeShifterCurseFabric.LOGGER.info("current effect successfully receive: " + currentTransformEffect.currentEffect);
+            statusTextBuilder.append(statusInfected.getString());
+            hasAnyStatus = true;
+        }
+         */
+        if (EffectManager.hasTransformativeEffect(player)) {
+            statusTextBuilder.append(statusInfected.getString());
+            hasAnyStatus = true;
+        }
+
+        // 使用环境检测来正确获取CursedMoon状态
+        boolean isCursedMoon, isNight;
+        if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) {
+            // 客户端使用同步的状态
+            isCursedMoon = CursedMoon.clientIsCursedMoon;
+            isNight = CursedMoon.clientIsNight;
+        } else {
+            // 服务端使用原始逻辑
+            isCursedMoon = CursedMoon.clientIsCursedMoon;
+            isNight = CursedMoon.clientIsNight;
+        }
+
+        if(isCursedMoon){
+            if(isNight){
+                statusTextBuilder.append(statusUnderMoon.getString());
+                hasAnyStatus = true;
+            }
+            else{
+                statusTextBuilder.append(statusBeforeMoon.getString());
+                hasAnyStatus = true;
+            }
+        }
+
+        if(!hasAnyStatus){
+            statusTextBuilder.append(statusNormal.getString());
+        }
+
+        return Text.literal(statusTextBuilder.toString());
+    }
     // status
     private static final Text statusNormal = Text.translatable("codex.status.normal");
     private static final Text statusInfected = Text.translatable("codex.status.infected");
@@ -246,64 +317,16 @@ public class CodexData {
     private static final Text phi_sp_cons = Text.translatable("codex.form.phi_sp.cons");
     private static final Text phi_sp_instincts = Text.translatable("codex.form.phi_sp.instincts");
 
-
-
-    public static Text getPlayerStatusText(PlayerEntity player){
-        // 根据当前角色状态与环境返回对应的状态文本
-        StringBuilder statusTextBuilder = new StringBuilder();
-        boolean hasAnyStatus = false;
-
-        /* 重构后不需要了 仅用于参考旧实现逻辑
-        PlayerEffectAttachment currentTransformEffect;
-
-        // 使用环境检测而不是玩家类型检测
-        if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT && player instanceof ClientPlayerEntity) {
-            currentTransformEffect = ClientEffectAttachmentCache.getAttachment();
-        } else {
-            currentTransformEffect = player.getAttached(EFFECT_ATTACHMENT);
-        }
-
-        if(currentTransformEffect != null && currentTransformEffect.currentToForm != null){
-            ShapeShifterCurseFabric.LOGGER.info("current effect successfully receive: " + currentTransformEffect.currentEffect);
-            statusTextBuilder.append(statusInfected.getString());
-            hasAnyStatus = true;
-        }
-         */
-        if (EffectManager.hasTransformativeEffect(player)) {
-            statusTextBuilder.append(statusInfected.getString());
-            hasAnyStatus = true;
-        }
-
-        // 使用环境检测来正确获取CursedMoon状态
-        boolean isCursedMoon, isNight;
-        if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) {
-            // 客户端使用同步的状态
-            isCursedMoon = CursedMoon.clientIsCursedMoon;
-            isNight = CursedMoon.clientIsNight;
-        } else {
-            // 服务端使用原始逻辑
-            isCursedMoon = CursedMoon.clientIsCursedMoon;
-            isNight = CursedMoon.clientIsNight;
-        }
-
-        if(isCursedMoon){
-            if(isNight){
-                statusTextBuilder.append(statusUnderMoon.getString());
-                hasAnyStatus = true;
-            }
-            else{
-                statusTextBuilder.append(statusBeforeMoon.getString());
-                hasAnyStatus = true;
-            }
-        }
-
-        if(!hasAnyStatus){
-            statusTextBuilder.append(statusNormal.getString());
-        }
-
-        return Text.literal(statusTextBuilder.toString());
-    }
-
+	/**
+	 * 根据内容类型和玩家当前阶段获取区域描述文本。
+	 * <p>
+	 * 不同形态阶段的描述文本不同。例如 PHASE_0 的外观描述与 PHASE_2 的外观描述不同。
+	 * SP 形态和部分类型可能返回空文本。
+	 *
+	 * @param type   内容类型
+	 * @param player 目标玩家（用于获取当前阶段）
+	 * @return 描述文本
+     */
     public static Text getDescText(ContentType type, PlayerEntity player){
         PlayerFormComponent formComp = player.getComponent(RegPlayerFormComponent.PLAYER_FORM);
         PlayerFormPhase currentPhase = formComp.getCurrentForm().getPhase();
@@ -350,8 +373,35 @@ public class CodexData {
         return Text.empty();
     }
 
+	/**
+	 * 获取当前形态指定内容类型的实际文本内容。
+	 * <p>
+	 * 委托给当前形态的 {@link PlayerFormBase#getContentText} 方法。
+	 *
+	 * @param type   内容类型
+	 * @param player 目标玩家
+	 * @return 本地化的形态内容文本
+     */
     public static Text getContentText(ContentType type, PlayerEntity player){
         PlayerFormComponent formComp = player.getComponent(RegPlayerFormComponent.PLAYER_FORM);
         return formComp.getCurrentForm().getContentText(type);
     }
+
+	/**
+	 * 图鉴内容类型。每种类型对应不同的文本区域。
+	 */
+	public enum ContentType {
+		/**
+		 * 形态标题
+		 */
+		TITLE,
+        /** 外观描述 */
+        APPEARANCE,
+        /** 优点 */
+        PROS,
+        /** 缺点 */
+        CONS,
+        /** 本能说明 */
+        INSTINCTS
+	}
 }

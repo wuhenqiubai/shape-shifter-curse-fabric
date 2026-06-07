@@ -15,21 +15,45 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Set;
 
+/**
+ * 新形态系统核心接口。定义形态的生命周期方法和变形链协议。
+ * <p>
+ * 与旧系统 {@link net.onixary.shapeShifterCurseFabric.player_form.PlayerFormBase} 不同，
+ * 新系统将所有形态属性整合为 {@code Flag} 集合，并通过 {@link ITransformReason} 处理变形逻辑。
+ * <p>
+ * 变形链协议：{@link #_getNextForm} → {@link #getNextForm} / {@link #getDefaultNextForm} / reason.getFallBackNextForm
+ * 使用责任链模式，每个步骤返回 null 则进入下一级兜底。
+ * <p>
+ * 注意：此系统尚未完全启用（标记 TODO），当前活跃形态系统仍为 {@code PlayerFormBase}。
+ *
+ * @see IFormGroup
+ * @see ITransformReason
+ * @see FormUtils
+ */
 // 新形态变形引擎代码
-
 public interface IForm {
+	/**
+	 * @return 形态唯一 ID
+	 */
     public @NotNull Identifier getFormID();
 
-    // HasSlowFall 整合进 flag 系统
+	/**
+	 * 形态标志集合（HasSlowFall 等已整合进此标志系统）。
+	 *
+	 * @return 标志字符串集合
+     */
     public @NotNull Set<String> getFormFlag();
 
+	/** @return 形态在组内的层级（类似旧系统的 {@code FormIndex}） */
     public int getFormTier();
 
+	/** @return 所属形态组 */
     public @Nullable IFormGroup getFormGroup();
 
+	/** 设置形态组及层级。 */
     public void setFormGroup(IFormGroup group, int formTier);
 
-    // 临时能力系统 等Origins移除后再写
+	/** @return 临时能力系统的层标识（等 Origins 移除后再完善） */
     public @NotNull Pair<Identifier, Identifier> getFormLayer();
 
 
@@ -121,18 +145,37 @@ public interface IForm {
         return new Pair<>(false, null);
     }
 
-    // 3个Hook 顺序为当前形态onTransform_To 目标形态onTransform_From 目标形态onTransform_Finish
-    default void onTransform_From(PlayerEntity player, IForm prevForm) { }
+	/**
+	 * 变形转换钩子。调用顺序为：
+	 * <ol>
+	 *   <li>当前形态的 {@code onTransform_To}</li>
+	 *   <li>目标形态的 {@code onTransform_From}</li>
+	 *   <li>目标形态的 {@code onTransform_Finish}</li>
+	 * </ol>
+     */
+    default void onTransform_From(PlayerEntity player, IForm prevForm) {
+    }
 
-    default void onTransform_Finish(PlayerEntity player) { }
+	/** 变形完成钩子。 */
+    default void onTransform_Finish(PlayerEntity player) {
+    }
 
-    default void onTransform_To(PlayerEntity player, IForm nextForm) { }
+	/** 变形开始钩子（准备切换到下一个形态时调用）。 */
+    default void onTransform_To(PlayerEntity player, IForm nextForm) {
+    }
 
-    // Scale 系统
-    // 先这样写 等我之后翻一下 pehkui 的代码
+	/**
+	 * 应用形态的缩放。
+	 * <p>
+	 * 通过 Pehkui API 修改玩家实体大小。
+     */
     public void applyScale(PlayerEntity player);
 
-    // Interface 没法重载boolean equal(Object)函数
+	/**
+	 * 比较两个形态是否相等（基于 {@link #getFormID}）。
+	 * <p>
+	 * 注：接口无法覆写 {@code Object.equals}，因此单独提供此方法。
+     */
     default boolean isEquals(IForm form) {
         return form != null && this.getFormID().equals(form.getFormID());
     }

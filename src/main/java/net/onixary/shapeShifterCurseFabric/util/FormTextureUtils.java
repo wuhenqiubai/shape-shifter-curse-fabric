@@ -22,22 +22,61 @@ import java.io.InputStream;
 import java.util.Objects;
 
 
+/**
+ * 形态纹理工具类。提供形态纹理的读取、颜色处理、图像混合等功能。
+ * <p>
+ * 核心功能：
+ * <ul>
+ *   <li>{@link #getPlayerForm_Render} — 获取当前渲染中玩家的形态实例（支持临时覆写）</li>
+ *   <li>{@link #BakeTexture} / {@link #BakeTextureNoMemLeak} — 根据颜色蒙版烘焙自定义纹理</li>
+ *   <li>{@link #ProcessPixel} / {@link #ProcessMaskChannel} / {@link #getAverageGreyScale} — 像素级颜色处理流水线</li>
+ *   <li>颜色空间转换：{@link #hsvToRgb} / {@link #rgbToHsv}</li>
+ *   <li>ABGR/RGBA 转换工具：{@link #RGBA2ABGR} / {@link #ABGR2RGBA} 等</li>
+ * </ul>
+ * <p>
+ * 颜色处理管线采用 ABGR 格式（与 NativeImage 一致），并支持蒙版通道分区染色。
+ * 此类的 Temp 接口用于色彩选择菜单的实时预览。
+ * <p>
+ * 注意：{@link #BakeTexture} 每次调用会注册新的动态纹理，累积可能造成内存泄漏（资源包重载后自动清理）。
+ *
+ * @see ColorSetting
+ * @see PlayerSkinComponent
+ */
 // 尽量少在Origin Fur中修改 减少后续工作量
 public class FormTextureUtils {
+	/**
+	 * 获取当前渲染阶段玩家的形态实例。
+	 * <p>
+	 * 如果处于临时形态覆写模式（色彩预览），则返回临时形态而非玩家的实际形态。
+	 *
+	 * @param player 目标玩家
+	 * @return 形态实例（渲染态）
+     */
+    public static PlayerFormBase getPlayerForm_Render(PlayerEntity player) {
+        if (useTempFormModel && Objects.equals(player, MinecraftClient.getInstance().player)) {
+            PlayerFormBase form = tempFormModelProcessor.getForm();
+            if (form != null) {
+                return form;
+            }
+        }
+        return RegPlayerFormComponent.PLAYER_FORM.get(player).getCurrentForm();
+    }
+
+	/**
+	 * 临时纹理处理器接口。用于色彩选择菜单中的实时纹理预览。
+	 * <p>
+	 * 实现方需要自行管理纹理缓存（模型缓存可能带来内存泄漏）。
+	 */
     public interface TempFormTextureProcessor {
-        // 需要自行实现缓存 Model的缓存带内存泄漏
         Identifier getTexture(int modelID, String category, Identifier texture, Identifier mask, boolean OnlyMultiply);
     }
 
+	/**
+	 * 临时皮肤配置覆写接口。用于控制是否保留原始皮肤纹理。
+	 */
     public interface TempCustomSkinConfigOverrider {
         boolean keepOriginalSkin();
-    }
-
-    public interface TempFormModelProcessor {
-        PlayerFormBase getForm();
-
-        Identifier getLayerID();
-    }
+	}
 
     public static boolean useTempFormTexture = false;
     public static TempFormTextureProcessor tempFormTextureProcessor = null;
@@ -47,14 +86,10 @@ public class FormTextureUtils {
     public static boolean useTempFormModel = false;
     public static TempFormModelProcessor tempFormModelProcessor = null;
 
-    public static PlayerFormBase getPlayerForm_Render(PlayerEntity player) {
-        if (useTempFormModel && Objects.equals(player, MinecraftClient.getInstance().player)) {
-            PlayerFormBase form = tempFormModelProcessor.getForm();
-            if (form != null) {
-                return form;
-            }
-        }
-        return RegPlayerFormComponent.PLAYER_FORM.get(player).getCurrentForm();
+	/** 临时形态模型处理器接口。用于色彩选择菜单中的形态预览。 */
+    public interface TempFormModelProcessor {
+        PlayerFormBase getForm();
+        Identifier getLayerID();
     }
 
     public record ColorSetting(int primaryColor, int accentColor1, int accentColor2, int eyeColorA, int eyeColorB

@@ -170,3 +170,4 @@ build_*.txt
 
 # ClaudeCode
 /projects/
+/.codegraph/
