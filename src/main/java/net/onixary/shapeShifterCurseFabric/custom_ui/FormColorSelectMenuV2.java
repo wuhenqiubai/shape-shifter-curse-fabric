@@ -305,6 +305,11 @@ public class FormColorSelectMenuV2 extends Screen implements FormTextureUtils.Te
         return false;
     }
 
+    @Override
+    public void renderBackground(DrawContext context, int mouseX, int mouseY, float delta) {
+        // 自定义背景纹理完全遮挡，不需要暗色渐变
+    }
+
     // FCS按钮生成函数
     private void createSaveDataButtons(int Index, int X, int Y) {
         // X,Y,80,15
@@ -1110,7 +1115,10 @@ public class FormColorSelectMenuV2 extends Screen implements FormTextureUtils.Te
         entity.setPitch(-g * 20.0F);
         entity.headYaw = entity.getYaw();
         entity.prevHeadYaw = entity.getYaw();
-        InventoryScreen.drawEntity(context, x, y, size, 0, 0, 0.0625f, f, g, entity);
+        Quaternionf quaternionf = new Quaternionf().rotateZ((float)Math.PI);
+        Quaternionf quaternionf2 = new Quaternionf().rotateX(f * 20.0F * ((float)Math.PI / 180F));
+        quaternionf2.mul(quaternionf);
+        InventoryScreen.drawEntity(context, (float)x, (float)y, (float)size, new org.joml.Vector3f(), quaternionf, quaternionf2, entity);
         entity.bodyYaw = h;
         entity.prevBodyYaw = m;
         entity.setYaw(i);

@@ -441,10 +441,11 @@ public class FormModel extends GeoModel<FormAnimatable> {
             for(int i = 1; i < tailChain.size(); i++){
                 GeoBone chainBone = this.getCachedGeoBone(tailChain.get(i));
                 if (chainBone == null) {continue;}
+                float decayFactor = 0.75F + offset * 0.15F;  // 链骨权重衰减：越远越柔
                 if(!isFeral){
-                    chainBone.setRotY(- MathHelper.lerp(limbDistance, SWAY_SCALE * MathHelper.cos(age * SWAY_RATE - (((float)Math.PI / 3.0F) * offset)), 0.0f) - tailDragAmount * 0.75F);
+                    chainBone.setRotY(- MathHelper.lerp(limbDistance, SWAY_SCALE * MathHelper.cos(age * SWAY_RATE - (((float)Math.PI / 3.0F) * offset)), 0.0f) - tailDragAmount * decayFactor);
                 } else{
-                    chainBone.setRotZ(MathHelper.lerp(limbDistance, SWAY_SCALE * MathHelper.cos(age * SWAY_RATE - (((float)Math.PI / 3.0F) * offset)), 0.0f) + tailDragAmount * 0.75F);
+                    chainBone.setRotZ(MathHelper.lerp(limbDistance, SWAY_SCALE * MathHelper.cos(age * SWAY_RATE - (((float)Math.PI / 3.0F) * offset)), 0.0f) + tailDragAmount * decayFactor);
                 }
                 chainBone.setRotX(-tailDragAmountVertical * 0.75f * (offset + 0.75f));
                 offset += 0.75F;

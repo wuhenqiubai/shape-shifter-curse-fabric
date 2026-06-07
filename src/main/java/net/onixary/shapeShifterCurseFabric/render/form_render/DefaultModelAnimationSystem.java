@@ -38,9 +38,11 @@ public class DefaultModelAnimationSystem implements IModelAnimationSystem {
         private float tailDragAmount = 0.0F;
         private float tailDragAmountO;
         private float currentTailDragAmount = 0.0F;
+        private float lastYaw;                               // 上一帧 lerp 后的 bodyYaw
         private float tailDragAmountVertical = 0.0F;
         private float tailDragAmountVerticalO;
         private float currentTailDragAmountVertical = 0.0F;
+        private float tailVelocityVertical;                  // 二阶阻尼：垂直速度
     }
 
 
@@ -174,7 +176,10 @@ public class DefaultModelAnimationSystem implements IModelAnimationSystem {
         tailData td = tailDataMap.computeIfAbsent(player.getUuid(), k -> new tailData());
         td.tailDragAmountO = td.tailDragAmount;
         td.tailDragAmount *= 0.75F;
-        td.tailDragAmount -= (float) (Math.toRadians((player.bodyYaw - player.prevBodyYaw)) * 0.55F);
+        float lerpedYaw = MathHelper.lerp(tickDelta, player.prevBodyYaw, player.bodyYaw);
+        float yawDelta = (float) Math.toRadians(lerpedYaw - td.lastYaw);
+        td.tailDragAmount -= yawDelta * 0.55F;
+        td.lastYaw = lerpedYaw;
         td.tailDragAmount = MathHelper.clamp(td.tailDragAmount, -1.6F, 1.6F);
         float verticalSpeed = (float) player.getVelocity().y;
         float targetVerticalDrag = MathHelper.clamp(verticalSpeed * 1.5f, -1.6f, 1.6f);
