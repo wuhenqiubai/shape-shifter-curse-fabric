@@ -36,10 +36,7 @@ loom {
 
 
 repositories {
-    // Local maven repo for patched dependencies (must be first)
-    maven {
-        url = uri("${project.projectDir}/_dev/libs/maven_local")
-    }
+
     // Add repositories to retrieve artifacts from in here.
     // You should only use this when depending on other mods because
     // Loom adds the essential maven repositories to download Minecraft and libraries from automatically.
@@ -116,7 +113,6 @@ repositories {
     maven {
         url = "https://jitpack.io"
     }
-    // maven { url = "https://maven.shedaniel.me" } // Disabled: GMM not compatible with Loom
     maven {
         url = "https://maven.terraformersmc.com"
     }
@@ -136,6 +132,7 @@ repositories {
         name = "RedlanceMinecraft"
         url = "https://repo.redlance.org/public"
     }
+    maven { url "https://maven.shedaniel.me/" }
 
     mavenLocal()
 }
