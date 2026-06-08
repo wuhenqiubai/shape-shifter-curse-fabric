@@ -60,10 +60,10 @@ public class TransformativeWolfEntity extends WolfEntity implements ITMob {
         this.goalSelector.add(10, new LookAtEntityGoal(this, PlayerEntity.class, 8.0F));
         this.goalSelector.add(10, new LookAroundGoal(this));
         this.targetSelector.add(1, new ActiveTargetGoal<>(this, PlayerEntity.class, true));
-        this.targetSelector.add(2, (new RevengeGoal(this, new Class[0])).setGroupRevenge(new Class[0]));
+        this.targetSelector.add(2, (new RevengeGoal(this)).setGroupRevenge());
         this.targetSelector.add(3, new UntamedActiveTargetGoal<>(this, TurtleEntity.class, false, null));
-        this.targetSelector.add(4, new ActiveTargetGoal(this, AbstractSkeletonEntity.class, false));
-        this.targetSelector.add(5, new UniversalAngerGoal(this, true));
+        this.targetSelector.add(4, new ActiveTargetGoal<>(this, AbstractSkeletonEntity.class, false));
+        this.targetSelector.add(5, new UniversalAngerGoal<>(this, true));
     }
 
     public static DefaultAttributeContainer.Builder createAttributes() {

@@ -227,8 +227,8 @@ public class Origin {
     @SuppressWarnings("unchecked")
     public static Origin createFromData(Identifier id, SerializableData.Instance data) {
         Origin origin = new Origin(id,
-            (ItemStack)data.get("icon"),
-            (Impact)data.get("impact"),
+		        data.get("icon"),
+		        data.get("impact"),
             data.getInt("order"),
             data.getInt("loading_priority"));
 
@@ -238,7 +238,7 @@ public class Origin {
 
         ((List<Identifier>)data.get("powers")).forEach(powerId -> {
             try {
-                PowerType powerType = PowerTypeRegistry.get(powerId);
+                PowerType<?> powerType = PowerTypeRegistry.get(powerId);
                 origin.add(powerType);
             } catch(IllegalArgumentException e) {
 	            Origins.LOGGER.error("Origin \"{}\" contained unregistered power: \"{}\"", id, powerId);

@@ -3,9 +3,9 @@ package net.onixary.shapeShifterCurseFabric.render.form_render;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import dev.kosmx.playerAnim.core.util.Vec3f;
-import mod.azure.azurelib.common.api.client.model.GeoModel;
-import mod.azure.azurelib.common.internal.common.cache.object.GeoBone;
+import com.zigythebird.playeranimcore.math.Vec3f;
+import software.bernie.geckolib.model.GeoModel;
+import software.bernie.geckolib.cache.object.GeoBone;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.Identifier;
@@ -15,7 +15,7 @@ import net.minecraft.util.math.Vec3d;
 import net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric;
 import net.onixary.shapeShifterCurseFabric.player_form.PlayerFormBase;
 import net.onixary.shapeShifterCurseFabric.player_form.PlayerFormBodyType;
-import net.onixary.shapeShifterCurseFabric.player_form.ability.RegPlayerFormComponent;
+import net.onixary.shapeShifterCurseFabric.util.FormSkinSystem;
 import net.onixary.shapeShifterCurseFabric.util.FormTextureUtils;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3d;
@@ -63,7 +63,9 @@ public class FormModel extends GeoModel<FormAnimatable> {
     public Identifier EmissiveTextureMaskResource_Slim = null;
 
     public Identifier FullBrightTextureResource = ShapeShifterCurseFabric.identifier("textures/missing.png");
+    public Identifier FullBrightTextureMaskResource = null;
     public Identifier FullBrightTextureResource_Slim = ShapeShifterCurseFabric.identifier("textures/missing.png");
+    public Identifier FullBrightTextureMaskResource_Slim = null;
 
     public Identifier Animation = ShapeShifterCurseFabric.identifier("animations/missing.animation.json");
 
@@ -75,6 +77,9 @@ public class FormModel extends GeoModel<FormAnimatable> {
 
     public HashMap<FormTextureUtils.ColorSetting, Identifier> ColorMask_Baked_EmissiveTexture = new HashMap<>();
     public HashMap<FormTextureUtils.ColorSetting, Identifier> ColorMask_Baked_EmissiveTexture_Slim = new HashMap<>();
+
+    public HashMap<FormTextureUtils.ColorSetting, Identifier> ColorMask_Baked_FullBrightTexture = new HashMap<>();
+    public HashMap<FormTextureUtils.ColorSetting, Identifier> ColorMask_Baked_FullBrightTexture_Slim = new HashMap<>();
 
     // Hidden Parts
     public boolean Hidden_Hat = false;
@@ -112,6 +117,8 @@ public class FormModel extends GeoModel<FormAnimatable> {
         this.ColorMask_Baked_OverlayTexture_Slim.clear();
         this.ColorMask_Baked_EmissiveTexture.clear();
         this.ColorMask_Baked_EmissiveTexture_Slim.clear();
+        this.ColorMask_Baked_FullBrightTexture.clear();
+        this.ColorMask_Baked_FullBrightTexture_Slim.clear();
 
         this.Name = JsonHelper.getString(this.modelJson, "name", "");
         if (this.modelJson.has("layer")) {
@@ -171,7 +178,17 @@ public class FormModel extends GeoModel<FormAnimatable> {
         }
 
         this.FullBrightTextureResource = Identifier.tryParse(JsonHelper.getString(this.modelJson, "fullbright_texture", MissingTextureString));
+        if (this.modelJson.has("fullbright_texture_mask")) {
+            this.FullBrightTextureMaskResource = Identifier.tryParse(JsonHelper.getString(this.modelJson, "fullbright_texture_mask", MissingTextureString));
+        } else {
+            this.FullBrightTextureMaskResource = null;
+        }
         this.FullBrightTextureResource_Slim = Identifier.tryParse(JsonHelper.getString(this.modelJson, "fullbright_texture_slim", MissingTextureString));
+        if (this.modelJson.has("fullbright_texture_mask_slim")) {
+            this.FullBrightTextureMaskResource_Slim = Identifier.tryParse(JsonHelper.getString(this.modelJson, "fullbright_texture_mask_slim", MissingTextureString));
+        } else {
+            this.FullBrightTextureMaskResource_Slim = null;
+        }
 
         this.Animation = Identifier.tryParse(JsonHelper.getString(this.modelJson, "animations", MissingAnimationString));
 
@@ -192,18 +209,18 @@ public class FormModel extends GeoModel<FormAnimatable> {
             for (int i = 0; i < hiddenArray.size(); i++) {
                 String hidden = hiddenArray.get(i).getAsString();
                 switch (hidden) {
-                    case "hat" -> { this.Hidden_Hat = true; }
-                    case "head" -> { this.Hidden_Head = true; }
-                    case "body" -> { this.Hidden_Body = true; }
-                    case "jacket" -> { this.Hidden_Jacket = true; }
-                    case "leftArm" -> { this.Hidden_LeftArm = true; }
-                    case "rightArm" -> { this.Hidden_RightArm = true; }
-                    case "leftSleeve" -> { this.Hidden_LeftSleeve = true; }
-                    case "rightSleeve" -> { this.Hidden_RightSleeve = true; }
-                    case "leftLeg" -> { this.Hidden_LeftLeg = true; }
-                    case "rightLeg" -> { this.Hidden_RightLeg = true; }
-                    case "leftPants" -> { this.Hidden_LeftPants = true; }
-                    case "rightPants" -> { this.Hidden_RightPants = true; }
+                    case "hat" -> this.Hidden_Hat = true;
+                    case "head" -> this.Hidden_Head = true;
+                    case "body" -> this.Hidden_Body = true;
+                    case "jacket" -> this.Hidden_Jacket = true;
+                    case "leftArm" -> this.Hidden_LeftArm = true;
+                    case "rightArm" -> this.Hidden_RightArm = true;
+                    case "leftSleeve" -> this.Hidden_LeftSleeve = true;
+                    case "rightSleeve" -> this.Hidden_RightSleeve = true;
+                    case "leftLeg" -> this.Hidden_LeftLeg = true;
+                    case "rightLeg" -> this.Hidden_RightLeg = true;
+                    case "leftPants" -> this.Hidden_LeftPants = true;
+                    case "rightPants" -> this.Hidden_RightPants = true;
                 }
             }
         }
@@ -357,6 +374,32 @@ public class FormModel extends GeoModel<FormAnimatable> {
         return Resource;
     }
 
+    public Identifier getFullBrightTextureResource(boolean slim) {
+        boolean uslim = useSlim(slim);
+        Identifier Resource = uslim ? this.FullBrightTextureResource_Slim : this.FullBrightTextureResource;
+        Identifier ResourceMask = uslim ? this.FullBrightTextureMaskResource_Slim : this.FullBrightTextureMaskResource;
+        if (this.entity != null) {
+            FormSkinSystem.FormSkin formSkin = FormSkinSystem.getFormSkin(this.entity.getUuid(), this.Form);
+            if (formSkin != null) {
+                Identifier SkinResource = formSkin.getSkinFullBrightTexture(uslim);
+                if (SkinResource != null) {
+                    return SkinResource;
+                }
+            }
+        }
+        if (ResourceMask != null) {
+            if (FormTextureUtils.useTempFormTexture && Objects.equals(this.entity, MinecraftClient.getInstance().player)) {
+                return FormTextureUtils.tempFormTextureProcessor.getTexture(this.modelID, uslim ? "fullbright_texture_slim" : "fullbright_texture", Resource, ResourceMask, UseMultiplyMask);
+            }
+            FormTextureUtils.ColorSetting colorSetting = FormTextureUtils.getPlayerColorSetting(this.entity);
+            if (colorSetting != null) {
+                HashMap<FormTextureUtils.ColorSetting, Identifier> Cache = uslim ? ColorMask_Baked_FullBrightTexture_Slim : ColorMask_Baked_FullBrightTexture;
+                return readCacheOrBake(Cache, Resource, ResourceMask, colorSetting);
+            }
+        }
+        return Resource;
+    }
+
     public final HashMap<String, GeoBone> geoBoneCache = new HashMap<>();
 
     public final @Nullable GeoBone getCachedGeoBone(String name) {
@@ -394,10 +437,11 @@ public class FormModel extends GeoModel<FormAnimatable> {
             for(int i = 1; i < tailChain.size(); i++){
                 GeoBone chainBone = this.getCachedGeoBone(tailChain.get(i));
                 if (chainBone == null) {continue;}
+                float decayFactor = 0.75F + offset * 0.15F;  // 链骨权重衰减：越远越柔
                 if(!isFeral){
-                    chainBone.setRotY(- MathHelper.lerp(limbDistance, SWAY_SCALE * MathHelper.cos(age * SWAY_RATE - (((float)Math.PI / 3.0F) * offset)), 0.0f) - tailDragAmount * 0.75F);
+                    chainBone.setRotY(- MathHelper.lerp(limbDistance, SWAY_SCALE * MathHelper.cos(age * SWAY_RATE - (((float)Math.PI / 3.0F) * offset)), 0.0f) - tailDragAmount * decayFactor);
                 } else{
-                    chainBone.setRotZ(MathHelper.lerp(limbDistance, SWAY_SCALE * MathHelper.cos(age * SWAY_RATE - (((float)Math.PI / 3.0F) * offset)), 0.0f) + tailDragAmount * 0.75F);
+                    chainBone.setRotZ(MathHelper.lerp(limbDistance, SWAY_SCALE * MathHelper.cos(age * SWAY_RATE - (((float)Math.PI / 3.0F) * offset)), 0.0f) + tailDragAmount * decayFactor);
                 }
                 chainBone.setRotX(-tailDragAmountVertical * 0.75f * (offset + 0.75f));
                 offset += 0.75F;
@@ -467,13 +511,13 @@ public class FormModel extends GeoModel<FormAnimatable> {
         }
     }
 
-    public final GeoBone translatePositionForBone(String bone_name, Vec3d pos) {
+    public final void translatePositionForBone(String bone_name, Vec3d pos) {
         var b = this.getCachedGeoBone(bone_name);
         if (b == null) {
-            return null;
+            return;
         }
         var posOut = new Vec3d(pos.x + b.getPosX(), (float)pos.y + b.getPosY(),(float)pos.z + b.getPosZ());
-        return this.setPositionForBone(bone_name, posOut);
+        this.setPositionForBone(bone_name, posOut);
     }
 
     public final GeoBone setPositionForBone(String bone_name, Vec3d pos) {
@@ -484,7 +528,7 @@ public class FormModel extends GeoModel<FormAnimatable> {
         b.setPosX((float)pos.x);
         b.setPosY((float)pos.y);
         b.setPosZ((float)pos.z);
-        return (GeoBone) b;
+        return b;
     }
 
     public final GeoBone setRotationForBone(String bone_name, Vec3d rot) {
@@ -495,11 +539,11 @@ public class FormModel extends GeoModel<FormAnimatable> {
         b.setRotX((float)rot.x);
         b.setRotY((float)rot.y);
         b.setRotZ((float)rot.z);
-        return (GeoBone) b;
+        return b;
     }
 
-    public final GeoBone setRotationForBone(String bone_name, Vec3f rot) {
-        return setRotationForBone(bone_name, new Vec3d(rot.getX(), rot.getY(), rot.getZ()));
+    public final void setRotationForBone(String bone_name, Vec3f rot) {
+        setRotationForBone(bone_name, new Vec3d(rot.x(), rot.y(), rot.z()));
     }
 
     public final GeoBone setModelPositionForBone(String bone_name, Vec3d pos) {
@@ -508,11 +552,11 @@ public class FormModel extends GeoModel<FormAnimatable> {
             return null;
         }
         b.setModelPosition(new Vector3d(pos.x, pos.y, pos.z));
-        return (GeoBone) b;
+        return b;
     }
 
     public final GeoBone setModelPositionForBone(String bone_name, Vec3f pos) {
-        return setModelPositionForBone(bone_name, new Vec3d(pos.getX(), pos.getY(), pos.getZ()));
+        return setModelPositionForBone(bone_name, new Vec3d(pos.x(), pos.y(), pos.z()));
     }
 
     public final GeoBone setScaleForBone(String bone_name, Vec3d scale) {
@@ -523,21 +567,20 @@ public class FormModel extends GeoModel<FormAnimatable> {
         b.setScaleX((float)scale.x);
         b.setScaleY((float)scale.y);
         b.setScaleZ((float)scale.z);
-        return (GeoBone) b;
+        return b;
     }
 
     public final GeoBone setScaleForBone(String bone_name, Vec3f scale) {
-        return setScaleForBone(bone_name, new Vec3d(scale.getX(), scale.getY(), scale.getZ()));
+        return setScaleForBone(bone_name, new Vec3d(scale.x(), scale.y(), scale.z()));
     }
 
-    public final GeoBone invertRotForPart(String bone_name, boolean x, boolean y, boolean z) {
+    public final void invertRotForPart(String bone_name, boolean x, boolean y, boolean z) {
         var b = getCachedGeoBone(bone_name);
-        if (b == null) {return null;}
+        if (b == null) {return;}
         var r =b.getRotationVector().mul(x ? -1 : 1, y ? -1 : 1, z ? -1 : 1);
         b.setRotX((float) r.x);
         b.setRotY((float) r.y);
         b.setRotZ((float) r.z);
-        return b;
     }
 
     public final GeoBone resetBone(String bone_name) {
@@ -561,7 +604,7 @@ public class FormModel extends GeoModel<FormAnimatable> {
 
     public Identifier getFullbrightTextureResource(FormAnimatable animatable) {
         PlayerEntity player = animatable.e;
-        return useSlim(SlimMap.getOrDefault(player, false)) ? this.FullBrightTextureResource_Slim : this.FullBrightTextureResource;
+        return getFullBrightTextureResource(SlimMap.getOrDefault(player, false));
 
     }
 

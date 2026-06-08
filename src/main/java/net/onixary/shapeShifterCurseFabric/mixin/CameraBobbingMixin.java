@@ -77,8 +77,8 @@ public class CameraBobbingMixin {
         float amplitude = MathHelper.lerp(tickDelta, player.prevStrideDistance, player.strideDistance);
 
         matrices.translate(
-                (double)(MathHelper.sin(phase * MathHelper.PI) * amplitude * 0.5f),
-                (double)(-Math.abs(MathHelper.cos(phase * MathHelper.PI) * amplitude)),
+		        MathHelper.sin(phase * MathHelper.PI) * amplitude * 0.5f,
+		        -Math.abs(MathHelper.cos(phase * MathHelper.PI) * amplitude),
                 0.0
         );
         matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(
@@ -114,8 +114,8 @@ public class CameraBobbingMixin {
         float amplitude = MathHelper.lerp(tickDelta, player.prevStrideDistance, player.strideDistance) * 0.55f;
 
         matrices.translate(
-                (double)(MathHelper.sin(phase * MathHelper.PI) * amplitude * 0.3f),
-                (double)(-Math.abs(MathHelper.cos(phase * MathHelper.PI * 1.1f) * amplitude) * 1.2f),
+		        MathHelper.sin(phase * MathHelper.PI) * amplitude * 0.3f,
+		        -Math.abs(MathHelper.cos(phase * MathHelper.PI * 1.1f) * amplitude) * 1.2f,
                 0.0
         );
         matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(
@@ -136,7 +136,7 @@ public class CameraBobbingMixin {
 
         matrices.translate(
                 0.0,
-                (double)(-Math.abs(sin) * amplitude * 0.8f),
+		        -Math.abs(sin) * amplitude * 0.8f,
                 0.0
         );
         matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(

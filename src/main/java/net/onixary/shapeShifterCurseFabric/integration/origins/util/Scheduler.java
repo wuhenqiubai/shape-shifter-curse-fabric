@@ -44,14 +44,13 @@ public class Scheduler {
         ServerTickEvents.END_SERVER_TICK.register(m -> {
             this.currentTick = m.getTicks();
             List<Consumer<MinecraftServer>> runnables = this.taskQueue.remove(this.currentTick);
-            if (runnables != null) for (int i = 0; i < runnables.size(); i++) {
-                Consumer<MinecraftServer> runnable = runnables.get(i);
-                runnable.accept(m);
+            if (runnables != null) for (Consumer<MinecraftServer> runnable : runnables) {
+	            runnable.accept(m);
 
 	            if (runnable instanceof Repeating repeating) {// reschedule repeating tasks
 		            if (repeating.shouldQueue(this.currentTick))
-                        this.queue(runnable, ((Repeating) runnable).next);
-                }
+			            this.queue(runnable, repeating.next);
+	            }
             }
 
         });
@@ -104,27 +103,19 @@ public class Scheduler {
         }, tick, interval);
     }
 
-    private static final class Repeating implements Consumer<MinecraftServer> {
-        private final Consumer<MinecraftServer> task;
-        private final IntPredicate requeue;
-        public final int next;
-
-        private Repeating(Consumer<MinecraftServer> task, IntPredicate requeue, int interval) {
-            this.task = task;
-            this.requeue = requeue;
-            this.next = interval;
-        }
+    private record Repeating(Consumer<MinecraftServer> task, IntPredicate requeue,
+                             int next) implements Consumer<MinecraftServer> {
 
         public boolean shouldQueue(int predicate) {
-            if(this.requeue == null)
-                return true;
-            return this.requeue.test(predicate);
-        }
+                if (this.requeue == null)
+                    return true;
+                return this.requeue.test(predicate);
+            }
 
 
-        @Override
-        public void accept(MinecraftServer server) {
-            this.task.accept(server);
+            @Override
+            public void accept(MinecraftServer server) {
+                this.task.accept(server);
+            }
         }
-    }
 }

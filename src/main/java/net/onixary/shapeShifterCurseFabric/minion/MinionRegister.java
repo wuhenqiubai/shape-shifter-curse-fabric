@@ -113,7 +113,6 @@ public class MinionRegister {
             if (IsSpaceEmpty(world, pos, SpaceHeight)) {
                 return pos;
             }
-            continue;
         }
         return null;
     }

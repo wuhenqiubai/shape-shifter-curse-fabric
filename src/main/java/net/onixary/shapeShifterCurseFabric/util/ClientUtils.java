@@ -13,10 +13,7 @@ public class ClientUtils {
         if (isOpenInventoryScreen) {
             return false;
         }
-        if (!ShapeShifterCurseFabric.clientConfig.enableBetterCombatFix) {
-            return false;
-        }
-        return true;
+	    return ShapeShifterCurseFabric.clientConfig.enableBetterCombatFix;
     }
 
     public static boolean IsNowPlayingPlayer(PlayerEntity player) {

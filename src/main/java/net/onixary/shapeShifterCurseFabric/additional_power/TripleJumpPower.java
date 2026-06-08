@@ -39,11 +39,8 @@ public class TripleJumpPower extends Power {
 
     @Override
     public void tick() {
-        boolean shouldReset = false;
-        if (!entity.isSprinting()) {
-            shouldReset = true;
-        }
-        if (entity.isOnGround()) {
+        boolean shouldReset = !entity.isSprinting();
+	    if (entity.isOnGround()) {
             ticksOnGround++;
             if (ticksOnGround > resetTicksOnGround) {
                 shouldReset = true;

@@ -52,7 +52,7 @@ public class TransformativeAxolotlEntity extends AxolotlEntity implements Bucket
 
     @Override
     public ActionResult interactMob(PlayerEntity player, Hand hand) {
-        return (ActionResult)Bucketable.tryBucket(player, hand, this).orElse(super.interactMob(player, hand));
+        return Bucketable.tryBucket(player, hand, this).orElse(super.interactMob(player, hand));
     }
 
     public ItemStack getBucketItem() {

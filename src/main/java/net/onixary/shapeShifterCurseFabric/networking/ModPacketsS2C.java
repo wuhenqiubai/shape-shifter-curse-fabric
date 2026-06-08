@@ -540,15 +540,10 @@ public class ModPacketsS2C {
                     return;
                 }
                 switch (arg1) {
-                    case "form" -> {
-                        ShapeShifterCurseFabricClient.formColorData.customSettingByForm.computeIfAbsent(formID, k -> new HashMap<>()).put(arg2, nowColorSetting);
-                    }
-                    case "global" -> {
-                        ShapeShifterCurseFabricClient.formColorData.customSetting.put(arg2, nowColorSetting);
-                    }
-                    case "form_default" -> {
-                        ShapeShifterCurseFabricClient.formColorData.formDefaultSetting.put(formID, nowColorSetting);
-                    }
+                    case "form" ->
+		                    ShapeShifterCurseFabricClient.formColorData.customSettingByForm.computeIfAbsent(formID, k -> new HashMap<>()).put(arg2, nowColorSetting);
+                    case "global" -> ShapeShifterCurseFabricClient.formColorData.customSetting.put(arg2, nowColorSetting);
+                    case "form_default" -> ShapeShifterCurseFabricClient.formColorData.formDefaultSetting.put(formID, nowColorSetting);
                 }
                 ShapeShifterCurseFabricClient.formColorData.writeToConfig();
             }
@@ -558,15 +553,9 @@ public class ModPacketsS2C {
                 }
                 FormTextureUtils.ColorSetting colorSetting = null;
                 switch (arg1) {
-                    case "form" -> {
-                        colorSetting = ShapeShifterCurseFabricClient.formColorData.customSettingByForm.getOrDefault(formID, new HashMap<>()).getOrDefault(arg2, null);
-                    }
-                    case "global" -> {
-                        colorSetting = ShapeShifterCurseFabricClient.formColorData.customSetting.getOrDefault(arg2, null);
-                    }
-                    case "form_default" -> {
-                        colorSetting = ShapeShifterCurseFabricClient.formColorData.formDefaultSetting.getOrDefault(formID, null);
-                    }
+                    case "form" -> colorSetting = ShapeShifterCurseFabricClient.formColorData.customSettingByForm.getOrDefault(formID, new HashMap<>()).getOrDefault(arg2, null);
+                    case "global" -> colorSetting = ShapeShifterCurseFabricClient.formColorData.customSetting.getOrDefault(arg2, null);
+                    case "form_default" -> colorSetting = ShapeShifterCurseFabricClient.formColorData.formDefaultSetting.getOrDefault(formID, null);
                 }
                 if (colorSetting != null) {
                     ModPacketsS2C.sendUpdateCustomColor(colorSetting, false);
@@ -577,15 +566,10 @@ public class ModPacketsS2C {
                     return;
                 }
                 switch (arg1) {
-                    case "form" -> {
-                        ShapeShifterCurseFabricClient.formColorData.customSettingByForm.computeIfAbsent(formID, k -> new HashMap<>()).remove(arg2);
-                    }
-                    case "global" -> {
-                        ShapeShifterCurseFabricClient.formColorData.customSetting.remove(arg2);
-                    }
-                    case "form_default" -> {
-                        ShapeShifterCurseFabricClient.formColorData.formDefaultSetting.remove(formID);
-                    }
+                    case "form" ->
+		                    ShapeShifterCurseFabricClient.formColorData.customSettingByForm.computeIfAbsent(formID, k -> new HashMap<>()).remove(arg2);
+                    case "global" -> ShapeShifterCurseFabricClient.formColorData.customSetting.remove(arg2);
+                    case "form_default" -> ShapeShifterCurseFabricClient.formColorData.formDefaultSetting.remove(formID);
                 }
                 ShapeShifterCurseFabricClient.formColorData.writeToConfig();
             }

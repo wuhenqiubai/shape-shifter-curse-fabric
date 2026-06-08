@@ -1,15 +1,10 @@
 package net.onixary.shapeShifterCurseFabric.recipes;
 
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.item.trim.*;
-import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.SmithingRecipe;
-import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.screen.SmithingScreenHandler;
-import net.minecraft.recipe.Recipe;
 import net.minecraft.recipe.input.SmithingRecipeInput;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.util.Identifier;

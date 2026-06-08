@@ -144,7 +144,7 @@ public class TransformManager {
                 toForm = getRandomOrBuffForm(player);
                 // 触发自定义成就
                 // Trigger custom achievement
-                ShapeShifterCurseFabric.ON_TRANSFORM_0.trigger((ServerPlayerEntity) player);
+                ShapeShifterCurseFabric.ON_TRANSFORM_0.trigger(player);
                 break;
             case PlayerFormPhase.INDEX_PHASE_0:
                 toForm = currentFormGroup.getForm(1);
@@ -158,7 +158,7 @@ public class TransformManager {
                     data._isRegressedFromFinal = true;
                     // 触发自定义成就
                     // Trigger custom achievement
-                    ShapeShifterCurseFabric.ON_TRIGGER_CURSED_MOON_FORM_2.trigger((ServerPlayerEntity) player);
+                    ShapeShifterCurseFabric.ON_TRIGGER_CURSED_MOON_FORM_2.trigger(player);
                 } else {
                     ShapeShifterCurseFabric.LOGGER.info("Triggered transformation when at max phase, this should not happen!");
                 }
@@ -184,7 +184,7 @@ public class TransformManager {
         data.curPlayer = player;
         data.curToForm = toForm;
 	    ShapeShifterCurseFabric.LOGGER.info("Cur Player: {} To Form: {}", data.curPlayer, data.curToForm);
-        applyStartTransformEffect((ServerPlayerEntity) player, StaticParams.TRANSFORM_FX_DURATION_IN);
+        applyStartTransformEffect(player, StaticParams.TRANSFORM_FX_DURATION_IN);
         handleTransformEffect(player);
         RegPlayerFormComponent.PLAYER_FORM.sync(player);
     }
@@ -447,21 +447,33 @@ public class TransformManager {
         if (!isByCure) {
             switch (toFormIndex) {
                 case PlayerFormPhase.INDEX_PHASE_0:
-                    ShapeShifterCurseFabric.ON_TRANSFORM_0.trigger((ServerPlayerEntity) player);
-                    ShapeShifterCurseFabric.ON_FIRST_TRANSFORM_ENABLE_FORM_LIST.trigger((ServerPlayerEntity) player);
-                    break;
+	                if (player instanceof ServerPlayerEntity) {
+		                ShapeShifterCurseFabric.ON_TRANSFORM_0.trigger((ServerPlayerEntity) player);
+	                }
+	                if (player instanceof ServerPlayerEntity) {
+		                ShapeShifterCurseFabric.ON_FIRST_TRANSFORM_ENABLE_FORM_LIST.trigger((ServerPlayerEntity) player);
+	                }
+	                break;
                 case PlayerFormPhase.INDEX_PHASE_1:
-                    ShapeShifterCurseFabric.ON_TRANSFORM_1.trigger((ServerPlayerEntity) player);
-                    break;
+	                if (player instanceof ServerPlayerEntity) {
+		                ShapeShifterCurseFabric.ON_TRANSFORM_1.trigger((ServerPlayerEntity) player);
+	                }
+	                break;
                 case PlayerFormPhase.INDEX_PHASE_2:
-                    ShapeShifterCurseFabric.ON_TRANSFORM_2.trigger((ServerPlayerEntity) player);
-                    break;
+	                if (player instanceof ServerPlayerEntity) {
+		                ShapeShifterCurseFabric.ON_TRANSFORM_2.trigger((ServerPlayerEntity) player);
+	                }
+	                break;
                 case PlayerFormPhase.INDEX_PHASE_3:
-                    ShapeShifterCurseFabric.ON_TRANSFORM_3.trigger((ServerPlayerEntity) player);
-                    break;
+	                if (player instanceof ServerPlayerEntity) {
+		                ShapeShifterCurseFabric.ON_TRANSFORM_3.trigger((ServerPlayerEntity) player);
+	                }
+	                break;
                 case PlayerFormPhase.INDEX_PHASE_SP:
-                    ShapeShifterCurseFabric.ON_TRANSFORM_SP.trigger((ServerPlayerEntity) player);
-                    break;
+	                if (player instanceof ServerPlayerEntity) {
+		                ShapeShifterCurseFabric.ON_TRANSFORM_SP.trigger((ServerPlayerEntity) player);
+	                }
+	                break;
                 default:
                     break;
             }
@@ -469,7 +481,9 @@ public class TransformManager {
 
 	    ShapeShifterCurseFabric.LOGGER.info("Cur Player: {} To Form: {}", data.curPlayer, data.curToForm);
         handleTransformEffect(player);
-        applyStartTransformEffect((ServerPlayerEntity) player, StaticParams.TRANSFORM_FX_DURATION_IN);
+	    if (player instanceof ServerPlayerEntity) {
+		    applyStartTransformEffect((ServerPlayerEntity) player, StaticParams.TRANSFORM_FX_DURATION_IN);
+	    }
     }
 
     // 双端 但我觉得是仅服务端 继承于handleDirectTransform
@@ -526,21 +540,31 @@ public class TransformManager {
         int toFormIndex = data.curToForm.getIndex();
         switch (toFormIndex) {
             case PlayerFormPhase.INDEX_PHASE_0:
-                ShapeShifterCurseFabric.ON_TRANSFORM_0.trigger((ServerPlayerEntity) player);
-                ShapeShifterCurseFabric.ON_FIRST_TRANSFORM_ENABLE_FORM_LIST.trigger((ServerPlayerEntity) player);
+	            if (player instanceof ServerPlayerEntity) {
+		            ShapeShifterCurseFabric.ON_TRANSFORM_0.trigger((ServerPlayerEntity) player);
+	            }
+	            ShapeShifterCurseFabric.ON_FIRST_TRANSFORM_ENABLE_FORM_LIST.trigger((ServerPlayerEntity) player);
                 break;
             case PlayerFormPhase.INDEX_PHASE_1:
-                ShapeShifterCurseFabric.ON_TRANSFORM_1.trigger((ServerPlayerEntity) player);
-                break;
+	            if (player instanceof ServerPlayerEntity) {
+		            ShapeShifterCurseFabric.ON_TRANSFORM_1.trigger((ServerPlayerEntity) player);
+	            }
+	            break;
             case PlayerFormPhase.INDEX_PHASE_2:
-                ShapeShifterCurseFabric.ON_TRANSFORM_2.trigger((ServerPlayerEntity) player);
-                break;
+	            if (player instanceof ServerPlayerEntity) {
+		            ShapeShifterCurseFabric.ON_TRANSFORM_2.trigger((ServerPlayerEntity) player);
+	            }
+	            break;
             case PlayerFormPhase.INDEX_PHASE_3:
-                ShapeShifterCurseFabric.ON_TRANSFORM_3.trigger((ServerPlayerEntity) player);
-                break;
+	            if (player instanceof ServerPlayerEntity) {
+		            ShapeShifterCurseFabric.ON_TRANSFORM_3.trigger((ServerPlayerEntity) player);
+	            }
+	            break;
             case PlayerFormPhase.INDEX_PHASE_SP:
-                ShapeShifterCurseFabric.ON_TRANSFORM_SP.trigger((ServerPlayerEntity) player);
-                break;
+	            if (player instanceof ServerPlayerEntity) {
+		            ShapeShifterCurseFabric.ON_TRANSFORM_SP.trigger((ServerPlayerEntity) player);
+	            }
+	            break;
             default:
                 break;
         }

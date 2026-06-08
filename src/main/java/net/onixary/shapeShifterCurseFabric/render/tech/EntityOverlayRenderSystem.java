@@ -1,6 +1,6 @@
 package net.onixary.shapeShifterCurseFabric.render.tech;
 
-import mod.azure.azurelib.common.api.client.renderer.GeoObjectRenderer;
+import software.bernie.geckolib.renderer.GeoObjectRenderer;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.util.math.MatrixStack;
@@ -34,7 +34,7 @@ public class EntityOverlayRenderSystem {
             public void render(Entity entity, float yaw, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light) {
                 matrices.push();
                 matrices.translate(-0.5, -0.5, -0.5);
-                cocoonRenderer.render(matrices, EmptyAnimatable, vertexConsumers, RenderLayer.getEntityTranslucent(cocoonModel.getTextureResource(EmptyAnimatable)), null, light);
+                cocoonRenderer.render(matrices, EmptyAnimatable, vertexConsumers, RenderLayer.getEntityTranslucent(cocoonModel.getTextureResource(EmptyAnimatable)), null, light, tickDelta);
                 matrices.pop();
             }
         });

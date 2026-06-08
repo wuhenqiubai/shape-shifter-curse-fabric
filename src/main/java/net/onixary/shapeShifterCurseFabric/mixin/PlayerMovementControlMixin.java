@@ -55,15 +55,11 @@ public class PlayerMovementControlMixin {
             return; // 组件未初始化，跳过处理
         }
 
-        BatBlockAttachPower attachPower = PowerHolderComponent.getPowers(player, BatBlockAttachPower.class)
-                .stream()
-                .filter(BatBlockAttachPower::isAttached)
-                .findFirst()
-                .orElse(null);
+	    PowerHolderComponent.getPowers(player, BatBlockAttachPower.class)
+			    .stream()
+			    .filter(BatBlockAttachPower::isAttached)
+			    .findFirst().ifPresent(attachPower -> cir.setReturnValue(0.0f));
 
-        if (attachPower != null) {
-            cir.setReturnValue(0.0f);
-        }
     }
 
     @Inject(method = "jump", at = @At("HEAD"), cancellable = true)

@@ -168,7 +168,7 @@ public class TransformRelatedItems {
                 if (EffectManager.hasTransformativeEffect(player)) {
                     EffectManager.ActiveTransformativeEffect(player);
                     player.sendMessage(Text.translatable("info.shape-shifter-curse.origin_form_used_catalyst_attached").formatted(Formatting.YELLOW));
-                    ShapeShifterCurseFabric.ON_TRANSFORM_BY_CATALYST.trigger((ServerPlayerEntity) player);
+                    ShapeShifterCurseFabric.ON_TRANSFORM_BY_CATALYST.trigger(player);
                 }
                 else{
                     player.sendMessage(Text.translatable("info.shape-shifter-curse.origin_form_used_catalyst").formatted(Formatting.YELLOW));

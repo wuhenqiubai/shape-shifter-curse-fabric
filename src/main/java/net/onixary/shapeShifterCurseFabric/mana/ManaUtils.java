@@ -257,16 +257,16 @@ public class ManaUtils {
         return getManaComponent(player).getManaTypeID();
     }
 
-    public static double setPlayerMana(PlayerEntity player, double mana) {
-        return getManaComponent(player).setMana(mana);
+    public static void setPlayerMana(PlayerEntity player, double mana) {
+        getManaComponent(player).setMana(mana);
     }
 
-    public static double gainPlayerMana(PlayerEntity player, double mana) {
-        return getManaComponent(player).gainMana( mana);
+    public static void gainPlayerMana(PlayerEntity player, double mana) {
+        getManaComponent(player).gainMana(mana);
     }
 
-    public static double consumePlayerMana(PlayerEntity player, double mana) {
-        return getManaComponent(player).consumeMana(mana);
+    public static void consumePlayerMana(PlayerEntity player, double mana) {
+        getManaComponent(player).consumeMana(mana);
     }
 
     public static void gainPlayerManaWithTime(PlayerEntity player, double mana, int time) {

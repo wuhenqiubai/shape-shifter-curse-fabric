@@ -62,12 +62,11 @@ public class UseOtherStateAnimController extends AbstractAnimStateControllerDP {
     }
 
     @Override
-    public AbstractAnimStateController loadFormJson(JsonObject jsonData) {
+    public void loadFormJson(JsonObject jsonData) {
         if (jsonData != null && jsonData.has("StateControllerId") && jsonData.get("StateControllerId").isJsonPrimitive())  {
             this.otherStateId = Identifier.tryParse(jsonData.get("StateControllerId").getAsString());
         } else {
             this.otherStateId = null;
         }
-        return this;
     }
 }

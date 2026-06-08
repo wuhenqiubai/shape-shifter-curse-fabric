@@ -84,37 +84,25 @@ public class WebBullet extends ThrownItemEntity {
                 launched = true;
                 if (this.owner != null) {
                     switch (Tier) {
-                        case 1 -> {
-                            serverWorld.playSound(null, this.owner.getX(), this.owner.getY(), this.owner.getZ(),
-                                    SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.NEUTRAL, 1.0f, 0.6f + this.random.nextFloat() * 0.4f);
-                        }
-                        case 2 -> {
-                            serverWorld.playSound(null, this.owner.getX(), this.owner.getY(), this.owner.getZ(),
-                                    SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.NEUTRAL, 1.0f, 0.9f + this.random.nextFloat() * 0.4f);
-                        }
-                        case 3 -> {
-                            serverWorld.playSound(null, this.owner.getX(), this.owner.getY(), this.owner.getZ(),
-                                    SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.NEUTRAL, 1.0f, 1.2f + this.random.nextFloat() * 0.4f);
-                        }
+                        case 1 -> serverWorld.playSound(null, this.owner.getX(), this.owner.getY(), this.owner.getZ(),
+                                SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.NEUTRAL, 1.0f, 0.6f + this.random.nextFloat() * 0.4f);
+                        case 2 -> serverWorld.playSound(null, this.owner.getX(), this.owner.getY(), this.owner.getZ(),
+                                SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.NEUTRAL, 1.0f, 0.9f + this.random.nextFloat() * 0.4f);
+                        case 3 -> serverWorld.playSound(null, this.owner.getX(), this.owner.getY(), this.owner.getZ(),
+                                SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.NEUTRAL, 1.0f, 1.2f + this.random.nextFloat() * 0.4f);
                     }
                 }
             }
             switch (Tier) {
-                case 1 -> {
-                    serverWorld.spawnParticles(ParticleTypes.ASH,
-                            this.getX(), this.getY(), this.getZ(),
-                            3, 0.05, 0.05, 0.05, 0.01);
-                }
-                case 2 -> {
-                    serverWorld.spawnParticles(ParticleTypes.SPIT,
-                            this.getX(), this.getY(), this.getZ(),
-                            1, 0.05, 0.05, 0.05, 0.01);
-                }
-                case 3 -> {
-                    serverWorld.spawnParticles(ParticleTypes.CLOUD,
-                            this.getX(), this.getY(), this.getZ(),
-                            2, 0.05, 0.05, 0.05, 0.01);
-                }
+                case 1 -> serverWorld.spawnParticles(ParticleTypes.ASH,
+                        this.getX(), this.getY(), this.getZ(),
+                        3, 0.05, 0.05, 0.05, 0.01);
+                case 2 -> serverWorld.spawnParticles(ParticleTypes.SPIT,
+                        this.getX(), this.getY(), this.getZ(),
+                        1, 0.05, 0.05, 0.05, 0.01);
+                case 3 -> serverWorld.spawnParticles(ParticleTypes.CLOUD,
+                        this.getX(), this.getY(), this.getZ(),
+                        2, 0.05, 0.05, 0.05, 0.01);
             }
 
             if (this.getWorld().getBlockState(this.getBlockPos()).isLiquid()) {

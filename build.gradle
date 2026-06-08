@@ -4,15 +4,13 @@ plugins {
     //id("com.gradleup.shadow") version "8.3.6"
 }
 
-version = "${project.mod_version}-${build_type}+build.${build_number}+mc.1.21.1"
 group = project.maven_group
 
-// 从Github Action 环境获取构建Channel和BuildVersion
-def channel = System.getenv('channel')
-def build_version = System.getenv('build_version')
-if (channel != null) {
-    version = "${project.mod_version}-${channel}.${build_version}"
-}
+// 统一版本号格式: mod_version-channel.build_number+mc.minecraft_version
+// CI 通过环境变量 channel / build_version 覆盖，本地使用 gradle.properties 默认值
+def channel = System.getenv('channel') ?: build_type
+def build_version = System.getenv('build_version') ?: build_number
+version = "${project.mod_version}-${channel}.${build_version}+mc.${minecraft_version}"
 
 base {
     archivesName = project.archives_base_name
@@ -35,13 +33,7 @@ loom {
 }
 
 repositories {
-    // Local maven repo for patched dependencies (must be first)
-    maven {
-        url = uri("${project.projectDir}/libs/maven_local")
-    }
-    flatDir {
-        dir 'libs'
-    }
+
     // Add repositories to retrieve artifacts from in here.
     // You should only use this when depending on other mods because
     // Loom adds the essential maven repositories to download Minecraft and libraries from automatically.
@@ -50,15 +42,10 @@ repositories {
     maven {
         url 'https://maven.aliyun.com/nexus/content/groups/public'
     }
-    //maven {
-        //url 'https://repository.hanbings.io/proxy'
-        //mavenCentral()
+    mavenCentral()
     //}
 
-    // The Maven with the mods source
-    maven { url 'https://maven.azuredoom.com/mods' }
-
-    maven { url 'https://dl.cloudsmith.io/public/azuredoom-mods/azurelib/maven/' }
+    // The Maven with the mods source (AzureDoom Maven - no longer needed for GeckoLib)
 
     //Owo
     maven { url 'https://maven.wispforest.io/releases/' }
@@ -120,7 +107,6 @@ repositories {
     maven {
         url = "https://jitpack.io"
     }
-    // maven { url = "https://maven.shedaniel.me" } // Disabled: GMM not compatible with Loom
     maven {
         url = "https://maven.terraformersmc.com"
     }
@@ -136,6 +122,18 @@ repositories {
         url = "https://raw.githubusercontent.com/Fuzss/modresources/main/maven/"
     }
     maven { url "https://maven.ryanliptak.com/" }
+    maven {
+        name = "RedlanceMinecraft"
+        url = "https://repo.redlance.org/public"
+    }
+    maven { url "https://maven.shedaniel.me/" }
+    maven {
+        name = 'GeckoLib'
+        url 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/'
+        content {
+            includeGroup("software.bernie.geckolib")
+        }
+    }
 
     mavenLocal()
 }
@@ -159,11 +157,13 @@ dependencies {
     //    parchment("org.parchmentmc.data:parchment-1.20.1:2023.09.03@zip")
     //}
 
-    //Common 1.20.1+ Latest Only
-    //compileOnly "mod.azure.azurelib:azurelib-common-1.20.1:2.0.41"
+    //Common 1.20.1+ Latest Only (unused - replaced by GeckoLib)
 
-    //Fabric or Quilt
-    modImplementation "mod.azure.azurelib:azurelib-fabric-1.21.1:${azurelib_version}"
+    //AzureLib
+    //modImplementation "mod.azure.azurelib:azurelib-fabric-1.21.1:${azurelib_version}"
+
+    //GeckoLib
+    modImplementation "software.bernie.geckolib:geckolib-fabric-${minecraft_version}:${geckolib_version}"
 
 
     //Owo
@@ -217,8 +217,8 @@ dependencies {
     modApi("com.jamieswhiteshirt:reach-entity-attributes:${project.reach_version}")
     //  Modmenu
     modImplementation "com.terraformersmc:modmenu:${project.mod_menu_version}"
-    // Player Anim
-    modImplementation("dev.kosmx.player-anim:player-animation-lib-fabric:${project.player_anim}")
+    // Player Animation Library
+    modImplementation "com.zigythebird.playeranim:PlayerAnimationLibFabric:$pal_version"
 
     // Trinkets
 
@@ -236,7 +236,6 @@ dependencies {
     modCompileOnly "maven.modrinth:origins-classes:EnGfmh9y"
     modCompileOnly "maven.modrinth:bendy-lib:DFxVCaiC"
     modCompileOnly "maven.modrinth:better-combat:MxaoPSMy"
-    modCompileOnly "maven.modrinth:playeranimator:cfkAgcOh"
     modCompileOnly "maven.modrinth:first-person-model:mquWPSix"
     modRuntimeOnly "maven.modrinth:first-person-model:mquWPSix"
 
@@ -244,7 +243,7 @@ dependencies {
     modLocalRuntime "squeek.appleskin:appleskin-fabric:mc1.21-3.0.6"
 
     modCompileOnly "maven.modrinth:vivecraft:9Sa2NEEb"
-    annotationProcessor(files("libs/mixinextras-fabric-0.2.0-beta.8.jar"))
+    annotationProcessor(files("_dev/libs/mixinextras-fabric-0.4.1.jar"))
 
     modCompileOnly "maven.modrinth:tacz-refabricated:HxQ3IsAZ" // TaCZ: Refabricated 1.20.1-0.4.0-forge1.1.7-hotfix
 
@@ -304,7 +303,7 @@ tasks.register('fixEmbeddedModVersions') {
         }
         def jarsDir = new File(tmpDir, 'META-INF/jars')
         jarsDir.listFiles()?.each { embedded ->
-            if (embedded.name.contains('apoli') || embedded.name.contains('calio') || embedded.name.contains('azurelib')) {
+            if (embedded.name.contains('apoli') || embedded.name.contains('calio')) {
                 def extractDir = new File(tmpDir, embedded.name + '-tmp')
                 extractDir.mkdir()
                 copy { from zipTree(embedded); into extractDir }
@@ -315,18 +314,6 @@ tasks.register('fixEmbeddedModVersions') {
                     txt = txt.replace('"minecraft": "1.21.x"', '"minecraft": "1.21.1"')
                     modJson.text = txt
                 }
-//                if (embedded.name.contains('azurelib')) {
-//                    // Delete TextureManagerMixin - causes AnimatableTexture NPE with null IDs in 1.21.1
-//                    project.delete fileTree(extractDir) { include '**/TextureManagerMixin*.class' }
-//                    def cfg = new File(extractDir, 'azurelib.fabric.mixins.json')
-//                    if (cfg.exists()) {
-//                        def json = new groovy.json.JsonSlurper().parse(cfg) as Map
-//                        json.mixins = json.mixins.findAll { !it.contains('TextureManagerMixin') }
-//                        json.client = (json.client ?: []).findAll { !it.contains('TextureManagerMixin') }
-//                        json.server = (json.server ?: []).findAll { !it.contains('TextureManagerMixin') }
-//                        cfg.text = groovy.json.JsonOutput.prettyPrint(groovy.json.JsonOutput.toJson(json))
-//                    }
-//                }
 //                if (embedded.name.contains('apoli')) {
 //                    // Delete EquipmentMixin - restrict_armor condition context mismatch in 1.21
 //                    project.delete fileTree(extractDir) { include '**/EquipmentMixin*.class' }

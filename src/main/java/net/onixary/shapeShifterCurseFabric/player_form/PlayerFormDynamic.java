@@ -24,16 +24,53 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
+/**
+ * 从 JSON 数据包动态加载的形态，继承 {@link PlayerFormBase}。
+ * <p>
+ * 数据包形态完全通过 JSON 定义，支持动画控制器、Power 动画、额外 Origin Power、赞助者限定等功能。
+ * 服务端数据包重载后通过 {@link RegPlayerForms} 注册，客户端通过 {@link FormModelResourceReloadListener} 同步模型。
+ * <p>
+ * JSON 数据包格式示例：
+ * <pre>
+ * {
+ *   "FormID": "ssc:custom_form",
+ *   "phase": "PHASE_0",
+ *   "bodyType": "FERAL",
+ *   "FurModelID": "ssc:models/custom_form.geo.json",
+ *   "groupID": "ssc:custom_group",
+ *   "groupIndex": 0,
+ *   "anim": { ... },
+ *   "powerAnim": { ... },
+ *   "ExtraPower": [ ... ]
+ * }
+ * </pre>
+ *
+ * @see PlayerFormBase
+ * @see RegPlayerForms
+ */
 public class PlayerFormDynamic extends PlayerFormBase{
 
+	/**
+	 * 通配 UUID，表示对所有玩家公开。用于 {@link #PlayerUUIDs} 白名单。
+	 */
     public static final UUID PublicUUID = UUID.fromString("00000000-0000-0000-0000-000000000000");
 
+	/** 形态模型的 GeoModel ID，对应 {@link FormModelResourceReloadListener} 中注册的模型 ID。 */
     public Identifier FurModelID = null;
+	/** 额外 Origin Power ID 列表。这些 power 会在形态激活时一并赋予玩家。 */
 	public List<Identifier> ExtraPower = new LinkedList<>();
+	/** 额外 Origin Power 的原始 JSON 数据，键为注册后的 power ID。 */
     public HashMap<Identifier, JsonObject> ExtraPowerData = new LinkedHashMap<>();
     private int TempPowerIndex = 0;
-    public boolean IsPatronForm = false;  // 可以使用特殊物品直接变形
-    public int RequirePatronLevel = 0;  // 需要的赞助等级
+	/**
+	 * 是否是赞助者限定形态（可以使用特殊物品直接变形）。
+	 */
+	public boolean IsPatronForm = false;
+	/**
+	 * 所需的最低赞助等级。赞助等级低于此值的玩家无法使用。
+	 */
+	public int RequirePatronLevel = 0;
+	/** 可使用的玩家 UUID 白名单。为空则不限制；包含 {@link #PublicUUID} 则对所有玩家公开。 */
 	public List<UUID> PlayerUUIDs = new ArrayList<>();
 
     // 覆写数据
@@ -43,11 +80,14 @@ public class PlayerFormDynamic extends PlayerFormBase{
     private JsonObject formData = null;  // 我觉得可以不用save出JsonObject 在load的时候直接保存原始JsonObject 省的给一堆的Field写序列化
 
     private PlayerFormDynamic(Identifier id) {
-        super(id);
+	    super(id);
     }
 
-    public boolean isModelExist() {
-	    return FormRenderUtils.formRendererRegistry.getOrDefault(FormModelResourceReloadListener.defaultLayer, new HashMap<>()).containsKey(this.getFormOriginID());
+    private static boolean _Gson_GetBoolean(JsonObject data, String key, boolean defaultValue) {
+        if (data.has(key)) {
+            return data.get(key).getAsBoolean();
+        }
+	    return defaultValue;
     }
 
     private Map<Identifier, AbstractAnimStateController> animStateControllerMap = new HashMap<>();
@@ -65,11 +105,17 @@ public class PlayerFormDynamic extends PlayerFormBase{
         powerAnimBuilderMap.put(powerAnimID, powerAnimData);
     }
 
-    public @Nullable AbstractAnimStateController getAnimStateController(PlayerEntity player, AnimSystem.AnimSystemData animSystemData, @NotNull Identifier animStateID) {
-        if (!this.isModelExist()) {
-            return AnimUtils.EMPTY_CONTROLLER; // 如果未加载模型则不修改动画
-        }
-        return animStateControllerMap.getOrDefault(animStateID, defaultAnimStateController);
+	/**
+	 * 创建并加载一个动态形态。
+	 *
+	 * @param id       形态 ID
+	 * @param formData 形态 JSON 数据
+	 * @return 已加载的动态形态实例
+	 */
+    public static PlayerFormDynamic of(Identifier id, JsonObject formData) {
+        PlayerFormDynamic form = new PlayerFormDynamic(id);
+        form.load(formData);
+	    return form;
     }
 
     @Override
@@ -108,13 +154,51 @@ public class PlayerFormDynamic extends PlayerFormBase{
         return defaultValue;
     }
 
-    private static boolean _Gson_GetBoolean(JsonObject data, String key, boolean defaultValue) {
-        if (data.has(key)) {
-            return data.get(key).getAsBoolean();
+	/**
+	 * 从 JSON 数据创建动态形态，FormID 从 JSON 中读取。
+	 *
+	 * @param formData 包含 {@code FormID} 字段的形态 JSON 数据
+	 * @return 已加载的动态形态实例
+	 * @throws IllegalArgumentException 如果 JSON 中未包含 FormID
+	 */
+    public static PlayerFormDynamic of(JsonObject formData) throws IllegalArgumentException {
+        PlayerFormDynamic form = new PlayerFormDynamic(null);
+        form.load(formData);
+        if (form.FormID == null) {
+            throw new IllegalArgumentException("FormID is required");
         }
-        return defaultValue;
+        return form;
     }
 
+	/** @return 此形态的 GeoModel 模型文件是否已加载 */
+	public boolean isModelExist() {
+		return FormRenderUtils.formRendererRegistry.getOrDefault(FormModelResourceReloadListener.defaultLayer, new HashMap<>()).containsKey(this.getFormOriginID());
+    }
+
+	/**
+	 * 获取指定动画状态对应的控制器。
+	 * <p>
+	 * 如果模型未加载则返回空控制器，跳过此状态的动画覆盖。
+	 *
+	 * @param player         目标玩家
+	 * @param animSystemData 动画系统数据
+	 * @param animStateID    动画状态 ID
+	 * @return 状态控制器，模型未加载或未配置时返回空控制器
+	 */
+    public @Nullable AbstractAnimStateController getAnimStateController(PlayerEntity player, AnimSystem.AnimSystemData animSystemData, @NotNull Identifier animStateID) {
+        if (!this.isModelExist()) {
+            return AnimUtils.EMPTY_CONTROLLER; // 如果未加载模型则不修改动画
+        }
+        return animStateControllerMap.getOrDefault(animStateID, defaultAnimStateController);
+    }
+
+	/**
+	 * 从 JSON 对象加载此形态的所有配置数据。
+	 * <p>
+	 * 包括阶段、体型、动画控制器、Power 动画、Origin 覆盖、形态组、模型 ID、额外 Power、赞助者信息等。
+	 *
+	 * @param formData 形态 JSON 数据
+	 */
     public void load(JsonObject formData) {
         try {
             if (formData.has("FormID")) {
@@ -195,9 +279,18 @@ public class PlayerFormDynamic extends PlayerFormBase{
         catch(Exception e) {
             ShapeShifterCurseFabric.LOGGER.error("Error while loading player form: {}", e.getMessage());
         }
-        this.formData = formData;
+	    this.formData = formData;
     }
 
+	/**
+	 * 保存此形态的 JSON 配置数据。
+	 * <p>
+	 * 实际上返回的是 {@link #load} 时保存的原始 JSON 副本，而非重新序列化各字段。
+	 * 这样可以保留原始数据格式，避免序列化丢失信息。
+	 *
+	 * @return 形态 JSON 数据
+	 * @throws RuntimeException 如果在 {@link #load} 之前调用
+	 */
     public JsonObject save() {
         /*
         JsonObject data = new JsonObject();
@@ -244,22 +337,7 @@ public class PlayerFormDynamic extends PlayerFormBase{
         if (this.formData == null) {
             throw new RuntimeException("PlayerFormDynamic.save() called before load()");
         }
-        return this.formData;
-    }
-
-    public static PlayerFormDynamic of(Identifier id, JsonObject formData) {
-        PlayerFormDynamic form = new PlayerFormDynamic(id);
-        form.load(formData);
-        return form;
-    }
-
-    public static PlayerFormDynamic of(JsonObject formData) throws IllegalArgumentException {
-        PlayerFormDynamic form = new PlayerFormDynamic(null);
-        form.load(formData);
-        if (form.FormID == null) {
-            throw new IllegalArgumentException("FormID is required");
-        }
-        return form;
+	    return this.formData;
     }
 
     @Override
@@ -272,7 +350,16 @@ public class PlayerFormDynamic extends PlayerFormBase{
         return this.originLayerID != null ? this.originLayerID : super.getFormOriginLayerID();
     }
 
-    // 添加在玩家自选Form的UI判断
+	/**
+	 * 判断指定玩家是否有权限使用此形态。
+	 * <p>
+	 * 判断逻辑：如果 {@link #PlayerUUIDs} 白名单中包含该玩家或 {@link #PublicUUID}，
+	 * 则该玩家可用。如果白名单为空则默认允许。
+	 * 此外还需满足 {@link #RequirePatronLevel} 的赞助等级要求。
+	 *
+	 * @param player 要判断的玩家
+     * @return 该玩家是否可以使用此形态
+     */
     public boolean IsPlayerCanUse(PlayerEntity player) {
         // PlayerUUIDs 为白名单 为空则无限制
         if (this.PlayerUUIDs.contains(player.getUuid())) {
@@ -281,6 +368,13 @@ public class PlayerFormDynamic extends PlayerFormBase{
         return (this.PlayerUUIDs.isEmpty() || this.PlayerUUIDs.contains(PublicUUID)) && (PatronUtils.PatronLevels.getOrDefault(player.getUuid(), 0) >= this.RequirePatronLevel);
     }
 
+	/**
+	 * 获取此形态附加的所有额外 Origin Power ID。
+	 * <p>
+	 * 包含 {@link #ExtraPower} 列表中的预注册 ID，以及 {@link #ExtraPowerData} 中动态注册的 power ID。
+	 *
+     * @return Power ID 列表
+     */
     public List<Identifier> getExtraPower() {
         List<Identifier> powerList = new LinkedList<>(this.ExtraPower);
         // this.ExtraPowerData

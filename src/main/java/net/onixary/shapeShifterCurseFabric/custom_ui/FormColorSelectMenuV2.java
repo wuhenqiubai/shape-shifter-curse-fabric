@@ -305,6 +305,11 @@ public class FormColorSelectMenuV2 extends Screen implements FormTextureUtils.Te
         return false;
     }
 
+    @Override
+    public void renderBackground(DrawContext context, int mouseX, int mouseY, float delta) {
+        // 自定义背景纹理完全遮挡，不需要暗色渐变
+    }
+
     // FCS按钮生成函数
     private void createSaveDataButtons(int Index, int X, int Y) {
         // X,Y,80,15
@@ -325,9 +330,7 @@ public class FormColorSelectMenuV2 extends Screen implements FormTextureUtils.Te
 
         // X+15,Y+0,40,15 slot name input
         TextFieldWidget textFieldWidget = new TextFieldWidget(this.textRenderer, X + 15, Y, 40, 15, EmptyText);
-        textFieldWidget.setChangedListener((text) -> {
-            this.onGlobalSlotNameChanged(Index);
-        });
+        textFieldWidget.setChangedListener((text) -> this.onGlobalSlotNameChanged(Index));
         // X+55,Y+0,15,15 delete Button
         FCS_ButtonWidget deleteButtonWidget = new FCS_ButtonWidget(X + 55, Y, EmptyText, (button -> {
             if (button instanceof FCS_ButtonWidget fcsButtonWidget) {
@@ -394,11 +397,11 @@ public class FormColorSelectMenuV2 extends Screen implements FormTextureUtils.Te
             } else {
                 int Color = 0x00FFFFFF;
                 switch (this.SliderIndex) {
-                    case 0 -> { Color = this.primaryColor; }
-                    case 1 -> { Color = this.accentColor1Color; }
-                    case 2 -> { Color = this.accentColor2Color; }
-                    case 3 -> { Color = this.eyeColorA; }
-                    case 4 -> { Color = this.eyeColorB; }
+                    case 0 -> Color = this.primaryColor;
+                    case 1 -> Color = this.accentColor1Color;
+                    case 2 -> Color = this.accentColor2Color;
+                    case 3 -> Color = this.eyeColorA;
+                    case 4 -> Color = this.eyeColorB;
                 }
                 this.SliderTextBox.setText(encodeColor(Color));
             }
@@ -419,11 +422,11 @@ public class FormColorSelectMenuV2 extends Screen implements FormTextureUtils.Te
         // }
         int Color = 0x00FFFFFF;
         switch (this.SliderIndex) {
-            case 0 -> { Color = this.primaryColor; }
-            case 1 -> { Color = this.accentColor1Color; }
-            case 2 -> { Color = this.accentColor2Color; }
-            case 3 -> { Color = this.eyeColorA; }
-            case 4 -> { Color = this.eyeColorB; }
+            case 0 -> Color = this.primaryColor;
+            case 1 -> Color = this.accentColor1Color;
+            case 2 -> Color = this.accentColor2Color;
+            case 3 -> Color = this.eyeColorA;
+            case 4 -> Color = this.eyeColorB;
         }
         int R = (Color >> 16) & 0xFF;
         int G = (Color >> 8) & 0xFF;
@@ -447,36 +450,36 @@ public class FormColorSelectMenuV2 extends Screen implements FormTextureUtils.Te
         if (!this.UseSliderTextBox) {
             switch (textBoxIndex) {
                 // OnChanged
-                case 0 -> { this.primaryColor = decodeColor(this.primaryColorTextBox.getText()); }
-                case 1 -> { this.accentColor1Color = decodeColor(this.accentColor1TextBox.getText()); }
-                case 2 -> { this.accentColor2Color = decodeColor(this.accentColor2TextBox.getText()); }
-                case 3 -> { this.eyeColorA = decodeColor(this.eyeColorATextBox.getText()); }
-                case 4 -> { this.eyeColorB = decodeColor(this.eyeColorBTextBox.getText()); }
+                case 0 -> this.primaryColor = decodeColor(this.primaryColorTextBox.getText());
+                case 1 -> this.accentColor1Color = decodeColor(this.accentColor1TextBox.getText());
+                case 2 -> this.accentColor2Color = decodeColor(this.accentColor2TextBox.getText());
+                case 3 -> this.eyeColorA = decodeColor(this.eyeColorATextBox.getText());
+                case 4 -> this.eyeColorB = decodeColor(this.eyeColorBTextBox.getText());
                 // OnClicked
-                case 5 -> { this.primaryGreyReverse = !this.primaryGreyReverse; }
-                case 6 -> { this.accent1GreyReverse = !this.accent1GreyReverse; }
-                case 7 -> { this.accent2GreyReverse = !this.accent2GreyReverse; }
-                case 8 -> { this.keepCustomSkin = !this.keepCustomSkin; }
-                case 9 -> { this.enableFormColorSystem = !this.enableFormColorSystem; }
+                case 5 -> this.primaryGreyReverse = !this.primaryGreyReverse;
+                case 6 -> this.accent1GreyReverse = !this.accent1GreyReverse;
+                case 7 -> this.accent2GreyReverse = !this.accent2GreyReverse;
+                case 8 -> this.keepCustomSkin = !this.keepCustomSkin;
+                case 9 -> this.enableFormColorSystem = !this.enableFormColorSystem;
             }
         } else {
             switch (textBoxIndex) {
                 // OnChanged
                 case 0, 1, 2, 3, 4 -> {
                     switch (this.SliderIndex) {
-                        case 0 -> { this.primaryColor = decodeColor(this.SliderTextBox.getText()); }
-                        case 1 -> { this.accentColor1Color = decodeColor(this.SliderTextBox.getText()); }
-                        case 2 -> { this.accentColor2Color = decodeColor(this.SliderTextBox.getText()); }
-                        case 3 -> { this.eyeColorA = decodeColor(this.SliderTextBox.getText()); }
-                        case 4 -> { this.eyeColorB = decodeColor(this.SliderTextBox.getText()); }
+                        case 0 -> this.primaryColor = decodeColor(this.SliderTextBox.getText());
+                        case 1 -> this.accentColor1Color = decodeColor(this.SliderTextBox.getText());
+                        case 2 -> this.accentColor2Color = decodeColor(this.SliderTextBox.getText());
+                        case 3 -> this.eyeColorA = decodeColor(this.SliderTextBox.getText());
+                        case 4 -> this.eyeColorB = decodeColor(this.SliderTextBox.getText());
                     }
                 }
                 // OnClicked
-                case 5 -> { this.primaryGreyReverse = !this.primaryGreyReverse; }
-                case 6 -> { this.accent1GreyReverse = !this.accent1GreyReverse; }
-                case 7 -> { this.accent2GreyReverse = !this.accent2GreyReverse; }
-                case 8 -> { this.keepCustomSkin = !this.keepCustomSkin; }
-                case 9 -> { this.enableFormColorSystem = !this.enableFormColorSystem; }
+                case 5 -> this.primaryGreyReverse = !this.primaryGreyReverse;
+                case 6 -> this.accent1GreyReverse = !this.accent1GreyReverse;
+                case 7 -> this.accent2GreyReverse = !this.accent2GreyReverse;
+                case 8 -> this.keepCustomSkin = !this.keepCustomSkin;
+                case 9 -> this.enableFormColorSystem = !this.enableFormColorSystem;
             }
         }
         this.isColorSettingDirty = true;
@@ -495,11 +498,11 @@ public class FormColorSelectMenuV2 extends Screen implements FormTextureUtils.Te
         }
         int Color = SliderA << 24 | SliderR << 16 | SliderG << 8 | SliderB;
         switch (this.SliderIndex) {
-            case 0 -> { this.primaryColor = Color; }
-            case 1 -> { this.accentColor1Color = Color; }
-            case 2 -> { this.accentColor2Color = Color; }
-            case 3 -> { this.eyeColorA = Color; }
-            case 4 -> { this.eyeColorB = Color; }
+            case 0 -> this.primaryColor = Color;
+            case 1 -> this.accentColor1Color = Color;
+            case 2 -> this.accentColor2Color = Color;
+            case 3 -> this.eyeColorA = Color;
+            case 4 -> this.eyeColorB = Color;
         }
         this.isColorSettingDirty = true;
         this.onData1Changed();
@@ -509,23 +512,23 @@ public class FormColorSelectMenuV2 extends Screen implements FormTextureUtils.Te
     private void onData4ChangedOrClicked(int textBoxIndex) {
         if (this.isUpdateSlider == 0) {
             switch (textBoxIndex) {
-                case 0 -> { this.SliderRSlider.setIntValue(colorChannel2Int(this.SliderRTextBox.getText(), 0, 255)); }
-                case 1 -> { this.SliderGSlider.setIntValue(colorChannel2Int(this.SliderGTextBox.getText(), 0, 255)); }
-                case 2 -> { this.SliderBSlider.setIntValue(colorChannel2Int(this.SliderBTextBox.getText(), 0, 255)); }
-                case 3 -> { this.SliderHSlider.setIntValue(colorChannel2Int(this.SliderHTextBox.getText(), 0, 359)); }
-                case 4 -> { this.SliderSSlider.setIntValue(colorChannel2Int(this.SliderSTextBox.getText(), 0, 100)); }
-                case 5 -> { this.SliderVSlider.setIntValue(colorChannel2Int(this.SliderVTextBox.getText(), 0, 100)); }
-                case 6 -> { this.SliderA = this.SliderA == 0 ? 255 : 0; }
+                case 0 -> this.SliderRSlider.setIntValue(colorChannel2Int(this.SliderRTextBox.getText(), 0, 255));
+                case 1 -> this.SliderGSlider.setIntValue(colorChannel2Int(this.SliderGTextBox.getText(), 0, 255));
+                case 2 -> this.SliderBSlider.setIntValue(colorChannel2Int(this.SliderBTextBox.getText(), 0, 255));
+                case 3 -> this.SliderHSlider.setIntValue(colorChannel2Int(this.SliderHTextBox.getText(), 0, 359));
+                case 4 -> this.SliderSSlider.setIntValue(colorChannel2Int(this.SliderSTextBox.getText(), 0, 100));
+                case 5 -> this.SliderVSlider.setIntValue(colorChannel2Int(this.SliderVTextBox.getText(), 0, 100));
+                case 6 -> this.SliderA = this.SliderA == 0 ? 255 : 0;
             }
         } else {
             switch (textBoxIndex) {
-                case 0 -> { this.SliderR = colorChannel2Int(this.SliderRTextBox.getText(), 0, 255); }
-                case 1 -> { this.SliderG = colorChannel2Int(this.SliderGTextBox.getText(), 0, 255); }
-                case 2 -> { this.SliderB = colorChannel2Int(this.SliderBTextBox.getText(), 0, 255); }
-                case 3 -> { this.SliderH = colorChannel2Int(this.SliderHTextBox.getText(), 0, 359); }
-                case 4 -> { this.SliderS = colorChannel2Int(this.SliderSTextBox.getText(), 0, 100); }
-                case 5 -> { this.SliderV = colorChannel2Int(this.SliderVTextBox.getText(), 0, 100); }
-                case 6 -> { this.SliderA = this.SliderA == 0 ? 255 : 0; }
+                case 0 -> this.SliderR = colorChannel2Int(this.SliderRTextBox.getText(), 0, 255);
+                case 1 -> this.SliderG = colorChannel2Int(this.SliderGTextBox.getText(), 0, 255);
+                case 2 -> this.SliderB = colorChannel2Int(this.SliderBTextBox.getText(), 0, 255);
+                case 3 -> this.SliderH = colorChannel2Int(this.SliderHTextBox.getText(), 0, 359);
+                case 4 -> this.SliderS = colorChannel2Int(this.SliderSTextBox.getText(), 0, 100);
+                case 5 -> this.SliderV = colorChannel2Int(this.SliderVTextBox.getText(), 0, 100);
+                case 6 -> this.SliderA = this.SliderA == 0 ? 255 : 0;
             }
         }
         this.onData3Changed();
@@ -566,12 +569,12 @@ public class FormColorSelectMenuV2 extends Screen implements FormTextureUtils.Te
     private void onData5Changed(int sliderIndex) {
         this.isUpdateSlider++;
         switch (sliderIndex) {
-            case 0 -> { this.SliderRTextBox.setText(String.valueOf(this.SliderRSlider.getIntValue())); }
-            case 1 -> { this.SliderGTextBox.setText(String.valueOf(this.SliderGSlider.getIntValue())); }
-            case 2 -> { this.SliderBTextBox.setText(String.valueOf(this.SliderBSlider.getIntValue())); }
-            case 3 -> { this.SliderHTextBox.setText(String.valueOf(this.SliderHSlider.getIntValue())); }
-            case 4 -> { this.SliderSTextBox.setText(String.valueOf(this.SliderSSlider.getIntValue())); }
-            case 5 -> { this.SliderVTextBox.setText(String.valueOf(this.SliderVSlider.getIntValue())); }
+            case 0 -> this.SliderRTextBox.setText(String.valueOf(this.SliderRSlider.getIntValue()));
+            case 1 -> this.SliderGTextBox.setText(String.valueOf(this.SliderGSlider.getIntValue()));
+            case 2 -> this.SliderBTextBox.setText(String.valueOf(this.SliderBSlider.getIntValue()));
+            case 3 -> this.SliderHTextBox.setText(String.valueOf(this.SliderHSlider.getIntValue()));
+            case 4 -> this.SliderSTextBox.setText(String.valueOf(this.SliderSSlider.getIntValue()));
+            case 5 -> this.SliderVTextBox.setText(String.valueOf(this.SliderVSlider.getIntValue()));
         }
         this.isUpdateSlider--;
         // 在从配置加载数据时 不用自动更新HSV 由后续代码自动更新
@@ -579,12 +582,8 @@ public class FormColorSelectMenuV2 extends Screen implements FormTextureUtils.Te
             return;
         }
         switch (sliderIndex) {
-            case 0, 1, 2 -> {
-                this.updateHSVFromRGB();
-            }
-            case 3, 4, 5 -> {
-                this.updateRGBFromHSV();
-            }
+            case 0, 1, 2 -> this.updateHSVFromRGB();
+            case 3, 4, 5 -> this.updateRGBFromHSV();
         }
     }
     // 二级菜单
@@ -791,13 +790,9 @@ public class FormColorSelectMenuV2 extends Screen implements FormTextureUtils.Te
         this.addDrawableChild(formScrollButton);
         this.formNameLabel = formScrollButton;
         // 31,20,11,11 - Form Scroll Left Button
-        this.addDrawableChild(ButtonWidget.builder(Text.literal("<"), button -> {
-            this.scrollFormID(-1, true);
-        }).position(BPosX + 31, BPosY + 20).size(11, 11).build());
+        this.addDrawableChild(ButtonWidget.builder(Text.literal("<"), button -> this.scrollFormID(-1, true)).position(BPosX + 31, BPosY + 20).size(11, 11).build());
         // 140,20,11,11 - Form Scroll Right Button
-        this.addDrawableChild(ButtonWidget.builder(Text.literal(">"), button -> {
-            this.scrollFormID(1, true);
-        }).position(BPosX + 140, BPosY + 20).size(11, 11).build());
+        this.addDrawableChild(ButtonWidget.builder(Text.literal(">"), button -> this.scrollFormID(1, true)).position(BPosX + 140, BPosY + 20).size(11, 11).build());
         this.reloadFormIDName();
         // Config Panel 01
         // 192,39,68,11 - PrimaryColor Label
@@ -805,9 +800,7 @@ public class FormColorSelectMenuV2 extends Screen implements FormTextureUtils.Te
         this.addDrawableChild(primaryColorLabel);
         this.ConfigPanel01.add(primaryColorLabel);
         // 270,39,45,11 - PrimaryColor Button
-        ButtonWidgetOKey primaryColorButton = new ButtonWidgetOKey(BPosX + 270, BPosY + 39, 45, 11, CLICK_TO_MODIFY, button -> {
-            this.openPanel(0);
-        }, ButtonWidgetOKey.DEFAULT_NARRATION_SUPPLIER);
+        ButtonWidgetOKey primaryColorButton = new ButtonWidgetOKey(BPosX + 270, BPosY + 39, 45, 11, CLICK_TO_MODIFY, button -> this.openPanel(0), ButtonWidgetOKey.DEFAULT_NARRATION_SUPPLIER);
         primaryColorButton.canClick = ButtonWidgetOKey.LEFT_CLICK;
         this.addDrawableChild(primaryColorButton);
         this.ConfigPanel01.add(primaryColorButton);
@@ -816,9 +809,7 @@ public class FormColorSelectMenuV2 extends Screen implements FormTextureUtils.Te
         this.addDrawableChild(accentColor1Label);
         this.ConfigPanel01.add(accentColor1Label);
         // 270,54,45,11 - AccentColor1 Button
-        ButtonWidgetOKey accentColor1Button = new ButtonWidgetOKey(BPosX + 270, BPosY + 54, 45, 11, CLICK_TO_MODIFY, button -> {
-            this.openPanel(1);
-        }, ButtonWidgetOKey.DEFAULT_NARRATION_SUPPLIER);
+        ButtonWidgetOKey accentColor1Button = new ButtonWidgetOKey(BPosX + 270, BPosY + 54, 45, 11, CLICK_TO_MODIFY, button -> this.openPanel(1), ButtonWidgetOKey.DEFAULT_NARRATION_SUPPLIER);
         accentColor1Button.canClick = ButtonWidgetOKey.LEFT_CLICK;
         this.addDrawableChild(accentColor1Button);
         this.ConfigPanel01.add(accentColor1Button);
@@ -827,9 +818,7 @@ public class FormColorSelectMenuV2 extends Screen implements FormTextureUtils.Te
         this.addDrawableChild(accentColor2Label);
         this.ConfigPanel01.add(accentColor2Label);
         // 270,69,45,11 - AccentColor2 Button
-        ButtonWidgetOKey accentColor2Button = new ButtonWidgetOKey(BPosX + 270, BPosY + 69, 45, 11, CLICK_TO_MODIFY, button -> {
-            this.openPanel(2);
-        }, ButtonWidgetOKey.DEFAULT_NARRATION_SUPPLIER);
+        ButtonWidgetOKey accentColor2Button = new ButtonWidgetOKey(BPosX + 270, BPosY + 69, 45, 11, CLICK_TO_MODIFY, button -> this.openPanel(2), ButtonWidgetOKey.DEFAULT_NARRATION_SUPPLIER);
         accentColor2Button.canClick = ButtonWidgetOKey.LEFT_CLICK;
         this.addDrawableChild(accentColor2Button);
         this.ConfigPanel01.add(accentColor2Button);
@@ -838,9 +827,7 @@ public class FormColorSelectMenuV2 extends Screen implements FormTextureUtils.Te
         this.addDrawableChild(eyeColorALabel);
         this.ConfigPanel01.add(eyeColorALabel);
         // 270,84,45,11 - EyeColorA Button
-        ButtonWidgetOKey eyeColorAButton = new ButtonWidgetOKey(BPosX + 270, BPosY + 84, 45, 11, CLICK_TO_MODIFY, button -> {
-            this.openPanel(3);
-        }, ButtonWidgetOKey.DEFAULT_NARRATION_SUPPLIER);
+        ButtonWidgetOKey eyeColorAButton = new ButtonWidgetOKey(BPosX + 270, BPosY + 84, 45, 11, CLICK_TO_MODIFY, button -> this.openPanel(3), ButtonWidgetOKey.DEFAULT_NARRATION_SUPPLIER);
         eyeColorAButton.canClick = ButtonWidgetOKey.LEFT_CLICK;
         this.addDrawableChild(eyeColorAButton);
         this.ConfigPanel01.add(eyeColorAButton);
@@ -849,9 +836,7 @@ public class FormColorSelectMenuV2 extends Screen implements FormTextureUtils.Te
         this.addDrawableChild(eyeColorBLabel);
         this.ConfigPanel01.add(eyeColorBLabel);
         // 270,99,45,11 - EyeColorB Button
-        ButtonWidgetOKey eyeColorBButton = new ButtonWidgetOKey(BPosX + 270, BPosY + 99, 45, 11, CLICK_TO_MODIFY, button -> {
-            this.openPanel(4);
-        }, ButtonWidgetOKey.DEFAULT_NARRATION_SUPPLIER);
+        ButtonWidgetOKey eyeColorBButton = new ButtonWidgetOKey(BPosX + 270, BPosY + 99, 45, 11, CLICK_TO_MODIFY, button -> this.openPanel(4), ButtonWidgetOKey.DEFAULT_NARRATION_SUPPLIER);
         eyeColorBButton.canClick = ButtonWidgetOKey.LEFT_CLICK;
         this.addDrawableChild(eyeColorBButton);
         this.ConfigPanel01.add(eyeColorBButton);
@@ -860,9 +845,7 @@ public class FormColorSelectMenuV2 extends Screen implements FormTextureUtils.Te
         this.addDrawableChild(primaryGreyReverseLabel);
         this.ConfigPanel01.add(primaryGreyReverseLabel);
         // 288,114,27,12 - PrimaryGreyReverse Button
-        ButtonWidget primaryGreyReverseButton = ButtonWidget.builder(this.primaryGreyReverse ? BoolBTN_ON :BoolBTN_OFF, (button) -> {
-            this.onData2ChangedOrClicked(5);
-        }).position(BPosX + 288, BPosY + 114).size(27, 12).build();
+        ButtonWidget primaryGreyReverseButton = ButtonWidget.builder(this.primaryGreyReverse ? BoolBTN_ON :BoolBTN_OFF, (button) -> this.onData2ChangedOrClicked(5)).position(BPosX + 288, BPosY + 114).size(27, 12).build();
         this.addDrawableChild(primaryGreyReverseButton);
         this.primaryGreyReverseButton = primaryGreyReverseButton;
         this.ConfigPanel01.add(primaryGreyReverseButton);
@@ -871,9 +854,7 @@ public class FormColorSelectMenuV2 extends Screen implements FormTextureUtils.Te
         this.addDrawableChild(accent1GreyReverseLabel);
         this.ConfigPanel01.add(accent1GreyReverseLabel);
         // 288,130,27,12 - Accent1GreyReverse Button
-        ButtonWidget accent1GreyReverseButton = ButtonWidget.builder(this.accent1GreyReverse ? BoolBTN_ON :BoolBTN_OFF, (button) -> {
-            this.onData2ChangedOrClicked(6);
-        }).position(BPosX + 288, BPosY + 130).size(27, 12).build();
+        ButtonWidget accent1GreyReverseButton = ButtonWidget.builder(this.accent1GreyReverse ? BoolBTN_ON :BoolBTN_OFF, (button) -> this.onData2ChangedOrClicked(6)).position(BPosX + 288, BPosY + 130).size(27, 12).build();
         this.addDrawableChild(accent1GreyReverseButton);
         this.accent1GreyReverseButton = accent1GreyReverseButton;
         this.ConfigPanel01.add(accent1GreyReverseButton);
@@ -882,9 +863,7 @@ public class FormColorSelectMenuV2 extends Screen implements FormTextureUtils.Te
         this.addDrawableChild(accent2GreyReverseLabel);
         this.ConfigPanel01.add(accent2GreyReverseLabel);
         // 288,146,27,12 - Accent2GreyReverse Button
-        ButtonWidget accent2GreyReverseButton = ButtonWidget.builder(this.accent2GreyReverse ? BoolBTN_ON :BoolBTN_OFF, (button) -> {
-            this.onData2ChangedOrClicked(7);
-        }).position(BPosX + 288, BPosY + 146).size(27, 12).build();
+        ButtonWidget accent2GreyReverseButton = ButtonWidget.builder(this.accent2GreyReverse ? BoolBTN_ON :BoolBTN_OFF, (button) -> this.onData2ChangedOrClicked(7)).position(BPosX + 288, BPosY + 146).size(27, 12).build();
         this.addDrawableChild(accent2GreyReverseButton);
         this.accent2GreyReverseButton = accent2GreyReverseButton;
         this.ConfigPanel01.add(accent2GreyReverseButton);
@@ -893,9 +872,7 @@ public class FormColorSelectMenuV2 extends Screen implements FormTextureUtils.Te
         this.addDrawableChild(keepOriginalSkinLabel);
         this.ConfigPanel01.add(keepOriginalSkinLabel);
         // 288,176,27,11 - Keep Original Skin Button
-        ButtonWidget keepOriginalSkinButton = ButtonWidget.builder(this.keepCustomSkin ? BoolBTN_ON :BoolBTN_OFF, (button) -> {
-            this.onData2ChangedOrClicked(8);
-        }).position(BPosX + 288, BPosY + 176).size(27, 11).build();
+        ButtonWidget keepOriginalSkinButton = ButtonWidget.builder(this.keepCustomSkin ? BoolBTN_ON :BoolBTN_OFF, (button) -> this.onData2ChangedOrClicked(8)).position(BPosX + 288, BPosY + 176).size(27, 11).build();
         this.addDrawableChild(keepOriginalSkinButton);
         this.keepCustomSkinButton = keepOriginalSkinButton;
         this.ConfigPanel01.add(keepOriginalSkinButton);
@@ -904,9 +881,7 @@ public class FormColorSelectMenuV2 extends Screen implements FormTextureUtils.Te
         this.addDrawableChild(enableFormColorLabel);
         this.ConfigPanel01.add(enableFormColorLabel);
         // 288,191,27,11 - Enable Form Color Button
-        ButtonWidget enableFormColorButton = ButtonWidget.builder(this.enableFormColorSystem ? BoolBTN_ON : BoolBTN_OFF, (button) -> {
-            this.onData2ChangedOrClicked(9);
-        }).position(BPosX + 288, BPosY + 191).size(27, 11).build();
+        ButtonWidget enableFormColorButton = ButtonWidget.builder(this.enableFormColorSystem ? BoolBTN_ON : BoolBTN_OFF, (button) -> this.onData2ChangedOrClicked(9)).position(BPosX + 288, BPosY + 191).size(27, 11).build();
         this.addDrawableChild(enableFormColorButton);
         this.enableFormColorSystemButton = enableFormColorButton;
         this.ConfigPanel01.add(enableFormColorButton);
@@ -919,9 +894,7 @@ public class FormColorSelectMenuV2 extends Screen implements FormTextureUtils.Te
         // 222,68,93,11 - Config Input
         TextFieldWidget configInput = new TextFieldWidget(textRenderer, BPosX + 222, BPosY + 68, 93, 11, EmptyText);
         configInput.setMaxLength(9);
-        configInput.setChangedListener((text) -> {
-            this.onData2ChangedOrClicked(0);
-        });
+        configInput.setChangedListener((text) -> this.onData2ChangedOrClicked(0));
         this.addDrawableChild(configInput);
         this.SliderTextBox = configInput;
         this.ConfigPanel02.add(configInput);
@@ -952,102 +925,78 @@ public class FormColorSelectMenuV2 extends Screen implements FormTextureUtils.Te
         // 192,83,26,11 - R Input
         TextFieldWidget rInput = new TextFieldWidget(textRenderer, BPosX + 192, BPosY + 83, 26, 11, EmptyText);
         rInput.setMaxLength(3);
-        rInput.setChangedListener((text) -> {
-            this.onData4ChangedOrClicked(0);
-        });
+        rInput.setChangedListener((text) -> this.onData4ChangedOrClicked(0));
         this.addDrawableChild(rInput);
         this.SliderRTextBox = rInput;
         this.ConfigPanel02.add(rInput);
         // 192,98,26,11 - G Input
         TextFieldWidget gInput = new TextFieldWidget(textRenderer, BPosX + 192, BPosY + 98, 26, 11, EmptyText);
         gInput.setMaxLength(3);
-        gInput.setChangedListener((text) -> {
-            this.onData4ChangedOrClicked(1);
-        });
+        gInput.setChangedListener((text) -> this.onData4ChangedOrClicked(1));
         this.addDrawableChild(gInput);
         this.SliderGTextBox = gInput;
         this.ConfigPanel02.add(gInput);
         // 192,113,26,11 - B Input
         TextFieldWidget bInput = new TextFieldWidget(textRenderer, BPosX + 192, BPosY + 113, 26, 11, EmptyText);
         bInput.setMaxLength(3);
-        bInput.setChangedListener((text) -> {
-            this.onData4ChangedOrClicked(2);
-        });
+        bInput.setChangedListener((text) -> this.onData4ChangedOrClicked(2));
         this.addDrawableChild(bInput);
         this.SliderBTextBox = bInput;
         this.ConfigPanel02.add(bInput);
         // 192,128,26,11 - H Input
         TextFieldWidget hInput = new TextFieldWidget(textRenderer, BPosX + 192, BPosY + 128, 26, 11, EmptyText);
         hInput.setMaxLength(3);
-        hInput.setChangedListener((text) -> {
-            this.onData4ChangedOrClicked(3);
-        });
+        hInput.setChangedListener((text) -> this.onData4ChangedOrClicked(3));
         this.addDrawableChild(hInput);
         this.SliderHTextBox = hInput;
         this.ConfigPanel02.add(hInput);
         // 192,143,26,11 - S Input
         TextFieldWidget sInput = new TextFieldWidget(textRenderer, BPosX + 192, BPosY + 143, 26, 11, EmptyText);
         sInput.setMaxLength(3);
-        sInput.setChangedListener((text) -> {
-            this.onData4ChangedOrClicked(4);
-        });
+        sInput.setChangedListener((text) -> this.onData4ChangedOrClicked(4));
         this.addDrawableChild(sInput);
         this.SliderSTextBox = sInput;
         this.ConfigPanel02.add(sInput);
         // 192,158,26,11 - V Input
         TextFieldWidget vInput = new TextFieldWidget(textRenderer, BPosX + 192, BPosY + 158, 26, 11, EmptyText);
         vInput.setMaxLength(3);
-        vInput.setChangedListener((text) -> {
-            this.onData4ChangedOrClicked(5);
-        });
+        vInput.setChangedListener((text) -> this.onData4ChangedOrClicked(5));
         this.addDrawableChild(vInput);
         this.SliderVTextBox = vInput;
         this.ConfigPanel02.add(vInput);
         // 222,85,93,7 - R Slider
         SimpleIntSliderWidget rSlider = new SimpleIntSliderWidget(BPosX + 222, BPosY + 85, 93, 7, EmptyText, 0d, 0, 255);
-        rSlider.onChanged = ((value) -> {
-            this.onData5Changed(0);
-        });
+        rSlider.onChanged = ((value) -> this.onData5Changed(0));
         this.addDrawableChild(rSlider);
         this.SliderRSlider = rSlider;
         this.ConfigPanel02.add(rSlider);
         // 222,100,93,7 - G Slider
         SimpleIntSliderWidget gSlider = new SimpleIntSliderWidget(BPosX + 222, BPosY + 100, 93, 7, EmptyText, 0d, 0, 255);
-        gSlider.onChanged = ((value) -> {
-            this.onData5Changed(1);
-        });
+        gSlider.onChanged = ((value) -> this.onData5Changed(1));
         this.addDrawableChild(gSlider);
         this.SliderGSlider = gSlider;
         this.ConfigPanel02.add(gSlider);
         // 222,115,93,7 - B Slider
         SimpleIntSliderWidget bSlider = new SimpleIntSliderWidget(BPosX + 222, BPosY + 115, 93, 7, EmptyText, 0d, 0, 255);
-        bSlider.onChanged = ((value) -> {
-            this.onData5Changed(2);
-        });
+        bSlider.onChanged = ((value) -> this.onData5Changed(2));
         this.addDrawableChild(bSlider);
         this.SliderBSlider = bSlider;
         this.ConfigPanel02.add(bSlider);
         // 222,130,93,7 - H Slider
         SimpleIntSliderWidget hSlider = new SimpleIntSliderWidget(BPosX + 222, BPosY + 130, 93, 7, EmptyText, 0d, 0, 359);
-        hSlider.onChanged = ((value) -> {
-            this.onData5Changed(3);
-        });
+        hSlider.onChanged = ((value) -> this.onData5Changed(3));
         this.addDrawableChild(hSlider);
         this.SliderHSlider = hSlider;
         this.ConfigPanel02.add(hSlider);
         // 222,145,93,7 - S Slider
         SimpleIntSliderWidget sSlider = new SimpleIntSliderWidget(BPosX + 222, BPosY + 145, 93, 7, EmptyText, 0d, 0, 100);
-        sSlider.onChanged = ((value) -> {
-            this.onData5Changed(4);
-        });
+        sSlider.onChanged = ((value) -> this.onData5Changed(4));
         this.addDrawableChild(sSlider);
         this.SliderSSlider = sSlider;
         this.ConfigPanel02.add(sSlider);
         // 222,160,93,7 - V Slider
         SimpleIntSliderWidget vSlider = new SimpleIntSliderWidget(BPosX + 222, BPosY + 160, 93, 7, EmptyText, 0d, 0, 100);
-        vSlider.onChanged = ((value) -> {
-            this.onData5Changed(5);
-        });
+        vSlider.onChanged = ((value) -> this.onData5Changed(5));
         this.addDrawableChild(vSlider);
         this.SliderVSlider = vSlider;
         this.ConfigPanel02.add(vSlider);
@@ -1056,16 +1005,12 @@ public class FormColorSelectMenuV2 extends Screen implements FormTextureUtils.Te
         this.addDrawableChild(isEnableLayerLabel);
         this.ConfigPanel02.add(isEnableLayerLabel);
         // 288,174,27,12 - Is Enable Layer Button
-        ButtonWidget isEnableLayerButton = ButtonWidget.builder(this.SliderA != 0 ? BoolBTN_ON : BoolBTN_OFF, (button) -> {
-            this.onData4ChangedOrClicked(6);
-        }).position(BPosX + 288, BPosY + 174).size(27, 12).build();
+        ButtonWidget isEnableLayerButton = ButtonWidget.builder(this.SliderA != 0 ? BoolBTN_ON : BoolBTN_OFF, (button) -> this.onData4ChangedOrClicked(6)).position(BPosX + 288, BPosY + 174).size(27, 12).build();
         this.addDrawableChild(isEnableLayerButton);
         this.SliderAButton = isEnableLayerButton;
         this.ConfigPanel02.add(isEnableLayerButton);
         // 255,190,60,12 - Exit Slider Button
-        ButtonWidget exitSliderButton = ButtonWidget.builder(ExitSliderButtonLabel, (button) -> {
-            this.closePanel();
-        }).position(BPosX + 255, BPosY + 190).size(60, 12).build();
+        ButtonWidget exitSliderButton = ButtonWidget.builder(ExitSliderButtonLabel, (button) -> this.closePanel()).position(BPosX + 255, BPosY + 190).size(60, 12).build();
         this.addDrawableChild(exitSliderButton);
         this.ConfigPanel02.add(exitSliderButton);
 
@@ -1096,8 +1041,8 @@ public class FormColorSelectMenuV2 extends Screen implements FormTextureUtils.Te
     }
 
     private void RenderEntity(DrawContext context, int x, int y, int size, int mouseX, int mouseY, LivingEntity entity) {
-        float f = (float)Math.atan((double)(mouseX / 40.0F));
-        float g = (float)Math.atan((double)(mouseY / 40.0F));
+        float f = (float)Math.atan(mouseX / 40.0F);
+        float g = (float)Math.atan(mouseY / 40.0F);
         float h = entity.bodyYaw;
         float i = entity.getYaw();
         float j = entity.getPitch();
@@ -1110,7 +1055,10 @@ public class FormColorSelectMenuV2 extends Screen implements FormTextureUtils.Te
         entity.setPitch(-g * 20.0F);
         entity.headYaw = entity.getYaw();
         entity.prevHeadYaw = entity.getYaw();
-        InventoryScreen.drawEntity(context, x, y, size, 0, 0, 0.0625f, f, g, entity);
+        Quaternionf quaternionf = new Quaternionf().rotateZ((float)Math.PI);
+        Quaternionf quaternionf2 = new Quaternionf().rotateX(f * 20.0F * ((float)Math.PI / 180F));
+        quaternionf2.mul(quaternionf);
+        InventoryScreen.drawEntity(context, (float)x, (float)y, (float)size, new org.joml.Vector3f(), quaternionf, quaternionf2, entity);
         entity.bodyYaw = h;
         entity.prevBodyYaw = m;
         entity.setYaw(i);

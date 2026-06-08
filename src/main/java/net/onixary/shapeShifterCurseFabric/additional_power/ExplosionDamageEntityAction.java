@@ -50,44 +50,43 @@ public class ExplosionDamageEntityAction {
         int s = MathHelper.floor(ExplosionPos.getY() + (double)q + 1.0);
         int t = MathHelper.floor(ExplosionPos.getZ() - (double)q - 1.0);
         int u = MathHelper.floor(ExplosionPos.getZ() + (double)q + 1.0);
-        List<Entity> list = entity.getWorld().getOtherEntities(entity, new Box((double)k, (double)r, (double)t, (double)l, (double)s, (double)u));
-        for(int v = 0; v < list.size(); ++v) {
-            Entity target_entity = (Entity) list.get(v);
-            if (entityCondition == null || entityCondition.test(new Pair<>(entity, target_entity))) {
-                double w = Math.sqrt(target_entity.squaredDistanceTo(ExplosionPos)) / (double)q;
-                if (w <= 1.0) {
-                    double x = target_entity.getX() - ExplosionPos.getX();
-                    double y = (target_entity instanceof TntEntity ? target_entity.getY() : target_entity.getEyeY()) - ExplosionPos.getY();
-                    double z = target_entity.getZ() - ExplosionPos.getZ();
-                    double aa = Math.sqrt(x * x + y * y + z * z);
-                    if (aa != 0.0) {
-                        x /= aa;
-                        y /= aa;
-                        z /= aa;
-                        double ab = (double) Explosion.getExposure(ExplosionPos, target_entity);
-                        double ac = (1.0 - w) * ab;
-                        if(explosion_damage_entity){
-                            target_entity.damage(source, (float)((int)((ac * ac + ac) / 2.0 * 7.0 * (double)q + 1.0)));
-                        }
-                        double ad;
-                        if (target_entity instanceof LivingEntity livingEntity) {
-                            ad = ac; // ProtectionEnchantment API changed in 1.21; blast resistance handled by explosion system
-                        } else {
-                            ad = ac;
-                        }
-                        x *= ad;
-                        y *= ad;
-                        z *= ad;
-                        Vec3d vec3d2 = new Vec3d(x, y, z);
-                        target_entity.setVelocity(target_entity.getVelocity().add(vec3d2));
-                        // 加入额外可选的EntityAction
-                        if (entityAction != null) {
-                            entityAction.accept(target_entity);
-                        }
-                    }
-                }
-            }
-        }
+        List<Entity> list = entity.getWorld().getOtherEntities(entity, new Box(k, r, t, l, s, u));
+	    for (Entity target_entity : list) {
+		    if (entityCondition == null || entityCondition.test(new Pair<>(entity, target_entity))) {
+			    double w = Math.sqrt(target_entity.squaredDistanceTo(ExplosionPos)) / (double) q;
+			    if (w <= 1.0) {
+				    double x = target_entity.getX() - ExplosionPos.getX();
+				    double y = (target_entity instanceof TntEntity ? target_entity.getY() : target_entity.getEyeY()) - ExplosionPos.getY();
+				    double z = target_entity.getZ() - ExplosionPos.getZ();
+				    double aa = Math.sqrt(x * x + y * y + z * z);
+				    if (aa != 0.0) {
+					    x /= aa;
+					    y /= aa;
+					    z /= aa;
+					    double ab = Explosion.getExposure(ExplosionPos, target_entity);
+					    double ac = (1.0 - w) * ab;
+					    if (explosion_damage_entity) {
+						    target_entity.damage(source, (float) ((int) ((ac * ac + ac) / 2.0 * 7.0 * (double) q + 1.0)));
+					    }
+					    double ad;
+					    if (target_entity instanceof LivingEntity livingEntity) {
+						    ad = ac; // ProtectionEnchantment API changed in 1.21; blast resistance handled by explosion system
+					    } else {
+						    ad = ac;
+					    }
+					    x *= ad;
+					    y *= ad;
+					    z *= ad;
+					    Vec3d vec3d2 = new Vec3d(x, y, z);
+					    target_entity.setVelocity(target_entity.getVelocity().add(vec3d2));
+					    // 加入额外可选的EntityAction
+					    if (entityAction != null) {
+						    entityAction.accept(target_entity);
+					    }
+				    }
+			    }
+		    }
+	    }
     }
 
     public static ActionFactory<Entity> createFactory() {

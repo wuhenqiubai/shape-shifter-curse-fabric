@@ -20,6 +20,25 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * 法力系统 CCA 组件。每个玩家实体附带一个 ManaComponent，管理与法力相关的所有状态。
+ * <p>
+ * 核心功能：
+ * <ul>
+ *   <li>法力值管理：{@link #getMana} / {@link #setMana} / {@link #gainMana} / {@link #consumeMana}</li>
+ *   <li>法力类型系统：{@link #gainManaTypeID} / {@link #loseManaTypeID} — 支持多个来源叠加法力类型</li>
+ *   <li>修饰符系统：{@link ManaUtils.ModifierList} — 支持来自不同 Origin Power 的叠加修饰符</li>
+ *   <li>法力回复：{@link #tick} 处理每 tick 回复 + 临时回复叠加</li>
+ *   <li>法力条回调：通过 {@link ManaHandler} 的钩子系统（满/空/变化）驱动客户端 UI</li>
+ * </ul>
+ * <p>
+ * 同步策略：通过 CCA {@link AutoSyncedComponent} 同步，客户端缓存 MaxMana/ManaRegen 而非实时计算修饰符。
+ * 所有公开字段尽量使用方法修改，直接修改字段可能导致同步异常。
+ *
+ * @see ManaUtils.ModifierList
+ * @see ManaHandler
+ * @see ManaRegistries
+ */
 // 试试这个实验性接口 省的我缓存ModifierList了
 // 所有的公开Field尽量使用Class里的Method修改 直接修改Field可能会导致一些奇怪的同步Bug
 public class ManaComponent implements AutoSyncedComponent {
@@ -153,6 +172,11 @@ public class ManaComponent implements AutoSyncedComponent {
         this.Dirty = true;
     }
 
+	/**
+	 * 获取最大法力值。客户端使用缓存的 MaxManaClient，服务端动态计算修饰符。
+	 *
+	 * @return 最大法力值
+	 */
     public double getMaxMana() {
         if (this.player.getWorld().isClient) {
             return MaxManaClient;
@@ -160,6 +184,11 @@ public class ManaComponent implements AutoSyncedComponent {
         return MaxManaModifier.apply(this.player, 0.0d, this.MaxManaModifierPlayerSide);
     }
 
+	/**
+	 * 获取每 tick 法力回复值。客户端使用缓存的 ManaRegenClient，服务端动态计算修饰符。
+	 *
+	 * @return 法力回复值
+	 */
     public double getManaRegen() {
         if (this.player.getWorld().isClient) {
             return ManaRegenClient;
@@ -167,33 +196,61 @@ public class ManaComponent implements AutoSyncedComponent {
         return ManaRegenModifier.apply(this.player, 0.0d, this.ManaRegenModifierPlayerSide);
     }
 
+	/**
+	 * @return 当前法力值
+	 */
     public double getMana() {
         return Mana;
     }
 
+	/**
+	 * 设置法力值。范围为 [0, getMaxMana()]。
+	 *
+	 * @param mana 目标法力值
+	 * @return 设置后的实际法力值
+     */
     public double setMana(double mana) {
         this.__SetMana__(mana);
         this.Dirty = true;
         return this.Mana;
     }
 
+	/**
+	 * 增加法力量。最终法力值不会超过 getMaxMana()。
+	 *
+	 * @param mana 增加量
+	 * @return 增加后的实际法力值
+     */
     public double gainMana(double mana) {
         this.__SetMana__(this.Mana + mana);
         this.Dirty = true;
         return this.Mana;
     }
 
+	/**
+	 * 消耗法力量。最终法力值不会低于 0。
+	 *
+	 * @param mana 消耗量
+	 * @return 消耗后的实际法力值
+     */
     public double consumeMana(double mana) {
         this.__SetMana__(this.Mana - mana);
         this.Dirty = true;
         return this.Mana;
     }
 
+	/**
+	 * 在指定时间内持续回复法力（随时间线性叠加）。
+	 *
+	 * @param mana 总回复量
+	 * @param time 回复时长（tick）
+     */
     public void gainManaWithTime(double mana, int time) {
         this.mergeTempRegen(mana, time);
         this.Dirty = true;
     }
 
+	/** @return 法力值是否高于指定值 */
     public boolean isManaAbove(double mana) {
         return this.Mana >= mana;
     }

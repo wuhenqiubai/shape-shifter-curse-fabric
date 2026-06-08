@@ -21,9 +21,7 @@ public class IsMorphScaleItemCondition {
         }
         var customData = itemStack.get(DataComponentTypes.CUSTOM_DATA);
         if (customData != null) {
-            if (customData.copyNbt().getBoolean(IsMorphScaleArmorTagName)) {
-                return true;
-            }
+	        return customData.copyNbt().getBoolean(IsMorphScaleArmorTagName);
         }
         return false;
     }
@@ -42,26 +40,24 @@ public class IsMorphScaleItemCondition {
             if (itemNBT.getBoolean(IsMorphScaleFoodTagName)) {
                 return true;
             }
-            if (itemNBT.getBoolean(IsMorphScaleArmorTagName)) {
-                return true;
-            }
+			return itemNBT.getBoolean(IsMorphScaleArmorTagName);
         }
         return false;
     }
 
 	public static ConditionFactory<Pair<World, ItemStack>> getFactory1() {
-		return new ConditionFactory<Pair<World, ItemStack>>(
-                ShapeShifterCurseFabric.identifier("is_morph_scale_item"),
-                new SerializableData(),
-                IsMorphScaleItemCondition::MSI_condition
-        );
+		return new ConditionFactory<>(
+				ShapeShifterCurseFabric.identifier("is_morph_scale_item"),
+				new SerializableData(),
+				IsMorphScaleItemCondition::MSI_condition
+		);
     }
 
 	public static ConditionFactory<Pair<World, ItemStack>> getFactory2() {
-		return new ConditionFactory<Pair<World, ItemStack>>(
-                ShapeShifterCurseFabric.identifier("is_morph_scale_food"),
-                new SerializableData(),
-                IsMorphScaleItemCondition::MSF_condition
-        );
+		return new ConditionFactory<>(
+				ShapeShifterCurseFabric.identifier("is_morph_scale_food"),
+				new SerializableData(),
+				IsMorphScaleItemCondition::MSF_condition
+		);
     }
 }

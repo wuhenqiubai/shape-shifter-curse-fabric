@@ -19,6 +19,6 @@ public class RecipeSerializerRegister {
 
 
 	public static <S extends RecipeSerializer<T>, T extends Recipe<?>> S register(Identifier id, S serializer) {
-        return (S)(Registry.register(Registries.RECIPE_SERIALIZER, id, serializer));
+        return Registry.register(Registries.RECIPE_SERIALIZER, id, serializer);
 	}
 }

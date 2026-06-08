@@ -25,9 +25,9 @@ public class TrinketImpl implements Trinket {
             new AccessoryItem.SlotData(Identifier.of("trinket", "%s/%s".formatted(slotType.getGroup(), slotType.getName())), slot.index()));
     }
 
-    @Inject(method = "accessoryInit", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "accessoryInit", at = @At("HEAD"))
     private void initAccessory(CallbackInfo ci) {
-        TrinketsApi.registerTrinket((AccessoryItem) (Object) this, (Trinket) (Object) this);
+        TrinketsApi.registerTrinket((AccessoryItem) (Object) this, this);
     }
 
     @Override

@@ -51,12 +51,15 @@ public class AdvancementUtils {
 
         for (Map.Entry<String, AdvancementCriterion<?>> criterionEntry : criteria.entrySet()) {
             AdvancementCriterion<?> criterion = criterionEntry.getValue();
-            if (criterion.conditions() instanceof InventoryChangedCriterion.Conditions conditions) {
-                List<ItemPredicate> newPredicates = patchPredicateList(conditions.items(), patches);
+            if (criterion.conditions() instanceof InventoryChangedCriterion.Conditions(
+		            Optional<net.minecraft.predicate.entity.LootContextPredicate> player,
+		            InventoryChangedCriterion.Conditions.Slots slots, List<ItemPredicate> items
+            )) {
+                List<ItemPredicate> newPredicates = patchPredicateList(items, patches);
                 if (newPredicates != null) {
                     criterionEntry.setValue(Criteria.INVENTORY_CHANGED.create(
                             new InventoryChangedCriterion.Conditions(
-                                    conditions.player(), conditions.slots(), newPredicates)
+		                            player, slots, newPredicates)
                     ));
                     changed = true;
                 }

@@ -40,7 +40,7 @@ public class ScaleMultilineTextWidget extends MultilineTextWidget {
     }
 
     public void renderButton(DrawContext context, int mouseX, int mouseY, float delta) {
-        MultilineText multilineText = (MultilineText)this.cacheKeyToText.map(this.getCacheKey());
+        MultilineText multilineText = this.cacheKeyToText.map(this.getCacheKey());
         int i = this.getX();
         int j = this.getY();
         Objects.requireNonNull(this.getTextRenderer());

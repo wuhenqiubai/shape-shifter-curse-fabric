@@ -33,12 +33,7 @@ public class SuperMorphScaleCore extends Item {
         int damagePerCount = damagePerItem * multiplier;
         int damage = stack.getDamage();
         int targetDamage = damage + damagePerCount;
-        if (targetDamage >= stack.getMaxDamage()) {
-            stack.setDamage(stack.getMaxDamage());
-        }
-        else {
-            stack.setDamage(targetDamage);
-        }
+	    stack.setDamage(Math.min(targetDamage, stack.getMaxDamage()));
     }
 
     @Override

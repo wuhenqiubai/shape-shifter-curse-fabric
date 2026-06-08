@@ -154,7 +154,7 @@ public class FormAbilityManager {
             if(layer.contains(origin, playerEntity)){
                 component.setOrigin(layer, origin);
                 component.sync();
-	            ShapeShifterCurseFabric.LOGGER.info("Set form origin {} for player {}", id.toString(), playerEntity.getName());
+	            ShapeShifterCurseFabric.LOGGER.info("Set form origin {} for player {}", id, playerEntity.getName());
             }
         }
     }

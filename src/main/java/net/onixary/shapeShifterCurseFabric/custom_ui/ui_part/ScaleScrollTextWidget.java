@@ -191,7 +191,7 @@ public class ScaleScrollTextWidget extends MultilineTextWidget implements Widget
     }
 
     public int getTextWidth() {
-        return (int) (this.MaxWidth + this.modMaxWidth);
+        return this.MaxWidth + this.modMaxWidth;
     }
 
     @Override
@@ -199,17 +199,16 @@ public class ScaleScrollTextWidget extends MultilineTextWidget implements Widget
         return (int) (super.getHeight() * this.Scale);
     }
 
-    private int drawCenterWithShadow(DrawContext context, List<OrderedText> lines, int x, int y, int lineHeight, int color) {
+    private void drawCenterWithShadow(DrawContext context, List<OrderedText> lines, int x, int y, int lineHeight, int color) {
         int i = y;
         TextRenderer textRenderer = this.getTextRenderer();
         for(OrderedText line : lines) {
             context.drawTextWithShadow(textRenderer, line, x - textRenderer.getWidth(line) / 2, i, color);
             i += lineHeight;
         }
-        return i;
     }
 
-    public int drawWithShadow(DrawContext context, List<OrderedText> lines, int x, int y, int lineHeight, int color) {
+    public void drawWithShadow(DrawContext context, List<OrderedText> lines, int x, int y, int lineHeight, int color) {
         int i = y;
         TextRenderer textRenderer = this.getTextRenderer();
         for(OrderedText line : lines) {
@@ -217,10 +216,9 @@ public class ScaleScrollTextWidget extends MultilineTextWidget implements Widget
             i += lineHeight;
         }
 
-        return i;
     }
 
-    public int drawWithOutShadow(DrawContext context, List<OrderedText> lines, int x, int y, int lineHeight, int color) {
+    public void drawWithOutShadow(DrawContext context, List<OrderedText> lines, int x, int y, int lineHeight, int color) {
         int i = y;
         TextRenderer textRenderer = this.getTextRenderer();
         for(OrderedText line : lines) {
@@ -228,7 +226,6 @@ public class ScaleScrollTextWidget extends MultilineTextWidget implements Widget
             i += lineHeight;
         }
 
-        return i;
     }
 
     @Override

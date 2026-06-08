@@ -46,7 +46,7 @@ public class TransformativeBatEntity extends BatEntity implements ITMob {
             if (Chance >= 1) { return true; }
             if (random.nextFloat() > Chance) { return false; }
 
-            return i > random.nextInt(j) ? false : canMobSpawn(type, world, spawnReason, pos, random);
+            return i <= random.nextInt(j) && canMobSpawn(type, world, spawnReason, pos, random);
         }
     }
 

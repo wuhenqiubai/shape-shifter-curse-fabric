@@ -182,31 +182,7 @@ public class AnubisWolfMinionEntity extends WolfEntity implements IMinion<Anubis
             }
         }
         super.tick();
-        // processAnim();
     }
-    /* 弃用 不会做AzureLib模型 原先的模型不兼容 连测试都没法测试
-    public void processAnim() {
-        if (this.isAttacking()) {
-            WolfMinionAnimator.ATTACK_COMMAND.sendForEntity(this);
-        } else if (this.isTouchingWater()) {
-            WolfMinionAnimator.FLOAT_COMMAND.sendForEntity(this);
-        } else if (!this.isOnGround()) {
-            if (this.getVelocity().getY() > 0.0) {
-                WolfMinionAnimator.JUMP_COMMAND.sendForEntity(this);
-            }
-            else {
-                WolfMinionAnimator.FALL_COMMAND.sendForEntity(this);
-            }
-        } else {
-            if (this.getVelocity().getX() != 0 || this.getVelocity().getZ() != 0) {
-                WolfMinionAnimator.WALK_COMMAND.sendForEntity(this);
-            }
-            else {
-                WolfMinionAnimator.IDLE_COMMAND.sendForEntity(this);
-            }
-        }
-    }
-     */
 
     @Override
     public void onAttacking(Entity target) {

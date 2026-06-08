@@ -48,9 +48,9 @@ public class WebComposterBlock extends Block implements InventoryProvider {
     public static final int MAX_LEVEL = 3;
     public static final IntProperty LEVEL = IntProperty.of("level", 0, 4);
     private static final VoxelShape RAYCAST_SHAPE = VoxelShapes.fullCube();
-    private static final VoxelShape[] LEVEL_TO_COLLISION_SHAPE = (VoxelShape[]) Util.make(new VoxelShape[5], (shapes) -> {
+    private static final VoxelShape[] LEVEL_TO_COLLISION_SHAPE = Util.make(new VoxelShape[5], (shapes) -> {
         for(int i = 0; i < 4; ++i) {
-            shapes[i] = VoxelShapes.combineAndSimplify(RAYCAST_SHAPE, Block.createCuboidShape((double)2.0F, (double)Math.max(2, 1 + i * 4), (double)2.0F, (double)14.0F, (double)16.0F, (double)14.0F), BooleanBiFunction.ONLY_FIRST);
+            shapes[i] = VoxelShapes.combineAndSimplify(RAYCAST_SHAPE, Block.createCuboidShape(2.0F, Math.max(2, 1 + i * 4), 2.0F, 14.0F, 16.0F, 14.0F), BooleanBiFunction.ONLY_FIRST);
         }
 
         shapes[4] = shapes[3];
@@ -65,10 +65,7 @@ public class WebComposterBlock extends Block implements InventoryProvider {
             return true;
         }
         FoodComponent foodComponent = itemStack.get(DataComponentTypes.FOOD);
-        if (foodComponent != null) {
-            return true;
-        }
-        return false;
+	    return foodComponent != null;
     }
 
     public static float getIncreaseChance(ItemStack itemStack) {
@@ -81,15 +78,15 @@ public class WebComposterBlock extends Block implements InventoryProvider {
 
     public WebComposterBlock(Settings settings) {
         super(settings);
-	    this.setDefaultState((BlockState) ((BlockState) this.stateManager.getDefaultState()).with(LEVEL, MIN_LEVEL).with(COCOON_COUNT, 0));
+	    this.setDefaultState(this.stateManager.getDefaultState().with(LEVEL, MIN_LEVEL).with(COCOON_COUNT, 0));
     }
 
     public static void playEffects(World world, BlockPos pos, boolean fill) {
         BlockState blockState = world.getBlockState(pos);
         world.playSoundAtBlockCenter(pos, fill ? SoundEvents.BLOCK_COMPOSTER_FILL_SUCCESS : SoundEvents.BLOCK_COMPOSTER_FILL, SoundCategory.BLOCKS, 1.0F, 1.0F, false);
-        double d = blockState.getOutlineShape(world, pos).getEndingCoord(Direction.Axis.Y, (double)0.5F, (double)0.5F) + (double)0.03125F;
-        double e = (double)0.13125F;
-        double f = (double)0.7375F;
+        double d = blockState.getOutlineShape(world, pos).getEndingCoord(Direction.Axis.Y, 0.5F, 0.5F) + (double)0.03125F;
+        double e = 0.13125F;
+        double f = 0.7375F;
         Random random = world.getRandom();
 
         for(int i = 0; i < 10; ++i) {
@@ -102,7 +99,7 @@ public class WebComposterBlock extends Block implements InventoryProvider {
     }
 
     public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
-        return LEVEL_TO_COLLISION_SHAPE[(Integer)state.get(LEVEL)];
+        return LEVEL_TO_COLLISION_SHAPE[state.get(LEVEL)];
     }
 
     public VoxelShape getRaycastShape(BlockState state, BlockView world, BlockPos pos) {
@@ -114,14 +111,14 @@ public class WebComposterBlock extends Block implements InventoryProvider {
     }
 
     public void onBlockAdded(BlockState state, World world, BlockPos pos, BlockState oldState, boolean notify) {
-        if ((Integer)state.get(LEVEL) == MAX_LEVEL) {
+        if (state.get(LEVEL) == MAX_LEVEL) {
             world.scheduleBlockTick(pos, state.getBlock(), 20);
         }
 
     }
 
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
-        int i = (Integer)state.get(LEVEL);
+        int i = state.get(LEVEL);
         ItemStack itemStack = player.getStackInHand(hand);
         if (i < MAX_LEVEL + 1 && canIncrease(itemStack)) {
             if (i < MAX_LEVEL && !world.isClient) {
@@ -143,7 +140,7 @@ public class WebComposterBlock extends Block implements InventoryProvider {
     }
 
     public static BlockState compost(Entity user, BlockState state, ServerWorld world, ItemStack stack, BlockPos pos) {
-        int i = (Integer)state.get(LEVEL);
+        int i = state.get(LEVEL);
         if (i < MAX_LEVEL && canIncrease(stack)) {
             BlockState blockState = addToComposter(user, state, world, pos, stack);
             stack.decrement(1);
@@ -153,45 +150,43 @@ public class WebComposterBlock extends Block implements InventoryProvider {
         }
     }
 
-    public static BlockState emptyFullComposter(Entity user, BlockState state, World world, BlockPos pos) {
+    public static void emptyFullComposter(Entity user, BlockState state, World world, BlockPos pos) {
         if (!world.isClient) {
-            Vec3d vec3d = Vec3d.add(pos, (double)0.5F, 1.01, (double)0.5F).addRandom(world.random, 0.7F);
+            Vec3d vec3d = Vec3d.add(pos, 0.5F, 1.01, 0.5F).addRandom(world.random, 0.7F);
 	        ItemEntity itemEntity = new ItemEntity(world, vec3d.getX(), vec3d.getY(), vec3d.getZ(), new ItemStack(ResultItem, state.get(COCOON_COUNT)));
             itemEntity.setToDefaultPickupDelay();
             world.spawnEntity(itemEntity);
         }
 
         BlockState blockState = emptyComposter(user, state, world, pos);
-        world.playSound((PlayerEntity)null, pos, SoundEvents.BLOCK_COMPOSTER_EMPTY, SoundCategory.BLOCKS, 1.0F, 1.0F);
-        return blockState;
+        world.playSound(null, pos, SoundEvents.BLOCK_COMPOSTER_EMPTY, SoundCategory.BLOCKS, 1.0F, 1.0F);
     }
 
     static BlockState emptyComposter(@Nullable Entity user, BlockState state, WorldAccess world, BlockPos pos) {
-	    BlockState blockState = (BlockState) state.with(LEVEL, 0).with(COCOON_COUNT, 0);
+	    BlockState blockState = state.with(LEVEL, 0).with(COCOON_COUNT, 0);
 	    world.setBlockState(pos, blockState, 3);
 	    world.emitGameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Emitter.of(user, blockState));
 	    return blockState;
     }
 
-	static BlockState setComposterItemCount(@Nullable Entity user, BlockState state, WorldAccess world, BlockPos pos, int count) {
+	static void setComposterItemCount(@Nullable Entity user, BlockState state, WorldAccess world, BlockPos pos, int count) {
 		if (count == 0) {
-			return emptyComposter(user, state, world, pos);
+			emptyComposter(user, state, world, pos);
 		} else {
-			BlockState blockState = (BlockState) state.with(LEVEL, state.get(LEVEL)).with(COCOON_COUNT, count);
+			BlockState blockState = state.with(LEVEL, state.get(LEVEL)).with(COCOON_COUNT, count);
 			world.setBlockState(pos, blockState, 3);
 			world.emitGameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Emitter.of(user, blockState));
-			return blockState;
 		}
     }
 
     static BlockState addToComposter(@Nullable Entity user, BlockState state, WorldAccess world, BlockPos pos, ItemStack stack) {
-        int i = (Integer)state.get(LEVEL);
+        int i = state.get(LEVEL);
         float f = getIncreaseChance(stack);
         if ((i != 0 || !(f > 0.0F)) && !(world.getRandom().nextDouble() < (double)f)) {
             return state;
         } else {
             int j = i + 1;
-	        BlockState blockState = (BlockState) state.with(LEVEL, j).with(COCOON_COUNT, state.get(COCOON_COUNT));
+	        BlockState blockState = state.with(LEVEL, j).with(COCOON_COUNT, state.get(COCOON_COUNT));
             world.setBlockState(pos, blockState, 3);
             world.emitGameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Emitter.of(user, blockState));
             if (j == MAX_LEVEL) {
@@ -203,9 +198,9 @@ public class WebComposterBlock extends Block implements InventoryProvider {
     }
 
     public void scheduledTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
-        if ((Integer)state.get(LEVEL) == MAX_LEVEL) {
-	        world.setBlockState(pos, (BlockState) state.with(LEVEL, MAX_LEVEL + 1).with(COCOON_COUNT, ResultCount.apply(random)), 3);
-            world.playSound((PlayerEntity)null, pos, SoundEvents.BLOCK_COMPOSTER_READY, SoundCategory.BLOCKS, 1.0F, 1.0F);
+        if (state.get(LEVEL) == MAX_LEVEL) {
+	        world.setBlockState(pos, state.with(LEVEL, MAX_LEVEL + 1).with(COCOON_COUNT, ResultCount.apply(random)), 3);
+            world.playSound(null, pos, SoundEvents.BLOCK_COMPOSTER_READY, SoundCategory.BLOCKS, 1.0F, 1.0F);
         }
 
     }
@@ -215,11 +210,11 @@ public class WebComposterBlock extends Block implements InventoryProvider {
     }
 
     public int getComparatorOutput(BlockState state, World world, BlockPos pos) {
-        return (Integer)state.get(LEVEL);
+        return state.get(LEVEL);
     }
 
     protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
-	    builder.add(new Property[]{LEVEL, COCOON_COUNT});
+	    builder.add(LEVEL, COCOON_COUNT);
     }
 
     public boolean canPathfindThrough(BlockState state, BlockView world, BlockPos pos, NavigationType type) {
@@ -227,11 +222,11 @@ public class WebComposterBlock extends Block implements InventoryProvider {
     }
 
     public SidedInventory getInventory(BlockState state, WorldAccess world, BlockPos pos) {
-        int i = (Integer)state.get(LEVEL);
+        int i = state.get(LEVEL);
         if (i == MAX_LEVEL + 1) {
 	        return new WebComposterBlock.FullComposterInventory(state, world, pos, new ItemStack(ResultItem, state.get(COCOON_COUNT)));
         } else {
-            return (SidedInventory)(i < MAX_LEVEL ? new WebComposterBlock.ComposterInventory(state, world, pos) : new WebComposterBlock.DummyInventory());
+            return i < MAX_LEVEL ? new ComposterInventory(state, world, pos) : new DummyInventory();
         }
     }
 
@@ -260,7 +255,7 @@ public class WebComposterBlock extends Block implements InventoryProvider {
         private boolean dirty;
 
         public FullComposterInventory(BlockState state, WorldAccess world, BlockPos pos, ItemStack outputItem) {
-            super(new ItemStack[]{outputItem});
+            super(outputItem);
             this.state = state;
             this.world = world;
             this.pos = pos;
@@ -285,9 +280,9 @@ public class WebComposterBlock extends Block implements InventoryProvider {
         public void markDirty() {
 	        this.dirty = true;
 	        if (this.getStack(0).isEmpty()) {
-		        WebComposterBlock.emptyComposter((Entity) null, this.state, this.world, this.pos);
+		        WebComposterBlock.emptyComposter(null, this.state, this.world, this.pos);
 	        } else {
-		        WebComposterBlock.setComposterItemCount((Entity) null, this.state, this.world, this.pos, this.getStack(0).getCount());
+		        WebComposterBlock.setComposterItemCount(null, this.state, this.world, this.pos, this.getStack(0).getCount());
 	        }
         }
     }
@@ -325,7 +320,7 @@ public class WebComposterBlock extends Block implements InventoryProvider {
             ItemStack itemStack = this.getStack(0);
             if (!itemStack.isEmpty()) {
                 this.dirty = true;
-                BlockState blockState = WebComposterBlock.addToComposter((Entity)null, this.state, this.world, this.pos, itemStack);
+                BlockState blockState = WebComposterBlock.addToComposter(null, this.state, this.world, this.pos, itemStack);
                 this.world.syncWorldEvent(1500, this.pos, blockState != this.state ? 1 : 0);
                 this.removeStack(0);
             }

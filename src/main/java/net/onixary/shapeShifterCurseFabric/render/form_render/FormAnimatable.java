@@ -1,16 +1,11 @@
 package net.onixary.shapeShifterCurseFabric.render.form_render;
 
-import mod.azure.azurelib.core.animatable.GeoAnimatable;
-import mod.azure.azurelib.core.animatable.instance.AnimatableInstanceCache;
-import mod.azure.azurelib.core.animatable.instance.SingletonAnimatableInstanceCache;
-import mod.azure.azurelib.core.animation.AnimatableManager;
-import mod.azure.azurelib.core.animation.Animation;
-import mod.azure.azurelib.core.animation.AnimationController;
-import mod.azure.azurelib.core.animation.RawAnimation;
-import mod.azure.azurelib.core.object.PlayState;
+import software.bernie.geckolib.animatable.GeoAnimatable;
+import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
+import software.bernie.geckolib.animatable.instance.SingletonAnimatableInstanceCache;
+import software.bernie.geckolib.animation.AnimatableManager;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.player.PlayerEntity;
-import net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric;
 
 
 public class FormAnimatable implements GeoAnimatable {
@@ -18,10 +13,7 @@ public class FormAnimatable implements GeoAnimatable {
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllerRegistrar) {
-	    controllerRegistrar.add(new AnimationController<>(this, ShapeShifterCurseFabric.MOD_ID, animationState -> {
-		    animationState.setAnimation(RawAnimation.begin().then("idle", Animation.LoopType.LOOP));
-		    return PlayState.CONTINUE;
-        }));
+        /* No-op: animations are driven by IModelAnimationSystem, not GeckoLib controllers */
     }
 
     public PlayerEntity e;

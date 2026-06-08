@@ -31,7 +31,7 @@ public class SpawnParticlesInCircleAction {
         int count = Math.max(0, data.getInt("count"));
 
         // 获取扩散/偏移参数
-        Vec3d spread = data.<Vec3d>get("spread");
+        Vec3d spread = data.get("spread");
         double offsetX = data.getDouble("offset_x");
         double offsetY = data.getDouble("offset_y");
         double offsetZ = data.getDouble("offset_z");

@@ -54,7 +54,7 @@ public class TrinketItemMixin implements Trinket {
 @Mixin(value = LivingEntity.class, priority = 1001)
 public class TrinketItemMixin {
     @Unique
-    private final Map<String, ItemStack> lastEquippedTrinkets = new HashMap();
+    private final Map<String, ItemStack> lastEquippedTrinkets = new HashMap<>();
 
     @Unique
     private final String pluginID = "trinkets";
@@ -79,7 +79,7 @@ public class TrinketItemMixin {
     public void tick(CallbackInfo ci) {
         if ((Object)this instanceof PlayerEntity player) {
             if (!player.isRemoved()) {
-                Map<String, ItemStack> newlyEquippedTrinkets = new HashMap();
+                Map<String, ItemStack> newlyEquippedTrinkets = new HashMap<>();
 	            TrinketsApi.getTrinketComponent(player).ifPresent((trinkets) -> trinkets.forEach((ref, stack) -> {
 		            TrinketInventory inventory = ref.inventory();
 		            SlotType slotType = inventory.getSlotType();

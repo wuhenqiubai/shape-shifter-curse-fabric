@@ -56,11 +56,11 @@ public class AdditionalEntityConditions {
                     if (e instanceof PlayerEntity player) {
                         long lastAttackTime = AttackEntityDataTracker.lastAttackWitchTimeMap.getOrDefault(player.getUuid(), Long.MIN_VALUE / 16);
                         long trueLastAttackTime = player.getWorld().getTime() - lastAttackTime;
-                        Comparison comparison = (Comparison) data.get("comparison");
+                        Comparison comparison = data.get("comparison");
                         if (comparison == null) {
                             return false;
                         }
-                        return comparison.compare(trueLastAttackTime, (int) data.get("compare_to"));
+                        return comparison.compare(trueLastAttackTime, data.get("compare_to"));
                     }
                     return false;
                 }
@@ -74,11 +74,11 @@ public class AdditionalEntityConditions {
                     if (e instanceof PlayerEntity player) {
                         long lastAttackTime = AttackEntityDataTracker.lastAttackPillagerTimeMap.getOrDefault(player.getUuid(), Long.MIN_VALUE / 16);
                         long trueLastAttackTime = player.getWorld().getTime() - lastAttackTime;
-                        Comparison comparison = (Comparison) data.get("comparison");
+                        Comparison comparison = data.get("comparison");
                         if (comparison == null) {
                             return false;
                         }
-                        return comparison.compare(trueLastAttackTime, (int) data.get("compare_to"));
+                        return comparison.compare(trueLastAttackTime, data.get("compare_to"));
                     }
                     return false;
                 }

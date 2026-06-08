@@ -30,7 +30,7 @@ public class SmithingScreenHandlerMixin {
         if (recipe instanceof ISmithingRecipeEX iSmithingRecipeEX) {
             iSmithingRecipeEX.onTakeOutput(realThis, player, stack);
             if (iSmithingRecipeEX.overrideVanillaOnTakeOutput()) {
-                realThis.context.run((world, pos) -> world.syncWorldEvent(1044, (BlockPos)pos, 0));
+                realThis.context.run((world, pos) -> world.syncWorldEvent(1044, pos, 0));
                 ci.cancel();
             }
         }

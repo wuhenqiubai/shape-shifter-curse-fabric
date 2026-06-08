@@ -57,7 +57,7 @@ public abstract class WitchEntityMixin {
                     customPotion.setVelocity(d, e + g * 0.2, f, 0.75F, 8.0F);
 
                     if (!witch.isSilent()) {
-                        witch.getWorld().playSound((PlayerEntity)null, witch.getX(), witch.getY(), witch.getZ(), SoundEvents.ENTITY_WITCH_THROW, witch.getSoundCategory(), 1.0F, 0.8F);
+                        witch.getWorld().playSound(null, witch.getX(), witch.getY(), witch.getZ(), SoundEvents.ENTITY_WITCH_THROW, witch.getSoundCategory(), 1.0F, 0.8F);
                     }
                     // 发射自定义药水
                     world.spawnEntity(customPotion);
@@ -66,7 +66,7 @@ public abstract class WitchEntityMixin {
                     ci.cancel();
                 }
             }
-            else if (PowerHolderComponent.hasPower((PlayerEntity)target, WitchFriendlyPower.class)) {
+            else if (PowerHolderComponent.hasPower(target, WitchFriendlyPower.class)) {
                 ci.cancel();
             }
         }
