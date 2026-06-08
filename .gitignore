@@ -150,8 +150,6 @@ build_*.txt
 
 # Legacy root-level mod descriptor
 /fabric.mod.json
-/azurelib.fabric.mixins.json
-/azurelib.mixins.json
 
 # Tools
 /verify_mixins.py
@@ -171,3 +169,4 @@ build_*.txt
 # ClaudeCode
 /projects/
 /.codegraph/
+/CLAUDE.md
