@@ -9,6 +9,7 @@ import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.util.Identifier;
 import net.onixary.shapeShifterCurseFabric.recipes.BrewingRecipeUtils;
 
@@ -100,8 +101,10 @@ public class RegCustomPotions {
         JsonObject json = new JsonObject();
         json.addProperty("type", "potion");
 
-        // 处理输入药水
-        if (input instanceof Potion) {
+        // 处理输入药水（1.21 中 Potions.* 是 RegistryEntry<Potion>）
+        if (input instanceof RegistryEntry<?> entry) {
+            json.addProperty("input", entry.getKey().get().getValue().toString());
+        } else if (input instanceof Potion) {
             var potionId = Registries.POTION.getId((Potion) input);
             if (potionId != null) {
                 json.addProperty("input", potionId.toString());
@@ -111,7 +114,9 @@ public class RegCustomPotions {
         }
 
         // 处理输出药水
-        if (output instanceof Potion) {
+        if (output instanceof RegistryEntry<?> entry) {
+            json.addProperty("output", entry.getKey().get().getValue().toString());
+        } else if (output instanceof Potion) {
             var potionId = Registries.POTION.getId((Potion) output);
             if (potionId != null) {
                 json.addProperty("output", potionId.toString());

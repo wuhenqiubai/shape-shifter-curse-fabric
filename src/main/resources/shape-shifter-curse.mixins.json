@@ -42,7 +42,6 @@
     "PlayerEntityPoseMixin",
     "PlayerEntitySprintSwimmingMixin",
     "PotionEntityMixin",
-    "RecipeManagerMixin",
     "PotionItemMixin",
     "PotionStackMixin",
     "ServerPlayerEntityForceInputMixin",

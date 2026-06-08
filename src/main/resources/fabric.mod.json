@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "id": "shape-shifter-curse-unofficial",
+  "id": "shape-shifter-curse",
   "version": "${version}",
   "name": "Shape Shifter Curse-Unofficial Port",
   "description": "An unofficial port of the mod that allows you to gradually transform into different vanilla creatures, each with unique models and animations.",
