@@ -46,10 +46,7 @@ repositories {
     mavenCentral()
     //}
 
-    // The Maven with the mods source
-    maven { url 'https://maven.azuredoom.com/mods' }
-
-    maven { url 'https://dl.cloudsmith.io/public/azuredoom-mods/azurelib/maven/' }
+    // The Maven with the mods source (AzureDoom Maven - no longer needed for GeckoLib)
 
     //Owo
     maven { url 'https://maven.wispforest.io/releases/' }
@@ -131,6 +128,13 @@ repositories {
         url = "https://repo.redlance.org/public"
     }
     maven { url "https://maven.shedaniel.me/" }
+    maven {
+        name = 'GeckoLib'
+        url 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/'
+        content {
+            includeGroup("software.bernie.geckolib")
+        }
+    }
 
     mavenLocal()
 }
@@ -154,11 +158,13 @@ dependencies {
     //    parchment("org.parchmentmc.data:parchment-1.20.1:2023.09.03@zip")
     //}
 
-    //Common 1.20.1+ Latest Only
-    //compileOnly "mod.azure.azurelib:azurelib-common-1.20.1:2.0.41"
+    //Common 1.20.1+ Latest Only (unused - replaced by GeckoLib)
 
-    //Fabric or Quilt
-    modImplementation "mod.azure.azurelib:azurelib-fabric-1.21.1:${azurelib_version}"
+    //AzureLib
+    //modImplementation "mod.azure.azurelib:azurelib-fabric-1.21.1:${azurelib_version}"
+
+    //GeckoLib
+    modImplementation "software.bernie.geckolib:geckolib-fabric-${minecraft_version}:${geckolib_version}"
 
 
     //Owo
@@ -298,7 +304,7 @@ tasks.register('fixEmbeddedModVersions') {
         }
         def jarsDir = new File(tmpDir, 'META-INF/jars')
         jarsDir.listFiles()?.each { embedded ->
-            if (embedded.name.contains('apoli') || embedded.name.contains('calio') || embedded.name.contains('azurelib')) {
+            if (embedded.name.contains('apoli') || embedded.name.contains('calio')) {
                 def extractDir = new File(tmpDir, embedded.name + '-tmp')
                 extractDir.mkdir()
                 copy { from zipTree(embedded); into extractDir }
@@ -309,18 +315,6 @@ tasks.register('fixEmbeddedModVersions') {
                     txt = txt.replace('"minecraft": "1.21.x"', '"minecraft": "1.21.1"')
                     modJson.text = txt
                 }
-//                if (embedded.name.contains('azurelib')) {
-//                    // Delete TextureManagerMixin - causes AnimatableTexture NPE with null IDs in 1.21.1
-//                    project.delete fileTree(extractDir) { include '**/TextureManagerMixin*.class' }
-//                    def cfg = new File(extractDir, 'azurelib.fabric.mixins.json')
-//                    if (cfg.exists()) {
-//                        def json = new groovy.json.JsonSlurper().parse(cfg) as Map
-//                        json.mixins = json.mixins.findAll { !it.contains('TextureManagerMixin') }
-//                        json.client = (json.client ?: []).findAll { !it.contains('TextureManagerMixin') }
-//                        json.server = (json.server ?: []).findAll { !it.contains('TextureManagerMixin') }
-//                        cfg.text = groovy.json.JsonOutput.prettyPrint(groovy.json.JsonOutput.toJson(json))
-//                    }
-//                }
 //                if (embedded.name.contains('apoli')) {
 //                    // Delete EquipmentMixin - restrict_armor condition context mismatch in 1.21
 //                    project.delete fileTree(extractDir) { include '**/EquipmentMixin*.class' }

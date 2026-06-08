@@ -1,16 +1,17 @@
 package net.onixary.shapeShifterCurseFabric.items.armors;
 
-
-import mod.azure.azurelib.rewrite.render.armor.AzArmorRenderer;
-import mod.azure.azurelib.rewrite.render.armor.AzArmorRendererConfig;
 import net.minecraft.util.Identifier;
 import net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric;
+import software.bernie.geckolib.model.DefaultedGeoModel;
+import software.bernie.geckolib.renderer.GeoArmorRenderer;
 
-public class MorphscaleArmorRenderer extends AzArmorRenderer {
-    private static final Identifier MODEL = Identifier.of(ShapeShifterCurseFabric.MOD_ID, "geo/item/morphscale_armor.geo.json");
-    private static final Identifier TEXTURE = Identifier.of(ShapeShifterCurseFabric.MOD_ID, "textures/item/morphscale_armor.png");
-
+public class MorphscaleArmorRenderer extends GeoArmorRenderer<MorphScaleArmor> {
     public MorphscaleArmorRenderer() {
-        super(AzArmorRendererConfig.builder(MODEL, TEXTURE).build());
+        super(new DefaultedGeoModel<>(Identifier.of(ShapeShifterCurseFabric.MOD_ID, "morphscale_armor")) {
+            @Override
+            protected String subtype() {
+                return "item";
+            }
+        });
     }
 }

@@ -2,7 +2,6 @@ package net.onixary.shapeShifterCurseFabric.client;
 
 import io.github.apace100.apoli.ApoliClient;
 import io.github.apace100.apoli.component.PowerHolderComponent;
-import mod.azure.azurelib.rewrite.render.armor.AzArmorRendererRegistry;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
@@ -30,8 +29,6 @@ import net.onixary.shapeShifterCurseFabric.form_giving_custom_entity.bat.BatEnti
 import net.onixary.shapeShifterCurseFabric.form_giving_custom_entity.ocelot.TOcelotEntityRenderer;
 import net.onixary.shapeShifterCurseFabric.form_giving_custom_entity.spider.TSpiderEntityRenderer;
 import net.onixary.shapeShifterCurseFabric.items.RegCustomItem;
-import net.onixary.shapeShifterCurseFabric.items.armors.MorphscaleArmorRenderer;
-import net.onixary.shapeShifterCurseFabric.items.armors.NetheriteMorphscaleArmorRenderer;
 import net.onixary.shapeShifterCurseFabric.mana.ManaRegistriesClient;
 import net.onixary.shapeShifterCurseFabric.mana.ManaUtils;
 import net.onixary.shapeShifterCurseFabric.minion.MinionRegisterClient;
@@ -92,22 +89,6 @@ public class ShapeShifterCurseFabricClient implements ClientModInitializer {
 		MinionRegisterClient.registerClient();
 	}
 
-    public static void registerAzureArmorGeo(){
-        AzArmorRendererRegistry.register(
-                MorphscaleArmorRenderer::new,
-                RegCustomItem.MORPHSCALE_HEADRING,
-                RegCustomItem.MORPHSCALE_VEST,
-                RegCustomItem.MORPHSCALE_CUISH,
-                RegCustomItem.MORPHSCALE_ANKLET
-        );
-		AzArmorRendererRegistry.register(
-				NetheriteMorphscaleArmorRenderer::new,
-				RegCustomItem.NETHERITE_MORPHSCALE_HEADRING,
-				RegCustomItem.NETHERITE_MORPHSCALE_VEST,
-				RegCustomItem.NETHERITE_MORPHSCALE_CUISH,
-				RegCustomItem.NETHERITE_MORPHSCALE_ANKLET
-		);
-    }
 
 	private static void onClientTick(MinecraftClient minecraftClient){
 		TickManager.tickClientAll();
@@ -236,7 +217,7 @@ public class ShapeShifterCurseFabricClient implements ClientModInitializer {
 
 		registerShaderResource();
 		FurGradientRenderLayer.onInitializeClient();
-        registerAzureArmorGeo();
+
 
 		ManaRegistriesClient.register();
 		RegCustomEntityRenderer.init();

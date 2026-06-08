@@ -1,7 +1,7 @@
 package net.onixary.shapeShifterCurseFabric.render.form_render;
 
 import com.google.gson.JsonObject;
-import mod.azure.azurelib.common.internal.common.cache.object.GeoBone;
+import software.bernie.geckolib.cache.object.GeoBone;
 import net.minecraft.client.model.ModelPart;
 import net.minecraft.client.render.entity.PlayerEntityRenderer;
 import net.minecraft.entity.player.PlayerEntity;
