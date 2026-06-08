@@ -80,7 +80,7 @@ public class FormRenderFeature <T extends PlayerEntity, M extends BipedEntityMod
     // 处理 BonePart 隐藏
     public static void rM_PartA(PlayerEntityRenderer playerEntityRenderer, AbstractClientPlayerEntity player, float f, float g, MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i) {
         if (player.isSpectator()) {
-            PlayerEntityModel<?> model = (PlayerEntityModel<?>) playerEntityRenderer.getModel();
+            PlayerEntityModel<?> model = playerEntityRenderer.getModel();
             model.hat.hidden = false;
             model.head.hidden = false;
             model.body.hidden = false;

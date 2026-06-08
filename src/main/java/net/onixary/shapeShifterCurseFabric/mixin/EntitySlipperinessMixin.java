@@ -19,9 +19,9 @@ public abstract class EntitySlipperinessMixin extends Entity {
         super(type, world);
     }
 
-    @ModifyVariable(method = "travel", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;isOnGround()Z", opcode = Opcodes.GETFIELD, ordinal = 2))
+    @ModifyVariable(method = "travel", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;isOnGround()Z", ordinal = 2))
     private float modifySlipperiness(float original) {
-        Entity entity = (Entity)(Object)this;
+        Entity entity = this;
 	    if (entity instanceof PlayerEntity player) {
 		    PowerHolderComponent component = PowerHolderComponent.KEY.get(player);
 

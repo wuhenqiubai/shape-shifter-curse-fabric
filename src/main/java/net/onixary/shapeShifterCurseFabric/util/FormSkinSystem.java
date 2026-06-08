@@ -13,9 +13,9 @@ import java.util.HashMap;
 import java.util.UUID;
 
 public class FormSkinSystem {
-    public static void init() {};
+    public static void init() {}
 
-    public static class FormSkin {
+	public static class FormSkin {
         public static final String IdNameSpace = ShapeShifterCurseFabric.MOD_ID;
         public static final String IdPrefix = "dynamic_skin";
         public static long nowId = 0;

@@ -123,10 +123,8 @@ public interface IModelAnimationSystem {
 	 * @param player       目标玩家
 	 * @param arm          手臂 ModelPart
 	 * @param sleeve       袖子 ModelPart
-	 * @return 后处理后的手臂骨骼
 	 */
-	default @Nullable GeoBone afterRenderFirstPerson(@Nullable GeoBone geoBone, FormRenderer formRenderer, FormModel model, PlayerEntityRenderer renderer, PlayerEntity player, ModelPart arm, ModelPart sleeve) {
-		return geoBone;
+	default void afterRenderFirstPerson(@Nullable GeoBone geoBone, FormRenderer formRenderer, FormModel model, PlayerEntityRenderer renderer, PlayerEntity player, ModelPart arm, ModelPart sleeve) {
 	}
 
 }

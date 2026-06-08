@@ -42,7 +42,7 @@ public abstract class PlayerEntityAnimOverrideMixin extends PlayerEntity {
     AnimationHolder animToPlay = null;
 
     @Unique
-    AnimSystem animSystem = new AnimSystem((PlayerEntity) (Object)this);
+    AnimSystem animSystem = new AnimSystem(this);
 
     @Inject(method = "tick", at = @At("TAIL"))
     void tick(CallbackInfo ci) {

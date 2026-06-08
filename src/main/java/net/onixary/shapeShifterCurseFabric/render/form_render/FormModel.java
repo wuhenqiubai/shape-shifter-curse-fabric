@@ -6,7 +6,6 @@ import com.google.gson.JsonObject;
 import com.zigythebird.playeranimcore.math.Vec3f;
 import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.cache.object.GeoBone;
-import software.bernie.geckolib.animation.AnimationState;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.Identifier;
@@ -16,7 +15,6 @@ import net.minecraft.util.math.Vec3d;
 import net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric;
 import net.onixary.shapeShifterCurseFabric.player_form.PlayerFormBase;
 import net.onixary.shapeShifterCurseFabric.player_form.PlayerFormBodyType;
-import net.onixary.shapeShifterCurseFabric.player_form.ability.RegPlayerFormComponent;
 import net.onixary.shapeShifterCurseFabric.util.FormSkinSystem;
 import net.onixary.shapeShifterCurseFabric.util.FormTextureUtils;
 import org.jetbrains.annotations.Nullable;
@@ -211,18 +209,18 @@ public class FormModel extends GeoModel<FormAnimatable> {
             for (int i = 0; i < hiddenArray.size(); i++) {
                 String hidden = hiddenArray.get(i).getAsString();
                 switch (hidden) {
-                    case "hat" -> { this.Hidden_Hat = true; }
-                    case "head" -> { this.Hidden_Head = true; }
-                    case "body" -> { this.Hidden_Body = true; }
-                    case "jacket" -> { this.Hidden_Jacket = true; }
-                    case "leftArm" -> { this.Hidden_LeftArm = true; }
-                    case "rightArm" -> { this.Hidden_RightArm = true; }
-                    case "leftSleeve" -> { this.Hidden_LeftSleeve = true; }
-                    case "rightSleeve" -> { this.Hidden_RightSleeve = true; }
-                    case "leftLeg" -> { this.Hidden_LeftLeg = true; }
-                    case "rightLeg" -> { this.Hidden_RightLeg = true; }
-                    case "leftPants" -> { this.Hidden_LeftPants = true; }
-                    case "rightPants" -> { this.Hidden_RightPants = true; }
+                    case "hat" -> this.Hidden_Hat = true;
+                    case "head" -> this.Hidden_Head = true;
+                    case "body" -> this.Hidden_Body = true;
+                    case "jacket" -> this.Hidden_Jacket = true;
+                    case "leftArm" -> this.Hidden_LeftArm = true;
+                    case "rightArm" -> this.Hidden_RightArm = true;
+                    case "leftSleeve" -> this.Hidden_LeftSleeve = true;
+                    case "rightSleeve" -> this.Hidden_RightSleeve = true;
+                    case "leftLeg" -> this.Hidden_LeftLeg = true;
+                    case "rightLeg" -> this.Hidden_RightLeg = true;
+                    case "leftPants" -> this.Hidden_LeftPants = true;
+                    case "rightPants" -> this.Hidden_RightPants = true;
                 }
             }
         }
@@ -513,13 +511,13 @@ public class FormModel extends GeoModel<FormAnimatable> {
         }
     }
 
-    public final GeoBone translatePositionForBone(String bone_name, Vec3d pos) {
+    public final void translatePositionForBone(String bone_name, Vec3d pos) {
         var b = this.getCachedGeoBone(bone_name);
         if (b == null) {
-            return null;
+            return;
         }
         var posOut = new Vec3d(pos.x + b.getPosX(), (float)pos.y + b.getPosY(),(float)pos.z + b.getPosZ());
-        return this.setPositionForBone(bone_name, posOut);
+        this.setPositionForBone(bone_name, posOut);
     }
 
     public final GeoBone setPositionForBone(String bone_name, Vec3d pos) {
@@ -530,7 +528,7 @@ public class FormModel extends GeoModel<FormAnimatable> {
         b.setPosX((float)pos.x);
         b.setPosY((float)pos.y);
         b.setPosZ((float)pos.z);
-        return (GeoBone) b;
+        return b;
     }
 
     public final GeoBone setRotationForBone(String bone_name, Vec3d rot) {
@@ -541,11 +539,11 @@ public class FormModel extends GeoModel<FormAnimatable> {
         b.setRotX((float)rot.x);
         b.setRotY((float)rot.y);
         b.setRotZ((float)rot.z);
-        return (GeoBone) b;
+        return b;
     }
 
-    public final GeoBone setRotationForBone(String bone_name, Vec3f rot) {
-        return setRotationForBone(bone_name, new Vec3d(rot.x(), rot.y(), rot.z()));
+    public final void setRotationForBone(String bone_name, Vec3f rot) {
+        setRotationForBone(bone_name, new Vec3d(rot.x(), rot.y(), rot.z()));
     }
 
     public final GeoBone setModelPositionForBone(String bone_name, Vec3d pos) {
@@ -554,7 +552,7 @@ public class FormModel extends GeoModel<FormAnimatable> {
             return null;
         }
         b.setModelPosition(new Vector3d(pos.x, pos.y, pos.z));
-        return (GeoBone) b;
+        return b;
     }
 
     public final GeoBone setModelPositionForBone(String bone_name, Vec3f pos) {
@@ -569,21 +567,20 @@ public class FormModel extends GeoModel<FormAnimatable> {
         b.setScaleX((float)scale.x);
         b.setScaleY((float)scale.y);
         b.setScaleZ((float)scale.z);
-        return (GeoBone) b;
+        return b;
     }
 
     public final GeoBone setScaleForBone(String bone_name, Vec3f scale) {
         return setScaleForBone(bone_name, new Vec3d(scale.x(), scale.y(), scale.z()));
     }
 
-    public final GeoBone invertRotForPart(String bone_name, boolean x, boolean y, boolean z) {
+    public final void invertRotForPart(String bone_name, boolean x, boolean y, boolean z) {
         var b = getCachedGeoBone(bone_name);
-        if (b == null) {return null;}
+        if (b == null) {return;}
         var r =b.getRotationVector().mul(x ? -1 : 1, y ? -1 : 1, z ? -1 : 1);
         b.setRotX((float) r.x);
         b.setRotY((float) r.y);
         b.setRotZ((float) r.z);
-        return b;
     }
 
     public final GeoBone resetBone(String bone_name) {

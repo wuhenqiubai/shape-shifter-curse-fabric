@@ -4,7 +4,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import net.minecraft.util.Identifier;
 import net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric;
-import net.onixary.shapeShifterCurseFabric.player_form.PlayerFormPhase;
 import net.onixary.shapeShifterCurseFabric.player_form.forms.*;
 
 import java.util.*;
@@ -177,36 +176,34 @@ public class RegPlayerForms {
         return registerPlayerFormGroup(formGroup);
     }
 
-    public static boolean removeDynamicPlayerForm(Identifier id, boolean RemoveDynamicRegistry) {
+    public static void removeDynamicPlayerForm(Identifier id, boolean RemoveDynamicRegistry) {
         if (!dynamicPlayerForms.contains(id)) {
 	        ShapeShifterCurseFabric.LOGGER.warn("Attempted to remove non-dynamic player form: {}", id);
-            return false;
+            return;
         }
         if (!playerForms.containsKey(id)) {
 	        ShapeShifterCurseFabric.LOGGER.warn("Attempted to remove non-existent player form: {}", id);
-            return false;
+            return;
         }
         if (RemoveDynamicRegistry) {
             dynamicPlayerForms.remove(id);
         }
         playerForms.remove(id);
-        return true;
     }
 
-    public static boolean removeDynamicPlayerFormGroup(Identifier id, boolean RemoveDynamicRegistry) {
+    public static void removeDynamicPlayerFormGroup(Identifier id, boolean RemoveDynamicRegistry) {
         if (!dynamicPlayerFormGroups.contains(id)) {
 	        ShapeShifterCurseFabric.LOGGER.warn("Attempted to remove non-dynamic player form group: {}", id);
-            return false;
+            return;
         }
         if (!playerFormGroups.containsKey(id)) {
 	        ShapeShifterCurseFabric.LOGGER.warn("Attempted to remove non-existent player form group: {}", id);
-            return false;
+            return;
         }
         if (RemoveDynamicRegistry) {
             dynamicPlayerFormGroups.remove(id);
         }
         playerFormGroups.remove(id);
-        return true;
     }
 
     public static void ClearAllDynamicPlayerForms() {

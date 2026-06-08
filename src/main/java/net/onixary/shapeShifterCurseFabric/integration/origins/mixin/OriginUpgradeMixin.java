@@ -1,5 +1,6 @@
 package net.onixary.shapeShifterCurseFabric.integration.origins.mixin;
 
+import com.llamalad7.mixinextras.sugar.Local;
 import net.onixary.shapeShifterCurseFabric.integration.origins.Origins;
 import net.onixary.shapeShifterCurseFabric.integration.origins.component.OriginComponent;
 import net.onixary.shapeShifterCurseFabric.integration.origins.origin.Origin;
@@ -27,8 +28,8 @@ public class OriginUpgradeMixin {
     @Shadow
     private ServerPlayerEntity owner;
 
-    @Inject(method = "grantCriterion", at = @At(value = "INVOKE", target = "Lnet/minecraft/advancement/PlayerAdvancementTracker;endTrackingCompleted(Lnet/minecraft/advancement/AdvancementEntry;)V"), locals = LocalCapture.CAPTURE_FAILHARD)
-    private void checkOriginUpgrade(AdvancementEntry advancement, String criterionName, CallbackInfoReturnable<Boolean> info, boolean bl, AdvancementProgress advancementProgress, boolean bl2) {
+    @Inject(method = "grantCriterion", at = @At(value = "INVOKE", target = "Lnet/minecraft/advancement/PlayerAdvancementTracker;endTrackingCompleted(Lnet/minecraft/advancement/AdvancementEntry;)V"))
+    private void checkOriginUpgrade(AdvancementEntry advancement, String criterionName, CallbackInfoReturnable<Boolean> info, @Local AdvancementProgress advancementProgress) {
         if(advancementProgress.isDone()) {
             Origin.get(owner).forEach((layer, o) -> {
                 Optional<OriginUpgrade> upgrade = o.getUpgrade(advancement);

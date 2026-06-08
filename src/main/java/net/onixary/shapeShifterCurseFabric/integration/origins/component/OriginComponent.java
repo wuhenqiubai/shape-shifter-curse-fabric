@@ -79,7 +79,7 @@ public interface OriginComponent extends AutoSyncedComponent {
 					choseOneAutomatically = true;
 					shouldContinue = true;
 				} else if (layer.getOriginOptionCount(player) == 1 && layer.shouldAutoChoose()) {
-					List<Origin> origins = layer.getOrigins(player).stream().map(OriginRegistry::get).filter(Origin::isChoosable).collect(Collectors.toList());
+					List<Origin> origins = layer.getOrigins(player).stream().map(OriginRegistry::get).filter(Origin::isChoosable).toList();
 					if (origins.isEmpty()) {
 						List<Identifier> randomOrigins = layer.getRandomOrigins(player);
 						setOrigin(layer, OriginRegistry.get(randomOrigins.get(player.getRandom().nextInt(randomOrigins.size()))));

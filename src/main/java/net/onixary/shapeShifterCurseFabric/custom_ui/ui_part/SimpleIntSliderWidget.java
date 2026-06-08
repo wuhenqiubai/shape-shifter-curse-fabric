@@ -12,8 +12,7 @@ import java.util.function.Consumer;
 
 public class SimpleIntSliderWidget extends SliderWidget {
     private static final Identifier TEXTURE = Identifier.of("textures/gui/slider.png");
-    ;
-    public final int minValue;
+	public final int minValue;
     public final int maxValue;
 
     public int intValue = 0;

@@ -17,8 +17,7 @@ public class CursedMoon {
     public static boolean middayMessageSent = false;  // 接收到同步包时自动置为 false
 
     public static boolean isCursedMoonByPhase(int moonPhase) {
-        int[] curseMoonPhase = ShapeShifterCurseFabric.commonConfig.curseMoonPhase;
-        return Arrays.stream(curseMoonPhase).anyMatch(phase -> phase == moonPhase);
+	    return net.onixary.shapeShifterCurseFabric.cursed_moon.CursedMoon.isCursedMoonByPhase(moonPhase);
     }
 
     public static boolean isCursedMoonDay(World world) {

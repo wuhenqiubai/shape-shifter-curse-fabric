@@ -36,13 +36,11 @@ public abstract class MinionPlayerEntityMixin implements IPlayerEntityMinion {
     }
 
     @Unique
-    private boolean syncPlayerMinionComponent() {
+    private void syncPlayerMinionComponent() {
         try {
 	        RegPlayerMinionComponent.PLAYER_MINION_DATA.sync(this);
-            return true;
         } catch (Exception e) {
             ShapeShifterCurseFabric.LOGGER.error("Failed to sync PlayerMinionComponent", e);
-            return false;
         }
     }
 
@@ -81,18 +79,16 @@ public abstract class MinionPlayerEntityMixin implements IPlayerEntityMinion {
     }
 
     @Override
-    public boolean shape_shifter_curse$removeMinion(Identifier MinionID, UUID minionUUID) {
+    public void shape_shifter_curse$removeMinion(Identifier MinionID, UUID minionUUID) {
         boolean result = this.shape_shifter_curse$getMinionsByMinionID(MinionID).remove(minionUUID);
         this.syncPlayerMinionComponent();
-        return result;
     }
 
     @Override
-    public <T extends IMinion<? extends LivingEntity>> boolean shape_shifter_curse$addMinion(T minion) {
+    public <T extends IMinion<? extends LivingEntity>> void shape_shifter_curse$addMinion(T minion) {
         this.shape_shifter_curse$getMinionsByMinionID(minion.getMinionTypeID()).add(minion.getSelf().getUuid());
         minion.setOwner((PlayerEntity)(Object)this);
         this.syncPlayerMinionComponent();
-        return true;
     }
 
     @Override

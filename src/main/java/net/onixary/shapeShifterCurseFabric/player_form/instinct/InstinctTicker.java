@@ -41,12 +41,7 @@ public class InstinctTicker {
     public static void tick(ServerPlayerEntity player) {
         PlayerInstinctComponent comp = player.getComponent(RegPlayerInstinctComponent.PLAYER_INSTINCT_COMP);
 
-        if(CursedMoon.isCursedMoon(player.getWorld()) && CursedMoon.isNight(player.getWorld())){
-            isUnderCursedMoon = true;
-        }
-        else{
-            isUnderCursedMoon = false;
-        }
+	    isUnderCursedMoon = CursedMoon.isCursedMoon(player.getWorld()) && CursedMoon.isNight(player.getWorld());
 
         // 处理立即效果
         // Process immediate effects
@@ -76,7 +71,7 @@ public class InstinctTicker {
         // If the instinct value is between 80 and 99.99, send a packet to the server
         if (comp.instinctValue >= 80.0f && comp.instinctValue < 99.99f && !player.getWorld().isClient && player instanceof ServerPlayerEntity) {
             PacketByteBuf buf = PacketByteBufs.create();
-            ServerPlayNetworking.send((ServerPlayerEntity) player, new BytePayload(BytePayload.id(ModPackets.INSTINCT_THRESHOLD_EFFECT_ID), buf));
+            ServerPlayNetworking.send(player, new BytePayload(BytePayload.id(ModPackets.INSTINCT_THRESHOLD_EFFECT_ID), buf));
         }
         //ShapeShifterCurseFabric.LOGGER.info("currentInstinctFromComp: " + comp.instinctValue);
         // 判断当前状态
@@ -99,24 +94,20 @@ public class InstinctTicker {
     private static float judgeInstinctGrowRate(PlayerEntity player){
         PlayerFormComponent formComp = player.getComponent(RegPlayerFormComponent.PLAYER_FORM);
         PlayerFormPhase currentPhase = formComp.getCurrentForm().getPhase();
-        switch (currentPhase){
-            case PHASE_CLEAR:
-                return 0.0f;
-            case PHASE_0:
-                return StaticParams.INSTINCT_INCREASE_RATE_0;
-            case PHASE_1:
-                return StaticParams.INSTINCT_INCREASE_RATE_1;
-            case PHASE_2:
-                // 立刻涨满
-                return 100.0f;
-            case PHASE_3:
-                // 立刻涨满
-                return 100.0f;
-            case PHASE_SP:
-                // 立刻涨满
-                return 100.0f;
-        }
-        return 0.0f;
+	    return switch (currentPhase) {
+		    case PHASE_CLEAR -> 0.0f;
+		    case PHASE_0 -> StaticParams.INSTINCT_INCREASE_RATE_0;
+		    case PHASE_1 -> StaticParams.INSTINCT_INCREASE_RATE_1;
+		    case PHASE_2 ->
+			    // 立刻涨满
+				    100.0f;
+		    case PHASE_3 ->
+			    // 立刻涨满
+				    100.0f;
+		    case PHASE_SP ->
+			    // 立刻涨满
+				    100.0f;
+	    };
     }
 
     private static void judgeInstinctState(PlayerEntity player, PlayerInstinctComponent comp){

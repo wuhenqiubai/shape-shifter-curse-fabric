@@ -73,9 +73,7 @@ public class ProjectileDodgePower extends Power {
                             Vec3d prevPos = projectile.prevX != 0 ? new Vec3d(projectile.prevX, projectile.prevY, projectile.prevZ) : null;
                             if (prevPos != null) {
                                 double movement = prevPos.distanceTo(projectile.getPos());
-                                if (movement < 0.1) {
-                                    return false; // 投射物没有移动，可能已经停止
-                                }
+	                            return !(movement < 0.1); // 投射物没有移动，可能已经停止
                             }
 
                             //ShapeShifterCurseFabric.LOGGER.info("飞行中投射物: " + projectile.getUuid());

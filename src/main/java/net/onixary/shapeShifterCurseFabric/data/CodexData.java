@@ -5,6 +5,7 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.text.Text;
 import net.onixary.shapeShifterCurseFabric.cursed_moon.CursedMoon;
+import net.onixary.shapeShifterCurseFabric.player_form.PlayerFormBase;
 import net.onixary.shapeShifterCurseFabric.player_form.PlayerFormPhase;
 import net.onixary.shapeShifterCurseFabric.player_form.ability.PlayerFormComponent;
 import net.onixary.shapeShifterCurseFabric.player_form.ability.RegPlayerFormComponent;
@@ -330,47 +331,41 @@ public class CodexData {
     public static Text getDescText(ContentType type, PlayerEntity player){
         PlayerFormComponent formComp = player.getComponent(RegPlayerFormComponent.PLAYER_FORM);
         PlayerFormPhase currentPhase = formComp.getCurrentForm().getPhase();
-        switch (type){
-            case TITLE:
-                return Text.empty();
-            case APPEARANCE:
-                return switch (currentPhase) {
-                    case PHASE_CLEAR -> descAppearance_normal;
-                    case PHASE_0 -> descAppearance_0;
-                    case PHASE_1 -> descAppearance_1;
-                    case PHASE_2 -> descAppearance_2;
-                    case PHASE_3 -> descAppearance_3;
-                    case PHASE_SP -> Text.empty();
-                };
-            case PROS:
-                return switch (currentPhase) {
-                    case PHASE_CLEAR -> descPros_normal;
-                    case PHASE_0 -> descPros_0;
-                    case PHASE_1 -> descPros_1;
-                    case PHASE_2 -> descPros_2;
-                    case PHASE_3 -> descPros_3;
-                    case PHASE_SP -> Text.empty();
-                };
-            case CONS:
-                return switch (currentPhase) {
-                    case PHASE_CLEAR -> descCons_normal;
-                    case PHASE_0 -> descCons_0;
-                    case PHASE_1 -> descCons_1;
-                    case PHASE_2 -> descCons_2;
-                    case PHASE_3 -> descCons_3;
-                    case PHASE_SP -> Text.empty();
-                };
-            case INSTINCTS:
-                return switch (currentPhase) {
-                    case PHASE_CLEAR -> descInstincts_normal;
-                    case PHASE_0 -> descInstincts_0;
-                    case PHASE_1 -> descInstincts_1;
-                    case PHASE_2 -> descInstincts_2;
-                    case PHASE_3 -> descInstincts_3;
-                    case PHASE_SP -> Text.empty();
-                };
-        }
-        return Text.empty();
+	    return switch (type) {
+		    case TITLE -> Text.empty();
+		    case APPEARANCE -> switch (currentPhase) {
+			    case PHASE_CLEAR -> descAppearance_normal;
+			    case PHASE_0 -> descAppearance_0;
+			    case PHASE_1 -> descAppearance_1;
+			    case PHASE_2 -> descAppearance_2;
+			    case PHASE_3 -> descAppearance_3;
+			    case PHASE_SP -> Text.empty();
+		    };
+		    case PROS -> switch (currentPhase) {
+			    case PHASE_CLEAR -> descPros_normal;
+			    case PHASE_0 -> descPros_0;
+			    case PHASE_1 -> descPros_1;
+			    case PHASE_2 -> descPros_2;
+			    case PHASE_3 -> descPros_3;
+			    case PHASE_SP -> Text.empty();
+		    };
+		    case CONS -> switch (currentPhase) {
+			    case PHASE_CLEAR -> descCons_normal;
+			    case PHASE_0 -> descCons_0;
+			    case PHASE_1 -> descCons_1;
+			    case PHASE_2 -> descCons_2;
+			    case PHASE_3 -> descCons_3;
+			    case PHASE_SP -> Text.empty();
+		    };
+		    case INSTINCTS -> switch (currentPhase) {
+			    case PHASE_CLEAR -> descInstincts_normal;
+			    case PHASE_0 -> descInstincts_0;
+			    case PHASE_1 -> descInstincts_1;
+			    case PHASE_2 -> descInstincts_2;
+			    case PHASE_3 -> descInstincts_3;
+			    case PHASE_SP -> Text.empty();
+		    };
+	    };
     }
 
 	/**

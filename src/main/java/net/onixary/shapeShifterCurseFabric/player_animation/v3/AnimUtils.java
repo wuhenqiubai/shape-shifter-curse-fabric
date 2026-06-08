@@ -108,17 +108,14 @@ public class AnimUtils {
      * @param powerAnimID  Power 动画 ID
      * @param animDuration 动画时长（tick）
      * @param sendSideType 播放端类型
-     * @return 是否成功播放
      */
-    public static boolean playPowerAnimWithTime(PlayerEntity playerEntity, Identifier powerAnimID, int animDuration, AnimationSendSideType sendSideType) {
+    public static void playPowerAnimWithTime(PlayerEntity playerEntity, Identifier powerAnimID, int animDuration, AnimationSendSideType sendSideType) {
         if (!sendSideType.canPlayAnim(playerEntity)) {
-            return false;
+            return;
         }
         if (playerEntity instanceof IPlayerAnimController playerAnimController) {
             playerAnimController.shape_shifter_curse$playAnimationWithTime(powerAnimID, animDuration);
-            return true;
         } else {
-            return false;
         }
     }
 
@@ -129,17 +126,14 @@ public class AnimUtils {
      * @param powerAnimID  Power 动画 ID
      * @param animCount    播放次数
      * @param sendSideType 播放端类型
-     * @return 是否成功播放
      */
-    public static boolean playPowerAnimWithCount(PlayerEntity playerEntity, Identifier powerAnimID, int animCount, AnimationSendSideType sendSideType) {
+    public static void playPowerAnimWithCount(PlayerEntity playerEntity, Identifier powerAnimID, int animCount, AnimationSendSideType sendSideType) {
         if (!sendSideType.canPlayAnim(playerEntity)) {
-            return false;
+            return;
         }
         if (playerEntity instanceof IPlayerAnimController playerAnimController) {
             playerAnimController.shape_shifter_curse$playAnimationWithCount(powerAnimID, animCount);
-            return true;
         } else {
-            return false;
         }
     }
 
@@ -149,17 +143,14 @@ public class AnimUtils {
      * @param playerEntity 目标玩家
      * @param powerAnimID  Power 动画 ID
      * @param sendSideType 播放端类型
-     * @return 是否成功播放
      */
-    public static boolean playPowerAnimLoop(PlayerEntity playerEntity, Identifier powerAnimID, AnimationSendSideType sendSideType) {
+    public static void playPowerAnimLoop(PlayerEntity playerEntity, Identifier powerAnimID, AnimationSendSideType sendSideType) {
         if (!sendSideType.canPlayAnim(playerEntity)) {
-            return false;
+            return;
         }
         if (playerEntity instanceof IPlayerAnimController playerAnimController) {
             playerAnimController.shape_shifter_curse$playAnimationLoop(powerAnimID);
-            return true;
         } else {
-            return false;
         }
     }
 
@@ -168,17 +159,14 @@ public class AnimUtils {
      *
      * @param playerEntity 目标玩家
      * @param sendSideType 执行端类型
-     * @return 是否成功停止
      */
-    public static boolean stopPowerAnim(PlayerEntity playerEntity, AnimationSendSideType sendSideType) {
+    public static void stopPowerAnim(PlayerEntity playerEntity, AnimationSendSideType sendSideType) {
         if (!sendSideType.canPlayAnim(playerEntity)) {
-            return false;
+            return;
         }
         if (playerEntity instanceof IPlayerAnimController playerAnimController) {
             playerAnimController.shape_shifter_curse$stopAnimation();
-            return true;
         } else {
-            return false;
         }
     }
 
@@ -227,7 +215,7 @@ public class AnimUtils {
         public @Nullable EasingType Easing;
         public boolean skipFade;
         private @Nullable AnimationHolder animationHolder;
-        public AnimationHolderData(Identifier AnimID, float Speed, int Fade, EasingType easing) {
+        public AnimationHolderData(Identifier AnimID, float Speed, int Fade, @Nullable EasingType easing) {
             this.AnimID = AnimID;
             this.Speed = Speed;
             this.Fade = Fade;
@@ -282,8 +270,8 @@ public class AnimUtils {
         }
     }
 
-    public static boolean stopPowerAnimWithIDs(PlayerEntity playerEntity, AnimationSendSideType sendSideType, List<Identifier> powerAnimIDs) {
-        return stopPowerAnimWithIDs(playerEntity, sendSideType, powerAnimIDs.toArray(new Identifier[0]));
+    public static void stopPowerAnimWithIDs(PlayerEntity playerEntity, AnimationSendSideType sendSideType, List<Identifier> powerAnimIDs) {
+        stopPowerAnimWithIDs(playerEntity, sendSideType, powerAnimIDs.toArray(new Identifier[0]));
     }
 
     public static boolean stopPowerAnimWithIDs(PlayerEntity playerEntity, AnimationSendSideType sendSideType, Identifier... powerAnimIDs) {

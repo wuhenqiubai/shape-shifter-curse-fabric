@@ -22,7 +22,7 @@ public abstract class PlayerEntitySpeedFOVMixin {
      * 这可以精确地控制因速度变化引起的FOV缩放效果，而不会影响其他FOV修改（如望远镜）。
      *
      * @param cir 回调信息，用于修改返回值。
-     * @Inject(method = "getFovMultiplier", at = @At("RETURN"), cancellable = true)
+     * &#064;Inject(method  = "getFovMultiplier", at = @At("RETURN"), cancellable = true)
      * private void shape_shifter_curse$limitFovMultiplier(CallbackInfoReturnable<Float> cir) {
      *     float originalMultiplier = cir.getReturnValue();
      *     float minMultiplier = 0.95f;
@@ -36,7 +36,7 @@ public abstract class PlayerEntitySpeedFOVMixin {
      *     }
      *     cir.setReturnValue(clampedMultiplier);
      * }
-    */
+     */
 
     @Unique  // 0.95
     private final float nowSpeedMaxMul = 0.95f * 2 - 1.0f;

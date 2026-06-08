@@ -26,7 +26,7 @@ public class WebResourceBar implements IManaRender {
     public void render(DrawContext context, float tickDelta) {
         if (!mc.options.hudHidden) {
             Pair<Integer, Integer> pos = UIPositionUtils.getCorrectPosition(ShapeShifterCurseFabric.clientConfig.manaBarPosType, ShapeShifterCurseFabric.clientConfig.manaBarPosOffsetX, ShapeShifterCurseFabric.clientConfig.manaBarPosOffsetY);
-            this.renderBar(context, tickDelta, (Integer)pos.getLeft(), (Integer)pos.getRight());
+            this.renderBar(context, tickDelta, pos.getLeft(), pos.getRight());
         }
     }
 
@@ -64,7 +64,7 @@ public class WebResourceBar implements IManaRender {
         double maxMana = ManaUtils.getPlayerMaxMana(mc.player);
         double manaRegen = ManaUtils.getPlayerManaRegen(mc.player);
 
-        int manaWidth = (int)Math.ceil((double)80.0F * ManaUtils.getManaPercent(mana, maxMana, (double)0.0F));
+        int manaWidth = (int)Math.ceil((double)80.0F * ManaUtils.getManaPercent(mana, maxMana, 0.0F));
         context.drawTexture(BarTexID, x, y, 0.0f, 0, 80, 5, 80, 18);
         context.drawTexture(BarTexID, x, y, 0.0f, 5, manaWidth, 5, 80, 18);
 

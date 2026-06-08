@@ -1,6 +1,5 @@
 package net.onixary.shapeShifterCurseFabric.items.armors;
 
-import net.minecraft.client.model.Model;
 import net.minecraft.client.render.entity.model.BipedEntityModel;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;

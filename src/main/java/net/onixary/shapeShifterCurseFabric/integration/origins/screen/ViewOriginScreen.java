@@ -41,7 +41,9 @@ public class ViewOriginScreen extends OriginDisplayScreen {
 			if(displayItem.getItem() == Items.PLAYER_HEAD) {
 				ProfileComponent profile = displayItem.get(DataComponentTypes.PROFILE);
 				if (profile == null || profile.name().isEmpty()) {
-					displayItem.set(DataComponentTypes.PROFILE, new ProfileComponent(player.getGameProfile()));
+					if (player != null) {
+						displayItem.set(DataComponentTypes.PROFILE, new ProfileComponent(player.getGameProfile()));
+					}
 				}
 			}
 			if((origin != Origin.EMPTY || layer.getOriginOptionCount(player) > 0) && !layer.isHidden()) {

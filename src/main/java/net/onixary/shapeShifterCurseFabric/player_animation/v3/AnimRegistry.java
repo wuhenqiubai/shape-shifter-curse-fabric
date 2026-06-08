@@ -28,7 +28,7 @@ public class AnimRegistry {
         AnimUtils.AnimationHolderData defaultAnimationData = null;
         AnimationHolder defaultAnimation = null;
         public PowerDefaultAnim() {
-            this((AnimUtils.AnimationHolderData)null);
+            this(null);
         }
 
         public PowerDefaultAnim(@Nullable AnimUtils.AnimationHolderData defaultAnimationData) {

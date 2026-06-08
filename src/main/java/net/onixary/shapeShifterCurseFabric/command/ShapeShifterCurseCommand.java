@@ -24,7 +24,6 @@ import net.onixary.shapeShifterCurseFabric.networking.ModPacketsS2CServer;
 import net.onixary.shapeShifterCurseFabric.player_form.PlayerFormBase;
 import net.onixary.shapeShifterCurseFabric.player_form.PlayerFormDynamic;
 import net.onixary.shapeShifterCurseFabric.player_form.RegPlayerForms;
-import net.onixary.shapeShifterCurseFabric.player_form.ability.PlayerFormComponent;
 import net.onixary.shapeShifterCurseFabric.player_form.ability.RegPlayerFormComponent;
 import net.onixary.shapeShifterCurseFabric.player_form.instinct.RegPlayerInstinctComponent;
 import net.onixary.shapeShifterCurseFabric.player_form.skin.RegPlayerSkinComponent;
@@ -320,9 +319,11 @@ public class ShapeShifterCurseCommand {
 	        String message = newSetting
                     ? "Successfully set to use your original skin!"
                     : "Successfully set to use built-in skin!";
-            player.sendMessage(Text.literal(message), false);
+	        if (player != null) {
+		        player.sendMessage(Text.literal(message), false);
+	        }
 
-            return 1;
+	        return 1;
         } catch (Exception e) {
             // 处理其他可能的错误
             commandContext.getSource().sendError(Text.literal("Error when change player skin: " + e.getMessage()));
@@ -564,7 +565,7 @@ public class ShapeShifterCurseCommand {
         return 1;
     }
 
-    private static int FC_Menu(CommandContext<ServerCommandSource> commandContext) throws CommandSyntaxException {
+    private static int FC_Menu(CommandContext<ServerCommandSource> commandContext) {
         ServerPlayerEntity player = commandContext.getSource().getPlayer();
         if (player == null) {
             return 0;
@@ -573,7 +574,7 @@ public class ShapeShifterCurseCommand {
         return 1;
     }
 
-    private static int FC_Save(CommandContext<ServerCommandSource> commandContext) throws CommandSyntaxException {
+    private static int FC_Save(CommandContext<ServerCommandSource> commandContext) {
         ServerPlayerEntity player = commandContext.getSource().getPlayer();
         if (player == null) {
             return 0;
@@ -591,7 +592,7 @@ public class ShapeShifterCurseCommand {
         return 1;
     }
 
-    private static int FC_Load(CommandContext<ServerCommandSource> commandContext) throws CommandSyntaxException {
+    private static int FC_Load(CommandContext<ServerCommandSource> commandContext) {
         ServerPlayerEntity player = commandContext.getSource().getPlayer();
         if (player == null) {
             return 0;
@@ -609,7 +610,7 @@ public class ShapeShifterCurseCommand {
         return 1;
     }
 
-    private static int FC_Delete(CommandContext<ServerCommandSource> commandContext) throws CommandSyntaxException {
+    private static int FC_Delete(CommandContext<ServerCommandSource> commandContext) {
         ServerPlayerEntity player = commandContext.getSource().getPlayer();
         if (player == null) {
             return 0;
@@ -629,7 +630,7 @@ public class ShapeShifterCurseCommand {
 
     private static final Identifier NO_ID = ShapeShifterCurseFabric.identifier("empty");
 
-    private static int FC_Config(CommandContext<ServerCommandSource> commandContext) throws CommandSyntaxException {
+    private static int FC_Config(CommandContext<ServerCommandSource> commandContext) {
         ServerPlayerEntity player = commandContext.getSource().getPlayer();
         if (player == null) {
             return 0;
@@ -639,7 +640,7 @@ public class ShapeShifterCurseCommand {
         return 1;
     }
 
-    private static int FC_List(CommandContext<ServerCommandSource> commandContext) throws CommandSyntaxException {
+    private static int FC_List(CommandContext<ServerCommandSource> commandContext) {
         ServerPlayerEntity player = commandContext.getSource().getPlayer();
         if (player == null) {
             return 0;
@@ -656,7 +657,7 @@ public class ShapeShifterCurseCommand {
         return 1;
     }
 
-    private static int FC_ToChat(CommandContext<ServerCommandSource> commandContext) throws CommandSyntaxException {
+    private static int FC_ToChat(CommandContext<ServerCommandSource> commandContext) {
         ServerPlayerEntity player = commandContext.getSource().getPlayer();
         if (player == null) {
             return 0;
@@ -667,34 +668,24 @@ public class ShapeShifterCurseCommand {
         FormTextureUtils.ColorSetting colorSetting = FormColorData.ABGR2ARGB(RegPlayerSkinComponent.SKIN_SETTINGS.get(player).getFormColor());
         String Data = "";
         switch (encodeType) {
-            case "base64" -> {
-                Data = FormColorData.ColorSettingtoString(colorSetting, true);
-            }
-            case "hex" -> {
-                Data = FormColorData.ColorSettingtoString(colorSetting, false);
-            }
+            case "base64" -> Data = FormColorData.ColorSettingtoString(colorSetting, true);
+            case "hex" -> Data = FormColorData.ColorSettingtoString(colorSetting, false);
         }
         switch (messageType) {
             case "raw" -> {
             }
-            case "command" -> {
-                Data = "/shape_shifter_curse form_color set_color_from_string \"" + Data + "\"";
-            }
+            case "command" -> Data = "/shape_shifter_curse form_color set_color_from_string \"" + Data + "\"";
         }
         Text text = Text.translatable("message.shape-shifter-curse.form_color_data", player.getName());
         text = FormColorData.appendCopyableText(text, Data);
         switch (type) {
-            case "local" -> {
-                player.sendMessage(text, false);
-            }
-            case "server" -> {
-                Objects.requireNonNull(player.getServer()).getPlayerManager().broadcast(text, false);
-            }
+            case "local" -> player.sendMessage(text, false);
+            case "server" -> Objects.requireNonNull(player.getServer()).getPlayerManager().broadcast(text, false);
         }
         return 1;
     }
 
-    private static int FC_SetColorFromString(CommandContext<ServerCommandSource> commandContext) throws CommandSyntaxException {
+    private static int FC_SetColorFromString(CommandContext<ServerCommandSource> commandContext) {
         ServerPlayerEntity player = commandContext.getSource().getPlayer();
         if (player == null) {
             return 0;

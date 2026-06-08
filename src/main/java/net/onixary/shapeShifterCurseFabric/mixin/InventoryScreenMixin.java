@@ -19,7 +19,7 @@ public class InventoryScreenMixin {
     private static void drawEntityHead(DrawContext context, int x, int y, int size, int mouseX, int mouseY, float f, float g, float h, LivingEntity entity, CallbackInfo ci) {
         ClientUtils.isOpenInventoryScreen = true;
         prevBodyYaw = entity.prevBodyYaw;
-        float angle = (float)Math.atan((double)(mouseX / 40.0F));
+        float angle = (float)Math.atan(mouseX / 40.0F);
         entity.prevBodyYaw = 180.0F + angle * 20.0F;
         return;
     }

@@ -30,21 +30,14 @@ public class Form_Ocelot2 extends PlayerFormBase {
     public @Nullable AbstractAnimStateController getAnimStateController(PlayerEntity player, AnimSystem.AnimSystemData animSystemData, @NotNull Identifier animStateID) {
         @Nullable AnimStateEnum animStateEnum = AnimStateEnum.getStateEnum(animStateID);
         if (animStateEnum != null) {
-            switch (animStateEnum) {
-                case ANIM_STATE_IDLE:
-                    return IDLE_CONTROLLER;
-                case ANIM_STATE_RIDE:
-                    return RIDE_CONTROLLER;
-                case ANIM_STATE_WALK:
-                case ANIM_STATE_SPRINT:
-                    return SNEAK_RUSH_CONTROLLER;
-                case ANIM_STATE_JUMP:
-                    return RUSH_JUMP_CONTROLLER;
-                case ANIM_STATE_FALL:
-                    return FALL_CONTROLLER;
-                default:
-                    return null;
-            }
+	        return switch (animStateEnum) {
+		        case ANIM_STATE_IDLE -> IDLE_CONTROLLER;
+		        case ANIM_STATE_RIDE -> RIDE_CONTROLLER;
+		        case ANIM_STATE_WALK, ANIM_STATE_SPRINT -> SNEAK_RUSH_CONTROLLER;
+		        case ANIM_STATE_JUMP -> RUSH_JUMP_CONTROLLER;
+		        case ANIM_STATE_FALL -> FALL_CONTROLLER;
+		        default -> null;
+	        };
         }
         return super.getAnimStateController(player, animSystemData, animStateID);
     }

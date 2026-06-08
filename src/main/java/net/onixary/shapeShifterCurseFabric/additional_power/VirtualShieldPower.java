@@ -33,11 +33,8 @@ public class VirtualShieldPower extends Power {
         Vec3d vec3d;
         PersistentProjectileEntity persistentProjectileEntity;
         Entity attacker = source.getSource();
-        boolean bl = false;
-        if (attacker instanceof PersistentProjectileEntity && (persistentProjectileEntity = (PersistentProjectileEntity)attacker).getPierceLevel() > 0) {
-            bl = true;
-        }
-        if (!source.isIn(DamageTypeTags.BYPASSES_SHIELD) && (this.activeShieldCondition == null || this.activeShieldCondition.test(this.entity)) && !bl && (vec3d = source.getPosition()) != null) {
+        boolean bl = attacker instanceof PersistentProjectileEntity && (persistentProjectileEntity = (PersistentProjectileEntity) attacker).getPierceLevel() > 0;
+	    if (!source.isIn(DamageTypeTags.BYPASSES_SHIELD) && (this.activeShieldCondition == null || this.activeShieldCondition.test(this.entity)) && !bl && (vec3d = source.getPosition()) != null) {
             Vec3d vec3d2 = this.entity.getRotationVec(1.0f);
             Vec3d vec3d3 = vec3d.relativize(this.entity.getPos()).normalize();
             vec3d3 = new Vec3d(vec3d3.x, 0.0, vec3d3.z);

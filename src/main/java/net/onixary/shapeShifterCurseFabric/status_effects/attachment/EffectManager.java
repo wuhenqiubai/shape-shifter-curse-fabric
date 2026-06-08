@@ -224,10 +224,10 @@ public class EffectManager {
     // 服务器端 -> 玩家效果 Map<StatusEffect, StatusEffectInstance | TransformativeStatusInstance>
 
     // 客户端+服务端
-    public static boolean clearTransformativeEffect(PlayerEntity player) {
+    public static void clearTransformativeEffect(PlayerEntity player) {
         if (player == null) {
             ShapeShifterCurseFabric.LOGGER.error("Attempted to clear effect with null player");
-            return false;
+            return;
         }
         Iterator<StatusEffectInstance> iterator = player.getStatusEffects().iterator();
         boolean hasEffect = false;
@@ -238,7 +238,6 @@ public class EffectManager {
                 iterator.remove();
             }
         }
-        return hasEffect;
     }
 
     // 客户端+服务端 但应该在服务器端调用
@@ -318,14 +317,13 @@ public class EffectManager {
     }
 
     // 服务端
-    public static boolean ActiveTransformativeEffect(ServerPlayerEntity player) {
+    public static void ActiveTransformativeEffect(ServerPlayerEntity player) {
         TransformativeStatusInstance transformativeStatusInstance = getTransformativeEffect(player);
         if (transformativeStatusInstance == null) {
-            return false;
+            return;
         }
         transformativeStatusInstance.ActiveEffect(player);
         clearTransformativeEffect(player);
-        return true;
     }
 
     private static PlayerFormBase getPlayerForm(PlayerEntity player) {

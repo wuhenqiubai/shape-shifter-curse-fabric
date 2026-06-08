@@ -18,9 +18,9 @@ public interface IPlayerEntityMinion {
 
 	boolean shape_shifter_curse$minionExist(Identifier MinionID, UUID minionUUID);
 
-	boolean shape_shifter_curse$removeMinion(Identifier MinionID, UUID minionUUID);
+	void shape_shifter_curse$removeMinion(Identifier MinionID, UUID minionUUID);
 
-	<T extends IMinion<? extends LivingEntity>> boolean shape_shifter_curse$addMinion(T minion);
+	<T extends IMinion<? extends LivingEntity>> void shape_shifter_curse$addMinion(T minion);
 
 	void shape_shifter_curse$applyCooldown(Identifier MinionID, long time);
 

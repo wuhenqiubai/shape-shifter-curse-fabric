@@ -24,12 +24,10 @@ public class Form_Bat1 extends PlayerFormBase {
     public @Nullable AbstractAnimStateController getAnimStateController(PlayerEntity player, AnimSystem.AnimSystemData animSystemData, @NotNull Identifier animStateID) {
         @Nullable AnimStateEnum animStateEnum = AnimStateEnum.getStateEnum(animStateID);
         if (animStateEnum != null) {
-            switch (animStateEnum) {
-                case ANIM_STATE_JUMP:
-                    return JUMP_CONTROLLER;
-                default:
-                    return null;
-            }
+	        return switch (animStateEnum) {
+		        case ANIM_STATE_JUMP -> JUMP_CONTROLLER;
+		        default -> null;
+	        };
         }
         return super.getAnimStateController(player, animSystemData, animStateID);
     }

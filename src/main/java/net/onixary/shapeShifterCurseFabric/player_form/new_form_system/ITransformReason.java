@@ -10,14 +10,14 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 
 public interface ITransformReason {
-    public static interface ITransformReasonWithArg <T> extends ITransformReason {
+    interface ITransformReasonWithArg <T> extends ITransformReason {
         T getArg();
 
         void setArg(T arg);
     }
 
 
-    public static ITransformReason create(Identifier reasonType, BiFunction<PlayerEntity, IForm, IForm> fNextForm, BiFunction<PlayerEntity, IForm, IForm> fPrevForm) {
+    static ITransformReason create(Identifier reasonType, BiFunction<PlayerEntity, IForm, IForm> fNextForm, BiFunction<PlayerEntity, IForm, IForm> fPrevForm) {
         return new ITransformReason() {
             @Override
             public Identifier getReasonType() {
@@ -36,39 +36,39 @@ public interface ITransformReason {
         };
     }
 
-    public static <T> ITransformReasonWithArg<T> create(Identifier reasonType, ExtraFunctionInterface.TriFunction<ITransformReasonWithArg<T>, PlayerEntity, IForm, IForm> fNextForm, ExtraFunctionInterface.TriFunction<ITransformReasonWithArg<T>, PlayerEntity, IForm, IForm> fPrevForm, T arg) {
-        return new ITransformReasonWithArg<T>() {
-            private T storedArg = arg;
+    static <T> ITransformReasonWithArg<T> create(Identifier reasonType, ExtraFunctionInterface.TriFunction<ITransformReasonWithArg<T>, PlayerEntity, IForm, IForm> fNextForm, ExtraFunctionInterface.TriFunction<ITransformReasonWithArg<T>, PlayerEntity, IForm, IForm> fPrevForm, T arg) {
+        return new ITransformReasonWithArg<>() {
+	        private T storedArg = arg;
 
-            @Override
-            public T getArg() {
-                return storedArg;
-            }
+	        @Override
+	        public T getArg() {
+		        return storedArg;
+	        }
 
-            @Override
-            public void setArg(T arg) {
-                storedArg = arg;
-            }
+	        @Override
+	        public void setArg(T arg) {
+		        storedArg = arg;
+	        }
 
-            @Override
-            public Identifier getReasonType() {
-                return reasonType;
-            }
+	        @Override
+	        public Identifier getReasonType() {
+		        return reasonType;
+	        }
 
-            @Override
-            public @Nullable IForm getFallBackNextForm(PlayerEntity player, IForm nowForm) {
-                return fNextForm.apply(this, player, nowForm);
-            }
+	        @Override
+	        public @Nullable IForm getFallBackNextForm(PlayerEntity player, IForm nowForm) {
+		        return fNextForm.apply(this, player, nowForm);
+	        }
 
-            @Override
-            public @Nullable IForm getFallBackPrevForm(PlayerEntity player, IForm nowForm) {
-                return fPrevForm.apply(this, player, nowForm);
-            }
+	        @Override
+	        public @Nullable IForm getFallBackPrevForm(PlayerEntity player, IForm nowForm) {
+		        return fPrevForm.apply(this, player, nowForm);
+	        }
         };
     }
 
-    public static final Identifier InstinctReasonID = ShapeShifterCurseFabric.identifier("instinct");
-    public static final ITransformReason Instinct = create(InstinctReasonID,
+    Identifier InstinctReasonID = ShapeShifterCurseFabric.identifier("instinct");
+    ITransformReason Instinct = create(InstinctReasonID,
             (player, nowForm) -> {
                 IFormGroup group = nowForm.getFormGroup();
                 int tier = nowForm.getFormTier() + 1;
@@ -92,8 +92,8 @@ public interface ITransformReason {
                 return result == null ? nowForm : result;
             }
     );
-    public static final Identifier CursedMoonReasonID = ShapeShifterCurseFabric.identifier("cursed_moon");
-    public static final ITransformReason CursedMoon = create(CursedMoonReasonID,
+    Identifier CursedMoonReasonID = ShapeShifterCurseFabric.identifier("cursed_moon");
+    ITransformReason CursedMoon = create(CursedMoonReasonID,
             (player, nowForm) -> {
                 // TODO
                 return nowForm;
@@ -104,8 +104,8 @@ public interface ITransformReason {
             }
     );
 
-    public static final Identifier ItemReasonID = ShapeShifterCurseFabric.identifier("item");
-    public static final Function<ItemStack, ITransformReasonWithArg<ItemStack>> ItemReasonBuilder = (itemStack) -> create(ItemReasonID,
+    Identifier ItemReasonID = ShapeShifterCurseFabric.identifier("item");
+    Function<ItemStack, ITransformReasonWithArg<ItemStack>> ItemReasonBuilder = (itemStack) -> create(ItemReasonID,
             (reason, player, nowForm) -> {
                 // TODO
                 return nowForm;
@@ -117,19 +117,15 @@ public interface ITransformReason {
             itemStack
     );
 
-    public static final Identifier ForceReasonID = ShapeShifterCurseFabric.identifier("force");
-    public static final Function<IForm, ITransformReasonWithArg<IForm>> ForceReasonBuilder = (form) -> create(ForceReasonID,
-            (reason, player, nowForm) -> {
-                return reason.getArg();
-            },
-            (reason, player, nowForm) -> {
-                return reason.getArg();
-            },
+    Identifier ForceReasonID = ShapeShifterCurseFabric.identifier("force");
+    Function<IForm, ITransformReasonWithArg<IForm>> ForceReasonBuilder = (form) -> create(ForceReasonID,
+            (reason, player, nowForm) -> reason.getArg(),
+            (reason, player, nowForm) -> reason.getArg(),
             form
     );
 
 
-    public Identifier getReasonType();
+    Identifier getReasonType();
 
     default @Nullable IForm getFallBackNextForm(PlayerEntity player, IForm nowForm) {
         return null;

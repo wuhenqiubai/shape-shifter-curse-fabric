@@ -71,12 +71,16 @@ public class BookOfShapeShifterScreenV2_P1 extends Screen implements WidgetEXUti
                     if (ShapeShifterCurseFabric.clientConfig.fcs_use_v1_menu) {
                         if (FormColorSelectMenu.instance == null) {
                             Screen screen = new FormColorSelectMenu(Text.literal("text.shape-shifter-curse.config.form_color_select_menu"), this);
-                            client.setScreen(screen);
+	                        if (client != null) {
+		                        client.setScreen(screen);
+	                        }
                         }
                     } else {
                         if (FormColorSelectMenuV2.instance == null) {
                             Screen screen = new FormColorSelectMenuV2(Text.literal("text.shape-shifter-curse.config.form_color_select_menu_v2"), this);
-                            client.setScreen(screen);
+	                        if (client != null) {
+		                        client.setScreen(screen);
+	                        }
                         }
                     }
         }).position(BookPosX + 31 * BookScale, BookPosY + 194 * BookScale).size(78 * BookScale, 14 * BookScale).build());
@@ -100,8 +104,8 @@ public class BookOfShapeShifterScreenV2_P1 extends Screen implements WidgetEXUti
     }
 
     private void RenderEntity(DrawContext context, int x, int y, int size, int mouseX, int mouseY, LivingEntity entity) {
-        float f = (float)Math.atan((double)(mouseX / 40.0F));
-        float g = (float)Math.atan((double)(mouseY / 40.0F));
+        float f = (float)Math.atan(mouseX / 40.0F);
+        float g = (float)Math.atan(mouseY / 40.0F);
         Quaternionf quaternionf = (new Quaternionf()).rotateZ(3.1415927F);
         Quaternionf quaternionf2 = (new Quaternionf()).rotateX(g * 20.0F * 0.017453292F);
         quaternionf.mul(quaternionf2);

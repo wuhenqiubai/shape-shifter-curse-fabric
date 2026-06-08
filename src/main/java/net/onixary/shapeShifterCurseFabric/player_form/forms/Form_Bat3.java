@@ -55,30 +55,19 @@ public class Form_Bat3 extends PlayerFormBase {
     public @Nullable AbstractAnimStateController getAnimStateController(PlayerEntity player, AnimSystem.AnimSystemData animSystemData, @NotNull Identifier animStateID) {
         @Nullable AnimStateEnum animStateEnum = AnimStateEnum.getStateEnum(animStateID);
         if (animStateEnum != null) {
-            switch (animStateEnum) {
-                case ANIM_STATE_FALL:
-                    return FALL_CONTROLLER;
-                case ANIM_STATE_JUMP:
-                    return JUMP_CONTROLLER;
-                case ANIM_STATE_RIDE:
-                    return RIDE_CONTROLLER;
-                case ANIM_STATE_WALK:
-                    return WALK_CONTROLLER;
-                case ANIM_STATE_SPRINT:
-                    return SPRINT_CONTROLLER;
-                case ANIM_STATE_IDLE:
-                    return IDLE_CONTROLLER;
-                case ANIM_STATE_MINING:
-                    return MINING_CONTROLLER;
-                case ANIM_STATE_ATTACK:
-                    return ATTACK_CONTROLLER;
-                case ANIM_STATE_FLYING:
-                    return FLYING_CONTROLLER;
-                case ANIM_STATE_USE_ITEM:
-                    return IDLE_CONTROLLER;
-                default:
-                    return null;
-            }
+	        return switch (animStateEnum) {
+		        case ANIM_STATE_FALL -> FALL_CONTROLLER;
+		        case ANIM_STATE_JUMP -> JUMP_CONTROLLER;
+		        case ANIM_STATE_RIDE -> RIDE_CONTROLLER;
+		        case ANIM_STATE_WALK -> WALK_CONTROLLER;
+		        case ANIM_STATE_SPRINT -> SPRINT_CONTROLLER;
+		        case ANIM_STATE_IDLE -> IDLE_CONTROLLER;
+		        case ANIM_STATE_MINING -> MINING_CONTROLLER;
+		        case ANIM_STATE_ATTACK -> ATTACK_CONTROLLER;
+		        case ANIM_STATE_FLYING -> FLYING_CONTROLLER;
+		        case ANIM_STATE_USE_ITEM -> IDLE_CONTROLLER;
+		        default -> null;
+	        };
         }
         return super.getAnimStateController(player, animSystemData, animStateID);
     }

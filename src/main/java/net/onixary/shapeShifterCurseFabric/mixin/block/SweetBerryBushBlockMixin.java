@@ -42,7 +42,7 @@ public abstract class SweetBerryBushBlockMixin {
     private void preventBerrySlowdown(Entity entity, BlockState state, Vec3d multiplier) {
         // 如果是玩家则跳过减速
         if ((entity instanceof PlayerEntity)) {
-            if (!PowerHolderComponent.hasPower((PlayerEntity)entity, PreventBerryEffectPower.class)) {
+            if (!PowerHolderComponent.hasPower(entity, PreventBerryEffectPower.class)) {
                 entity.slowMovement(state, multiplier);
             }
         }

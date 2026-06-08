@@ -32,7 +32,7 @@ import java.util.Objects;
  * <br>
  * 或：Power 动画 ID → Power 动画注册表 → 动画数据
  * <p>
- * 每个 {@link PlayerEntity} 拥有一个 AnimSystem 实例，由 {@link net.onixary.shapeShifterCurseFabric.player_animation.v3.mixin.PlayerEntityAnimSystemMixin} 注入管理。
+ * 每个 {@link PlayerEntity} 拥有一个 AnimSystem 实例，由 Mixin 注入管理。
  *
  * @see AbstractAnimFSM
  * @see AbstractAnimStateController

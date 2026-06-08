@@ -49,8 +49,9 @@ public class StatusEffectMixin {
             if (PowerList.isEmpty()) {
                 return false;
             }
-            if (!false /* entity.isUndead() removed in 1.21 */) {
-                EffectValue = -6;
+            EffectValue = -4;
+            if (entity.getType().isIn(EntityTypeTags.UNDEAD)) {
+                EffectValue = 6;
             }
             FinalValue = (float) (EffectValue << amplifier);
             if (IsInstantEffect) {

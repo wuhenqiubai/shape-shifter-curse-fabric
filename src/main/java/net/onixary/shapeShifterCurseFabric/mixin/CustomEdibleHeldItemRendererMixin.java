@@ -12,6 +12,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.Arm;
 import net.minecraft.util.Hand;
 import net.minecraft.util.UseAction;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -20,6 +21,7 @@ import static net.onixary.shapeShifterCurseFabric.util.CustomEdibleUtils.getPowe
 
 @Mixin(HeldItemRenderer.class)
 public class CustomEdibleHeldItemRendererMixin {
+    @Final
     @Shadow
     private MinecraftClient client;
 

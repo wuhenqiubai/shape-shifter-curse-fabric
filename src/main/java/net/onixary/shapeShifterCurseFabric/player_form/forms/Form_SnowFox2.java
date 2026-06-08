@@ -24,14 +24,11 @@ public class Form_SnowFox2 extends PlayerFormBase {
     public @Nullable AbstractAnimStateController getAnimStateController(PlayerEntity player, AnimSystem.AnimSystemData animSystemData, @NotNull Identifier animStateID) {
         @Nullable AnimStateEnum animStateEnum = AnimStateEnum.getStateEnum(animStateID);
         if (animStateEnum != null) {
-            switch (animStateEnum) {
-                case ANIM_STATE_IDLE:
-                    return Form_FamiliarFox2.IDLE_CONTROLLER;
-                case ANIM_STATE_RIDE:
-                    return RIDE_CONTROLLER;
-                default:
-                    return null;
-            }
+	        return switch (animStateEnum) {
+		        case ANIM_STATE_IDLE -> Form_FamiliarFox2.IDLE_CONTROLLER;
+		        case ANIM_STATE_RIDE -> RIDE_CONTROLLER;
+		        default -> null;
+	        };
         }
         return super.getAnimStateController(player, animSystemData, animStateID);
     }

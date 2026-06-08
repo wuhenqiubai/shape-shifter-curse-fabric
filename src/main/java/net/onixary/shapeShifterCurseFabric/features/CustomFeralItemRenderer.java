@@ -285,7 +285,7 @@ public class CustomFeralItemRenderer {
 			matrices.translate(0.0F, h, 0.0F);
 		}
 
-		float h = 1.0F - (float)Math.pow((double)g, 27.0);
+		float h = 1.0F - (float)Math.pow(g, 27.0);
 		int i = arm == Arm.RIGHT ? 1 : -1;
 		matrices.translate(h * 0.6F * (float)i, h * -0.5F, h * 0.0F);
 		matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees((float)i * h * 90.0F));
@@ -408,8 +408,14 @@ public class CustomFeralItemRenderer {
 					matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(-11.935F));
 					matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees((float)i * 65.3F));
 					matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees((float)i * -9.785F));
-					float f = (float)item.getMaxUseTime(this.client.player) - ((float)this.client.player.getItemUseTimeLeft() - tickDelta + 1.0F);
-					float g = f / (float)CrossbowItem.getPullTime(item, this.client.player);
+					float f = 0;
+					if (this.client.player != null) {
+						f = (float)item.getMaxUseTime(this.client.player) - ((float)this.client.player.getItemUseTimeLeft() - tickDelta + 1.0F);
+					}
+					float g = 0;
+					if (this.client.player != null) {
+						g = f / (float) CrossbowItem.getPullTime(item, this.client.player);
+					}
 					if (g > 1.0F) {
 						g = 1.0F;
 					}
@@ -468,7 +474,10 @@ public class CustomFeralItemRenderer {
 							matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(-13.935F));
 							matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees((float)l * 35.3F));
 							matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees((float)l * -9.785F));
-							float mx = (float)item.getMaxUseTime(this.client.player) - ((float)this.client.player.getItemUseTimeLeft() - tickDelta + 1.0F);
+							float mx = 0;
+							if (this.client.player != null) {
+								mx = (float)item.getMaxUseTime(this.client.player) - ((float)this.client.player.getItemUseTimeLeft() - tickDelta + 1.0F);
+							}
 							float fxx = mx / 20.0F;
 							fxx = (fxx * fxx + fxx * 2.0F) / 3.0F;
 							if (fxx > 1.0F) {
@@ -492,7 +501,10 @@ public class CustomFeralItemRenderer {
 							matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(-55.0F));
 							matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees((float)l * 35.3F));
 							matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees((float)l * -9.785F));
-							float m = (float)item.getMaxUseTime(this.client.player) - ((float)this.client.player.getItemUseTimeLeft() - tickDelta + 1.0F);
+							float m = 0;
+							if (this.client.player != null) {
+								m = (float)item.getMaxUseTime(this.client.player) - ((float)this.client.player.getItemUseTimeLeft() - tickDelta + 1.0F);
+							}
 							float fx = m / 10.0F;
 							if (fx > 1.0F) {
 								fx = 1.0F;

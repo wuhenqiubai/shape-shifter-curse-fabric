@@ -102,7 +102,7 @@ public class OriginDisplayScreen extends Screen {
         int maxScrollbarOffset = 141;
         int u = 176;
         float part = scrollPos / (float)currentMaxScroll;
-        scrollbarY += (maxScrollbarOffset - scrollbarY) * part;
+        scrollbarY += (int) ((maxScrollbarOffset - scrollbarY) * part);
         if(scrolling) {
             u += 6;
         } else if(mouseX >= guiLeft + 156 && mouseX < guiLeft + 156 + 6) {
@@ -134,7 +134,7 @@ public class OriginDisplayScreen extends Screen {
             int scrollbarY = 36;
             int maxScrollbarOffset = 141;
             float part = scrollPos / (float)currentMaxScroll;
-            scrollbarY += (maxScrollbarOffset - scrollbarY) * part;
+            scrollbarY += (int) ((maxScrollbarOffset - scrollbarY) * part);
             if(mouseX >= guiLeft + 156 && mouseX < guiLeft + 156 + 6) {
                 if(mouseY >= guiTop + scrollbarY && mouseY < guiTop + scrollbarY + 27) {
                     scrolling = true;

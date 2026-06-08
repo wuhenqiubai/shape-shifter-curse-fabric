@@ -35,37 +35,37 @@ public interface IForm {
 	/**
 	 * @return 形态唯一 ID
 	 */
-    public @NotNull Identifier getFormID();
+    @NotNull Identifier getFormID();
 
 	/**
 	 * 形态标志集合（HasSlowFall 等已整合进此标志系统）。
 	 *
 	 * @return 标志字符串集合
      */
-    public @NotNull Set<String> getFormFlag();
+    @NotNull Set<String> getFormFlag();
 
 	/** @return 形态在组内的层级（类似旧系统的 {@code FormIndex}） */
-    public int getFormTier();
+	int getFormTier();
 
 	/** @return 所属形态组 */
-    public @Nullable IFormGroup getFormGroup();
+    @Nullable IFormGroup getFormGroup();
 
 	/** 设置形态组及层级。 */
-    public void setFormGroup(IFormGroup group, int formTier);
+	void setFormGroup(IFormGroup group, int formTier);
 
 	/** @return 临时能力系统的层标识（等 Origins 移除后再完善） */
-    public @NotNull Pair<Identifier, Identifier> getFormLayer();
+    @NotNull Pair<Identifier, Identifier> getFormLayer();
 
 
-    public @NotNull PlayerFormBodyType getBodyType();
+    @NotNull PlayerFormBodyType getBodyType();
 
     // 将 Name 合并进 ContentType
-    public default @NotNull Text getContentText(CodexData.ContentType type) {
+    default @NotNull Text getContentText(CodexData.ContentType type) {
         return Text.translatable("codex.form." + this.getFormID().getNamespace() + "." + this.getFormID().getPath() + "." + type.toString().toLowerCase());
     }
 
     // 变形系统
-    public default @NotNull IForm _getNextForm(PlayerEntity player, ITransformReason reason) {
+    default @NotNull IForm _getNextForm(PlayerEntity player, ITransformReason reason) {
         IForm nextForm = getNextForm(player, reason);
         if (nextForm == null) {
             nextForm = reason.getFallBackNextForm(player, this);
@@ -81,7 +81,7 @@ public interface IForm {
         return nextForm;
     }
 
-    public default @NotNull IForm _getPrevForm(PlayerEntity player, ITransformReason reason) {
+    default @NotNull IForm _getPrevForm(PlayerEntity player, ITransformReason reason) {
         IForm prevForm = getPrevForm(player, reason);
         if (prevForm == null) {
             prevForm = reason.getFallBackPrevForm(player, this);
@@ -98,15 +98,15 @@ public interface IForm {
     }
 
     // 选择性处理 如果不匹配则必须返回null
-    public default @Nullable IForm getNextForm(PlayerEntity player, ITransformReason reason) {
+    default @Nullable IForm getNextForm(PlayerEntity player, ITransformReason reason) {
         return null;
     }
 
-    public default @Nullable IForm getPrevForm(PlayerEntity player, ITransformReason reason) {
+    default @Nullable IForm getPrevForm(PlayerEntity player, ITransformReason reason) {
         return null;
     }
 
-    public default @NotNull IForm getDefaultNextForm(PlayerEntity player, ITransformReason reason) {
+    default @NotNull IForm getDefaultNextForm(PlayerEntity player, ITransformReason reason) {
         IFormGroup group = this.getFormGroup();
         int tier = this.getFormTier() + 1;
         IForm result = null;
@@ -116,7 +116,7 @@ public interface IForm {
         return result == null ? this : result;
     }
 
-    public default @NotNull IForm getDefaultPrevForm(PlayerEntity player, ITransformReason reason) {
+    default @NotNull IForm getDefaultPrevForm(PlayerEntity player, ITransformReason reason) {
         IForm prevForm = FormUtils.getPrevForm(player);
         int tier = this.getFormTier() - 1;
         if (prevForm != null && prevForm.getFormTier() == tier) {
@@ -131,17 +131,17 @@ public interface IForm {
     }
 
     // 动画系统
-    public default @Nullable AbstractAnimStateController getAnimStateController(PlayerEntity player, AnimSystem.AnimSystemData animSystemData, @NotNull Identifier animStateID) {
+    default @Nullable AbstractAnimStateController getAnimStateController(PlayerEntity player, AnimSystem.AnimSystemData animSystemData, @NotNull Identifier animStateID) {
         return null;
     }
 
-    public default void registerPowerAnim(PlayerEntity player, AnimSystem.AnimSystemData animSystemData) { }
+    default void registerPowerAnim(PlayerEntity player, AnimSystem.AnimSystemData animSystemData) { }
 
-    public default boolean isPowerAnimRegistered(PlayerEntity player, AnimSystem.AnimSystemData animSystemData) {
+    default boolean isPowerAnimRegistered(PlayerEntity player, AnimSystem.AnimSystemData animSystemData) {
         return true;
     }
 
-    public default @NotNull Pair<Boolean, @Nullable AnimationHolder> getPowerAnim(PlayerEntity player, AnimSystem.AnimSystemData animSystemData, @NotNull Identifier powerAnimID) {
+    default @NotNull Pair<Boolean, @Nullable AnimationHolder> getPowerAnim(PlayerEntity player, AnimSystem.AnimSystemData animSystemData, @NotNull Identifier powerAnimID) {
         return new Pair<>(false, null);
     }
 
@@ -169,7 +169,7 @@ public interface IForm {
 	 * <p>
 	 * 通过 Pehkui API 修改玩家实体大小。
      */
-    public void applyScale(PlayerEntity player);
+	void applyScale(PlayerEntity player);
 
 	/**
 	 * 比较两个形态是否相等（基于 {@link #getFormID}）。

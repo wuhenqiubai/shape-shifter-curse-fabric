@@ -31,12 +31,10 @@ public class Form_Spider2 extends PlayerFormBase {
         
         AnimStateEnum state = AnimStateEnum.getStateEnum(animStateID);
         if (state != null) {
-            switch (state) {
-                case ANIM_STATE_IDLE:
-                    return IDLE_CONTROLLER;
-                default:
-                    return null;
-            }
+	        return switch (state) {
+		        case ANIM_STATE_IDLE -> IDLE_CONTROLLER;
+		        default -> null;
+	        };
         }
         return super.getAnimStateController(player, animSystemData, animStateID);
     }

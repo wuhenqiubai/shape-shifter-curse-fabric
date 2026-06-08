@@ -32,7 +32,7 @@ public class AlterRecipe implements Recipe<AlterRecipe.AlterRecipeInput> {
             return false;
         }
         boolean noPass = false;
-	    noPass |= !this.input1.test(input.getStackInSlot(InputSlotIndex + 0));
+	    noPass |= !this.input1.test(input.getStackInSlot(InputSlotIndex));
 	    noPass |= !this.input2.test(input.getStackInSlot(InputSlotIndex + 1));
 	    noPass |= !this.input3.test(input.getStackInSlot(InputSlotIndex + 2));
 	    noPass |= !this.input4.test(input.getStackInSlot(InputSlotIndex + 3));
@@ -92,7 +92,7 @@ public class AlterRecipe implements Recipe<AlterRecipe.AlterRecipeInput> {
             if (list.size() >= 5) {
                 return list.get(4);
             } else {
-                return list.get(0);
+                return list.getFirst();
             }
         } else {
             return ItemStack.EMPTY;

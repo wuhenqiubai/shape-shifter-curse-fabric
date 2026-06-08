@@ -2,6 +2,7 @@ package net.onixary.shapeShifterCurseFabric.player_animation.v3;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.onixary.shapeShifterCurseFabric.player_animation.AnimationHolder;
+import net.onixary.shapeShifterCurseFabric.player_form.PlayerFormBase;
 import org.jetbrains.annotations.Nullable;
 
 /**

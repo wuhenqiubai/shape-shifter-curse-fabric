@@ -6,7 +6,6 @@ import io.github.apace100.apoli.power.factory.PowerFactory;
 import io.github.apace100.apoli.registry.ApoliRegistries;
 import net.minecraft.registry.Registry;
 import net.onixary.shapeShifterCurseFabric.ShapeShifterCurseFabric;
-import net.onixary.shapeShifterCurseFabric.integration.origins.Origins;
 
 public class AdditionalPowers {
 
@@ -88,7 +87,7 @@ public class AdditionalPowers {
         register(ModifyFootstepSoundSpeedPower.createFactory());
     }
 
-    public static PowerFactory<?> register(PowerFactory<?> powerFactory) {
-        return Registry.register(ApoliRegistries.POWER_FACTORY, powerFactory.getSerializerId(), powerFactory);
+    public static void register(PowerFactory<?> powerFactory) {
+	    Registry.register(ApoliRegistries.POWER_FACTORY, powerFactory.getSerializerId(), powerFactory);
     }
 }

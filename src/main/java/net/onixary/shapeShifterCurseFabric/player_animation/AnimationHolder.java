@@ -4,12 +4,13 @@ import com.zigythebird.playeranim.animation.PlayerAnimResources;
 import com.zigythebird.playeranimcore.animation.Animation;
 import com.zigythebird.playeranimcore.easing.EasingType;
 import net.minecraft.util.Identifier;
+import net.onixary.shapeShifterCurseFabric.player_animation.v3.AnimUtils;
 import org.jetbrains.annotations.Nullable;
 
 /**
  * 动画持有者，包装 PAL {@link Animation} 并提供播放参数（速度、淡入时间、缓动类型）。
  * <p>
- * 通过 {@link AnimationHolderData#build()} 创建，所有形态的动画配置最终转化为此类实例。
+ * 通过 {@link AnimUtils.AnimationHolderData#build()} 创建，所有形态的动画配置最终转化为此类实例。
  * 支持跳过淡入（{@link #skipFade}）用于处理不兼容平滑过渡的动画（如欧拉角大角度变化）。
  * <p>
  * 注意：{@link #EMPTY} 为禁用状态的哨兵对象，调用 {@link #getAnimation()} 返回 null。

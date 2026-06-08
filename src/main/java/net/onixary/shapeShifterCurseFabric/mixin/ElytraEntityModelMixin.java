@@ -9,7 +9,6 @@ import net.minecraft.util.math.Vec3d;
 import net.onixary.shapeShifterCurseFabric.player_form.PlayerFormBase;
 import net.onixary.shapeShifterCurseFabric.player_form.PlayerFormBodyType;
 import net.onixary.shapeShifterCurseFabric.player_form.RegPlayerForms;
-import net.onixary.shapeShifterCurseFabric.player_form.ability.RegPlayerFormComponent;
 import net.onixary.shapeShifterCurseFabric.util.FormTextureUtils;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -40,16 +39,16 @@ public abstract class ElytraEntityModelMixin<T extends LivingEntity> {
         float l = -0.2617994f;
         float m = 0.0f;
         float n = 0.0f;
-        if (((LivingEntity)entity).isFallFlying()) {
+        if (entity.isFallFlying()) {
             float o = 1.0f;
-            Vec3d vec3d = ((Entity)entity).getVelocity();
+            Vec3d vec3d = entity.getVelocity();
             if (vec3d.y < 0.0) {
                 Vec3d vec3d2 = vec3d.normalize();
                 o = 1.0f - (float)Math.pow(-vec3d2.y, 1.5);
             }
             k = o * 0.34906584f + (1.0f - o) * k;
             l = o * -1.5707964f + (1.0f - o) * l;
-        } else if (((Entity)entity).isInSneakingPose()) {
+        } else if (entity.isInSneakingPose()) {
             k = 0.6981317f;
             l = -0.7853982f;
             m = 3.0f;
@@ -60,8 +59,8 @@ public abstract class ElytraEntityModelMixin<T extends LivingEntity> {
             PlayerFormBase curForm0 = FormTextureUtils.getPlayerForm_Render(player);
             if(curForm0 == RegPlayerForms.BAT_3){
                 //ShapeShifterCurseFabric.LOGGER.info("BAT3 set elytra");
-                if (((LivingEntity)entity).isOnGround()){
-                    if (((Entity)entity).isInSneakingPose()){
+                if (entity.isOnGround()){
+                    if (entity.isInSneakingPose()){
                         k += (float)Math.toRadians(30.0);
                         m = 12.0f;
                     }
@@ -79,9 +78,8 @@ public abstract class ElytraEntityModelMixin<T extends LivingEntity> {
         }
 
         this.leftWing.pivotY = m;
-        if (entity instanceof AbstractClientPlayerEntity) {
-            AbstractClientPlayerEntity abstractClientPlayerEntity = (AbstractClientPlayerEntity)entity;
-            abstractClientPlayerEntity.elytraPitch += (k - abstractClientPlayerEntity.elytraPitch) * 0.1f;
+        if (entity instanceof AbstractClientPlayerEntity abstractClientPlayerEntity) {
+	        abstractClientPlayerEntity.elytraPitch += (k - abstractClientPlayerEntity.elytraPitch) * 0.1f;
             abstractClientPlayerEntity.elytraYaw += (n - abstractClientPlayerEntity.elytraYaw) * 0.1f;
             abstractClientPlayerEntity.elytraRoll += (l - abstractClientPlayerEntity.elytraRoll) * 0.1f;
 
