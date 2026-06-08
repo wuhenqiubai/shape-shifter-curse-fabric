@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "id": "shape-shifter-curse",
+  "id": "shape-shifter-curse-unofficial",
   "version": "${version}",
   "name": "Shape Shifter Curse-Unofficial Port",
   "description": "An unofficial port of the mod that allows you to gradually transform into different vanilla creatures, each with unique models and animations.",
@@ -17,6 +17,13 @@
         "github": "https://github.com/xu233333",
         "email": "18510478058@163.com"
       }
+    },
+    {
+      "name": "wuhenqiubai(Author of unofficial version)",
+      "contact": {
+        "github": "https://github.com/wuhenqiubai",
+        "email": "wth110628@163.com"
+      }
     }
   ],
   "contact": {
@@ -29,13 +36,6 @@
       "name": "MaxMobile-ru",
       "contact": {
         "github": "https://github.com/MaxMobile-ru"
-      }
-    },
-    {
-      "name": "wuhenqiubai",
-      "contact": {
-        "github": "https://github.com/wuhenqiubai",
-        "email": "wth110628@163.com"
       }
     },
     {
