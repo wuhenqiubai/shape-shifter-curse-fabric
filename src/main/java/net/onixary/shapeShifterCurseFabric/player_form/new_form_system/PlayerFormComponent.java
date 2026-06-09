@@ -1,8 +1,8 @@
 package net.onixary.shapeShifterCurseFabric.player_form.new_form_system;
 
-import dev.onyxstudios.cca.api.v3.component.ComponentKey;
-import dev.onyxstudios.cca.api.v3.component.ComponentRegistry;
-import dev.onyxstudios.cca.api.v3.component.sync.AutoSyncedComponent;
+import org.ladysnake.cca.api.v3.component.ComponentKey;
+import org.ladysnake.cca.api.v3.component.ComponentRegistry;
+import org.ladysnake.cca.api.v3.component.sync.AutoSyncedComponent;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
@@ -39,7 +39,7 @@ public class PlayerFormComponent implements AutoSyncedComponent {
     }
 
     @Override
-    public void readFromNbt(NbtCompound tag) {
+    public void readFromNbt(NbtCompound tag, net.minecraft.registry.RegistryWrapper.WrapperLookup registryLookup) {
         // 目前没写形态注册表 先用null凑活一下
         if (tag.contains("nowForm")) {
             nowForm = FormUtils.parseForm(Identifier.tryParse(tag.getString("nowForm")), RegPlayerForms.N_ORIGINAL_BEFORE_ENABLE);
@@ -83,7 +83,7 @@ public class PlayerFormComponent implements AutoSyncedComponent {
     }
 
     @Override
-    public void writeToNbt(NbtCompound tag) {
+    public void writeToNbt(NbtCompound tag, net.minecraft.registry.RegistryWrapper.WrapperLookup registryLookup) {
         tag.putString("nowForm", nowForm.getFormID().toString());
         NbtList history = new NbtList();
         for (IForm form : formHistory) {
