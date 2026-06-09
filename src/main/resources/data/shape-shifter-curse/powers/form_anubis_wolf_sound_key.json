@@ -1,5 +1,5 @@
 {
-  "type": "apoli:multiple",
+  "type": "origins:multiple",
   "form_anubis_wolf_sound_key_normal": {
     "type": "origins:active_self",
     "entity_action": {
