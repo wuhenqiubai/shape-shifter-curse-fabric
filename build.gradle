@@ -205,9 +205,11 @@ dependencies {
     modApi("org.ladysnake.cardinal-components-api:cardinal-components-base:${cca_version}") {
         exclude(group: "net.fabricmc.fabric-api")
     }
+    include "org.ladysnake.cardinal-components-api:cardinal-components-base:${cca_version}"
     modApi("org.ladysnake.cardinal-components-api:cardinal-components-entity:${cca_version}") {
         exclude(group: "net.fabricmc.fabric-api")
     }
+    include "org.ladysnake.cardinal-components-api:cardinal-components-entity:${cca_version}"
 
     modApi("me.shedaniel.cloth:cloth-config-fabric:${project.clothconfig_version}") {
         exclude(group: "net.fabricmc.fabric-api")
