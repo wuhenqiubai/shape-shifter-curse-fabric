@@ -160,10 +160,8 @@ public class TransformativeWolfEntity extends WolfEntity implements ITMob {
         );
     }
 
-    // TODO: setTamed removed in 1.21 WolfEntity rewrite. TamableAnimal has setTame(boolean,boolean) but may not be overrideable
     @Override
     public void setTamed(boolean tamed, boolean updateAttributes) {
-        return;
     }
 
     @Override

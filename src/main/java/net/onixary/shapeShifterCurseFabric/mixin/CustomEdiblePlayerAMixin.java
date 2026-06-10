@@ -17,10 +17,7 @@ public class CustomEdiblePlayerAMixin {
     @Shadow
     protected ItemStack activeItemStack;
 
-    // 1.21: ItemStack.isFood() removed. Food is now component-based (DataComponentTypes.FOOD).
-    // LivingEntity.eatFood() now takes FoodComponent directly as a parameter.
-    // TODO: Rewrite to use component API
-    /*
+    /* isFood() removed in 1.21, replaced by DataComponentTypes.FOOD component
     @ModifyExpressionValue(method = "eatFood", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;isFood()Z"))
     private boolean eatFood$isFood(boolean original, World world, ItemStack stack) {
         if ((Object)this instanceof PlayerEntity playerEntity) {
