@@ -29,9 +29,15 @@ public class MixinConfigPlugin implements IMixinConfigPlugin {
         mixinRequiredMods.put("net.onixary.shapeShifterCurseFabric.mixin.accessory.TrinketImpl", new MixinRequiredMods(new String[]{"trinkets"}, new String[]{}));
         mixinRequiredMods.put("net.onixary.shapeShifterCurseFabric.mixin.accessory.TrinketItemMixin", new MixinRequiredMods(new String[]{"trinkets"}, new String[]{}));
         mixinRequiredMods.put("net.onixary.shapeShifterCurseFabric.mixin.accessory.TrinketSlotMixin", new MixinRequiredMods(new String[]{"trinkets"}, new String[]{}));
-        mixinRequiredMods.put("net.onixary.shapeShifterCurseFabric.mixin.forge.CurioImpl", new MixinRequiredMods(new String[]{"curios"}, new String[]{}));
-        mixinRequiredMods.put("net.onixary.shapeShifterCurseFabric.mixin.forge.CurioItemImpl", new MixinRequiredMods(new String[]{"curios"}, new String[]{}));
-        mixinRequiredMods.put("net.onixary.shapeShifterCurseFabric.mixin.forge.CurioUtilsImpl", new MixinRequiredMods(new String[]{"curios"}, new String[]{}));
+        // 仅在有 Curios 且 NOT NeoForge 时应用 Forge Curios mixin
+        // NeoForge 下 Forge 的 net.minecraftforge.common.util.LazyOptional 不存在
+        var isNeoForge = FabricLoader.getInstance().isModLoaded("neoforge");
+        mixinRequiredMods.put("net.onixary.shapeShifterCurseFabric.mixin.forge.CurioImpl",
+            new MixinRequiredMods(new String[]{"curios"}, isNeoForge ? new String[]{"neoforge"} : new String[]{}));
+        mixinRequiredMods.put("net.onixary.shapeShifterCurseFabric.mixin.forge.CurioItemImpl",
+            new MixinRequiredMods(new String[]{"curios"}, isNeoForge ? new String[]{"neoforge"} : new String[]{}));
+        mixinRequiredMods.put("net.onixary.shapeShifterCurseFabric.mixin.forge.CurioUtilsImpl",
+            new MixinRequiredMods(new String[]{"curios"}, isNeoForge ? new String[]{"neoforge"} : new String[]{}));
 
         mixinAccessoryMixin.put("net.onixary.shapeShifterCurseFabric.mixin.accessory.TrinketImpl", "trinkets");
         mixinAccessoryMixin.put("net.onixary.shapeShifterCurseFabric.mixin.forge.CurioImpl", "curios");
@@ -47,8 +53,24 @@ public class MixinConfigPlugin implements IMixinConfigPlugin {
         return null;
     }
 
+    private static Boolean isNeoForgeCached = null;
+
+    private static boolean isNeoForge() {
+        if (isNeoForgeCached == null) {
+            isNeoForgeCached = FabricLoader.getInstance().isModLoaded("neoforge");
+        }
+        return isNeoForgeCached;
+    }
+
     @Override
     public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
+        // NeoForge 下 Forge 的 net.minecraftforge.common.util.LazyOptional 不存在，
+        // 跳过所有 forge 包下的 mixin
+        if (mixinClassName.startsWith("net.onixary.shapeShifterCurseFabric.mixin.forge.")
+            && isNeoForge()) {
+            LOGGER.info("NeoForge detected, skipping Forge-specific mixin: {}", mixinClassName);
+            return false;
+        }
         // 原先的代码 使用硬编码的方式
         // 检查是否为 PlayerEntityRendererFallFlyingMixin
         // if (mixinClassName.endsWith("PlayerEntityRendererFallFlyingMixin")) {
@@ -76,6 +98,10 @@ public class MixinConfigPlugin implements IMixinConfigPlugin {
             }
         }
         if (mixinAccessoryMixin.containsKey(mixinClassName)) {
+            // NeoForge 下 Forge Curios 不可用，强制回退到 Trinkets
+            if (isNeoForge() && "trinkets".equals(mixinAccessoryMixin.get(mixinClassName))) {
+                return true;
+            }
             if (!Objects.equals(AccessoryPriorityUtils.getHighestPriorityPlugin(), mixinAccessoryMixin.get(mixinClassName))) {
                 LOGGER.info("{} is highest priority, skipping {}", AccessoryPriorityUtils.getHighestPriorityPlugin(), mixinClassName);
                 return false;
