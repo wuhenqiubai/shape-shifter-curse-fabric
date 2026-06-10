@@ -1,23 +1,3 @@
-# Shape Shifter Curse Mod for Minecraft Java version
-GitHub repository for the mod Shape Shifter Curse, created for Fabric
-
-This mod is under active development. As I'm only working on it during my spare time, updates may be slow
-
-If you want to create custom forms using data packs and resource packs, please check the [wiki](https://ssc-wiki.readthedocs.io/en/latest/) here
-
-This mod is open-source and free. Do not trust any third-party channels that charge for downloads
-
-幻形者诅咒 Minecraft java版Mod
----
-幻形者诅咒mod的Github仓库，适用于Fabric端
-
-mod正在持续开发中。由于我只是业余时间开发，更新可能比较慢
-
-如果你想要通过数据包与资源包创建自定义形态，请查阅这里的[中文版wiki](https://ssc-wiki.readthedocs.io/zh-cn/latest/)
-
-本mod开源免费，请不要相信那些需要你付费下载的第三方渠道
-
----
 
 # 感谢 [onixary](https://github.com/onixary) 与 [xu233333](https://github.com/xu233333) 开发了这个优秀的模组！本项目仅为适配与修复维护，所有核心功能版权归原作者所有。
 # Thank you [onixary](https://github.com/onixary) with [xu233333](https://github.com/xu233333) Developed this excellent mod! This project is only for adaptation and repair maintenance, and all core functions are copyrighted by the original author.
