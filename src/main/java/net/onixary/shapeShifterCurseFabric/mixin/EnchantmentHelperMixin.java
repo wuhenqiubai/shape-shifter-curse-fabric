@@ -40,17 +40,4 @@ public class EnchantmentHelperMixin {
             cir.setReturnValue(getSoulSpeedLevel(entity, cir.getReturnValue()));
         }
     }
-
-    // hasSoulSpeed removed in 1.21 — soul speed is now data-driven via applyLocationBasedEffects.
-    // getEquipmentLevel mixin already handles SoulSpeedPower contribution.
-
-    /* isPrimaryItem disabled: conflicts with ModernFix's getPossibleEntries optimization
-    @ModifyExpressionValue(method = "getPossibleEntries", at = @At(value = "INVOKE", target = "Lnet/minecraft/enchantment/Enchantment;isPrimaryItem(Lnet/minecraft/item/ItemStack;)Z"))
-    private static boolean isPrimaryItem(boolean original, ItemStack stack, RegistryEntry<Enchantment> enchantment) {
-        if (!original) {
-            return EnchantmentUtils.isItemCanEnchantment(enchantment.getKey().orElseThrow(), stack);
-        }
-        return original;
-    }
-    */
 }
