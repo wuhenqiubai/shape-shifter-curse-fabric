@@ -145,7 +145,8 @@ public class FormRenderFeature <T extends PlayerEntity, M extends BipedEntityMod
             playerEntityModel.head.visible = false;
         }
 
-        if (IS_FIRST_PERSON_MOD_LOADED && IsFirstPersonView && IsClientNowPlayedPlayer) {
+        if (IS_FIRST_PERSON_MOD_LOADED && IsFirstPersonView && IsClientNowPlayedPlayer
+            && MinecraftClient.getInstance().currentScreen == null) {
             playerEntityModel.hat.visible = false;
             playerEntityModel.head.visible = false;
         }
