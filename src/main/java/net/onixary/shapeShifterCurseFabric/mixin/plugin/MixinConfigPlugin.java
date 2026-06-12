@@ -23,7 +23,11 @@ public class MixinConfigPlugin implements IMixinConfigPlugin {
 
     static {
         mixinRequiredMods.put("net.onixary.shapeShifterCurseFabric.mixin.PlayerEntityRendererFallFlyingMixin", new MixinRequiredMods(new String[]{}, new String[]{"vivecraft"}));
-        mixinRequiredMods.put("net.onixary.shapeShifterCurseFabric.mixin.integration.AppleSkin", new MixinRequiredMods(new String[]{"appleskin"}, new String[]{}));
+        var isNeoForge = FabricLoader.getInstance().isModLoaded("neoforge");
+        // TODO: NeoForge 版 AppleSkin API 与 Fabric 版不兼容 (method 签名不同)
+        // 先完全跳过，避免 Mixin 崩溃
+        mixinRequiredMods.put("net.onixary.shapeShifterCurseFabric.mixin.integration.AppleSkin",
+            new MixinRequiredMods(new String[]{"appleskin"}, isNeoForge ? new String[]{"neoforge"} : new String[]{}));
         mixinRequiredMods.put("net.onixary.shapeShifterCurseFabric.mixin.integration.TacZ_Anim", new MixinRequiredMods(new String[]{"tacz"}, new String[]{}));
         mixinRequiredMods.put("net.onixary.shapeShifterCurseFabric.mixin.integration.TacZ_AnimThird", new MixinRequiredMods(new String[]{"tacz"}, new String[]{}));
         mixinRequiredMods.put("net.onixary.shapeShifterCurseFabric.mixin.accessory.TrinketImpl", new MixinRequiredMods(new String[]{"trinkets"}, new String[]{}));
@@ -31,7 +35,6 @@ public class MixinConfigPlugin implements IMixinConfigPlugin {
         mixinRequiredMods.put("net.onixary.shapeShifterCurseFabric.mixin.accessory.TrinketSlotMixin", new MixinRequiredMods(new String[]{"trinkets"}, new String[]{}));
         // 仅在有 Curios 且 NOT NeoForge 时应用 Forge Curios mixin
         // NeoForge 下 Forge 的 net.minecraftforge.common.util.LazyOptional 不存在
-        var isNeoForge = FabricLoader.getInstance().isModLoaded("neoforge");
         mixinRequiredMods.put("net.onixary.shapeShifterCurseFabric.mixin.forge.CurioImpl",
             new MixinRequiredMods(new String[]{"curios"}, isNeoForge ? new String[]{"neoforge"} : new String[]{}));
         mixinRequiredMods.put("net.onixary.shapeShifterCurseFabric.mixin.forge.CurioItemImpl",
