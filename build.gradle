@@ -173,9 +173,6 @@ dependencies {
     modCompileOnly "io.wispforest:owo-lib:${owo_version}"
     modRuntimeOnly "io.wispforest:owo-lib:${owo_version}"
 
-    // Rich Translatable Text
-    modLocalRuntime "curse.maven:rich-translatable-text-1342784:7440321"
-
     // satin shader
     modImplementation "org.ladysnake:satin:${satin_version}"
 
