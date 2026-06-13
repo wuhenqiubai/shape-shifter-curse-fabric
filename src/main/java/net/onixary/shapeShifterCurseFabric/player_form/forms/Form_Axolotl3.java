@@ -47,8 +47,7 @@ public class Form_Axolotl3 extends PlayerFormBase {
 		        case ANIM_STATE_IDLE -> IDLE_CONTROLLER;
 		        case ANIM_STATE_WALK -> WALK_CONTROLLER;
 		        case ANIM_STATE_SPRINT -> SPRINT_CONTROLLER;
-		        case ANIM_STATE_JUMP -> JUMP_CONTROLLER;
-		        case ANIM_STATE_FALL -> FALL_CONTROLLER;
+		        case ANIM_STATE_JUMP, ANIM_STATE_FALL -> JUMP_CONTROLLER;
 		        case ANIM_STATE_ATTACK -> ATTACK_CONTROLLER;
 		        case ANIM_STATE_MINING -> MINING_CONTROLLER;
 		        case ANIM_STATE_FLYING -> FLYING_CONTROLLER;

@@ -21,8 +21,8 @@ public class Form_SnowFox3 extends PlayerFormBase {
         this.setBodyType(PlayerFormBodyType.FERAL);
     }
 
-    public static AbstractAnimStateController RIDE_CONTROLLER = new RideAnimController(new AnimUtils.AnimationHolderData(ShapeShifterCurseFabric.identifier("form_feral_common_sneak_idle"), 1.0f, 6, EasingType.EASE_IN_OUT_QUAD), new AnimUtils.AnimationHolderData(ShapeShifterCurseFabric.identifier("snow_fox_3_riding"), 1.0f, 6, EasingType.EASE_IN_OUT_QUAD));
-    public static AbstractAnimStateController FALL_CONTROLLER = new OneAnimController(new AnimUtils.AnimationHolderData(ShapeShifterCurseFabric.identifier("form_snow_fox_3_fall"), 1.0f, 4, EasingType.EASE_OUT_QUINT));
+    public static AbstractAnimStateController RIDE_CONTROLLER = new RideAnimController(new AnimUtils.AnimationHolderData(ShapeShifterCurseFabric.identifier("form_feral_common_sneak_idle"), 1.0f, 6, EasingType.EASE_IN_OUT_QUAD), new AnimUtils.AnimationHolderData(ShapeShifterCurseFabric.identifier("snow_fox_3_riding"), 1.0f, 6));
+    public static AbstractAnimStateController FALL_CONTROLLER = new OneAnimController(new AnimUtils.AnimationHolderData(ShapeShifterCurseFabric.identifier("form_snow_fox_3_fall"), 1.0f, 4));
 
     public @Nullable AbstractAnimStateController getAnimStateController(PlayerEntity player, AnimSystem.AnimSystemData animSystemData, @NotNull Identifier animStateID) {
         @Nullable AnimStateEnum animStateEnum = AnimStateEnum.getStateEnum(animStateID);
