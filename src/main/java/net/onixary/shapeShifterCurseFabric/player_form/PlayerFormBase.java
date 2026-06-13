@@ -240,7 +240,7 @@ public class PlayerFormBase {
      */
     public Vec3d getCapeIdleLoc(AbstractClientPlayerEntity player) {
         if (getBodyType() == PlayerFormBodyType.FERAL) {
-            return new Vec3d(0.0f, -0.2f, 0.3f);
+            return new Vec3d(0.0f, -0.18f, 0.35f);
         }
         else {
             return new Vec3d(0.0, 0.0, 0.125);
@@ -255,12 +255,7 @@ public class PlayerFormBase {
 	 * @return 旋转角度（度数），FERAL 为 90°，NORMAL 为 0°
      */
     public float getCapeBaseRotateAngle(AbstractClientPlayerEntity player) {
-        if (getBodyType() == PlayerFormBodyType.FERAL) {
-            return 90.0f;
-        }
-        else {
-            return 0.0f;
-        }
+	    return 0.0f;
     }
 
 	/** @return FERAL 形态时需要在渲染过程中旋转 X 轴角度以适配四足姿势 */

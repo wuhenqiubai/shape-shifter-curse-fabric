@@ -257,6 +257,45 @@ public class AnimSystem {
     }
 
 	/**
+	 * 获取上半身覆盖动画（使用物品/攻击时）。
+	 * 返回 UPPER-ONLY 动画，与主 FSM 动画同时在 PAL 不同层播放。
+	 */
+	public @Nullable AnimationHolder getUpperBodyOverride() {
+		this.data.HasUpperBodyOverride = false;
+		if (this.getPreProcessAnimation() != null) return null;
+
+		if (this.player.isUsingItem()) {
+			AbstractAnimStateController controller = this.data.playerForm.getAnimStateController(this.player, this.data, AnimRegistries.ANIM_STATE_USE_ITEM);
+			if (controller == null) {
+				AnimRegistry.AnimState animState = AnimRegistry.getAnimState(AnimRegistries.ANIM_STATE_USE_ITEM);
+				if (animState != null) controller = animState.defaultController;
+			}
+			if (controller != null && controller.isRegistered(this.player, this.data) && controller.isEnabled(this.player, this.data)) {
+				@Nullable AnimationHolder anim = controller.getAnimation(this.player, this.data);
+				if (anim != null) {
+					this.data.HasUpperBodyOverride = true;
+					return anim;
+				}
+			}
+		}
+		if (this.player.handSwinging) {
+			AbstractAnimStateController controller = this.data.playerForm.getAnimStateController(this.player, this.data, AnimRegistries.ANIM_STATE_ATTACK);
+			if (controller == null) {
+				AnimRegistry.AnimState animState = AnimRegistry.getAnimState(AnimRegistries.ANIM_STATE_ATTACK);
+				if (animState != null) controller = animState.defaultController;
+			}
+			if (controller != null && controller.isRegistered(this.player, this.data) && controller.isEnabled(this.player, this.data)) {
+				@Nullable AnimationHolder anim = controller.getAnimation(this.player, this.data);
+				if (anim != null) {
+					this.data.HasUpperBodyOverride = true;
+					return anim;
+				}
+			}
+		}
+		return null;
+	}
+
+	/**
 	 * 动画系统上下文数据，每帧由 {@link #getAnimation} 更新。
 	 */
     public static class AnimSystemData {
@@ -282,6 +321,8 @@ public class AnimSystem {
 		public boolean IsWalking = false;
 		/** 自定义 NBT 数据，供其他拓展 Mod 使用。SSC 本身不使用。 */
         public NbtCompound customData;
+	/** 此帧是否有上半身动画覆盖 */
+	public boolean HasUpperBodyOverride = false;
 
         public AnimSystemData(PlayerEntity player) {
             this.playerForm = RegPlayerForms.ORIGINAL_BEFORE_ENABLE;

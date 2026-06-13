@@ -18,11 +18,11 @@ public class Form_Ocelot2 extends PlayerFormBase {
         super(formID);
     }
 
-    private static final AnimUtils.AnimationHolderData SNEAK_RUSH_JUMP_ANIM = new AnimUtils.AnimationHolderData(ShapeShifterCurseFabric.identifier("ocelot_2_rush_jump"), 1.0f, 6, EasingType.EASE_IN_OUT_EXPO);
+    private static final AnimUtils.AnimationHolderData SNEAK_RUSH_JUMP_ANIM = new AnimUtils.AnimationHolderData(ShapeShifterCurseFabric.identifier("ocelot_2_rush_jump"), 1.0f, 6);
 
-    public static final AbstractAnimStateController IDLE_CONTROLLER = new WithSneakAnimController(null, new AnimUtils.AnimationHolderData(ShapeShifterCurseFabric.identifier("ocelot_2_sneak_idle"), 1.0f, 6, EasingType.EASE_IN_OUT_QUAD));
-    public static final AbstractAnimStateController RIDE_CONTROLLER = new RideAnimController(new AnimUtils.AnimationHolderData(ShapeShifterCurseFabric.identifier("ocelot_2_riding"), 1.0f, 6, EasingType.EASE_IN_OUT_QUAD), new AnimUtils.AnimationHolderData(ShapeShifterCurseFabric.identifier("ocelot_2_sneak_idle"), 1.0f, 6, EasingType.EASE_IN_OUT_QUAD));
-    public static final AbstractAnimStateController SNEAK_RUSH_CONTROLLER = new SneakRushAnimController(null, null, new AnimUtils.AnimationHolderData(ShapeShifterCurseFabric.identifier("ocelot_2_sneak_rush_2"), 3.3f, 2, EasingType.EASE_IN_OUT_EXPO));
+    public static final AbstractAnimStateController IDLE_CONTROLLER = new WithSneakAnimController(null, new AnimUtils.AnimationHolderData(ShapeShifterCurseFabric.identifier("ocelot_2_sneak_idle"), 1.0f, 6));
+    public static final AbstractAnimStateController RIDE_CONTROLLER = new RideAnimController(new AnimUtils.AnimationHolderData(ShapeShifterCurseFabric.identifier("ocelot_2_riding"), 1.0f, 6, EasingType.EASE_IN_OUT_QUAD), new AnimUtils.AnimationHolderData(ShapeShifterCurseFabric.identifier("ocelot_2_sneak_idle"), 1.0f, 6));
+    public static final AbstractAnimStateController SNEAK_RUSH_CONTROLLER = new SneakRushAnimController(null, null, new AnimUtils.AnimationHolderData(ShapeShifterCurseFabric.identifier("ocelot_2_sneak_rush_2"), 3.3f, 2));
     public static final AbstractAnimStateController RUSH_JUMP_CONTROLLER = new RushJumpAnimController(null, SNEAK_RUSH_JUMP_ANIM, null, SNEAK_RUSH_JUMP_ANIM);
     public static final AbstractAnimStateController FALL_CONTROLLER = new WithSneakAnimController(null, SNEAK_RUSH_JUMP_ANIM);
 
