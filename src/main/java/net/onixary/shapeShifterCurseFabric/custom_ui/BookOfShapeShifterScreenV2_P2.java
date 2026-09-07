@@ -51,7 +51,7 @@ public class BookOfShapeShifterScreenV2_P2 extends Screen implements WidgetEXUti
         // Size -> (83, 181) Pos -> (13, 26)
         this.addDrawableChild(BuildDetailScreenButton(80, 12, 9, 9, CodexData.getContentText(CodexData.ContentType.PROS, currentPlayer)));
         this.addDrawableChild(new TextWidget(BookPosX + 26 * BookScale, BookPosY + 10 * BookScale, 53 * BookScale, 11 * BookScale, CodexData.headerPros, textRenderer).setTextColor(HeaderTextColor));
-        ScaleScrollTextWidget Pros = (ScaleScrollTextWidget) new ScaleScrollTextWidget(BookPosX + 13 * BookScale, BookPosY + 26 * BookScale, 83 * BookScale, 18 * BookScale, Scale, CodexData.getContentText(CodexData.ContentType.PROS, currentPlayer), scaleTextRenderer).shadow(false).setTextColor(DefaultTextColor);
+        ScaleScrollTextWidget Pros = (ScaleScrollTextWidget) new ScaleScrollTextWidget(BookPosX + 13 * BookScale, BookPosY + 26 * BookScale, 83 * BookScale, 181 * BookScale, Scale, CodexData.getContentText(CodexData.ContentType.PROS, currentPlayer), scaleTextRenderer).shadow(false).setTextColor(DefaultTextColor);
         // ScaleScrollTextWidget Pros = (ScaleScrollTextWidget) new ScaleScrollTextWidget(BookPosX + 13 * BookScale, BookPosY + 26 * BookScale, 83 * BookScale, 4 * BookScale, Scale, CodexData.getContentText(CodexData.ContentType.PROS, currentPlayer), scaleTextRenderer).shadow(false).setTextColor(DefaultTextColor);
         Pros.setEnableScrollableIconRender(true);
         this.addWidget(Pros);
@@ -61,31 +61,31 @@ public class BookOfShapeShifterScreenV2_P2 extends Screen implements WidgetEXUti
         // Size -> (82, 182) Pos -> (110, 26)
         this.addDrawableChild(BuildDetailScreenButton(185, 12, 9, 9, CodexData.getContentText(CodexData.ContentType.CONS, currentPlayer)));
         this.addDrawableChild(new TextWidget(BookPosX + 120 * BookScale, BookPosY + 10 * BookScale, 63 * BookScale, 11 * BookScale, CodexData.headerCons, textRenderer).setTextColor(HeaderTextColor));
-        ScaleScrollTextWidget Cons = (ScaleScrollTextWidget) new ScaleScrollTextWidget(BookPosX + 110 * BookScale, BookPosY + 26 * BookScale, 82 * BookScale, 18 * BookScale, Scale, CodexData.getContentText(CodexData.ContentType.CONS, currentPlayer), scaleTextRenderer).shadow(false).setTextColor(DefaultTextColor);
+        ScaleScrollTextWidget Cons = (ScaleScrollTextWidget) new ScaleScrollTextWidget(BookPosX + 110 * BookScale, BookPosY + 26 * BookScale, 82 * BookScale, 182 * BookScale, Scale, CodexData.getContentText(CodexData.ContentType.CONS, currentPlayer), scaleTextRenderer).shadow(false).setTextColor(DefaultTextColor);
         // ScaleScrollTextWidget Cons = (ScaleScrollTextWidget) new ScaleScrollTextWidget(BookPosX + 110 * BookScale, BookPosY + 26 * BookScale, 82 * BookScale, 4 * BookScale, Scale, CodexData.getContentText(CodexData.ContentType.CONS, currentPlayer), scaleTextRenderer).shadow(false).setTextColor(DefaultTextColor);
         Cons.setEnableScrollableIconRender(true);
         this.addWidget(Cons);
         this.addDrawableChild(Cons);
-            // Instincts
-            // D -> (9, 9), (308, 13)
-            // Size -> (106, 136) Pos -> (220, 24)
-            // 扩展点：注册 CodexInstinctColumnHooks.Provider 时优先取该列文本；正文只取一次，主列与"+"详情同源
-            CodexInstinctColumnHooks.Provider codexColumnProvider = CodexInstinctColumnHooks.provider();
-            Text instinctsDescText = codexColumnProvider != null ? codexColumnProvider.instinctsDesc(currentPlayer) : null;
-            if (instinctsDescText == null) {
-                instinctsDescText = CodexData.getDescText(CodexData.ContentType.INSTINCTS, currentPlayer);
-            }
-            Text instinctsContentText = codexColumnProvider != null ? codexColumnProvider.instinctsContent(currentPlayer) : null;
-            if (instinctsContentText == null) {
-                instinctsContentText = CodexData.getContentText(CodexData.ContentType.INSTINCTS, currentPlayer);
-            }
-            this.addDrawableChild(BuildDetailScreenButton(308, 13, 9, 9, instinctsContentText));
-            this.addDrawableChild(new TextWidget(BookPosX + 242 * BookScale, BookPosY + 10 * BookScale, 63 * BookScale, 12 * BookScale, CodexData.headerInstincts, textRenderer).setTextColor(HeaderTextColor));
-            // 在 BookOfShapeShifterScreen 未上色
-            MultilineTextWidget InstinctsDesc = new ScaleMultilineTextWidget(BookPosX + 220 * BookScale, BookPosY + 24 * BookScale, instinctsDescText, scaleTextRenderer, Scale).shadow(false).setMaxWidth(106 * BookScale);
-            this.addDrawableChild(InstinctsDesc);
-            int InstinctsDescHeight = InstinctsDesc.getHeight();
-            ScaleScrollTextWidget Instincts = (ScaleScrollTextWidget) new ScaleScrollTextWidget(BookPosX + 220 * BookScale, BookPosY + 24 * BookScale + InstinctsDescHeight + Math.round(9 * Scale), 106 * BookScale, ((112 - InstinctsDescHeight) / 9 + 1) * BookScale, Scale, instinctsContentText, scaleTextRenderer).shadow(false).setTextColor(DefaultTextColor);
+        // Instincts
+        // D -> (9, 9), (308, 13)
+        // Size -> (106, 136) Pos -> (220, 24)
+        // 扩展点：注册 CodexInstinctColumnHooks.Provider 时优先取该列文本；正文只取一次，主列与"+"详情同源
+        CodexInstinctColumnHooks.Provider codexColumnProvider = CodexInstinctColumnHooks.provider();
+        Text instinctsDescText = codexColumnProvider != null ? codexColumnProvider.instinctsDesc(currentPlayer) : null;
+        if (instinctsDescText == null) {
+            instinctsDescText = CodexData.getDescText(CodexData.ContentType.INSTINCTS, currentPlayer);
+        }
+        Text instinctsContentText = codexColumnProvider != null ? codexColumnProvider.instinctsContent(currentPlayer) : null;
+        if (instinctsContentText == null) {
+            instinctsContentText = CodexData.getContentText(CodexData.ContentType.INSTINCTS, currentPlayer);
+        }
+        this.addDrawableChild(BuildDetailScreenButton(308, 13, 9, 9, instinctsContentText));
+        this.addDrawableChild(new TextWidget(BookPosX + 242 * BookScale, BookPosY + 10 * BookScale, 63 * BookScale, 12 * BookScale, CodexData.headerInstincts, textRenderer).setTextColor(HeaderTextColor));
+        // 在 BookOfShapeShifterScreen 未上色
+        MultilineTextWidget InstinctsDesc = new ScaleMultilineTextWidget(BookPosX + 220 * BookScale, BookPosY + 24 * BookScale, instinctsDescText, scaleTextRenderer, Scale).shadow(false).setMaxWidth(106 * BookScale);
+        this.addDrawableChild(InstinctsDesc);
+        int InstinctsDescHeight = InstinctsDesc.getHeight();
+        ScaleScrollTextWidget Instincts = (ScaleScrollTextWidget) new ScaleScrollTextWidget(BookPosX + 220 * BookScale, BookPosY + 24 * BookScale + InstinctsDescHeight + Math.round(9 * Scale), 106 * BookScale, (112 - InstinctsDescHeight) * BookScale, Scale, instinctsContentText, scaleTextRenderer).shadow(false).setTextColor(DefaultTextColor);
         Instincts.setEnableScrollableIconRender(true);
         this.addWidget(Instincts);
         this.addDrawableChild(Instincts);
